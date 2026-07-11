@@ -36,9 +36,28 @@ credentials. On macOS these come from the `osxkeychain` credential helper, which
 non-interactively while you are logged in — no token is stored in this repo. If a push
 ever fails with an auth error, run `git push` once by hand to re-cache the credential.
 
-## Weekly schedule (macOS launchd)
+## Weekly schedule — GitHub Actions (primary)
 
-Installed to run **every Sunday at 18:00**:
+The scheduled run lives in [`../.github/workflows/sync-docs.yml`](../.github/workflows/sync-docs.yml)
+and runs on GitHub's servers **every Sunday at 18:00 UTC** — no local machine needed. It
+does the same fetch → crawl → commit → push loop and pushes as `github-actions[bot]`.
+
+```bash
+gh workflow run "Sync Hermes docs"        # run it now
+gh run list --workflow "Sync Hermes docs" # see recent runs
+gh run watch <run-id>                      # follow a run live
+```
+
+To change the time, edit the `cron:` line (it is UTC, no daylight-saving). Scheduled
+workflows can start a few minutes late under load, and GitHub disables them after 60 days
+with no repo activity — the weekly commits normally keep it alive, and you can re-enable
+it from the repo's **Actions** tab if it ever pauses.
+
+## Weekly schedule — macOS launchd (optional local alternative)
+
+If you'd rather run it from a specific Mac instead of GitHub, install a launchd job to run
+**every Sunday at 18:00** local time (don't run both — they'd both push to `main` and
+collide):
 
 ```bash
 scripts/install-schedule.sh                       # Sunday 18:00 (default)

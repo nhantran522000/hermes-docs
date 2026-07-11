@@ -47,7 +47,7 @@ Every Telegram bot starts with **@BotFather** — Telegram's official bot for cr
 
 3.  **Copy the bot token** — BotFather replies with something like:
 
-    ``` prism-code
+    ``` text
     Use this token to access the HTTP API:
     7123456789:AAH1bGciOiJSUzI1NiIsInR5cCI6Ikp...
     ```
@@ -56,25 +56,25 @@ Every Telegram bot starts with **@BotFather** — Telegram's official bot for cr
 
 4.  **Set a description** (optional but recommended):
 
-    ``` prism-code
+    ``` text
     /setdescription
     ```
 
     Choose your bot, then enter something like:
 
-    ``` prism-code
+    ``` text
     Team AI assistant powered by Hermes Agent. DM me for help with code, research, debugging, and more.
     ```
 
 5.  **Set bot commands** (optional — gives users a command menu):
 
-    ``` prism-code
+    ``` text
     /setcommands
     ```
 
     Choose your bot, then paste:
 
-    ``` prism-code
+    ``` text
     new - Start a fresh conversation
     model - Show or change the AI model
     status - Show session info
@@ -94,7 +94,7 @@ You have two options: the interactive setup wizard (recommended) or manual confi
 
 ### Option A: Interactive Setup (Recommended)
 
-``` prism-code
+``` bash
 hermes gateway setup
 ```
 
@@ -104,7 +104,7 @@ This walks you through everything with arrow-key selection. Pick **Telegram**, p
 
 Add these lines to `~/.hermes/.env`:
 
-``` prism-code
+``` bash
 # Telegram bot token from BotFather
 TELEGRAM_BOT_TOKEN=7123456789:AAH1bGciOiJSUzI1NiIsInR5cCI6Ikp...
 
@@ -132,13 +132,13 @@ Telegram user IDs are permanent numbers like `123456789`. They're different from
 
 Run the gateway in the foreground first to make sure everything works:
 
-``` prism-code
+``` bash
 hermes gateway
 ```
 
 You should see output like:
 
-``` prism-code
+``` text
 [Gateway] Starting Hermes Gateway...
 [Gateway] Telegram adapter connected
 [Gateway] Cron scheduler started (tick every 60s)
@@ -150,14 +150,14 @@ Open Telegram, find your bot, and send it a message. If it replies, you're in bu
 
 For a persistent deployment that survives reboots:
 
-``` prism-code
+``` bash
 hermes gateway install
 sudo hermes gateway install --system   # Linux only: boot-time system service
 ```
 
 This creates a background service: a user-level **systemd** service on Linux by default, a **launchd** service on macOS, or a boot-time Linux system service if you pass `--system`.
 
-``` prism-code
+``` bash
 # Linux — manage the default user service
 hermes gateway start
 hermes gateway stop
@@ -175,7 +175,7 @@ sudo hermes gateway status --system
 journalctl -u hermes-gateway -f
 ```
 
-``` prism-code
+``` bash
 # macOS — manage the service
 hermes gateway start
 hermes gateway stop
@@ -188,7 +188,7 @@ The launchd plist captures your shell PATH at install time so gateway subprocess
 
 ### Verify It's Running
 
-``` prism-code
+``` bash
 hermes gateway status
 ```
 
@@ -204,14 +204,14 @@ Now let's give your teammates access. There are two approaches.
 
 Collect each team member's Telegram user ID (have them message [@userinfobot](https://t.me/userinfobot)) and add them as a comma-separated list:
 
-``` prism-code
+``` bash
 # In ~/.hermes/.env
 TELEGRAM_ALLOWED_USERS=123456789,987654321,555555555
 ```
 
 Restart the gateway after changes:
 
-``` prism-code
+``` bash
 hermes gateway stop && hermes gateway start
 ```
 
@@ -221,7 +221,7 @@ DM pairing is more flexible — you don't need to collect user IDs upfront. Here
 
 1.  **Teammate DMs the bot** — since they're not on the allowlist, the bot replies with a one-time pairing code:
 
-    ``` prism-code
+    ``` text
     🔐 Pairing code: XKGH5N7P
     Send this code to the bot owner for approval.
     ```
@@ -230,7 +230,7 @@ DM pairing is more flexible — you don't need to collect user IDs upfront. Here
 
 3.  **You approve it** on the server:
 
-    ``` prism-code
+    ``` bash
     hermes pairing approve telegram XKGH5N7P
     ```
 
@@ -238,7 +238,7 @@ DM pairing is more flexible — you don't need to collect user IDs upfront. Here
 
 **Managing paired users:**
 
-``` prism-code
+``` bash
 # See all pending and approved users
 hermes pairing list
 
@@ -273,7 +273,7 @@ A **home channel** is where the bot delivers cron job results and proactive mess
 
 **Option 2:** Set it manually in `~/.hermes/.env`:
 
-``` prism-code
+``` bash
 TELEGRAM_HOME_CHANNEL=-1001234567890
 TELEGRAM_HOME_CHANNEL_NAME="Team Updates"
 ```
@@ -284,7 +284,7 @@ To find a channel ID, add [@userinfobot](https://t.me/userinfobot) to the group 
 
 Control how much detail the bot shows when using tools. In `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 display:
   tool_progress: new    # off | new | all | verbose
 ```
@@ -304,7 +304,7 @@ Customize how the bot communicates by editing `~/.hermes/SOUL.md`:
 
 For a full guide, see [Use SOUL.md with Hermes](use-soul-with-hermes.md).
 
-``` prism-code
+``` markdown
 # Soul
 You are a helpful team assistant. Be concise and technical.
 Use code blocks for any code. Skip pleasantries — the team
@@ -316,7 +316,7 @@ before guessing at solutions.
 
 If your team works on specific projects, create context files so the bot knows your stack:
 
-``` prism-code
+``` markdown
 <!-- ~/.hermes/AGENTS.md -->
 # Team Context
 - We use Python 3.12 with FastAPI and SQLAlchemy
@@ -340,7 +340,7 @@ With the gateway running, you can schedule recurring tasks that deliver results 
 
 Message the bot on Telegram:
 
-``` prism-code
+``` text
 Every weekday at 9am, check the GitHub repository at
 github.com/myorg/myproject for:
 1. Pull requests opened/merged in the last 24 hours
@@ -353,7 +353,7 @@ The agent creates a cron job automatically and delivers results to the chat wher
 
 ### Server Health Check
 
-``` prism-code
+``` text
 Every 6 hours, check disk usage with 'df -h', memory with 'free -h',
 and Docker container status with 'docker ps'. Report anything unusual —
 partitions above 80%, containers that have restarted, or high memory usage.
@@ -361,7 +361,7 @@ partitions above 80%, containers that have restarted, or high memory usage.
 
 ### Managing Scheduled Tasks
 
-``` prism-code
+``` bash
 # From the CLI
 hermes cron list          # View all scheduled jobs
 hermes cron status        # Check if scheduler is running
@@ -383,7 +383,7 @@ Cron job prompts run in completely fresh sessions with no memory of prior conver
 
 On a shared team bot, use Docker as the terminal backend so agent commands run in a container instead of on your host:
 
-``` prism-code
+``` bash
 # In ~/.hermes/.env
 TERMINAL_BACKEND=docker
 TERMINAL_DOCKER_IMAGE=nikolaik/python-nodejs:python3.11-nodejs20
@@ -391,7 +391,7 @@ TERMINAL_DOCKER_IMAGE=nikolaik/python-nodejs:python3.11-nodejs20
 
 Or in `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 terminal:
   backend: docker
   container_cpu: 1
@@ -403,7 +403,7 @@ This way, even if someone asks the bot to run something destructive, your host s
 
 ### Monitor the Gateway
 
-``` prism-code
+``` bash
 # Check if the gateway is running
 hermes gateway status
 
@@ -418,20 +418,20 @@ tail -f ~/.hermes/logs/gateway.log
 
 From Telegram, send `/update` to the bot — it will pull the latest version and restart. Or from the server:
 
-``` prism-code
+``` bash
 hermes update
 hermes gateway stop && hermes gateway start
 ```
 
 ### Log Locations
 
-| What                 | Location                                                                              |
-|----------------------|---------------------------------------------------------------------------------------|
-| Gateway logs         | `journalctl --user -u hermes-gateway` (Linux) or `~/.hermes/logs/gateway.log` (macOS) |
-| Cron job output      | `~/.hermes/cron/output/{job_id}/{timestamp}.md`                                       |
-| Cron job definitions | `~/.hermes/cron/jobs.json`                                                            |
-| Pairing data         | `~/.hermes/pairing/`                                                                  |
-| Session history      | `~/.hermes/sessions/`                                                                 |
+| What | Location |
+|----|----|
+| Gateway logs | `journalctl --user -u hermes-gateway` (Linux) or `~/.hermes/logs/gateway.log` (macOS) |
+| Cron job output | `~/.hermes/cron/output/{job_id}/{timestamp}.md` |
+| Cron job definitions | `~/.hermes/cron/jobs.json` |
+| Pairing data | `~/.hermes/pairing/` |
+| Session history | `~/.hermes/sessions/` |
 
 ------------------------------------------------------------------------
 

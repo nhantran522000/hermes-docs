@@ -200,7 +200,7 @@ If the provider exposes a live model list, prefer that first and keep `_PROVIDER
 
 This file is also what makes inputs like these work:
 
-``` prism-code
+``` text
 anthropic:claude-sonnet-4-6
 kimi:model-name
 ```
@@ -213,7 +213,7 @@ If aliases are missing here, the provider may authenticate correctly but still f
 
 Add a branch that returns a dict with at least:
 
-``` prism-code
+``` python
 {
     "provider": "your-provider",
     "api_mode": "chat_completions",  # or your native mode
@@ -340,14 +340,14 @@ For docs-only examples, the exact file set may differ. The point is to cover:
 
 Run tests with xdist disabled:
 
-``` prism-code
+``` bash
 source venv/bin/activate
 python -m pytest tests/hermes_cli/test_runtime_provider_resolution.py tests/cli/test_cli_provider_resolution.py tests/hermes_cli/test_setup_model_provider.py tests/run_agent/test_provider_parity.py -n0 -q
 ```
 
 For deeper changes, run the full suite before pushing:
 
-``` prism-code
+``` bash
 source venv/bin/activate
 python -m pytest tests/ -n0 -q
 ```
@@ -356,14 +356,14 @@ python -m pytest tests/ -n0 -q
 
 After tests, run a real smoke test.
 
-``` prism-code
+``` bash
 source venv/bin/activate
 python -m hermes_cli.main chat -q "Say hello" --provider your-provider --model your-model
 ```
 
 Also test the interactive flows if you changed menus:
 
-``` prism-code
+``` bash
 source venv/bin/activate
 python -m hermes_cli.main model
 python -m hermes_cli.main setup
@@ -385,28 +385,28 @@ A developer can wire the provider perfectly and still leave users unable to disc
 
 Use this if the provider is standard chat completions.
 
-- `ProviderConfig` added in `hermes_cli/auth.py`
-- aliases added in `hermes_cli/auth.py` and `hermes_cli/models.py`
-- model catalog added in `hermes_cli/models.py`
-- runtime branch added in `hermes_cli/runtime_provider.py`
-- CLI wiring added in `hermes_cli/main.py` (setup.py inherits automatically)
-- aux model added in `agent/auxiliary_client.py`
-- context lengths added in `agent/model_metadata.py`
-- runtime / CLI tests updated
-- user docs updated
+- [ ] `ProviderConfig` added in `hermes_cli/auth.py`
+- [ ] aliases added in `hermes_cli/auth.py` and `hermes_cli/models.py`
+- [ ] model catalog added in `hermes_cli/models.py`
+- [ ] runtime branch added in `hermes_cli/runtime_provider.py`
+- [ ] CLI wiring added in `hermes_cli/main.py` (setup.py inherits automatically)
+- [ ] aux model added in `agent/auxiliary_client.py`
+- [ ] context lengths added in `agent/model_metadata.py`
+- [ ] runtime / CLI tests updated
+- [ ] user docs updated
 
 ## Native provider checklist
 
 Use this when the provider needs a new protocol path.
 
-- everything in the OpenAI-compatible checklist
-- adapter added in `agent/<provider>_adapter.py`
-- new `api_mode` supported in `run_agent.py`
-- interrupt / rebuild path works
-- usage and finish-reason extraction works
-- fallback path works
-- adapter tests added
-- live smoke test passes
+- [ ] everything in the OpenAI-compatible checklist
+- [ ] adapter added in `agent/<provider>_adapter.py`
+- [ ] new `api_mode` supported in `run_agent.py`
+- [ ] interrupt / rebuild path works
+- [ ] usage and finish-reason extraction works
+- [ ] fallback path works
+- [ ] adapter tests added
+- [ ] live smoke test passes
 
 ## Common pitfalls
 

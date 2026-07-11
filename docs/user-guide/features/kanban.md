@@ -33,16 +33,16 @@ For the full design rationale, comparative analysis against Cline Kanban / Paper
 
 They look similar; they are not the same primitive.
 
-|                   | `delegate_task`                | Kanban                                               |
-|-------------------|--------------------------------|------------------------------------------------------|
-| Shape             | RPC call (fork → join)         | Durable message queue + state machine                |
-| Parent            | Blocks until child returns     | Fire-and-forget after `create`                       |
-| Child identity    | Anonymous subagent             | Named profile with persistent memory                 |
-| Resumability      | None — failed = failed         | Block → unblock → re-run; crash → reclaim            |
-| Human in the loop | Not supported                  | Comment / unblock at any point                       |
-| Agents per task   | One call = one subagent        | N agents over task's life (retry, review, follow-up) |
-| Audit trail       | Lost on context compression    | Durable rows in SQLite forever                       |
-| Coordination      | Hierarchical (caller → callee) | Peer — any profile reads/writes any task             |
+|  | `delegate_task` | Kanban |
+|----|----|----|
+| Shape | RPC call (fork → join) | Durable message queue + state machine |
+| Parent | Blocks until child returns | Fire-and-forget after `create` |
+| Child identity | Anonymous subagent | Named profile with persistent memory |
+| Resumability | None — failed = failed | Block → unblock → re-run; crash → reclaim |
+| Human in the loop | Not supported | Comment / unblock at any point |
+| Agents per task | One call = one subagent | N agents over task's life (retry, review, follow-up) |
+| Audit trail | Lost on context compression | Durable rows in SQLite forever |
+| Coordination | Hierarchical (caller → callee) | Peer — any profile reads/writes any task |
 
 **One-sentence distinction:** `delegate_task` is a function call; Kanban is a work queue where every handoff is a row any profile (or human) can see and edit.
 
@@ -78,7 +78,7 @@ Per-board isolation is absolute:
 
 ### Managing boards from the CLI
 
-``` prism-code
+``` bash
 # See what's on disk. Fresh installs show only "default".
 hermes kanban boards list
 
@@ -144,7 +144,7 @@ Attachment paths resolve directly on the **local** terminal backend, which is th
 
 The commands below are **you** (the human) setting up the board and creating tasks. Once a task is assigned, the dispatcher spawns the assigned profile as a worker, and from there **the model drives the task through `kanban_*` tool calls, not CLI commands** — see [How workers interact with the board](#how-workers-interact-with-the-board).
 
-``` prism-code
+``` bash
 # 1. Create the board (you)
 hermes kanban init
 
@@ -168,7 +168,7 @@ When the dispatcher picks up `t_abcd` and spawns the `researcher` profile, the v
 
 The dispatcher runs inside the gateway process. Nothing to install, no separate service to manage — if the gateway is up, ready tasks get picked up on the next tick (60s by default).
 
-``` prism-code
+``` yaml
 # config.yaml
 kanban:
   dispatch_in_gateway: true        # default
@@ -181,7 +181,7 @@ Running `hermes kanban daemon` as a separate process is **deprecated**; use the 
 
 ### Idempotent create (for automation / webhooks)
 
-``` prism-code
+``` bash
 # First call creates the task. Any subsequent call with the same key
 # returns the existing task id instead of duplicating.
 hermes kanban create "nightly ops review" \
@@ -194,7 +194,7 @@ hermes kanban create "nightly ops review" \
 
 All the lifecycle verbs accept multiple ids so you can clean up a batch in one command:
 
-``` prism-code
+``` bash
 hermes kanban complete t_abc t_def t_hij --result "batch wrap"
 hermes kanban archive  t_abc t_def t_hij
 hermes kanban unblock  t_abc t_def
@@ -205,21 +205,21 @@ hermes kanban block    t_abc "need input" --ids t_def t_hij
 
 **Workers do not shell out to `hermes kanban`.** When the dispatcher spawns a worker it sets `HERMES_KANBAN_TASK=t_abcd` in the child's env, and that env var flips on a dedicated **kanban toolset** in the model's schema. The same toolset is also available to orchestrator profiles that enable `kanban` in their toolsets config. These tools read and mutate the board directly via the Python `kanban_db` layer, same as the CLI does. A running worker calls these like any other tool; it never sees or needs the `hermes kanban` CLI.
 
-| Tool               | Purpose                                                                                                                                                                                             | Required params                      |
-|--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
-| `kanban_show`      | Read the current task (title, body, prior attempts, parent handoffs, comments, full pre-formatted `worker_context`). Defaults to the env's task id.                                                 | —                                    |
-| `kanban_list`      | List task summaries with filters for `assignee`, `status`, `tenant`, archived visibility, and limit. Intended for orchestrators discovering board work.                                             | —                                    |
-| `kanban_complete`  | Finish with `summary` + `metadata` structured handoff.                                                                                                                                              | at least one of `summary` / `result` |
-| `kanban_block`     | Stop work and route by why: `kind=dependency` (waits in `todo`, auto-resumes), `needs_input`/`capability`/`transient` (surface to a human). Repeated same-kind re-blocks auto-escalate to `triage`. | `reason`                             |
-| `kanban_heartbeat` | Signal liveness during long operations. Pure side-effect.                                                                                                                                           | —                                    |
-| `kanban_comment`   | Append a durable note to the task thread.                                                                                                                                                           | `task_id`, `body`                    |
-| `kanban_create`    | (Orchestrators) fan out into child tasks with an `assignee`, optional `parents`, `skills`, etc.                                                                                                     | `title`, `assignee`                  |
-| `kanban_link`      | (Orchestrators) add a `parent_id → child_id` dependency edge after the fact.                                                                                                                        | `parent_id`, `child_id`              |
-| `kanban_unblock`   | (Orchestrators) move a blocked task back to `ready`.                                                                                                                                                | `task_id`                            |
+| Tool | Purpose | Required params |
+|----|----|----|
+| `kanban_show` | Read the current task (title, body, prior attempts, parent handoffs, comments, full pre-formatted `worker_context`). Defaults to the env's task id. | — |
+| `kanban_list` | List task summaries with filters for `assignee`, `status`, `tenant`, archived visibility, and limit. Intended for orchestrators discovering board work. | — |
+| `kanban_complete` | Finish with `summary` + `metadata` structured handoff. | at least one of `summary` / `result` |
+| `kanban_block` | Stop work and route by why: `kind=dependency` (waits in `todo`, auto-resumes), `needs_input`/`capability`/`transient` (surface to a human). Repeated same-kind re-blocks auto-escalate to `triage`. | `reason` |
+| `kanban_heartbeat` | Signal liveness during long operations. Pure side-effect. | — |
+| `kanban_comment` | Append a durable note to the task thread. | `task_id`, `body` |
+| `kanban_create` | (Orchestrators) fan out into child tasks with an `assignee`, optional `parents`, `skills`, etc. | `title`, `assignee` |
+| `kanban_link` | (Orchestrators) add a `parent_id → child_id` dependency edge after the fact. | `parent_id`, `child_id` |
+| `kanban_unblock` | (Orchestrators) move a blocked task back to `ready`. | `task_id` |
 
 A typical worker turn looks like:
 
-``` prism-code
+``` text
 # Model's tool calls, in order:
 kanban_show()                                     # no args — uses HERMES_KANBAN_TASK
 # (model reads the returned worker_context, does the work via terminal/file tools)
@@ -233,7 +233,7 @@ kanban_complete(
 
 An **orchestrator** worker fans out instead:
 
-``` prism-code
+``` text
 kanban_show()
 kanban_create(
     title="research ICP funding 2024-2026",
@@ -272,7 +272,7 @@ The auto-injected kanban guidance teaches the model which tool to call when and 
 
 For engineering and review tasks, prefer this optional metadata shape:
 
-``` prism-code
+``` json
 {
   "changed_files": ["path/to/file.py"],
   "verification": ["pytest tests/hermes_cli/test_kanban_db.py -q"],
@@ -311,7 +311,7 @@ Sometimes a single task needs specialist context the assignee profile doesn't ca
 
 **From an orchestrator agent** (the usual case — one agent routing work to another), use the `kanban_create` tool's `skills` array:
 
-``` prism-code
+``` text
 kanban_create(
     title="translate README to Japanese",
     assignee="linguist",
@@ -327,7 +327,7 @@ kanban_create(
 
 **From a human (CLI / slash command)**, repeat `--skill` for each one:
 
-``` prism-code
+``` bash
 hermes kanban create "translate README to Japanese" \
     --assignee linguist \
     --skill translation
@@ -346,7 +346,7 @@ The dispatcher emits one `--skills <name>` flag per skill listed, so the worker 
 
 By default each worker gets **one shot** at its card — do the work, call `kanban_complete`/`kanban_block`, exit. Pass `--goal` (CLI) or `goal_mode=True` (the `kanban_create` tool / dashboard) to instead run that worker in a **goal loop**, the same Ralph-style engine behind the `/goal` slash command: after every turn an auxiliary judge checks the worker's output against the card's title + body (treated as the acceptance criteria), and if the work isn't done — and the turn budget remains — the worker keeps going **in the same session** until the judge agrees, the worker terminates the task itself, or the budget runs out (which **blocks** the card for human review rather than exiting silently).
 
-``` prism-code
+``` bash
 hermes kanban create "Translate the docs site to French" \
     --body "Acceptance: every page translated, no English left, links intact." \
     --assignee linguist \
@@ -362,7 +362,7 @@ A **well-behaved orchestrator does not do the work itself.** It decomposes the u
 
 A canonical orchestrator turn (two parallel researchers handing off to a writer):
 
-``` prism-code
+``` text
 # Goal from user: "draft a launch post on the ICP funding landscape"
 kanban_create(title="research ICP funding, NA angle",  assignee="researcher-a", body="…")  # → t_r1
 kanban_create(title="research ICP funding, EU angle",  assignee="researcher-b", body="…")  # → t_r2
@@ -389,7 +389,7 @@ The `/kanban` CLI and slash command are enough to run the board headlessly, but 
 
 Open it with:
 
-``` prism-code
+``` bash
 hermes kanban init      # one-time: create kanban.db if not already present
 hermes dashboard        # "Kanban" tab appears in the nav, after "Skills"
 ```
@@ -431,26 +431,26 @@ The decomposer's routing decisions depend on profile descriptions, which is a pe
 
 Config knobs (all under `kanban:` in `~/.hermes/config.yaml`):
 
-| Key                        | Default | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                  |
-|----------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `auto_decompose`           | `true`  | Dispatcher auto-runs the decomposer every tick.                                                                                                                                                                                                                                                                                                                                                                          |
-| `auto_decompose_per_tick`  | `3`     | Cap on decompositions per dispatcher tick. Excess defers to the next tick.                                                                                                                                                                                                                                                                                                                                               |
-| `orchestrator_profile`     | `""`    | Profile assigned to the root/orchestration task after decomposition. Empty = fall back to active default profile.                                                                                                                                                                                                                                                                                                        |
-| `default_assignee`         | `""`    | Where a child task lands when the LLM picks an unknown profile. Empty = fall back to active default.                                                                                                                                                                                                                                                                                                                     |
-| `auto_subscribe_on_create` | `true`  | When a worker calls `kanban_create` from inside a session with a persistent delivery channel (messaging gateway or TUI), the originating session is auto-subscribed to the new task's completion/block events. The dispatcher still drives the delivery — this only changes whether the caller's chat/key shows up in the notify-sub table. Set to `false` to require explicit `kanban_notify-subscribe` calls per task. |
+| Key | Default | Purpose |
+|----|----|----|
+| `auto_decompose` | `true` | Dispatcher auto-runs the decomposer every tick. |
+| `auto_decompose_per_tick` | `3` | Cap on decompositions per dispatcher tick. Excess defers to the next tick. |
+| `orchestrator_profile` | `""` | Profile assigned to the root/orchestration task after decomposition. Empty = fall back to active default profile. |
+| `default_assignee` | `""` | Where a child task lands when the LLM picks an unknown profile. Empty = fall back to active default. |
+| `auto_subscribe_on_create` | `true` | When a worker calls `kanban_create` from inside a session with a persistent delivery channel (messaging gateway or TUI), the originating session is auto-subscribed to the new task's completion/block events. The dispatcher still drives the delivery — this only changes whether the caller's chat/key shows up in the notify-sub table. Set to `false` to require explicit `kanban_notify-subscribe` calls per task. |
 
 And the two auxiliary LLM slots:
 
-| Key                           | Purpose                                                                                                           |
-|-------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| Key | Purpose |
+|----|----|
 | `auxiliary.kanban_decomposer` | Model that produces the task graph (called by Decompose). Set `provider`/`model` to override the main chat model. |
-| `auxiliary.profile_describer` | Model that auto-generates profile descriptions (called by `hermes profile describe --auto`).                      |
+| `auxiliary.profile_describer` | Model that auto-generates profile descriptions (called by `hermes profile describe --auto`). |
 
 ### Architecture
 
 The GUI is strictly a **read-through-the-DB + write-through-kanban_db** layer with no domain logic of its own:
 
-``` prism-code
+``` text
 ┌────────────────────────┐      WebSocket (tails task_events)
 │   React SPA (plugin)   │ ◀──────────────────────────────────┐
 │   HTML5 drag-and-drop  │                                    │
@@ -474,26 +474,26 @@ The GUI is strictly a **read-through-the-DB + write-through-kanban_db** layer wi
 
 All routes are mounted under `/api/plugins/kanban/` and protected by the dashboard's ephemeral session token:
 
-| Method   | Path                                      | Purpose                                                                                                                                                                                                                                                                 |
-|----------|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GET`    | `/board?tenant=<name>&include_archived=…` | Full board grouped by status column, plus tenants + assignees for filter dropdowns                                                                                                                                                                                      |
-| `GET`    | `/tasks/:id`                              | Task + comments + events + links                                                                                                                                                                                                                                        |
-| `POST`   | `/tasks`                                  | Create (wraps `kanban_db.create_task`, accepts `triage: bool` and `parents: [id, …]`)                                                                                                                                                                                   |
-| `PATCH`  | `/tasks/:id`                              | Status / assignee / priority / title / body / result                                                                                                                                                                                                                    |
-| `POST`   | `/tasks/bulk`                             | Apply the same patch (status / archive / assignee / priority) to every id in `ids`. Per-id failures reported without aborting siblings                                                                                                                                  |
-| `POST`   | `/tasks/:id/comments`                     | Append a comment                                                                                                                                                                                                                                                        |
-| `POST`   | `/tasks/:id/specify`                      | Run the triage specifier — auxiliary LLM fleshes out the task body and promotes it from `triage` to `todo`. Returns `{ok, task_id, reason, new_title}`; `ok=false` with a human-readable reason on "not in triage" / no aux client / LLM error is a 200, not a 4xx      |
-| `POST`   | `/tasks/:id/decompose`                    | Run the kanban decomposer — auxiliary LLM produces a task graph and the helper atomically creates the children + links the root + flips `triage → todo`. Returns `{ok, task_id, reason, fanout, child_ids, new_title}`. Same 200-on-LLM-error convention as `/specify`. |
-| `GET`    | `/profiles`                               | List installed profiles with their descriptions (consumed by the dashboard's profile-description editor and the orchestrator picker).                                                                                                                                   |
-| `PATCH`  | `/profiles/:name`                         | Set or clear a profile's description (user-authored — `description_auto: false`). Returns `{ok, profile, description}`.                                                                                                                                                 |
-| `POST`   | `/profiles/:name/describe-auto`           | Generate a description for a profile via `auxiliary.profile_describer`. Persists with `description_auto: true` so the dashboard can surface a "review" badge.                                                                                                           |
-| `GET`    | `/orchestration`                          | Read the kanban orchestration settings (`orchestrator_profile`, `default_assignee`, `auto_decompose`) plus the *resolved* effective values after fallbacks.                                                                                                             |
-| `PUT`    | `/orchestration`                          | Update one or more of the three orchestration keys in `config.yaml`. Validates that non-empty profile names actually exist.                                                                                                                                             |
-| `POST`   | `/links`                                  | Add a dependency (`parent_id` → `child_id`)                                                                                                                                                                                                                             |
-| `DELETE` | `/links?parent_id=…&child_id=…`           | Remove a dependency                                                                                                                                                                                                                                                     |
-| `POST`   | `/dispatch?max=…&dry_run=…`               | Nudge the dispatcher — skip the 60 s wait                                                                                                                                                                                                                               |
-| `GET`    | `/config`                                 | Read `dashboard.kanban` preferences from `config.yaml` — `default_tenant`, `lane_by_profile`, `include_archived_by_default`, `render_markdown`                                                                                                                          |
-| `WS`     | `/events?since=<event_id>`                | Live stream of `task_events` rows                                                                                                                                                                                                                                       |
+| Method | Path | Purpose |
+|----|----|----|
+| `GET` | `/board?tenant=<name>&include_archived=…` | Full board grouped by status column, plus tenants + assignees for filter dropdowns |
+| `GET` | `/tasks/:id` | Task + comments + events + links |
+| `POST` | `/tasks` | Create (wraps `kanban_db.create_task`, accepts `triage: bool` and `parents: [id, …]`) |
+| `PATCH` | `/tasks/:id` | Status / assignee / priority / title / body / result |
+| `POST` | `/tasks/bulk` | Apply the same patch (status / archive / assignee / priority) to every id in `ids`. Per-id failures reported without aborting siblings |
+| `POST` | `/tasks/:id/comments` | Append a comment |
+| `POST` | `/tasks/:id/specify` | Run the triage specifier — auxiliary LLM fleshes out the task body and promotes it from `triage` to `todo`. Returns `{ok, task_id, reason, new_title}`; `ok=false` with a human-readable reason on "not in triage" / no aux client / LLM error is a 200, not a 4xx |
+| `POST` | `/tasks/:id/decompose` | Run the kanban decomposer — auxiliary LLM produces a task graph and the helper atomically creates the children + links the root + flips `triage → todo`. Returns `{ok, task_id, reason, fanout, child_ids, new_title}`. Same 200-on-LLM-error convention as `/specify`. |
+| `GET` | `/profiles` | List installed profiles with their descriptions (consumed by the dashboard's profile-description editor and the orchestrator picker). |
+| `PATCH` | `/profiles/:name` | Set or clear a profile's description (user-authored — `description_auto: false`). Returns `{ok, profile, description}`. |
+| `POST` | `/profiles/:name/describe-auto` | Generate a description for a profile via `auxiliary.profile_describer`. Persists with `description_auto: true` so the dashboard can surface a "review" badge. |
+| `GET` | `/orchestration` | Read the kanban orchestration settings (`orchestrator_profile`, `default_assignee`, `auto_decompose`) plus the *resolved* effective values after fallbacks. |
+| `PUT` | `/orchestration` | Update one or more of the three orchestration keys in `config.yaml`. Validates that non-empty profile names actually exist. |
+| `POST` | `/links` | Add a dependency (`parent_id` → `child_id`) |
+| `DELETE` | `/links?parent_id=…&child_id=…` | Remove a dependency |
+| `POST` | `/dispatch?max=…&dry_run=…` | Nudge the dispatcher — skip the 60 s wait |
+| `GET` | `/config` | Read `dashboard.kanban` preferences from `config.yaml` — `default_tenant`, `lane_by_profile`, `include_archived_by_default`, `render_markdown` |
+| `WS` | `/events?since=<event_id>` | Live stream of `task_events` rows |
 
 Every handler is a thin wrapper — the plugin is ~700 lines of Python (router + WebSocket tail + bulk batcher + config reader) and adds no new business logic. A tiny `_conn()` helper auto-initializes `kanban.db` on every read and write, so a fresh install works whether the user opened the dashboard first, hit the REST API directly, or ran `hermes kanban init`.
 
@@ -501,7 +501,7 @@ Every handler is a thin wrapper — the plugin is ~700 lines of Python (router +
 
 Any of these keys under `dashboard.kanban` in `~/.hermes/config.yaml` changes the tab's defaults — the plugin reads them at load time via `GET /config`:
 
-``` prism-code
+``` yaml
 dashboard:
   kanban:
     default_tenant: acme              # preselects the tenant filter
@@ -540,7 +540,7 @@ The GUI is deliberately thin. Everything the plugin does is reachable from the C
 
 This is the surface **you** (or scripts, cron, the dashboard) use to drive the board. Workers running inside the dispatcher use the `kanban_*` [tool surface](#how-workers-interact-with-the-board) for the same operations — the CLI here and the tools there both route through `kanban_db`, so the two surfaces agree by construction.
 
-``` prism-code
+``` text
 hermes kanban init                                     # create kanban.db + print daemon hint
 hermes kanban create "<title>" [--body ...] [--assignee <profile>]
                                 [--parent <id>]... [--tenant <name>]
@@ -605,14 +605,14 @@ All commands are also available as a slash command in the interactive CLI and in
 
 ### Concurrency, scheduling, and child promotion config
 
-| Config key                           | Default           | What it does                                                                                                                                                                                                                                                                                                                  |
-|--------------------------------------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `kanban.max_in_progress`             | unset (unlimited) | Caps the number of simultaneously running tasks. When the board already has N running, the dispatcher skips spawning more — useful for slow workers (local LLMs, resource-constrained hosts) so they finish what they have before more pile up and time out. Invalid or below-1 values log a warning and behave as unlimited. |
-| `kanban.max_in_progress_per_profile` | unset (unlimited) | Per-profile variant of `max_in_progress` — caps how many tasks any single assignee profile may run concurrently. Useful when one profile is slow or rate-limited but others should keep flowing. Applies alongside the board-wide `max_in_progress`; both must allow a spawn for it to proceed.                               |
-| `kanban.auto_promote_children`       | `true`            | After `decompose_triage_task()` produces children with no parent-blocker dependencies, they're automatically promoted to `ready` so the dispatcher can pick them up. Set to `false` to require manual review — children stay in `todo` until you promote them.                                                                |
-| `kanban.default_workdir`             | unset             | Board-level default working directory applied to new tasks when neither `--workspace` nor the task itself overrides it. Per-task `workspace:` still wins.                                                                                                                                                                     |
+| Config key | Default | What it does |
+|----|----|----|
+| `kanban.max_in_progress` | unset (unlimited) | Caps the number of simultaneously running tasks. When the board already has N running, the dispatcher skips spawning more — useful for slow workers (local LLMs, resource-constrained hosts) so they finish what they have before more pile up and time out. Invalid or below-1 values log a warning and behave as unlimited. |
+| `kanban.max_in_progress_per_profile` | unset (unlimited) | Per-profile variant of `max_in_progress` — caps how many tasks any single assignee profile may run concurrently. Useful when one profile is slow or rate-limited but others should keep flowing. Applies alongside the board-wide `max_in_progress`; both must allow a spawn for it to proceed. |
+| `kanban.auto_promote_children` | `true` | After `decompose_triage_task()` produces children with no parent-blocker dependencies, they're automatically promoted to `ready` so the dispatcher can pick them up. Set to `false` to require manual review — children stay in `todo` until you promote them. |
+| `kanban.default_workdir` | unset | Board-level default working directory applied to new tasks when neither `--workspace` nor the task itself overrides it. Per-task `workspace:` still wins. |
 
-``` prism-code
+``` yaml
 kanban:
   max_in_progress: 2
   auto_promote_children: false
@@ -623,7 +623,7 @@ kanban:
 
 Set `scheduled_at` on a task to delay dispatch until a specific time. The dispatcher skips ready tasks whose `scheduled_at` is in the future and picks them up on the first tick after that timestamp.
 
-``` prism-code
+``` bash
 hermes kanban create "nightly backup audit" \
   --assignee ops --scheduled-at "2026-06-01T03:00:00Z"
 ```
@@ -640,12 +640,12 @@ The dashboard exposes a **trash drop zone** on the kanban page — drag any card
 
 The dashboard plugin API now exposes these read-only endpoints (plus a run-control verb) for external monitors:
 
-| Endpoint                                           | Returns                                                                                        |
-|----------------------------------------------------|------------------------------------------------------------------------------------------------|
-| `GET /api/plugins/kanban/workers/active`           | Currently spawned workers with PID, profile, task id, started-at, last heartbeat               |
-| `GET /api/plugins/kanban/runs/{id}`                | Single-run detail — task id, status, started/ended, exit code, log path                        |
-| `POST /api/plugins/kanban/runs/{run_id}/terminate` | Terminate a reclaimable run — stops the worker and frees the task for re-dispatch              |
-| `GET /api/plugins/kanban/inspect`                  | Combined dispatcher snapshot — backlog, in-progress count vs. `max_in_progress`, recent events |
+| Endpoint | Returns |
+|----|----|
+| `GET /api/plugins/kanban/workers/active` | Currently spawned workers with PID, profile, task id, started-at, last heartbeat |
+| `GET /api/plugins/kanban/runs/{id}` | Single-run detail — task id, status, started/ended, exit code, log path |
+| `POST /api/plugins/kanban/runs/{run_id}/terminate` | Terminate a reclaimable run — stops the worker and frees the task for re-dispatch |
+| `GET /api/plugins/kanban/inspect` | Combined dispatcher snapshot — backlog, in-progress count vs. `max_in_progress`, recent events |
 
 All of these are gated by the same dashboard plugin auth as the rest of the kanban plugin API.
 
@@ -653,7 +653,7 @@ All of these are gated by the same dashboard plugin auth as the rest of the kanb
 
 `hermes kanban swarm` creates a durable **Kanban Swarm v1** graph in one shot: a completed root/blackboard card, N parallel worker cards, a verifier card gated on all workers, and a synthesizer card gated on the verifier. Shared swarm context (the "blackboard") is stored as structured JSON comments on the root card so any worker can read it.
 
-``` prism-code
+``` bash
 hermes kanban swarm "Design a multi-region failover plan" \
   --workers researcher,architect,sre \
   --verifier reviewer --synthesizer writer
@@ -665,7 +665,7 @@ The resulting graph dispatches normally — workers run in parallel, the verifie
 
 Every `hermes kanban <action>` verb is also reachable as `/kanban <action>` — from inside an interactive `hermes chat` session **and** from any gateway platform (Telegram, Discord, Slack, WhatsApp, Signal, Matrix, Mattermost, email, SMS). Both surfaces call the exact same `hermes_cli.kanban.run_slash()` entry point that reuses the `hermes kanban` argparse tree, so the argument surface, flags, and output format are identical across CLI, `/kanban`, and `hermes kanban`. You don't have to leave the chat to drive the board.
 
-``` prism-code
+``` text
 /kanban list
 /kanban show t_abcd
 /kanban create "write launch post" --assignee writer --parent t_research
@@ -692,7 +692,7 @@ This is the whole point of the separation:
 
 When you create a task from the gateway with `/kanban create "…"`, the originating chat (platform + chat id + thread id) is automatically subscribed to that task's terminal events (`completed`, `blocked`, `gave_up`, `crashed`, `timed_out`). You'll get one message back per terminal event — including the first line of the worker's result summary on `completed` — without having to poll or remember the task id.
 
-``` prism-code
+``` text
 you> /kanban create "transcribe today's podcast" --assignee transcriber
 bot> Created t_9fc1a3  (ready, assignee=transcriber)
      (subscribed — you'll be notified when t_9fc1a3 completes or blocks)
@@ -717,17 +717,17 @@ In the interactive CLI, typing `/kanban ` and hitting Tab cycles through the bui
 
 The board supports these eight patterns without any new primitives:
 
-| Pattern                        | Shape                                                                 | Example                                  |
-|--------------------------------|-----------------------------------------------------------------------|------------------------------------------|
-| **P1 Fan-out**                 | N siblings, same role                                                 | "research 5 angles in parallel"          |
-| **P2 Pipeline**                | role chain: scout → editor → writer                                   | daily brief assembly                     |
-| **P3 Voting / quorum**         | N siblings + 1 aggregator                                             | 3 researchers → 1 reviewer picks         |
-| **P4 Long-running journal**    | same profile + shared dir + cron                                      | Obsidian vault                           |
-| **P5 Human-in-the-loop**       | worker blocks → user comments → unblock                               | ambiguous decisions                      |
-| **P6 `@mention`**              | inline routing from prose                                             | `@reviewer look at this`                 |
-| **P7 Thread-scoped workspace** | `/kanban here` in a thread                                            | per-project gateway threads              |
-| **P8 Fleet farming**           | one profile, N subjects                                               | 50 social accounts                       |
-| **P9 Triage specifier**        | rough idea → `triage` → `hermes kanban specify` expands body → `todo` | "turn this one-liner into a spec'd task" |
+| Pattern | Shape | Example |
+|----|----|----|
+| **P1 Fan-out** | N siblings, same role | "research 5 angles in parallel" |
+| **P2 Pipeline** | role chain: scout → editor → writer | daily brief assembly |
+| **P3 Voting / quorum** | N siblings + 1 aggregator | 3 researchers → 1 reviewer picks |
+| **P4 Long-running journal** | same profile + shared dir + cron | Obsidian vault |
+| **P5 Human-in-the-loop** | worker blocks → user comments → unblock | ambiguous decisions |
+| **P6 `@mention`** | inline routing from prose | `@reviewer look at this` |
+| **P7 Thread-scoped workspace** | `/kanban here` in a thread | per-project gateway threads |
+| **P8 Fleet farming** | one profile, N subjects | 50 social accounts |
+| **P9 Triage specifier** | rough idea → `triage` → `hermes kanban specify` expands body → `todo` | "turn this one-liner into a spec'd task" |
 
 For worked examples of each, see `docs/hermes-kanban-v1-spec.pdf`.
 
@@ -735,7 +735,7 @@ For worked examples of each, see `docs/hermes-kanban-v1-spec.pdf`.
 
 When one specialist fleet serves multiple businesses, tag each task with a tenant:
 
-``` prism-code
+``` bash
 hermes kanban create "monthly report" \
     --assignee researcher \
     --tenant business-a \
@@ -750,7 +750,7 @@ When you run `/kanban create …` from the gateway (Telegram, Discord, Slack, et
 
 You can manage subscriptions explicitly from the CLI — useful when a script / cron job wants to notify a chat it didn't originate from:
 
-``` prism-code
+``` bash
 hermes kanban notify-subscribe t_abcd \
     --platform telegram --chat-id 12345678 --thread-id 7
 hermes kanban notify-list
@@ -774,7 +774,7 @@ Runs are also where **structured handoff** lives. When a worker completes a task
 
 Downstream children read the most recent completed run's summary + metadata for each parent. Retrying workers read the prior attempts on their own task (outcome, summary, error) so they don't repeat a path that already failed.
 
-``` prism-code
+``` text
 # What a worker actually does — a tool call, from inside the agent loop:
 kanban_complete(
     summary="implemented token bucket, keys on user_id with IP fallback, all tests pass",
@@ -785,7 +785,7 @@ kanban_complete(
 
 The same handoff is reachable from the CLI when you (the human) need to close out a task a worker can't — e.g. a task that was abandoned, or one you marked done manually from the dashboard:
 
-``` prism-code
+``` bash
 hermes kanban complete t_abcd \
     --result "rate limiter shipped" \
     --summary "implemented token bucket, keys on user_id with IP fallback, all tests pass" \
@@ -820,41 +820,41 @@ Every transition appends a row to `task_events`. Each row carries an optional `r
 
 **Lifecycle** (what changed about the task as a logical unit):
 
-| Kind                  | Payload                               | When                                                                                                                                                                                                                                                                                                  |
-|-----------------------|---------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `created`             | `{assignee, status, parents, tenant}` | Task inserted. `run_id` is `NULL`.                                                                                                                                                                                                                                                                    |
-| `promoted`            | —                                     | `todo → ready` because all parents hit `done`. `run_id` is `NULL`.                                                                                                                                                                                                                                    |
-| `claimed`             | `{lock, expires, run_id}`             | Dispatcher atomically claimed a `ready` task for spawn.                                                                                                                                                                                                                                               |
-| `completed`           | `{result_len, summary?}`              | Worker wrote `--result` / `--summary` and task hit `done`. `summary` is the first-line handoff (400-char cap); full version lives on the run row. If `complete_task` is called on a never-claimed task with handoff fields, a zero-duration run is synthesized so `run_id` still points at something. |
-| `blocked`             | `{reason, kind, recurrences}`         | Worker or human flipped the task to `blocked`. `kind` is the typed block reason (`needs_input`, `capability`, `transient`, or `null` for a generic block); `recurrences` is the unblock-loop counter. Synthesizes a zero-duration run when called on a never-claimed task with `--reason`.            |
-| `dependency_wait`     | `{reason, kind}`                      | Worker blocked with `kind=dependency` — the task is only waiting on another task, so it routes to `todo` (parent-gated, auto-promoted) instead of `blocked`. No human needed.                                                                                                                         |
-| `block_loop_detected` | `{reason, kind, recurrences, limit}`  | A task was unblocked and re-blocked for the same reason `BLOCK_RECURRENCE_LIMIT` times (default 2). Instead of landing in `blocked` again — where a cron would keep unblocking it — it routes to `triage` for a human decision, breaking the unblock↔re-block loop.                                   |
-| `unblocked`           | —                                     | `blocked → ready` (or `todo` if parents are still open), either manually or via `/unblock`. Resets the dispatcher's `consecutive_failures` but deliberately preserves `block_recurrences` so the loop breaker keeps its memory. `run_id` is `NULL`.                                                   |
-| `archived`            | —                                     | Hidden from the default board. If the task was still running, carries the `run_id` of the run that was reclaimed as a side effect.                                                                                                                                                                    |
+| Kind | Payload | When |
+|----|----|----|
+| `created` | `{assignee, status, parents, tenant}` | Task inserted. `run_id` is `NULL`. |
+| `promoted` | — | `todo → ready` because all parents hit `done`. `run_id` is `NULL`. |
+| `claimed` | `{lock, expires, run_id}` | Dispatcher atomically claimed a `ready` task for spawn. |
+| `completed` | `{result_len, summary?}` | Worker wrote `--result` / `--summary` and task hit `done`. `summary` is the first-line handoff (400-char cap); full version lives on the run row. If `complete_task` is called on a never-claimed task with handoff fields, a zero-duration run is synthesized so `run_id` still points at something. |
+| `blocked` | `{reason, kind, recurrences}` | Worker or human flipped the task to `blocked`. `kind` is the typed block reason (`needs_input`, `capability`, `transient`, or `null` for a generic block); `recurrences` is the unblock-loop counter. Synthesizes a zero-duration run when called on a never-claimed task with `--reason`. |
+| `dependency_wait` | `{reason, kind}` | Worker blocked with `kind=dependency` — the task is only waiting on another task, so it routes to `todo` (parent-gated, auto-promoted) instead of `blocked`. No human needed. |
+| `block_loop_detected` | `{reason, kind, recurrences, limit}` | A task was unblocked and re-blocked for the same reason `BLOCK_RECURRENCE_LIMIT` times (default 2). Instead of landing in `blocked` again — where a cron would keep unblocking it — it routes to `triage` for a human decision, breaking the unblock↔re-block loop. |
+| `unblocked` | — | `blocked → ready` (or `todo` if parents are still open), either manually or via `/unblock`. Resets the dispatcher's `consecutive_failures` but deliberately preserves `block_recurrences` so the loop breaker keeps its memory. `run_id` is `NULL`. |
+| `archived` | — | Hidden from the default board. If the task was still running, carries the `run_id` of the run that was reclaimed as a side effect. |
 
 **Edits** (human-driven changes that aren't transitions):
 
-| Kind            | Payload      | When                                                                                                                                                                           |
-|-----------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `assigned`      | `{assignee}` | Assignee changed (including unassignment).                                                                                                                                     |
-| `edited`        | `{fields}`   | Title or body updated.                                                                                                                                                         |
-| `reprioritized` | `{priority}` | Priority changed.                                                                                                                                                              |
-| `status`        | `{status}`   | Dashboard drag-drop wrote a status directly (e.g. `todo → ready`). Carries the `run_id` of the run that was reclaimed when dragging off `running`; otherwise `run_id` is NULL. |
+| Kind | Payload | When |
+|----|----|----|
+| `assigned` | `{assignee}` | Assignee changed (including unassignment). |
+| `edited` | `{fields}` | Title or body updated. |
+| `reprioritized` | `{priority}` | Priority changed. |
+| `status` | `{status}` | Dashboard drag-drop wrote a status directly (e.g. `todo → ready`). Carries the `run_id` of the run that was reclaimed when dragging off `running`; otherwise `run_id` is NULL. |
 
 **Worker telemetry** (about the execution process, not the logical task):
 
-| Kind                 | Payload                                                                                         | When                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-|----------------------|-------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `spawned`            | `{pid}`                                                                                         | Dispatcher successfully started a worker process.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `heartbeat`          | `{note?}`                                                                                       | Worker called `hermes kanban heartbeat $TASK` to signal liveness during long operations.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| `reclaimed`          | `{stale_lock}`                                                                                  | Claim TTL expired without a completion; task goes back to `ready`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| `crashed`            | `{pid, claimer}`                                                                                | Worker PID no longer alive but TTL hadn't expired yet.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `timed_out`          | `{pid, elapsed_seconds, limit_seconds, sigkill}`                                                | `max_runtime_seconds` exceeded; dispatcher SIGTERM'd (then SIGKILL'd after 5 s grace) and re-queued.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `stale`              | `{elapsed_seconds, last_heartbeat_at, heartbeat_age_seconds, timeout_seconds, pid, terminated}` | Task ran longer than `kanban.dispatch_stale_timeout_seconds` (default 4 h) AND no `kanban_heartbeat` arrived in the last hour. Dispatcher SIGTERM'd the host-local worker (if any), reset the task to `ready` for re-dispatch. Does NOT tick the failure counter (stale is dispatcher-side absence detection, not a worker fault). Workers running long operations should call `kanban_heartbeat` at least once an hour to avoid this.                                                                                                                                                          |
-| `respawn_guarded`    | `{reason}`                                                                                      | Dispatcher refused to re-spawn this ready task this tick. Reasons: `blocker_auth` (last failure was a quota/auth/429 error — wait for the rate window to reset), `recent_success` (a completed run happened in the last hour — wait for review before re-running), `active_pr` (a GitHub PR URL appears in a recent comment — a prior worker already opened a PR). The task stays in `ready`; the next tick gets another chance to spawn. If the underlying condition persists, the normal `consecutive_failures` circuit breaker will auto-block via `gave_up` after `failure_limit` failures. |
-| `spawn_failed`       | `{error, failures}`                                                                             | One spawn attempt failed (missing PATH, workspace unmountable, …). Counter increments; task returns to `ready` for retry.                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `protocol_violation` | `{pid, claimer, exit_code}`                                                                     | Worker exited successfully while the task was still `running`, usually because it answered without calling `kanban_complete` or `kanban_block`. The dispatcher also emits `gave_up` and auto-blocks immediately instead of retrying.                                                                                                                                                                                                                                                                                                                                                            |
-| `gave_up`            | `{failures, effective_limit, limit_source, error}`                                              | Circuit breaker fired after N consecutive non-successful attempts. Task auto-blocks with the last error. The effective limit resolves as task `max_retries`, then dispatcher `failure_limit` / `kanban.failure_limit`, then the built-in default.                                                                                                                                                                                                                                                                                                                                               |
+| Kind | Payload | When |
+|----|----|----|
+| `spawned` | `{pid}` | Dispatcher successfully started a worker process. |
+| `heartbeat` | `{note?}` | Worker called `hermes kanban heartbeat $TASK` to signal liveness during long operations. |
+| `reclaimed` | `{stale_lock}` | Claim TTL expired without a completion; task goes back to `ready`. |
+| `crashed` | `{pid, claimer}` | Worker PID no longer alive but TTL hadn't expired yet. |
+| `timed_out` | `{pid, elapsed_seconds, limit_seconds, sigkill}` | `max_runtime_seconds` exceeded; dispatcher SIGTERM'd (then SIGKILL'd after 5 s grace) and re-queued. |
+| `stale` | `{elapsed_seconds, last_heartbeat_at, heartbeat_age_seconds, timeout_seconds, pid, terminated}` | Task ran longer than `kanban.dispatch_stale_timeout_seconds` (default 4 h) AND no `kanban_heartbeat` arrived in the last hour. Dispatcher SIGTERM'd the host-local worker (if any), reset the task to `ready` for re-dispatch. Does NOT tick the failure counter (stale is dispatcher-side absence detection, not a worker fault). Workers running long operations should call `kanban_heartbeat` at least once an hour to avoid this. |
+| `respawn_guarded` | `{reason}` | Dispatcher refused to re-spawn this ready task this tick. Reasons: `blocker_auth` (last failure was a quota/auth/429 error — wait for the rate window to reset), `recent_success` (a completed run happened in the last hour — wait for review before re-running), `active_pr` (a GitHub PR URL appears in a recent comment — a prior worker already opened a PR). The task stays in `ready`; the next tick gets another chance to spawn. If the underlying condition persists, the normal `consecutive_failures` circuit breaker will auto-block via `gave_up` after `failure_limit` failures. |
+| `spawn_failed` | `{error, failures}` | One spawn attempt failed (missing PATH, workspace unmountable, …). Counter increments; task returns to `ready` for retry. |
+| `protocol_violation` | `{pid, claimer, exit_code}` | Worker exited successfully while the task was still `running`, usually because it answered without calling `kanban_complete` or `kanban_block`. The dispatcher also emits `gave_up` and auto-blocks immediately instead of retrying. |
+| `gave_up` | `{failures, effective_limit, limit_source, error}` | Circuit breaker fired after N consecutive non-successful attempts. Task auto-blocks with the last error. The effective limit resolves as task `max_retries`, then dispatcher `failure_limit` / `kanban.failure_limit`, then the built-in default. |
 
 `hermes kanban tail <id>` shows these for a single task. `hermes kanban watch` streams them board-wide.
 

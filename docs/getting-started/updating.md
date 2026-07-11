@@ -10,7 +10,7 @@ last_crawled: 2026-07-11
 
 Update to the latest version with a single command:
 
-``` prism-code
+``` bash
 hermes update
 ```
 
@@ -35,7 +35,7 @@ When you run `hermes update`, the following steps occur:
 
 By default `hermes update` tracks `origin/main`. Pass `--branch <name>` to update against a different branch — useful for QA channels, feature branches, or release-candidate testing:
 
-``` prism-code
+``` bash
 hermes update --branch release-candidate
 hermes update --check --branch experimental   # preview behindness only
 ```
@@ -48,7 +48,7 @@ When you run `hermes update` in a terminal, Hermes stashes any uncommitted sourc
 
 When the update runs **without a terminal** — from the desktop/chat app's "Update" button or a gateway-triggered update — there's no prompt to answer. The `updates.non_interactive_local_changes` setting decides what happens to your stashed changes:
 
-``` prism-code
+``` yaml
 # ~/.hermes/config.yaml
 updates:
   non_interactive_local_changes: stash   # default: keep + auto-restore
@@ -68,13 +68,13 @@ Want to know if an update is available before pulling? Run `hermes update --chec
 
 For high-value profiles (production gateways, shared team installs) you can opt into a full pre-pull backup of `HERMES_HOME` (config, auth, sessions, skills, pairing):
 
-``` prism-code
+``` bash
 hermes update --backup
 ```
 
 Or make it the default for every run:
 
-``` prism-code
+``` yaml
 # ~/.hermes/config.yaml
 updates:
   pre_update_backup: true
@@ -86,7 +86,7 @@ updates:
 
 On Windows, `hermes update` will refuse to run if it detects another `hermes.exe` process holding the venv's entry-point executable open — most commonly the Hermes Desktop app's spawned backend, an open `hermes` REPL in another terminal, or a running gateway:
 
-``` prism-code
+``` text
 $ hermes update
 ✗ Another hermes.exe is running:
     PID 12345  hermes.exe
@@ -106,7 +106,7 @@ A second, separate guard refuses to touch the venv while any process is running 
 
 Expected output looks like:
 
-``` prism-code
+``` text
 $ hermes update
 Updating Hermes Agent...
 📥 Pulling latest code...
@@ -141,7 +141,7 @@ If `git status --short` shows unexpected changes after `hermes update`, stop and
 - The update ignores `SIGHUP`, so closing your SSH session or terminal window no longer kills it mid-install. `pip` and `git` child processes inherit this protection, so the Python environment cannot be left half-installed by a dropped connection.
 - All output is mirrored to `~/.hermes/logs/update.log` while the update runs. If your terminal disappears, reconnect and inspect the log to see whether the update finished and whether the gateway restart succeeded:
 
-``` prism-code
+``` bash
 tail -f ~/.hermes/logs/update.log
 ```
 
@@ -151,7 +151,7 @@ You no longer need to wrap `hermes update` in `screen` or `tmux` to survive a te
 
 ### Checking your current version
 
-``` prism-code
+``` bash
 hermes version
 ```
 
@@ -161,7 +161,7 @@ Compare against the latest release at the [GitHub releases page](https://github.
 
 You can also update directly from Telegram, Discord, Slack, WhatsApp, or Teams by sending:
 
-``` prism-code
+``` text
 /update
 ```
 
@@ -171,7 +171,7 @@ This pulls the latest code, updates dependencies, and restarts running gateways.
 
 If you installed manually (not via the quick installer):
 
-``` prism-code
+``` bash
 cd /path/to/hermes-agent
 # Activate the venv you created during install (outside the source tree)
 export VIRTUAL_ENV="$HOME/.hermes/venvs/hermes-dev"
@@ -192,7 +192,7 @@ hermes config migrate   # Interactively add any missing options
 
 If an update introduces a problem, you can roll back to a previous version:
 
-``` prism-code
+``` bash
 cd /path/to/hermes-agent
 
 # List recent versions
@@ -208,7 +208,7 @@ hermes gateway restart
 
 To roll back to a specific release tag (substitute your previous tag — e.g. a recent release like `v2026.5.16`, or any earlier tag from `git tag --sort=-version:refname`):
 
-``` prism-code
+``` bash
 git checkout vX.Y.Z
 uv pip install -e ".[all]"
 ```
@@ -221,7 +221,7 @@ Rolling back may cause config incompatibilities if new options were added. Run `
 
 Nix is no longer an explicitly supported install path (best-effort only) — see [Nix Setup](nix-setup.md). If you installed via Nix flake, updates are managed through the Nix package manager:
 
-``` prism-code
+``` bash
 # Update the flake input
 nix flake update hermes-agent
 
@@ -231,7 +231,7 @@ nix profile upgrade hermes-agent
 
 Nix installations are immutable — rollback is handled by Nix's generation system:
 
-``` prism-code
+``` bash
 nix profile rollback
 ```
 
@@ -241,7 +241,7 @@ See [Nix Setup](nix-setup.md) for more details.
 
 ## Uninstalling
 
-``` prism-code
+``` bash
 hermes uninstall
 ```
 
@@ -249,7 +249,7 @@ The uninstaller gives you the option to keep your configuration files (`~/.herme
 
 ### Manual Uninstall
 
-``` prism-code
+``` bash
 rm -f ~/.local/bin/hermes
 rm -rf /path/to/hermes-agent
 rm -rf ~/.hermes            # Optional — keep if you plan to reinstall
@@ -259,7 +259,7 @@ info
 
 If you installed the gateway as a system service, stop and disable it first:
 
-``` prism-code
+``` bash
 hermes gateway stop
 # Linux: systemctl --user disable hermes-gateway
 # macOS: launchctl remove ai.hermes.gateway

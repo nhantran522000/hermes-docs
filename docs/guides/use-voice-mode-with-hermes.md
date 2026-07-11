@@ -27,11 +27,11 @@ Voice mode is especially useful when:
 
 There are really three different voice experiences in Hermes.
 
-| Mode                        | Best for                                            | Platform               |
-|-----------------------------|-----------------------------------------------------|------------------------|
-| Interactive microphone loop | Personal hands-free use while coding or researching | CLI                    |
-| Voice replies in chat       | Spoken responses alongside normal messaging         | Telegram, Discord      |
-| Live voice channel bot      | Group or personal live conversation in a VC         | Discord voice channels |
+| Mode | Best for | Platform |
+|----|----|----|
+| Interactive microphone loop | Personal hands-free use while coding or researching | CLI |
+| Voice replies in chat | Spoken responses alongside normal messaging | Telegram, Discord |
+| Live voice channel bot | Group or personal live conversation in a VC | Discord voice channels |
 
 A good path is:
 
@@ -47,13 +47,13 @@ Before touching voice mode, verify that:
 - your provider is configured
 - the agent can answer text prompts normally
 
-``` prism-code
+``` bash
 hermes
 ```
 
 Ask something simple:
 
-``` prism-code
+``` text
 What tools do you have available?
 ```
 
@@ -63,31 +63,31 @@ If that is not solid yet, fix text mode first.
 
 ### CLI microphone + playback
 
-``` prism-code
+``` bash
 cd ~/.hermes/hermes-agent && uv pip install -e ".[voice]"
 ```
 
 ### Messaging platforms
 
-``` prism-code
+``` bash
 cd ~/.hermes/hermes-agent && uv pip install -e ".[messaging]"
 ```
 
 ### Premium ElevenLabs TTS
 
-``` prism-code
+``` bash
 cd ~/.hermes/hermes-agent && uv pip install -e ".[tts-premium]"
 ```
 
 ### Local NeuTTS (optional)
 
-``` prism-code
+``` bash
 python -m pip install -U neutts[all]
 ```
 
 ### Everything
 
-``` prism-code
+``` bash
 cd ~/.hermes/hermes-agent && uv pip install -e ".[all]"
 ```
 
@@ -95,14 +95,14 @@ cd ~/.hermes/hermes-agent && uv pip install -e ".[all]"
 
 ### macOS
 
-``` prism-code
+``` bash
 brew install portaudio ffmpeg opus
 brew install espeak-ng
 ```
 
 ### Ubuntu / Debian
 
-``` prism-code
+``` bash
 sudo apt install portaudio19-dev ffmpeg libopus0
 sudo apt install espeak-ng
 ```
@@ -131,7 +131,7 @@ This is usually the best place to start.
 
 Add to `~/.hermes/.env`:
 
-``` prism-code
+``` bash
 # Cloud STT options (local needs no key)
 GROQ_API_KEY=***
 VOICE_TOOLS_OPENAI_KEY=***
@@ -160,7 +160,7 @@ ELEVENLABS_API_KEY=***
 
 If you choose NeuTTS in the setup wizard, Hermes checks whether `neutts` is already installed. If it is missing, the wizard tells you NeuTTS needs the Python package `neutts` and the system package `espeak-ng`, offers to install them for you, installs `espeak-ng` with your platform package manager, and then runs:
 
-``` prism-code
+``` bash
 python -m pip install -U neutts[all]
 ```
 
@@ -168,7 +168,7 @@ If you skip that install or it fails, the wizard falls back to Edge TTS.
 
 ## Step 5: recommended config
 
-``` prism-code
+``` yaml
 voice:
   record_key: "ctrl+b"
   max_recording_seconds: 120
@@ -192,7 +192,7 @@ This is a good conservative default for most people.
 
 If you want local TTS instead, switch the `tts` block to:
 
-``` prism-code
+``` yaml
 tts:
   provider: "neutts"
   neutts:
@@ -208,13 +208,13 @@ tts:
 
 Start Hermes:
 
-``` prism-code
+``` bash
 hermes
 ```
 
 Inside the CLI:
 
-``` prism-code
+``` text
 /voice on
 ```
 
@@ -235,7 +235,7 @@ Workflow:
 
 ### Useful commands
 
-``` prism-code
+``` text
 /voice
 /voice on
 /voice off
@@ -249,7 +249,7 @@ Workflow:
 
 Say:
 
-``` prism-code
+``` text
 I keep getting a docker permission error. Help me debug it.
 ```
 
@@ -277,7 +277,7 @@ If typing is inconvenient, voice mode is one of the fastest ways to stay in the 
 
 If Hermes starts/stops too aggressively, tune:
 
-``` prism-code
+``` yaml
 voice:
   silence_threshold: 250
 ```
@@ -288,7 +288,7 @@ Higher threshold = less sensitive.
 
 If you pause a lot between sentences, increase:
 
-``` prism-code
+``` yaml
 voice:
   silence_duration: 4.0
 ```
@@ -297,7 +297,7 @@ voice:
 
 If `Ctrl+B` conflicts with your terminal or tmux habits:
 
-``` prism-code
+``` yaml
 voice:
   record_key: "ctrl+space"
 ```
@@ -310,7 +310,7 @@ Hermes stays a normal chat bot, but can speak replies.
 
 ### Start the gateway
 
-``` prism-code
+``` bash
 hermes gateway
 ```
 
@@ -318,13 +318,13 @@ hermes gateway
 
 Inside Telegram or Discord:
 
-``` prism-code
+``` text
 /voice on
 ```
 
 or
 
-``` prism-code
+``` text
 /voice tts
 ```
 
@@ -379,7 +379,7 @@ Also enable privileged intents in the Developer Portal:
 
 In a Discord text channel where the bot is present:
 
-``` prism-code
+``` text
 /voice join
 /voice leave
 /voice status

@@ -10,22 +10,22 @@ The messaging gateway is the long-running process that connects Hermes to 20+ ex
 
 ## Key Files
 
-| File                           | Purpose                                                                                               |
-|--------------------------------|-------------------------------------------------------------------------------------------------------|
-| `gateway/run.py`               | `GatewayRunner` — main loop, slash commands, message dispatch (large file; check git for current LOC) |
-| `gateway/session.py`           | `SessionStore` — conversation persistence and session key construction                                |
-| `gateway/delivery.py`          | Outbound message delivery to target platforms/channels                                                |
-| `gateway/pairing.py`           | DM pairing flow for user authorization                                                                |
-| `gateway/channel_directory.py` | Maps chat IDs to human-readable names for cron delivery                                               |
-| `gateway/hooks.py`             | Hook discovery, loading, and lifecycle event dispatch                                                 |
-| `gateway/mirror.py`            | Cross-session message mirroring for `send_message`                                                    |
-| `gateway/status.py`            | Token lock management for profile-scoped gateway instances                                            |
-| `gateway/builtin_hooks/`       | Extension point for always-registered hooks (none shipped)                                            |
-| `gateway/platforms/`           | Platform adapters (one per messaging platform)                                                        |
+| File | Purpose |
+|----|----|
+| `gateway/run.py` | `GatewayRunner` — main loop, slash commands, message dispatch (large file; check git for current LOC) |
+| `gateway/session.py` | `SessionStore` — conversation persistence and session key construction |
+| `gateway/delivery.py` | Outbound message delivery to target platforms/channels |
+| `gateway/pairing.py` | DM pairing flow for user authorization |
+| `gateway/channel_directory.py` | Maps chat IDs to human-readable names for cron delivery |
+| `gateway/hooks.py` | Hook discovery, loading, and lifecycle event dispatch |
+| `gateway/mirror.py` | Cross-session message mirroring for `send_message` |
+| `gateway/status.py` | Token lock management for profile-scoped gateway instances |
+| `gateway/builtin_hooks/` | Extension point for always-registered hooks (none shipped) |
+| `gateway/platforms/` | Platform adapters (one per messaging platform) |
 
 ## Architecture Overview
 
-``` prism-code
+``` text
 ┌─────────────────────────────────────────────────┐
 │                  GatewayRunner                  │
 │                                                 │
@@ -69,7 +69,7 @@ When a message arrives from any platform:
 
 Session keys encode the full routing context:
 
-``` prism-code
+``` text
 agent:main:{platform}:{chat_type}:{chat_id}
 ```
 
@@ -99,7 +99,7 @@ The gateway uses a multi-layer authorization check, evaluated in order:
 
 ### DM Pairing Flow
 
-``` prism-code
+``` text
 Admin: /pair
 Gateway: "Pairing code: ABC123. Share with the user."
 New user: ABC123
@@ -121,7 +121,7 @@ All slash commands in the gateway flow through the same resolution pipeline:
 
 Commands that must NOT execute while the agent is processing are rejected early:
 
-``` prism-code
+``` python
 if _quick_key in self._running_agents:
     if canonical == "model":
         return "⏳ Agent is running — wait for it to finish or /stop first."
@@ -133,11 +133,11 @@ Bypass commands (`/stop`, `/new`, `/approve`, `/deny`, `/queue`, `/status`) have
 
 The gateway reads configuration from multiple sources:
 
-| Source                  | What it provides                                    |
-|-------------------------|-----------------------------------------------------|
-| `~/.hermes/.env`        | API keys, bot tokens, platform credentials          |
+| Source | What it provides |
+|----|----|
+| `~/.hermes/.env` | API keys, bot tokens, platform credentials |
 | `~/.hermes/config.yaml` | Model settings, tool configuration, display options |
-| Environment variables   | Override any of the above                           |
+| Environment variables | Override any of the above |
 
 Unlike the CLI (which uses `load_cli_config()` with hardcoded defaults), the gateway reads `config.yaml` directly via YAML loader. This means config keys that exist in the CLI's defaults dict but not in the user's config file may behave differently between CLI and gateway.
 
@@ -145,7 +145,7 @@ Unlike the CLI (which uses `load_cli_config()` with hardcoded defaults), the gat
 
 Most messaging platforms ship as plugin adapters under `plugins/platforms/<name>/adapter.py`; a few legacy adapters still live directly in `gateway/platforms/`. All extend `BasePlatformAdapter` from `gateway/platforms/base.py`:
 
-``` prism-code
+``` text
 plugins/platforms/                  # plugin-packaged adapters (one dir each)
 ├── telegram/adapter.py     # Telegram Bot API (long polling or webhook)
 ├── discord/adapter.py      # Discord bot via discord.py
@@ -226,7 +226,7 @@ When a memory provider plugin (e.g., Honcho) is enabled:
 2.  The `MemoryManager` initializes the provider with the session context
 3.  Provider tools (e.g., `honcho_profile`, `viking_search`) are routed through:
 
-``` prism-code
+``` text
 AIAgent._invoke_tool()
   → self._memory_manager.handle_tool_call(name, args)
     → provider.handle_tool_call(name, args)

@@ -12,45 +12,45 @@ This page covers setting up inference providers for Hermes Agent — from cloud 
 
 You need at least one way to connect to an LLM. Use `hermes model` to switch providers and models interactively, or configure directly:
 
-| Provider                           | Setup                                                                                                                               |
-|------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| **Nous Portal**                    | `hermes model` (OAuth, subscription-based)                                                                                          |
-| **OpenAI Codex**                   | `hermes model` (ChatGPT OAuth, uses Codex models)                                                                                   |
-| **GitHub Copilot**                 | `hermes model` (OAuth device code flow, `COPILOT_GITHUB_TOKEN`, `GH_TOKEN`, or `gh auth token`)                                     |
-| **GitHub Copilot ACP**             | `hermes model` (spawns local `copilot --acp --stdio`)                                                                               |
-| **Anthropic**                      | `hermes model` (Claude Max + extra usage credits via OAuth; also supports Anthropic API key or manual setup-token — see note below) |
-| **OpenRouter**                     | `OPENROUTER_API_KEY` in `~/.hermes/.env`                                                                                            |
-| **NovitaAI**                       | `NOVITA_API_KEY` in `~/.hermes/.env` (provider: `novita`, 200+ models, Model API, Agent Sandbox, GPU Cloud)                         |
-| **z.ai / GLM**                     | `GLM_API_KEY` in `~/.hermes/.env` (provider: `zai`)                                                                                 |
-| **Kimi / Moonshot**                | `KIMI_API_KEY` in `~/.hermes/.env` (provider: `kimi-coding`)                                                                        |
-| **Kimi / Moonshot (China)**        | `KIMI_CN_API_KEY` in `~/.hermes/.env` (provider: `kimi-coding-cn`; aliases: `kimi-cn`, `moonshot-cn`)                               |
-| **Arcee AI**                       | `ARCEEAI_API_KEY` in `~/.hermes/.env` (provider: `arcee`; aliases: `arcee-ai`, `arceeai`)                                           |
-| **GMI Cloud**                      | `GMI_API_KEY` in `~/.hermes/.env` (provider: `gmi`; aliases: `gmi-cloud`, `gmicloud`)                                               |
-| **MiniMax**                        | `MINIMAX_API_KEY` in `~/.hermes/.env` (provider: `minimax`)                                                                         |
-| **MiniMax China**                  | `MINIMAX_CN_API_KEY` in `~/.hermes/.env` (provider: `minimax-cn`)                                                                   |
-| **xAI (Grok) — Responses API**     | `XAI_API_KEY` in `~/.hermes/.env` (provider: `xai`)                                                                                 |
-| **xAI Grok OAuth (SuperGrok)**     | `hermes model` → "xAI Grok OAuth (SuperGrok / Premium+)" — browser login, no API key. See [guide](https://hermes-agent.nousresearch.com/docs/guides/xai-grok-oauth)      |
-| **Qwen Cloud (Alibaba DashScope)** | `DASHSCOPE_API_KEY` in `~/.hermes/.env` (provider: `alibaba`)                                                                       |
-| **Alibaba Cloud (Coding Plan)**    | `DASHSCOPE_API_KEY` (provider: `alibaba-coding-plan`, alias: `alibaba_coding`) — separate billing SKU, different endpoint           |
-| **Kilo Code**                      | `KILOCODE_API_KEY` in `~/.hermes/.env` (provider: `kilocode`)                                                                       |
-| **Xiaomi MiMo**                    | `XIAOMI_API_KEY` in `~/.hermes/.env` (provider: `xiaomi`, aliases: `mimo`, `xiaomi-mimo`)                                           |
-| **Tencent TokenHub**               | `TOKENHUB_API_KEY` in `~/.hermes/.env` (provider: `tencent-tokenhub`, aliases: `tencent`, `tokenhub`, `tencentmaas`)                |
-| **OpenCode Zen**                   | `OPENCODE_ZEN_API_KEY` in `~/.hermes/.env` (provider: `opencode-zen`)                                                               |
-| **OpenCode Go**                    | `OPENCODE_GO_API_KEY` in `~/.hermes/.env` (provider: `opencode-go`)                                                                 |
-| **DeepSeek**                       | `DEEPSEEK_API_KEY` in `~/.hermes/.env` (provider: `deepseek`)                                                                       |
-| **Hugging Face**                   | `HF_TOKEN` in `~/.hermes/.env` (provider: `huggingface`, aliases: `hf`)                                                             |
-| **Google / Gemini**                | `GOOGLE_API_KEY` (or `GEMINI_API_KEY`) in `~/.hermes/.env` (provider: `gemini`)                                                     |
-| **Google Vertex AI**               | `hermes model` → "Google Vertex AI" (provider: `vertex`; OAuth2 via service-account JSON or ADC, GCP billing)                       |
-| **OpenAI API (direct)**            | `OPENAI_API_KEY` in `~/.hermes/.env` (provider: `openai-api`, optional `OPENAI_BASE_URL`)                                           |
-| **Azure AI Foundry**               | `hermes model` → "Azure AI Foundry" (provider: `azure-foundry`; uses Azure OpenAI / Foundry endpoint and key)                       |
-| **AWS Bedrock**                    | `hermes model` → "AWS Bedrock" (provider: `bedrock`; standard AWS credentials chain via boto3)                                      |
-| **NVIDIA Build**                   | `NVIDIA_API_KEY` in `~/.hermes/.env` (provider: `nvidia`; NIM-hosted models on build.nvidia.com)                                    |
-| **Ollama Cloud**                   | `hermes model` → "Ollama Cloud" (provider: `ollama-cloud`; cloud-hosted Ollama API)                                                 |
-| **Qwen OAuth**                     | `hermes model` → "Qwen OAuth" (provider: `qwen-oauth`; browser PKCE login)                                                          |
-| **MiniMax OAuth**                  | `hermes model` → "MiniMax (OAuth)" (provider: `minimax-oauth`; browser PKCE login)                                                  |
-| **StepFun**                        | `STEPFUN_API_KEY` in `~/.hermes/.env` (provider: `stepfun`)                                                                         |
-| **LM Studio**                      | `hermes model` → "LM Studio" (provider: `lmstudio`, optional `LM_API_KEY`)                                                          |
-| **Custom Endpoint**                | `hermes model` → choose "Custom endpoint" (saved in `config.yaml`)                                                                  |
+| Provider | Setup |
+|----|----|
+| **Nous Portal** | `hermes model` (OAuth, subscription-based) |
+| **OpenAI Codex** | `hermes model` (ChatGPT OAuth, uses Codex models) |
+| **GitHub Copilot** | `hermes model` (OAuth device code flow, `COPILOT_GITHUB_TOKEN`, `GH_TOKEN`, or `gh auth token`) |
+| **GitHub Copilot ACP** | `hermes model` (spawns local `copilot --acp --stdio`) |
+| **Anthropic** | `hermes model` (Claude Max + extra usage credits via OAuth; also supports Anthropic API key or manual setup-token — see note below) |
+| **OpenRouter** | `OPENROUTER_API_KEY` in `~/.hermes/.env` |
+| **NovitaAI** | `NOVITA_API_KEY` in `~/.hermes/.env` (provider: `novita`, 200+ models, Model API, Agent Sandbox, GPU Cloud) |
+| **z.ai / GLM** | `GLM_API_KEY` in `~/.hermes/.env` (provider: `zai`) |
+| **Kimi / Moonshot** | `KIMI_API_KEY` in `~/.hermes/.env` (provider: `kimi-coding`) |
+| **Kimi / Moonshot (China)** | `KIMI_CN_API_KEY` in `~/.hermes/.env` (provider: `kimi-coding-cn`; aliases: `kimi-cn`, `moonshot-cn`) |
+| **Arcee AI** | `ARCEEAI_API_KEY` in `~/.hermes/.env` (provider: `arcee`; aliases: `arcee-ai`, `arceeai`) |
+| **GMI Cloud** | `GMI_API_KEY` in `~/.hermes/.env` (provider: `gmi`; aliases: `gmi-cloud`, `gmicloud`) |
+| **MiniMax** | `MINIMAX_API_KEY` in `~/.hermes/.env` (provider: `minimax`) |
+| **MiniMax China** | `MINIMAX_CN_API_KEY` in `~/.hermes/.env` (provider: `minimax-cn`) |
+| **xAI (Grok) — Responses API** | `XAI_API_KEY` in `~/.hermes/.env` (provider: `xai`) |
+| **xAI Grok OAuth (SuperGrok)** | `hermes model` → "xAI Grok OAuth (SuperGrok / Premium+)" — browser login, no API key. See [guide](https://hermes-agent.nousresearch.com/docs/guides/xai-grok-oauth) |
+| **Qwen Cloud (Alibaba DashScope)** | `DASHSCOPE_API_KEY` in `~/.hermes/.env` (provider: `alibaba`) |
+| **Alibaba Cloud (Coding Plan)** | `DASHSCOPE_API_KEY` (provider: `alibaba-coding-plan`, alias: `alibaba_coding`) — separate billing SKU, different endpoint |
+| **Kilo Code** | `KILOCODE_API_KEY` in `~/.hermes/.env` (provider: `kilocode`) |
+| **Xiaomi MiMo** | `XIAOMI_API_KEY` in `~/.hermes/.env` (provider: `xiaomi`, aliases: `mimo`, `xiaomi-mimo`) |
+| **Tencent TokenHub** | `TOKENHUB_API_KEY` in `~/.hermes/.env` (provider: `tencent-tokenhub`, aliases: `tencent`, `tokenhub`, `tencentmaas`) |
+| **OpenCode Zen** | `OPENCODE_ZEN_API_KEY` in `~/.hermes/.env` (provider: `opencode-zen`) |
+| **OpenCode Go** | `OPENCODE_GO_API_KEY` in `~/.hermes/.env` (provider: `opencode-go`) |
+| **DeepSeek** | `DEEPSEEK_API_KEY` in `~/.hermes/.env` (provider: `deepseek`) |
+| **Hugging Face** | `HF_TOKEN` in `~/.hermes/.env` (provider: `huggingface`, aliases: `hf`) |
+| **Google / Gemini** | `GOOGLE_API_KEY` (or `GEMINI_API_KEY`) in `~/.hermes/.env` (provider: `gemini`) |
+| **Google Vertex AI** | `hermes model` → "Google Vertex AI" (provider: `vertex`; OAuth2 via service-account JSON or ADC, GCP billing) |
+| **OpenAI API (direct)** | `OPENAI_API_KEY` in `~/.hermes/.env` (provider: `openai-api`, optional `OPENAI_BASE_URL`) |
+| **Azure AI Foundry** | `hermes model` → "Azure AI Foundry" (provider: `azure-foundry`; uses Azure OpenAI / Foundry endpoint and key) |
+| **AWS Bedrock** | `hermes model` → "AWS Bedrock" (provider: `bedrock`; standard AWS credentials chain via boto3) |
+| **NVIDIA Build** | `NVIDIA_API_KEY` in `~/.hermes/.env` (provider: `nvidia`; NIM-hosted models on build.nvidia.com) |
+| **Ollama Cloud** | `hermes model` → "Ollama Cloud" (provider: `ollama-cloud`; cloud-hosted Ollama API) |
+| **Qwen OAuth** | `hermes model` → "Qwen OAuth" (provider: `qwen-oauth`; browser PKCE login) |
+| **MiniMax OAuth** | `hermes model` → "MiniMax (OAuth)" (provider: `minimax-oauth`; browser PKCE login) |
+| **StepFun** | `STEPFUN_API_KEY` in `~/.hermes/.env` (provider: `stepfun`) |
+| **LM Studio** | `hermes model` → "LM Studio" (provider: `lmstudio`, optional `LM_API_KEY`) |
+| **Custom Endpoint** | `hermes model` → choose "Custom endpoint" (saved in `config.yaml`) |
 
 For the official API-key path, see the dedicated [Google Gemini guide](https://hermes-agent.nousresearch.com/docs/guides/google-gemini).
 
@@ -62,7 +62,7 @@ In the `model:` config section, you can use either `default:` or `model:` as the
 
 [Nous Portal](https://portal.nousresearch.com) is Nous Research's unified subscription gateway and **the recommended way to run Hermes Agent**. One OAuth login covers 300+ frontier agentic models (Claude, GPT, Gemini, DeepSeek, Qwen, Kimi, GLM, MiniMax, Grok, ...) plus the [Tool Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-gateway) (web search, image generation, TTS, browser automation) plus [Nous Chat](https://chat.nousresearch.com) — billed against your Nous subscription instead of separate per-provider accounts.
 
-``` prism-code
+``` bash
 hermes setup --portal     # fresh install — OAuth + provider + gateway in one command
 hermes model              # existing install — pick "Nous Portal" from the list
 hermes portal info        # inspect login + routing at any time
@@ -94,10 +94,10 @@ Paid Nous Portal subscribers also get access to the **[Tool Gateway](https://her
 
 Hermes has **two** model commands that serve different purposes:
 
-| Command            | Where to run                        | What it does                                                                      |
-|--------------------|-------------------------------------|-----------------------------------------------------------------------------------|
+| Command | Where to run | What it does |
+|----|----|----|
 | **`hermes model`** | Your terminal (outside any session) | Full setup wizard — add providers, run OAuth, enter API keys, configure endpoints |
-| **`/model`**       | Inside a Hermes chat session        | Quick switch between **already-configured** providers and models                  |
+| **`/model`** | Inside a Hermes chat session | Quick switch between **already-configured** providers and models |
 
 If you're trying to switch to a provider you haven't set up yet (e.g. you only have OpenRouter configured and want to use Anthropic), you need `hermes model`, not `/model`. Exit your session first (`Ctrl+C` or `/quit`), run `hermes model`, complete the provider setup, then start a new session.
 
@@ -111,7 +111,7 @@ When you authenticate via `hermes model` → Anthropic OAuth (or via `hermes aut
 
 If you don't have Max + extra credits, use an `ANTHROPIC_API_KEY` instead — requests are billed pay-per-token against that key's organization (standard API pricing, independent of any Claude subscription).
 
-``` prism-code
+``` bash
 # With an API key (pay-per-token)
 export ANTHROPIC_API_KEY=***
 hermes chat --provider anthropic --model claude-sonnet-4-6
@@ -132,7 +132,7 @@ When you choose Anthropic OAuth through `hermes model`, Hermes prefers Claude Co
 
 Or set it permanently:
 
-``` prism-code
+``` yaml
 model:
   provider: "anthropic"
   default: "claude-sonnet-4-6"
@@ -148,7 +148,7 @@ Hermes supports GitHub Copilot as a first-class provider with two modes:
 
 **`copilot` — Direct Copilot API** (recommended). Uses your GitHub Copilot subscription to access GPT-5.x, Claude, Gemini, and other models through the Copilot API.
 
-``` prism-code
+``` bash
 hermes chat --provider copilot --model gpt-5.4
 ```
 
@@ -165,11 +165,11 @@ Token types
 
 The Copilot API does **not** support classic Personal Access Tokens (`ghp_*`). Supported token types:
 
-| Type             | Prefix        | How to get                                                                                         |
-|------------------|---------------|----------------------------------------------------------------------------------------------------|
-| OAuth token      | `gho_`        | `hermes model` → GitHub Copilot → Login with GitHub                                                |
+| Type | Prefix | How to get |
+|----|----|----|
+| OAuth token | `gho_` | `hermes model` → GitHub Copilot → Login with GitHub |
 | Fine-grained PAT | `github_pat_` | GitHub Settings → Developer settings → Fine-grained tokens (needs **Copilot Requests** permission) |
-| GitHub App token | `ghu_`        | Via GitHub App installation                                                                        |
+| GitHub App token | `ghu_` | Via GitHub App installation |
 
 If your `gh auth token` returns a `ghp_*` token, use `hermes model` to authenticate via OAuth instead.
 
@@ -189,30 +189,30 @@ Some older community proxies use `api.github.com/copilot_internal/v2/token` exch
 
 **`copilot-acp` — Copilot ACP agent backend**. Spawns the local Copilot CLI as a subprocess:
 
-``` prism-code
+``` bash
 hermes chat --provider copilot-acp --model copilot-acp
 # Requires the GitHub Copilot CLI in PATH and an existing `copilot login` session
 ```
 
 **Permanent config:**
 
-``` prism-code
+``` yaml
 model:
   provider: "copilot"
   default: "gpt-5.4"
 ```
 
-| Environment variable         | Description                                               |
-|------------------------------|-----------------------------------------------------------|
-| `COPILOT_GITHUB_TOKEN`       | GitHub token for Copilot API (first priority)             |
+| Environment variable | Description |
+|----|----|
+| `COPILOT_GITHUB_TOKEN` | GitHub token for Copilot API (first priority) |
 | `HERMES_COPILOT_ACP_COMMAND` | Override the Copilot CLI binary path (default: `copilot`) |
-| `HERMES_COPILOT_ACP_ARGS`    | Override ACP args (default: `--acp --stdio`)              |
+| `HERMES_COPILOT_ACP_ARGS` | Override ACP args (default: `--acp --stdio`) |
 
 ### First-Class API-Key Providers
 
 These providers have built-in support with dedicated provider IDs. Set the API key and use `--provider` to select:
 
-``` prism-code
+``` bash
 # NovitaAI Model API
 hermes chat --provider novita --model moonshotai/kimi-k2.5
 # Requires: NOVITA_API_KEY in ~/.hermes/.env
@@ -261,7 +261,7 @@ hermes chat --provider gmi --model zai-org/GLM-5.1-FP8
 
 Or set the provider permanently in `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   provider: "gmi"
   default: "zai-org/GLM-5.1-FP8"
@@ -287,7 +287,7 @@ xAI also ships a dedicated TTS endpoint (`/v1/tts`). Select **xAI TTS** in `herm
 
 **Retired xAI model migration (May 15, 2026):** xAI is retiring `grok-4*`, `grok-3`, `grok-code-fast-1`, and `grok-imagine-image-pro` on 2026-05-15. `hermes doctor` and `hermes chat` startup both detect any config still pointing at a retired ref and print the recommended replacement. Use `hermes migrate xai` for a one-shot config rewrite — dry-run by default, add `--apply` to write changes (a timestamped `config.yaml.bak-pre-migrate-xai-*` backup is created automatically).
 
-``` prism-code
+``` bash
 hermes migrate xai          # preview replacements
 hermes migrate xai --apply  # rewrite ~/.hermes/config.yaml in place
 ```
@@ -298,7 +298,7 @@ hermes migrate xai --apply  # rewrite ~/.hermes/config.yaml in place
 
 [NovitaAI](https://novita.ai) is the AI-native cloud for builders and agents. Its three product lines are Model API for 200+ models, Agent Sandbox for building and running AI agents, and GPU Cloud for scalable compute, all available from one platform.
 
-``` prism-code
+``` bash
 # Use any available model
 hermes chat --provider novita --model moonshotai/kimi-k2.5
 # Requires: NOVITA_API_KEY in ~/.hermes/.env
@@ -309,7 +309,7 @@ hermes chat --provider novita-ai --model deepseek/deepseek-v3-0324
 
 Or set it permanently in `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   provider: "novita"
   default: "moonshotai/kimi-k2.5"
@@ -322,7 +322,7 @@ Get your API key at [novita.ai/settings/key-management](https://novita.ai/settin
 
 [Ollama Cloud](https://ollama.com/cloud) hosts the same open-weight catalog as local Ollama but without the GPU requirement. Pick it in `hermes model` as **Ollama Cloud**, paste your API key from [ollama.com/settings/keys](https://ollama.com/settings/keys), and Hermes auto-discovers the available models.
 
-``` prism-code
+``` bash
 hermes model
 # → pick "Ollama Cloud"
 # → paste your OLLAMA_API_KEY
@@ -331,7 +331,7 @@ hermes model
 
 Or `config.yaml` directly:
 
-``` prism-code
+``` yaml
 model:
   provider: "ollama-cloud"
   default: "gpt-oss:120b"
@@ -347,7 +347,7 @@ Both speak the same OpenAI-compatible API. Cloud is a first-class provider (`--p
 
 Anthropic Claude, Amazon Nova, DeepSeek v3.2, Meta Llama 4, and other models via AWS Bedrock. Uses the AWS SDK (`boto3`) credential chain — no API key, just standard AWS auth.
 
-``` prism-code
+``` bash
 # Simplest — named profile in ~/.aws/credentials
 hermes chat --provider bedrock --model us.anthropic.claude-sonnet-4-6
 
@@ -357,7 +357,7 @@ AWS_PROFILE=myprofile AWS_REGION=us-east-1 hermes chat --provider bedrock --mode
 
 Or permanently in `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   provider: "bedrock"
   default: "us.anthropic.claude-sonnet-4-6"
@@ -380,7 +380,7 @@ See the [AWS Bedrock guide](https://hermes-agent.nousresearch.com/docs/guides/aw
 
 Gemini models on Google Cloud Vertex AI via Vertex's OpenAI-compatible endpoint. Authentication is **OAuth2** — a short-lived access token (~1 hour) minted from a service-account JSON or Application Default Credentials (ADC). There is **no static API key**; Hermes mints and auto-refreshes the token for you, including re-minting on a mid-session `401`.
 
-``` prism-code
+``` bash
 # Service account JSON (recommended for servers / gateways)
 echo "VERTEX_CREDENTIALS_PATH=/path/to/service-account.json" >> ~/.hermes/.env
 # or Application Default Credentials
@@ -391,7 +391,7 @@ hermes model   # → "Google Vertex AI" → project → region → model
 
 Or in `config.yaml` (project/region are non-secret and live here; the credential path stays in `.env`):
 
-``` prism-code
+``` yaml
 model:
   provider: "vertex"
   default: "google/gemini-3-flash-preview"   # Vertex requires the google/ prefix
@@ -406,7 +406,7 @@ vertex:
 
 Alibaba's Qwen Portal with browser-based OAuth login. Pick **Qwen OAuth (Portal)** in `hermes model`, sign in through the browser, and Hermes persists the refresh token.
 
-``` prism-code
+``` bash
 hermes model
 # → pick "Qwen OAuth (Portal)"
 # → browser opens; sign in with your Alibaba account
@@ -417,7 +417,7 @@ hermes chat   # uses portal.qwen.ai/v1 endpoint
 
 Or configure `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   provider: "qwen-oauth"
   default: "qwen3-coder-plus"
@@ -433,7 +433,7 @@ Qwen OAuth vs Qwen Cloud (Alibaba DashScope)
 
 If you're subscribed to Alibaba's **Coding Plan** (a pricing SKU separate from standard DashScope API access), Hermes exposes it as its own first-class provider: `alibaba-coding-plan`. Endpoint: `https://coding-intl.dashscope.aliyuncs.com/v1`. It's OpenAI-compatible like the regular `alibaba` provider but with a different base URL and billing surface.
 
-``` prism-code
+``` yaml
 model:
   provider: alibaba_coding     # alias for alibaba-coding-plan
   model: qwen3-coder-plus
@@ -441,7 +441,7 @@ model:
 
 Or from the CLI:
 
-``` prism-code
+``` bash
 hermes chat --provider alibaba_coding --model qwen3-coder-plus
 ```
 
@@ -451,7 +451,7 @@ hermes chat --provider alibaba_coding --model qwen3-coder-plus
 
 MiniMax-M2.7 via browser OAuth login — no API key needed. Pick **MiniMax (OAuth)** in `hermes model`, sign in through the browser, and Hermes persists the access + refresh tokens. Uses the Anthropic Messages-compatible endpoint (`/anthropic`) under the hood.
 
-``` prism-code
+``` bash
 hermes model
 # → pick "MiniMax (OAuth)"
 # → browser opens; sign in with your MiniMax account (global or CN region)
@@ -462,7 +462,7 @@ hermes chat   # uses api.minimax.io/anthropic endpoint
 
 Or configure `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   provider: "minimax-oauth"
   default: "MiniMax-M2.7"
@@ -478,7 +478,7 @@ MiniMax OAuth vs API key
 
 Nemotron and other open source models via [build.nvidia.com](https://build.nvidia.com) (free API key) or a local NIM endpoint.
 
-``` prism-code
+``` bash
 # Cloud (build.nvidia.com)
 hermes chat --provider nvidia --model nvidia/nemotron-3-super-120b-a12b
 # Requires: NVIDIA_API_KEY in ~/.hermes/.env
@@ -489,7 +489,7 @@ NVIDIA_BASE_URL=http://localhost:8000/v1 hermes chat --provider nvidia --model n
 
 Or set it permanently in `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   provider: "nvidia"
   default: "nvidia/nemotron-3-super-120b-a12b"
@@ -505,7 +505,7 @@ Hermes automatically attaches the NIM billing-origin header on every request to 
 
 Open and reasoning models via [GMI Cloud](https://www.gmicloud.ai/) — OpenAI-compatible API, API key authentication.
 
-``` prism-code
+``` bash
 # GMI Cloud
 hermes chat --provider gmi --model deepseek-ai/DeepSeek-V3.2
 # Requires: GMI_API_KEY in ~/.hermes/.env
@@ -513,7 +513,7 @@ hermes chat --provider gmi --model deepseek-ai/DeepSeek-V3.2
 
 Or set it permanently in `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   provider: "gmi"
   default: "deepseek-ai/DeepSeek-V3.2"
@@ -525,7 +525,7 @@ The base URL can be overridden with `GMI_BASE_URL` (default: `https://api.gmi-se
 
 Step-series models via [StepFun](https://platform.stepfun.com) — OpenAI-compatible API, API key authentication.
 
-``` prism-code
+``` bash
 # StepFun
 hermes chat --provider stepfun --model step-3.5-flash
 # Requires: STEPFUN_API_KEY in ~/.hermes/.env
@@ -533,7 +533,7 @@ hermes chat --provider stepfun --model step-3.5-flash
 
 Or set it permanently in `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   provider: "stepfun"
   default: "step-3.5-flash"
@@ -545,7 +545,7 @@ The base URL can be overridden with `STEPFUN_BASE_URL` (default: `https://api.st
 
 [Hugging Face Inference Providers](https://huggingface.co/docs/inference-providers) routes to 20+ open models through a unified OpenAI-compatible endpoint (`router.huggingface.co/v1`). Requests are automatically routed to the fastest available backend (Groq, Together, SambaNova, etc.) with automatic failover.
 
-``` prism-code
+``` bash
 # Use any available model
 hermes chat --provider huggingface --model Qwen/Qwen3.5-397B-A17B
 # Requires: HF_TOKEN in ~/.hermes/.env
@@ -556,7 +556,7 @@ hermes chat --provider hf --model deepseek-ai/DeepSeek-V3.2
 
 Or set it permanently in `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   provider: "huggingface"
   default: "Qwen/Qwen3.5-397B-A17B"
@@ -578,7 +578,7 @@ Three ways to configure a custom endpoint:
 
 **Interactive setup (recommended):**
 
-``` prism-code
+``` bash
 hermes model
 # Select "Custom endpoint (self-hosted / VLLM / etc.)"
 # Enter: API base URL, API key, Model name
@@ -586,7 +586,7 @@ hermes model
 
 **Manual config (`config.yaml`):**
 
-``` prism-code
+``` yaml
 # In ~/.hermes/config.yaml
 model:
   default: your-model-name
@@ -613,7 +613,7 @@ hermes model vs /model
 
 Once you have at least one custom endpoint configured, you can switch models mid-session:
 
-``` prism-code
+``` text
 /model custom:qwen-2.5          # Switch to a model on your custom endpoint
 /model custom                    # Auto-detect the model from the endpoint
 /model openrouter:claude-sonnet-4 # Switch back to a cloud provider
@@ -621,7 +621,7 @@ Once you have at least one custom endpoint configured, you can switch models mid
 
 If you have **named custom providers** configured (see below), use the triple syntax:
 
-``` prism-code
+``` text
 /model custom:local:qwen-2.5    # Use the "local" custom provider with model qwen-2.5
 /model custom:work:llama3       # Use the "work" custom provider with llama3
 ```
@@ -640,7 +640,7 @@ Everything below follows this same pattern — just change the URL, key, and mod
 
 [Ollama](https://ollama.com/) runs open-weight models locally with one command. Best for: quick local experimentation, privacy-sensitive work, offline use. Supports tool calling via the OpenAI-compatible API.
 
-``` prism-code
+``` bash
 # Install and run a model
 ollama pull qwen2.5-coder:32b
 ollama serve   # Starts on port 11434
@@ -648,7 +648,7 @@ ollama serve   # Starts on port 11434
 
 Then configure Hermes:
 
-``` prism-code
+``` bash
 hermes model
 # Select "Custom endpoint (self-hosted / VLLM / etc.)"
 # Enter URL: http://localhost:11434/v1
@@ -658,7 +658,7 @@ hermes model
 
 Or configure `config.yaml` directly:
 
-``` prism-code
+``` yaml
 model:
   default: qwen2.5-coder:32b
   provider: custom
@@ -680,7 +680,7 @@ Hermes Agent requires at least **64,000 tokens** of context for agent use with t
 
 **How to increase it** (pick one):
 
-``` prism-code
+``` bash
 # Option 1: Set server-wide via environment variable (recommended)
 OLLAMA_CONTEXT_LENGTH=64000 ollama serve
 
@@ -698,7 +698,7 @@ ollama create qwen2.5-coder-64k -f Modelfile
 
 **Verify your context is set correctly:**
 
-``` prism-code
+``` bash
 ollama ps
 # Look at the CONTEXT column — it should show your configured value
 ```
@@ -713,7 +713,7 @@ List available models with `ollama list`. Pull any model from the [Ollama librar
 
 [vLLM](https://docs.vllm.ai/) is the standard for production LLM serving. Best for: maximum throughput on GPU hardware, serving large models, continuous batching.
 
-``` prism-code
+``` bash
 pip install vllm
 vllm serve meta-llama/Llama-3.1-70B-Instruct \
   --port 8000 \
@@ -725,7 +725,7 @@ vllm serve meta-llama/Llama-3.1-70B-Instruct \
 
 Then configure Hermes:
 
-``` prism-code
+``` bash
 hermes model
 # Select "Custom endpoint (self-hosted / VLLM / etc.)"
 # Enter URL: http://localhost:8000/v1
@@ -737,10 +737,10 @@ hermes model
 
 **Tool calling requires explicit flags:**
 
-| Flag                        | Purpose                                                    |
-|-----------------------------|------------------------------------------------------------|
+| Flag | Purpose |
+|----|----|
 | `--enable-auto-tool-choice` | Required for `tool_choice: "auto"` (the default in Hermes) |
-| `--tool-call-parser <name>` | Parser for the model's tool call format                    |
+| `--tool-call-parser <name>` | Parser for the model's tool call format |
 
 Supported parsers: `hermes` (Qwen 2.5, Hermes 2/3), `llama3_json` (Llama 3.x), `mistral`, `deepseek_v3`, `deepseek_v31`, `xlam`, `pythonic`. Without these flags, tool calls won't work — the model will output tool calls as text.
 
@@ -756,7 +756,7 @@ vLLM supports human-readable sizes: `--max-model-len 64k` (lowercase k = 1000, u
 
 [SGLang](https://github.com/sgl-project/sglang) is an alternative to vLLM with RadixAttention for KV cache reuse. Best for: multi-turn conversations (prefix caching), constrained decoding, structured output.
 
-``` prism-code
+``` bash
 pip install "sglang[all]"
 python -m sglang.launch_server \
   --model meta-llama/Llama-3.1-70B-Instruct \
@@ -768,7 +768,7 @@ python -m sglang.launch_server \
 
 Then configure Hermes:
 
-``` prism-code
+``` bash
 hermes model
 # Select "Custom endpoint (self-hosted / VLLM / etc.)"
 # Enter URL: http://localhost:30000/v1
@@ -789,7 +789,7 @@ If responses seem truncated, add `max_tokens` to your requests or set `--default
 
 [llama.cpp](https://github.com/ggml-org/llama.cpp) runs quantized models on CPU, Apple Silicon (Metal), and consumer GPUs. Best for: running models without a datacenter GPU, Mac users, edge deployment.
 
-``` prism-code
+``` bash
 # Build and start llama-server
 cmake -B build && cmake --build build --config Release
 ./build/bin/llama-server \
@@ -804,7 +804,7 @@ cmake -B build && cmake --build build --config Release
 
 Then configure Hermes to point at it:
 
-``` prism-code
+``` bash
 hermes model
 # Select "Custom endpoint (self-hosted / VLLM / etc.)"
 # Enter URL: http://localhost:8080/v1
@@ -834,14 +834,14 @@ Download GGUF models from [Hugging Face](https://huggingface.co/models?library=g
 
 Start the server from the LM Studio app (Developer tab → Start Server), or use the CLI:
 
-``` prism-code
+``` bash
 lms server start                        # Starts on port 1234
 lms load qwen2.5-coder --context-length 64000
 ```
 
 Then configure Hermes:
 
-``` prism-code
+``` bash
 hermes model
 # Select "LM Studio"
 # Press Enter to use http://localhost:1234/v1
@@ -882,20 +882,20 @@ Available on **Windows 11 22H2+**, mirrored mode makes `localhost` work bidirect
 
 1.  Create or edit `%USERPROFILE%\.wslconfig` (e.g., `C:\Users\YourName\.wslconfig`):
 
-    ``` prism-code
+    ``` ini
     [wsl2]
     networkingMode=mirrored
     ```
 
 2.  Restart WSL from PowerShell:
 
-    ``` prism-code
+    ``` powershell
     wsl --shutdown
     ```
 
 3.  Reopen your WSL2 terminal. `localhost` now reaches Windows services:
 
-    ``` prism-code
+    ``` bash
     curl http://localhost:11434/v1/models   # Ollama on Windows — works
     ```
 
@@ -903,7 +903,7 @@ Hyper-V Firewall
 
 On some Windows 11 builds, the Hyper-V firewall blocks mirrored connections by default. If `localhost` still doesn't work after enabling mirrored mode, run this in an **Admin PowerShell**:
 
-``` prism-code
+``` powershell
 Set-NetFirewallHyperVVMSetting -Name '{40E0AC32-46A5-438A-A0B2-2B479E8F2E90}' -DefaultInboundAction Allow
 ```
 
@@ -911,7 +911,7 @@ Set-NetFirewallHyperVVMSetting -Name '{40E0AC32-46A5-438A-A0B2-2B479E8F2E90}' -D
 
 If you can't use mirrored mode, find the Windows host IP from inside WSL2 and use that instead of `localhost`:
 
-``` prism-code
+``` bash
 # Get the Windows host IP (the default gateway of WSL2's virtual network)
 ip route show | grep -i default | awk '{ print $3 }'
 # Example output: 172.29.192.1
@@ -919,7 +919,7 @@ ip route show | grep -i default | awk '{ print $3 }'
 
 Use that IP in your Hermes config:
 
-``` prism-code
+``` yaml
 model:
   default: qwen2.5-coder:32b
   provider: custom
@@ -930,7 +930,7 @@ Dynamic helper
 
 The host IP can change on WSL2 restart. You can grab it dynamically in your shell:
 
-``` prism-code
+``` bash
 export WSL_HOST=$(ip route show | grep -i default | awk '{ print $3 }')
 echo "Windows host at: $WSL_HOST"
 curl http://$WSL_HOST:11434/v1/models   # Test Ollama
@@ -938,7 +938,7 @@ curl http://$WSL_HOST:11434/v1/models   # Test Ollama
 
 Or use your machine's mDNS name (requires `libnss-mdns` in WSL2):
 
-``` prism-code
+``` bash
 sudo apt install libnss-mdns
 curl http://$(hostname).local:11434/v1/models
 ```
@@ -947,13 +947,13 @@ curl http://$(hostname).local:11434/v1/models
 
 If you're using **Option 2** (NAT mode with the host IP), the model server on Windows must accept connections from outside `127.0.0.1`. By default, most servers only listen on localhost — WSL2 connections in NAT mode come from a different virtual subnet and will be refused. In mirrored mode, `localhost` maps directly so the default `127.0.0.1` binding works fine.
 
-| Server           | Default bind | How to fix                                                                                                                                             |
-|------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Ollama**       | `127.0.0.1`  | Set `OLLAMA_HOST=0.0.0.0` environment variable before starting Ollama (System Settings → Environment Variables on Windows, or edit the Ollama service) |
-| **LM Studio**    | `127.0.0.1`  | Enable **"Serve on Network"** in the Developer tab → Server settings                                                                                   |
-| **llama-server** | `127.0.0.1`  | Add `--host 0.0.0.0` to the startup command                                                                                                            |
-| **vLLM**         | `0.0.0.0`    | Already binds to all interfaces by default                                                                                                             |
-| **SGLang**       | `127.0.0.1`  | Add `--host 0.0.0.0` to the startup command                                                                                                            |
+| Server | Default bind | How to fix |
+|----|----|----|
+| **Ollama** | `127.0.0.1` | Set `OLLAMA_HOST=0.0.0.0` environment variable before starting Ollama (System Settings → Environment Variables on Windows, or edit the Ollama service) |
+| **LM Studio** | `127.0.0.1` | Enable **"Serve on Network"** in the Developer tab → Server settings |
+| **llama-server** | `127.0.0.1` | Add `--host 0.0.0.0` to the startup command |
+| **vLLM** | `0.0.0.0` | Already binds to all interfaces by default |
+| **SGLang** | `127.0.0.1` | Add `--host 0.0.0.0` to the startup command |
 
 **Ollama on Windows (detailed):** Ollama runs as a Windows service. To set `OLLAMA_HOST`:
 
@@ -965,7 +965,7 @@ If you're using **Option 2** (NAT mode with the host IP), the model server on Wi
 
 Windows Firewall treats WSL2 as a separate network (in both NAT and mirrored mode). If connections still fail after the steps above, add a firewall rule for your model server's port:
 
-``` prism-code
+``` powershell
 # Run in Admin PowerShell — replace PORT with your server's port
 New-NetFirewallRule -DisplayName "Allow WSL2 to Model Server" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 11434
 ```
@@ -976,7 +976,7 @@ Common ports: Ollama `11434`, vLLM `8000`, SGLang `30000`, llama-server `8080`, 
 
 From inside WSL2, test that you can reach your model server:
 
-``` prism-code
+``` bash
 # Replace URL with your server's address and port
 curl http://localhost:11434/v1/models          # Mirrored mode
 curl http://172.29.192.1:11434/v1/models       # NAT mode (use your actual host IP)
@@ -1000,13 +1000,13 @@ The model outputs something like `{"name": "web_search", "arguments": {...}}` as
 
 **Cause:** Your server doesn't have tool calling enabled, or the model doesn't support it through the server's tool calling implementation.
 
-| Server        | Fix                                                                                                         |
-|---------------|-------------------------------------------------------------------------------------------------------------|
-| **llama.cpp** | Add `--jinja` to the startup command                                                                        |
-| **vLLM**      | Add `--enable-auto-tool-choice --tool-call-parser hermes`                                                   |
-| **SGLang**    | Add `--tool-call-parser qwen` (or appropriate parser)                                                       |
-| **Ollama**    | Tool calling is enabled by default — make sure your model supports it (check with `ollama show model-name`) |
-| **LM Studio** | Update to 0.3.6+ and use a model with native tool support                                                   |
+| Server | Fix |
+|----|----|
+| **llama.cpp** | Add `--jinja` to the startup command |
+| **vLLM** | Add `--enable-auto-tool-choice --tool-call-parser hermes` |
+| **SGLang** | Add `--tool-call-parser qwen` (or appropriate parser) |
+| **Ollama** | Tool calling is enabled by default — make sure your model supports it (check with `ollama show model-name`) |
+| **LM Studio** | Update to 0.3.6+ and use a model with native tool support |
 
 #### Model seems to forget context or give incoherent responses
 
@@ -1014,7 +1014,7 @@ The model outputs something like `{"name": "web_search", "arguments": {...}}` as
 
 **Diagnosis:**
 
-``` prism-code
+``` bash
 # Check what Hermes thinks the context is
 # Look at startup line: "Context limit: X tokens"
 
@@ -1032,7 +1032,7 @@ Hermes auto-detects context length from your server's `/v1/models` endpoint. If 
 
 **Fix:** Set it explicitly in `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   default: your-model
   provider: custom
@@ -1053,7 +1053,7 @@ model:
 
 [LiteLLM](https://docs.litellm.ai/) is an OpenAI-compatible proxy that unifies 100+ LLM providers behind a single API. Best for: switching between providers without config changes, load balancing, fallback chains, budget controls.
 
-``` prism-code
+``` bash
 # Install and start
 pip install "litellm[proxy]"
 litellm --model anthropic/claude-sonnet-4 --port 4000
@@ -1066,7 +1066,7 @@ Then configure Hermes with `hermes model` → Custom endpoint → `http://localh
 
 Example `litellm_config.yaml` with fallback:
 
-``` prism-code
+``` yaml
 model_list:
   - model_name: "best"
     litellm_params:
@@ -1086,7 +1086,7 @@ router_settings:
 
 [ClawRouter](https://github.com/BlockRunAI/ClawRouter) by BlockRunAI is a local routing proxy that auto-selects models based on query complexity. It classifies requests across 14 dimensions and routes to the cheapest model that can handle the task. Payment is via USDC cryptocurrency (no API keys).
 
-``` prism-code
+``` bash
 # Install and start
 npx @blockrun/clawrouter    # Starts on port 8402
 ```
@@ -1113,23 +1113,23 @@ ClawRouter requires a USDC-funded wallet on Base or Solana for payment. All requ
 
 Any service with an OpenAI-compatible API works. Some popular options:
 
-| Provider                                    | Base URL                                | Notes                               |
-|---------------------------------------------|-----------------------------------------|-------------------------------------|
-| [Together AI](https://together.ai)          | `https://api.together.xyz/v1`           | Cloud-hosted open models            |
-| [Groq](https://groq.com)                    | `https://api.groq.com/openai/v1`        | Ultra-fast inference                |
-| [DeepSeek](https://deepseek.com)            | `https://api.deepseek.com/v1`           | DeepSeek models                     |
-| [Fireworks AI](https://fireworks.ai)        | `https://api.fireworks.ai/inference/v1` | Fast open model hosting             |
-| [GMI Cloud](https://www.gmicloud.ai/)       | `https://api.gmi-serving.com/v1`        | Managed OpenAI-compatible inference |
-| [Cerebras](https://cerebras.ai)             | `https://api.cerebras.ai/v1`            | Wafer-scale chip inference          |
-| [Mistral AI](https://mistral.ai)            | `https://api.mistral.ai/v1`             | Mistral models                      |
-| [OpenAI](https://openai.com)                | `https://api.openai.com/v1`             | Direct OpenAI access                |
-| [Azure OpenAI](https://azure.microsoft.com) | `https://YOUR.openai.azure.com/`        | Enterprise OpenAI                   |
-| [LocalAI](https://localai.io)               | `http://localhost:8080/v1`              | Self-hosted, multi-model            |
-| [Jan](https://jan.ai)                       | `http://localhost:1337/v1`              | Desktop app with local models       |
+| Provider | Base URL | Notes |
+|----|----|----|
+| [Together AI](https://together.ai) | `https://api.together.xyz/v1` | Cloud-hosted open models |
+| [Groq](https://groq.com) | `https://api.groq.com/openai/v1` | Ultra-fast inference |
+| [DeepSeek](https://deepseek.com) | `https://api.deepseek.com/v1` | DeepSeek models |
+| [Fireworks AI](https://fireworks.ai) | `https://api.fireworks.ai/inference/v1` | Fast open model hosting |
+| [GMI Cloud](https://www.gmicloud.ai/) | `https://api.gmi-serving.com/v1` | Managed OpenAI-compatible inference |
+| [Cerebras](https://cerebras.ai) | `https://api.cerebras.ai/v1` | Wafer-scale chip inference |
+| [Mistral AI](https://mistral.ai) | `https://api.mistral.ai/v1` | Mistral models |
+| [OpenAI](https://openai.com) | `https://api.openai.com/v1` | Direct OpenAI access |
+| [Azure OpenAI](https://azure.microsoft.com) | `https://YOUR.openai.azure.com/` | Enterprise OpenAI |
+| [LocalAI](https://localai.io) | `http://localhost:8080/v1` | Self-hosted, multi-model |
+| [Jan](https://jan.ai) | `http://localhost:1337/v1` | Desktop app with local models |
 
 Configure any of these with `hermes model` → Custom endpoint, or in `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   default: meta-llama/Llama-3.1-70B-Instruct-Turbo
   provider: custom
@@ -1165,7 +1165,7 @@ For most setups this works out of the box. The system is provider-aware — the 
 
 To set the context length explicitly, add `context_length` to your model config:
 
-``` prism-code
+``` yaml
 model:
   default: "qwen3.5:9b"
   base_url: "http://localhost:8080/v1"
@@ -1174,7 +1174,7 @@ model:
 
 For custom endpoints, you can also set context length per model:
 
-``` prism-code
+``` yaml
 custom_providers:
   - name: "My Local LLM"
     base_url: "http://localhost:11434/v1"
@@ -1199,7 +1199,7 @@ When to set this manually
 
 If you work with multiple custom endpoints (e.g., a local dev server and a remote GPU server), you can define them as named custom providers in `config.yaml`:
 
-``` prism-code
+``` yaml
 custom_providers:
   - name: local
     base_url: http://localhost:8080/v1
@@ -1216,7 +1216,7 @@ custom_providers:
 
 Some OpenAI-compatible endpoints need provider-specific request body fields. Add an `extra_body` map to the matching custom provider and Hermes will merge it into each chat-completions request for that endpoint:
 
-``` prism-code
+``` yaml
 custom_providers:
   - name: gemma-local
     base_url: http://localhost:8080/v1
@@ -1228,7 +1228,7 @@ custom_providers:
 
 Use the shape your server documents. For example, vLLM Gemma deployments and some NVIDIA NIM endpoints expect `enable_thinking` under `chat_template_kwargs` instead of as a top-level `extra_body` field:
 
-``` prism-code
+``` yaml
 extra_body:
   chat_template_kwargs:
     enable_thinking: true
@@ -1236,7 +1236,7 @@ extra_body:
 
 For Qwen reasoning models served by vLLM, this same shape can be used to disable thinking when a reasoning parser separates all generated text into reasoning fields and leaves the assistant `content` empty:
 
-``` prism-code
+``` yaml
 extra_body:
   chat_template_kwargs:
     enable_thinking: false
@@ -1246,7 +1246,7 @@ The `hermes model` → Custom Endpoint wizard now prompts for `api_mode` explici
 
 **Native vision for custom-provider models.** If your custom endpoint serves a vision-capable model that isn't in models.dev, set `model.supports_vision: true` so Hermes routes attached images natively (as `image_url` parts) instead of pre-processing them through `vision_analyze`. Single knob — no need to also set `agent.image_input_mode: native`.
 
-``` prism-code
+``` yaml
 model:
   provider: custom
   base_url: http://localhost:8080/v1
@@ -1258,7 +1258,7 @@ The same key is honored on per-named-provider models (`custom_providers[*].model
 
 Switch between them mid-session with the triple syntax:
 
-``` prism-code
+``` text
 /model custom:local:qwen-2.5       # Use the "local" endpoint with qwen-2.5
 /model custom:work:llama3-70b      # Use the "work" endpoint with llama3-70b
 /model custom:anthropic-proxy:claude-sonnet-4  # Use the proxy
@@ -1276,7 +1276,7 @@ The cloud providers listed in [Other Compatible Providers](#other-compatible-pro
 
 Hosts open-weight models (Llama, MiniMax, Gemma, DeepSeek, Qwen) at prices significantly below first-party APIs. Good default for multi-model fleets.
 
-``` prism-code
+``` yaml
 # ~/.hermes/config.yaml
 custom_providers:
   - name: together
@@ -1289,14 +1289,14 @@ model:
   provider: custom:together
 ```
 
-``` prism-code
+``` bash
 # ~/.hermes/.env
 TOGETHER_API_KEY=your-together-key
 ```
 
 Switch models mid-session:
 
-``` prism-code
+``` text
 /model custom:together:meta-llama/Llama-3.3-70B-Instruct-Turbo
 /model custom:together:google/gemma-4-31b-it
 /model custom:together:deepseek-ai/DeepSeek-V3
@@ -1308,7 +1308,7 @@ Together's `/v1/models` endpoint works, so `hermes model` can auto-discover avai
 
 Ultra-fast inference (~500 tok/s on Llama-3.3-70B). Small catalog but strong for latency-sensitive interactive use.
 
-``` prism-code
+``` yaml
 # ~/.hermes/config.yaml
 custom_providers:
   - name: groq
@@ -1320,7 +1320,7 @@ model:
   provider: custom:groq
 ```
 
-``` prism-code
+``` bash
 # ~/.hermes/.env
 GROQ_API_KEY=your-groq-key
 ```
@@ -1329,7 +1329,7 @@ GROQ_API_KEY=your-groq-key
 
 Useful when you want a model that does live web search and citation automatically. Strict about which models are available — check [perplexity.ai/settings/api](https://www.perplexity.ai/settings/api) for the current list.
 
-``` prism-code
+``` yaml
 # ~/.hermes/config.yaml
 custom_providers:
   - name: perplexity
@@ -1341,7 +1341,7 @@ model:
   provider: custom:perplexity
 ```
 
-``` prism-code
+``` bash
 # ~/.hermes/.env
 PERPLEXITY_API_KEY=your-perplexity-key
 ```
@@ -1350,7 +1350,7 @@ PERPLEXITY_API_KEY=your-perplexity-key
 
 The three recipes compose — use all of them together and switch per turn with `/model custom:<name>:<model>`:
 
-``` prism-code
+``` yaml
 custom_providers:
   - name: together
     base_url: https://api.together.xyz/v1
@@ -1377,17 +1377,17 @@ Troubleshooting
 
 ### Choosing the Right Setup
 
-| Use Case                     | Recommended                                                                                                                      |
-|------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
-| **Just want it to work**     | OpenRouter (default) or Nous Portal                                                                                              |
-| **Local models, easy setup** | Ollama                                                                                                                           |
-| **Production GPU serving**   | vLLM or SGLang                                                                                                                   |
-| **Mac / no GPU**             | Ollama or llama.cpp                                                                                                              |
-| **Multi-provider routing**   | LiteLLM Proxy or OpenRouter                                                                                                      |
-| **Cost optimization**        | ClawRouter or OpenRouter with `sort: "price"`                                                                                    |
-| **Maximum privacy**          | Ollama, vLLM, or llama.cpp (fully local)                                                                                         |
-| **Enterprise / Azure**       | Azure OpenAI with custom endpoint                                                                                                |
-| **Chinese AI models**        | z.ai (GLM), Kimi/Moonshot (`kimi-coding` or `kimi-coding-cn`), MiniMax, Xiaomi MiMo, or Tencent TokenHub (first-class providers) |
+| Use Case | Recommended |
+|----|----|
+| **Just want it to work** | OpenRouter (default) or Nous Portal |
+| **Local models, easy setup** | Ollama |
+| **Production GPU serving** | vLLM or SGLang |
+| **Mac / no GPU** | Ollama or llama.cpp |
+| **Multi-provider routing** | LiteLLM Proxy or OpenRouter |
+| **Cost optimization** | ClawRouter or OpenRouter with `sort: "price"` |
+| **Maximum privacy** | Ollama, vLLM, or llama.cpp (fully local) |
+| **Enterprise / Azure** | Azure OpenAI with custom endpoint |
+| **Chinese AI models** | z.ai (GLM), Kimi/Moonshot (`kimi-coding` or `kimi-coding-cn`), MiniMax, Xiaomi MiMo, or Tencent TokenHub (first-class providers) |
 
 tip
 
@@ -1395,16 +1395,16 @@ You can switch between providers at any time with `hermes model` — no restart 
 
 ## Optional API Keys
 
-| Feature                           | Provider                                       | Env Variable                                    |
-|-----------------------------------|------------------------------------------------|-------------------------------------------------|
-| Web scraping                      | [Firecrawl](https://firecrawl.dev/)            | `FIRECRAWL_API_KEY`, `FIRECRAWL_API_URL`        |
-| Browser automation                | [Browserbase](https://browserbase.com/)        | `BROWSERBASE_API_KEY`, `BROWSERBASE_PROJECT_ID` |
-| Image generation                  | [FAL](https://fal.ai/)                         | `FAL_KEY`                                       |
-| Premium TTS voices                | [ElevenLabs](https://elevenlabs.io/)           | `ELEVENLABS_API_KEY`                            |
-| OpenAI TTS + voice transcription  | [OpenAI](https://platform.openai.com/api-keys) | `VOICE_TOOLS_OPENAI_KEY`                        |
-| Mistral TTS + voice transcription | [Mistral](https://console.mistral.ai/)         | `MISTRAL_API_KEY`                               |
-| Cross-session user modeling       | [Honcho](https://honcho.dev/)                  | `HONCHO_API_KEY`                                |
-| Semantic long-term memory         | [Supermemory](https://supermemory.ai)          | `SUPERMEMORY_API_KEY`                           |
+| Feature | Provider | Env Variable |
+|----|----|----|
+| Web scraping | [Firecrawl](https://firecrawl.dev/) | `FIRECRAWL_API_KEY`, `FIRECRAWL_API_URL` |
+| Browser automation | [Browserbase](https://browserbase.com/) | `BROWSERBASE_API_KEY`, `BROWSERBASE_PROJECT_ID` |
+| Image generation | [FAL](https://fal.ai/) | `FAL_KEY` |
+| Premium TTS voices | [ElevenLabs](https://elevenlabs.io/) | `ELEVENLABS_API_KEY` |
+| OpenAI TTS + voice transcription | [OpenAI](https://platform.openai.com/api-keys) | `VOICE_TOOLS_OPENAI_KEY` |
+| Mistral TTS + voice transcription | [Mistral](https://console.mistral.ai/) | `MISTRAL_API_KEY` |
+| Cross-session user modeling | [Honcho](https://honcho.dev/) | `HONCHO_API_KEY` |
+| Semantic long-term memory | [Supermemory](https://supermemory.ai) | `SUPERMEMORY_API_KEY` |
 
 ### Self-Hosting Firecrawl
 
@@ -1418,7 +1418,7 @@ By default, Hermes uses the [Firecrawl cloud API](https://firecrawl.dev/) for we
 
 1.  Clone and start the Firecrawl Docker stack (5 containers: API, Playwright, Redis, RabbitMQ, PostgreSQL — requires ~4-8 GB RAM):
 
-    ``` prism-code
+    ``` bash
     git clone https://github.com/firecrawl/firecrawl
     cd firecrawl
     # In .env, set: USE_DB_AUTHENTICATION=false, HOST=0.0.0.0, PORT=3002
@@ -1427,7 +1427,7 @@ By default, Hermes uses the [Firecrawl cloud API](https://firecrawl.dev/) for we
 
 2.  Point Hermes at your instance (no API key needed):
 
-    ``` prism-code
+    ``` bash
     hermes config set FIRECRAWL_API_URL http://localhost:3002
     ```
 
@@ -1437,7 +1437,7 @@ You can also set both `FIRECRAWL_API_KEY` and `FIRECRAWL_API_URL` if your self-h
 
 When using OpenRouter, you can control how requests are routed across providers. Add a `provider_routing` section to `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 provider_routing:
   sort: "throughput"          # "price" (default), "throughput", or "latency"
   # only: ["anthropic"]      # Only use these providers
@@ -1453,7 +1453,7 @@ provider_routing:
 
 OpenRouter ships an experimental coding-model router at `openrouter/pareto-code` that auto-routes requests to the cheapest model meeting a coding-quality bar (ranked by [Artificial Analysis](https://artificialanalysis.ai/)). Pick this model and tune the `min_coding_score` knob in `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   provider: openrouter
   model: openrouter/pareto-code
@@ -1474,7 +1474,7 @@ Notes:
 
 Configure a chain of backup providers Hermes tries in order when the primary model fails (rate limits, server errors, auth failures). The canonical format is a top-level `fallback_providers:` list:
 
-``` prism-code
+``` yaml
 fallback_providers:
   - provider: openrouter
     model: anthropic/claude-sonnet-4
@@ -1486,7 +1486,7 @@ fallback_providers:
 
 The legacy single-pair `fallback_model:` dict is still accepted for back-compat:
 
-``` prism-code
+``` yaml
 fallback_model:
   provider: openrouter
   model: anthropic/claude-sonnet-4

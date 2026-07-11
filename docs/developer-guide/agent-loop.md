@@ -23,7 +23,7 @@ The core orchestration engine is `run_agent.py`'s `AIAgent` class — a large fi
 
 ## Two Entry Points
 
-``` prism-code
+``` python
 # Simple interface — returns final response string
 response = agent.chat("Fix the bug in main.py")
 
@@ -42,11 +42,11 @@ result = agent.run_conversation(
 
 Hermes supports three API execution modes, resolved from provider selection, explicit args, and base URL heuristics:
 
-| API mode             | Used for                                                         | Client type                           |
-|----------------------|------------------------------------------------------------------|---------------------------------------|
-| `chat_completions`   | OpenAI-compatible endpoints (OpenRouter, custom, most providers) | `openai.OpenAI`                       |
-| `codex_responses`    | OpenAI Codex / Responses API                                     | `openai.OpenAI` with Responses format |
-| `anthropic_messages` | Native Anthropic Messages API                                    | `anthropic.Anthropic` via adapter     |
+| API mode | Used for | Client type |
+|----|----|----|
+| `chat_completions` | OpenAI-compatible endpoints (OpenRouter, custom, most providers) | `openai.OpenAI` |
+| `codex_responses` | OpenAI Codex / Responses API | `openai.OpenAI` with Responses format |
+| `anthropic_messages` | Native Anthropic Messages API | `anthropic.Anthropic` via adapter |
 
 The mode determines how messages are formatted, how tool calls are structured, how responses are parsed, and how caching/streaming works. All three converge on the same internal message format (OpenAI-style `role`/`content`/`tool_calls` dicts) before and after API calls.
 
@@ -61,7 +61,7 @@ The mode determines how messages are formatted, how tool calls are structured, h
 
 Each iteration of the agent loop follows this sequence:
 
-``` prism-code
+``` text
 run_conversation()
   1. Generate task_id if not provided
   2. Append user message to conversation history
@@ -83,7 +83,7 @@ run_conversation()
 
 All messages use OpenAI-compatible format internally:
 
-``` prism-code
+``` python
 {"role": "system", "content": "..."}
 {"role": "user", "content": "..."}
 {"role": "assistant", "content": "...", "tool_calls": [...]}
@@ -108,7 +108,7 @@ Providers validate these sequences and will reject malformed histories.
 
 API requests are wrapped in `_interruptible_api_call()` which runs the actual HTTP call in a background thread while monitoring an interrupt event:
 
-``` prism-code
+``` text
 ┌────────────────────────────────────────────────────┐
 │  Main thread                  API thread           │
 │                                                    │
@@ -138,7 +138,7 @@ When the model returns tool calls:
 
 ### Execution Flow
 
-``` prism-code
+``` text
 for each tool_call in response.tool_calls:
     1. Resolve handler from tools/registry.py
     2. Fire pre_tool_call plugin hook
@@ -166,16 +166,16 @@ These tools modify agent state directly and return synthetic tool results withou
 
 `AIAgent` supports platform-specific callbacks that enable real-time progress in the CLI, gateway, and ACP integrations:
 
-| Callback                 | When fired                                | Used by                                         |
-|--------------------------|-------------------------------------------|-------------------------------------------------|
-| `tool_progress_callback` | Before/after each tool execution          | CLI spinner, gateway progress messages          |
-| `thinking_callback`      | When model starts/stops thinking          | CLI "thinking..." indicator                     |
-| `reasoning_callback`     | When model returns reasoning content      | CLI reasoning display, gateway reasoning blocks |
-| `clarify_callback`       | When `clarify` tool is called             | CLI input prompt, gateway interactive message   |
-| `step_callback`          | After each complete agent turn            | Gateway step tracking, ACP progress             |
-| `stream_delta_callback`  | Each streaming token (when enabled)       | CLI streaming display                           |
-| `tool_gen_callback`      | When tool call is parsed from stream      | CLI tool preview in spinner                     |
-| `status_callback`        | State changes (thinking, executing, etc.) | ACP status updates                              |
+| Callback | When fired | Used by |
+|----|----|----|
+| `tool_progress_callback` | Before/after each tool execution | CLI spinner, gateway progress messages |
+| `thinking_callback` | When model starts/stops thinking | CLI "thinking..." indicator |
+| `reasoning_callback` | When model returns reasoning content | CLI reasoning display, gateway reasoning blocks |
+| `clarify_callback` | When `clarify` tool is called | CLI input prompt, gateway interactive message |
+| `step_callback` | After each complete agent turn | Gateway step tracking, ACP progress |
+| `stream_delta_callback` | Each streaming token (when enabled) | CLI streaming display |
+| `tool_gen_callback` | When tool call is parsed from stream | CLI tool preview in spinner |
+| `status_callback` | State changes (thinking, executing, etc.) | ACP status updates |
 
 ## Budget and Fallback Behavior
 
@@ -223,15 +223,15 @@ After each turn:
 
 ## Key Source Files
 
-| File                          | Purpose                                                                |
-|-------------------------------|------------------------------------------------------------------------|
-| `run_agent.py`                | AIAgent class — the complete agent loop                                |
-| `agent/prompt_builder.py`     | System prompt assembly from memory, skills, context files, personality |
-| `agent/context_engine.py`     | ContextEngine ABC — pluggable context management                       |
-| `agent/context_compressor.py` | Default engine — lossy summarization algorithm                         |
-| `agent/prompt_caching.py`     | Anthropic prompt caching markers and cache metrics                     |
-| `agent/auxiliary_client.py`   | Auxiliary LLM client for side tasks (vision, summarization)            |
-| `model_tools.py`              | Tool schema collection, `handle_function_call()` dispatch              |
+| File | Purpose |
+|----|----|
+| `run_agent.py` | AIAgent class — the complete agent loop |
+| `agent/prompt_builder.py` | System prompt assembly from memory, skills, context files, personality |
+| `agent/context_engine.py` | ContextEngine ABC — pluggable context management |
+| `agent/context_compressor.py` | Default engine — lossy summarization algorithm |
+| `agent/prompt_caching.py` | Anthropic prompt caching markers and cache metrics |
+| `agent/auxiliary_client.py` | Auxiliary LLM client for side tasks (vision, summarization) |
+| `model_tools.py` | Tool schema collection, `handle_function_call()` dispatch |
 
 ## Related Docs
 

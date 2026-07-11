@@ -14,11 +14,11 @@ For a supported setup, use one of the standard [installation](installation.md) p
 
 Hermes Agent ships a Nix flake & a NixOS module.
 
-| Level                                 | Who it's for                       | What you get                                                                                       |
-|---------------------------------------|------------------------------------|----------------------------------------------------------------------------------------------------|
-| **`nix run` / `nix profile install`** | Any Nix user (macOS, Linux)        | Pre-built binary with all deps — then use the standard CLI workflow                                |
-| **NixOS module (native)**             | NixOS server deployments           | Declarative config, hardened systemd service, managed secrets                                      |
-| **NixOS module (container)**          | Agents that need self-modification | Everything above, plus a persistent Ubuntu container where the agent can `apt`/`pip`/`npm install` |
+| Level | Who it's for | What you get |
+|----|----|----|
+| **`nix run` / `nix profile install`** | Any Nix user (macOS, Linux) | Pre-built binary with all deps — then use the standard CLI workflow |
+| **NixOS module (native)** | NixOS server deployments | Declarative config, hardened systemd service, managed secrets |
+| **NixOS module (container)** | Agents that need self-modification | Everything above, plus a persistent Ubuntu container where the agent can `apt`/`pip`/`npm install` |
 
 What's different from the standard install
 
@@ -39,7 +39,7 @@ The `curl | bash` installer manages Python, Node, and dependencies itself. The N
 
 No clone needed. Nix fetches, builds, and runs everything:
 
-``` prism-code
+``` bash
 # Run the desktop app
 nix run github:NousResearch/hermes-agent#desktop
 
@@ -66,7 +66,7 @@ The `default` package adds ~700 MB to the closure. If you only need messaging pl
 
 **Running from a local clone**
 
-``` prism-code
+``` bash
 git clone https://github.com/NousResearch/hermes-agent.git
 cd hermes-agent
 nix develop
@@ -85,7 +85,7 @@ This module requires NixOS. For non-NixOS systems (macOS, other Linux distros), 
 
 ### Add the Flake Input
 
-``` prism-code
+``` nix
 # /etc/nixos/flake.nix (or your system flake)
 {
   inputs = {
@@ -107,7 +107,7 @@ This module requires NixOS. For non-NixOS systems (macOS, other Linux distros), 
 
 ### Minimal Configuration
 
-``` prism-code
+``` nix
 # configuration.nix
 { config, ... }: {
   services.hermes-agent = {
@@ -125,11 +125,11 @@ Secrets are required
 
 The `environmentFiles` line above assumes you have [sops-nix](https://github.com/Mic92/sops-nix) or [agenix](https://github.com/ryantm/agenix) configured. The file should contain at least one LLM provider key (e.g., `OPENROUTER_API_KEY=sk-or-...`). See [Secrets Management](#secrets-management) for full setup. If you don't have a secrets manager yet, you can use a plain file as a starting point — just ensure it's not world-readable:
 
-``` prism-code
+``` bash
 echo "OPENROUTER_API_KEY=sk-or-your-key" | sudo install -m 0600 -o hermes /dev/stdin /var/lib/hermes/env
 ```
 
-``` prism-code
+``` nix
 services.hermes-agent.environmentFiles = [ "/var/lib/hermes/env" ];
 ```
 
@@ -150,7 +150,7 @@ When `container.enable = true` and `addToSystemPackages = true`, **every** `herm
 
 Set `container.hostUsers` to create a `~/.hermes` symlink to the service state directory, so the host CLI and the container share sessions, config, and memories:
 
-``` prism-code
+``` nix
 services.hermes-agent = {
   container.enable = true;
   container.hostUsers = [ "your-username" ];
@@ -162,7 +162,7 @@ Users listed in `hostUsers` are automatically added to the `hermes` group for fi
 
 **Podman users:** The NixOS service runs the container as root. Docker users get access via the `docker` group socket, but Podman's rootful containers require sudo. Grant passwordless sudo for your container runtime:
 
-``` prism-code
+``` nix
 security.sudo.extraRules = [{
   users = [ "your-username" ];
   commands = [{
@@ -178,7 +178,7 @@ The CLI auto-detects when sudo is needed and uses it transparently. Without this
 
 After `nixos-rebuild switch`, check that the service is running:
 
-``` prism-code
+``` bash
 # Check service status
 systemctl status hermes-agent
 
@@ -194,17 +194,17 @@ hermes config       # shows the generated config
 
 The module supports two modes, controlled by `container.enable`:
 
-|                                 | **Native** (default)                                    | **Container**                                                                     |
-|---------------------------------|---------------------------------------------------------|-----------------------------------------------------------------------------------|
-| How it runs                     | Hardened systemd service on the host                    | Persistent Ubuntu container with `/nix/store` bind-mounted                        |
-| Security                        | `NoNewPrivileges`, `ProtectSystem=strict`, `PrivateTmp` | Container isolation, runs as unprivileged user inside                             |
-| Agent can self-install packages | No — only tools on the Nix-provided PATH                | Yes — `apt`, `pip`, `npm` installs persist across restarts                        |
-| Config surface                  | Same                                                    | Same                                                                              |
-| When to choose                  | Standard deployments, maximum security, reproducibility | Agent needs runtime package installation, mutable environment, experimental tools |
+|  | **Native** (default) | **Container** |
+|----|----|----|
+| How it runs | Hardened systemd service on the host | Persistent Ubuntu container with `/nix/store` bind-mounted |
+| Security | `NoNewPrivileges`, `ProtectSystem=strict`, `PrivateTmp` | Container isolation, runs as unprivileged user inside |
+| Agent can self-install packages | No — only tools on the Nix-provided PATH | Yes — `apt`, `pip`, `npm` installs persist across restarts |
+| Config surface | Same | Same |
+| When to choose | Standard deployments, maximum security, reproducibility | Agent needs runtime package installation, mutable environment, experimental tools |
 
 To enable container mode, add one line:
 
-``` prism-code
+``` nix
 {
   services.hermes-agent = {
     enable = true;
@@ -226,7 +226,7 @@ Container mode auto-enables `virtualisation.docker.enable` via `mkDefault`. If y
 
 The `settings` option accepts an arbitrary attrset that is rendered as `config.yaml`. It supports deep merging across multiple module definitions (via `lib.recursiveUpdate`), so you can split config across files:
 
-``` prism-code
+``` nix
 # base.nix
 services.hermes-agent.settings = {
   model.default = "anthropic/claude-sonnet-4";
@@ -253,7 +253,7 @@ Run `nix build .#configKeys && cat result` to see every leaf config key extracte
 
 **Full example: all commonly customized settings**
 
-``` prism-code
+``` nix
 { config, ... }: {
   services.hermes-agent = {
     enable = true;
@@ -314,7 +314,7 @@ Run `nix build .#configKeys && cat result` to see every leaf config key extracte
 
 If you'd rather manage `config.yaml` entirely outside Nix, use `configFile`:
 
-``` prism-code
+``` nix
 services.hermes-agent.configFile = /etc/hermes/config.yaml;
 ```
 
@@ -324,23 +324,23 @@ This bypasses `settings` entirely — no merge, no generation. The file is copie
 
 Quick reference for the most common things Nix users want to customize:
 
-| I want to...                               | Option                                              | Example                                                           |
-|--------------------------------------------|-----------------------------------------------------|-------------------------------------------------------------------|
-| Change the LLM model                       | `settings.model.default`                            | `"anthropic/claude-sonnet-4"`                                     |
-| Use a different provider endpoint          | `settings.model.base_url`                           | `"https://openrouter.ai/api/v1"`                                  |
-| Add API keys                               | `environmentFiles`                                  | `[ config.sops.secrets."hermes-env".path ]`                       |
-| Give the agent a personality               | `${services.hermes-agent.stateDir}/.hermes/SOUL.md` | manage the file directly                                          |
-| Add MCP tool servers                       | `mcpServers.<name>`                                 | See [MCP Servers](#mcp-servers)                                   |
-| Enable Discord/Telegram/Slack              | `extraDependencyGroups`                             | `[ "messaging" ]`                                                 |
-| Mount host directories into container      | `container.extraVolumes`                            | `[ "/data:/data:rw" ]`                                            |
-| Pass GPU access to container               | `container.extraOptions`                            | `[ "--gpus" "all" ]`                                              |
-| Use Podman instead of Docker               | `container.backend`                                 | `"podman"`                                                        |
-| Share state between host CLI and container | `container.hostUsers`                               | `[ "sidbin" ]`                                                    |
-| Make extra tools available to the agent    | `extraPackages`                                     | `[ pkgs.pandoc pkgs.imagemagick ]`                                |
-| Use a custom base image                    | `container.image`                                   | `"ubuntu:24.04"`                                                  |
-| Override the hermes package                | `package`                                           | `inputs.hermes-agent.packages.${system}.default.override { ... }` |
-| Change state directory                     | `stateDir`                                          | `"/opt/hermes"`                                                   |
-| Set the agent's working directory          | `workingDirectory`                                  | `"/home/user/projects"`                                           |
+| I want to... | Option | Example |
+|----|----|----|
+| Change the LLM model | `settings.model.default` | `"anthropic/claude-sonnet-4"` |
+| Use a different provider endpoint | `settings.model.base_url` | `"https://openrouter.ai/api/v1"` |
+| Add API keys | `environmentFiles` | `[ config.sops.secrets."hermes-env".path ]` |
+| Give the agent a personality | `${services.hermes-agent.stateDir}/.hermes/SOUL.md` | manage the file directly |
+| Add MCP tool servers | `mcpServers.<name>` | See [MCP Servers](#mcp-servers) |
+| Enable Discord/Telegram/Slack | `extraDependencyGroups` | `[ "messaging" ]` |
+| Mount host directories into container | `container.extraVolumes` | `[ "/data:/data:rw" ]` |
+| Pass GPU access to container | `container.extraOptions` | `[ "--gpus" "all" ]` |
+| Use Podman instead of Docker | `container.backend` | `"podman"` |
+| Share state between host CLI and container | `container.hostUsers` | `[ "sidbin" ]` |
+| Make extra tools available to the agent | `extraPackages` | `[ pkgs.pandoc pkgs.imagemagick ]` |
+| Use a custom base image | `container.image` | `"ubuntu:24.04"` |
+| Override the hermes package | `package` | `inputs.hermes-agent.packages.${system}.default.override { ... }` |
+| Change state directory | `stateDir` | `"/opt/hermes"` |
+| Set the agent's working directory | `workingDirectory` | `"/home/user/projects"` |
 
 ------------------------------------------------------------------------
 
@@ -354,7 +354,7 @@ Both `environment` (non-secret vars) and `environmentFiles` (secret files) are m
 
 ### sops-nix
 
-``` prism-code
+``` nix
 {
   sops = {
     defaultSopsFile = ./secrets/hermes.yaml;
@@ -370,7 +370,7 @@ Both `environment` (non-secret vars) and `environmentFiles` (secret files) are m
 
 The secrets file contains key-value pairs:
 
-``` prism-code
+``` yaml
 # secrets/hermes.yaml (encrypted with sops)
 hermes-env: |
     OPENROUTER_API_KEY=sk-or-...
@@ -380,7 +380,7 @@ hermes-env: |
 
 ### agenix
 
-``` prism-code
+``` nix
 {
   age.secrets.hermes-env.file = ./secrets/hermes-env.age;
 
@@ -394,7 +394,7 @@ hermes-env: |
 
 For platforms requiring OAuth (e.g., Discord), use `authFile` to seed credentials on first deploy:
 
-``` prism-code
+``` nix
 {
   services.hermes-agent = {
     authFile = config.sops.secrets."hermes/auth.json".path;
@@ -416,7 +416,7 @@ The `documents` option installs files into the agent's working directory (the `w
 
 The agent identity file is separate: Hermes loads its primary `SOUL.md` from `$HERMES_HOME/SOUL.md`, which in the NixOS module is `${services.hermes-agent.stateDir}/.hermes/SOUL.md`. Putting `SOUL.md` in `documents` only creates a workspace file and will not replace the main persona file.
 
-``` prism-code
+``` nix
 {
   services.hermes-agent.documents = {
     "USER.md" = ./documents/USER.md;  # path reference, copied from Nix store
@@ -434,7 +434,7 @@ The `mcpServers` option declaratively configures [MCP (Model Context Protocol)](
 
 ### Stdio Transport (Local Servers)
 
-``` prism-code
+``` nix
 {
   services.hermes-agent.mcpServers = {
     filesystem = {
@@ -456,7 +456,7 @@ Environment variables in `env` values are resolved from `$HERMES_HOME/.env` at r
 
 ### HTTP Transport (Remote Servers)
 
-``` prism-code
+``` nix
 {
   services.hermes-agent.mcpServers.remote-api = {
     url = "https://mcp.example.com/v1/mcp";
@@ -470,7 +470,7 @@ Environment variables in `env` values are resolved from `$HERMES_HOME/.env` at r
 
 Set `auth = "oauth"` for servers using OAuth 2.1. Hermes implements the full PKCE flow — metadata discovery, dynamic client registration, token exchange, and automatic refresh.
 
-``` prism-code
+``` nix
 {
   services.hermes-agent.mcpServers.my-oauth-server = {
     url = "https://mcp.example.com/mcp";
@@ -487,7 +487,7 @@ The first OAuth authorization requires a browser-based consent flow. In a headle
 
 **Option A: Interactive bootstrap** — run the flow once via `docker exec` (container) or `sudo -u hermes` (native):
 
-``` prism-code
+``` bash
 # Container mode
 docker exec -it hermes-agent \
   hermes mcp add my-oauth-server --url https://mcp.example.com/mcp --auth oauth
@@ -501,7 +501,7 @@ The container uses `--network=host`, so the OAuth callback listener on `127.0.0.
 
 **Option B: Pre-seed tokens** — complete the flow on a workstation, then copy tokens:
 
-``` prism-code
+``` bash
 hermes mcp add my-oauth-server --url https://mcp.example.com/mcp --auth oauth
 scp ~/.hermes/mcp-tokens/my-oauth-server{,.client}.json \
     server:/var/lib/hermes/.hermes/mcp-tokens/
@@ -512,7 +512,7 @@ scp ~/.hermes/mcp-tokens/my-oauth-server{,.client}.json \
 
 Some MCP servers can request LLM completions from the agent:
 
-``` prism-code
+``` nix
 {
   services.hermes-agent.mcpServers.analysis = {
     command = "npx";
@@ -534,13 +534,13 @@ Some MCP servers can request LLM completions from the agent:
 
 When hermes runs via the NixOS module, the following CLI commands are **blocked** with a descriptive error pointing you to `configuration.nix`:
 
-| Blocked command                   | Why                                                        |
-|-----------------------------------|------------------------------------------------------------|
-| `hermes setup`                    | Config is declarative — edit `settings` in your Nix config |
-| `hermes config edit`              | Config is generated from `settings`                        |
-| `hermes config set <key> <value>` | Config is generated from `settings`                        |
-| `hermes gateway install`          | The systemd service is managed by NixOS                    |
-| `hermes gateway uninstall`        | The systemd service is managed by NixOS                    |
+| Blocked command | Why |
+|----|----|
+| `hermes setup` | Config is declarative — edit `settings` in your Nix config |
+| `hermes config edit` | Config is generated from `settings` |
+| `hermes config set <key> <value>` | Config is generated from `settings` |
+| `hermes gateway install` | The systemd service is managed by NixOS |
+| `hermes gateway uninstall` | The systemd service is managed by NixOS |
 
 This prevents drift between what Nix declares and what's on disk. Detection uses two signals:
 
@@ -559,7 +559,7 @@ This section is only relevant if you're using `container.enable = true`. Skip it
 
 When container mode is enabled, hermes runs inside a persistent Ubuntu container with the Nix-built binary bind-mounted read-only from the host:
 
-``` prism-code
+``` text
 Host                                    Container
 ────                                    ─────────
 /nix/store/...-hermes-agent-0.1.0  ──►  /nix/store/... (ro)
@@ -587,15 +587,15 @@ The Nix-built binary works inside the Ubuntu container because `/nix/store` is b
 
 ### What Persists Across What
 
-| Event                                   | Container recreated? | `/data` (state) | `/home/hermes` | Writable layer (`apt`/`pip`/`npm`) |
-|-----------------------------------------|----------------------|-----------------|----------------|------------------------------------|
-| `systemctl restart hermes-agent`        | No                   | Persists        | Persists       | Persists                           |
-| `nixos-rebuild switch` (code change)    | No (symlink updated) | Persists        | Persists       | Persists                           |
-| Host reboot                             | No                   | Persists        | Persists       | Persists                           |
-| `nix-collect-garbage`                   | No (GC root)         | Persists        | Persists       | Persists                           |
-| Image change (`container.image`)        | **Yes**              | Persists        | Persists       | **Lost**                           |
-| Volume/options change                   | **Yes**              | Persists        | Persists       | **Lost**                           |
-| `environment`/`environmentFiles` change | No                   | Persists        | Persists       | Persists                           |
+| Event | Container recreated? | `/data` (state) | `/home/hermes` | Writable layer (`apt`/`pip`/`npm`) |
+|----|----|----|----|----|
+| `systemctl restart hermes-agent` | No | Persists | Persists | Persists |
+| `nixos-rebuild switch` (code change) | No (symlink updated) | Persists | Persists | Persists |
+| Host reboot | No | Persists | Persists | Persists |
+| `nix-collect-garbage` | No (GC root) | Persists | Persists | Persists |
+| Image change (`container.image`) | **Yes** | Persists | Persists | **Lost** |
+| Volume/options change | **Yes** | Persists | Persists | **Lost** |
+| `environment`/`environmentFiles` change | No | Persists | Persists | Persists |
 
 The container is only recreated when its **identity hash** changes. The hash covers: schema version, image, `extraVolumes`, `extraOptions`, and the entrypoint script. Changes to environment variables, settings, documents, or the hermes package itself do **not** trigger recreation.
 
@@ -619,7 +619,7 @@ The NixOS module supports declarative plugin installation — no imperative `her
 
 For plugins that are just a source tree with `plugin.yaml` + `__init__.py` (e.g., [hermes-lcm](https://github.com/stephenschoettler/hermes-lcm)):
 
-``` prism-code
+``` nix
 services.hermes-agent.extraPlugins = [
   (pkgs.fetchFromGitHub {
     owner = "stephenschoettler";
@@ -636,7 +636,7 @@ Plugins are symlinked into `$HERMES_HOME/plugins/` at activation time. Hermes di
 
 For pip-packaged plugins that register via `[project.entry-points."hermes_agent.plugins"]` (e.g., [rtk-hermes](https://github.com/ogallotti/rtk-hermes)):
 
-``` prism-code
+``` nix
 services.hermes-agent.extraPythonPackages = [
   (pkgs.python312Packages.buildPythonPackage {
     pname = "rtk-hermes";
@@ -659,12 +659,12 @@ The package's `site-packages` is added to PYTHONPATH in the hermes wrapper. `imp
 
 For optional extras declared in hermes-agent's `pyproject.toml`, use `extraDependencyGroups` to include them in the sealed venv at build time. This is required for any extra not in the default `[all]` set — on Nix, runtime installation into the read-only store is not possible.
 
-``` prism-code
+``` nix
 # Enable Discord, Telegram, Slack
 services.hermes-agent.extraDependencyGroups = [ "messaging" ];
 ```
 
-``` prism-code
+``` nix
 # Enable a memory provider
 services.hermes-agent = {
   extraDependencyGroups = [ "hindsight" ];
@@ -698,18 +698,18 @@ Or use the pre-built `#messaging` or `#full` flake packages instead of per-extra
 
 **When to use which:**
 
-| Need                                                | Option                  |
-|-----------------------------------------------------|-------------------------|
-| Enable a pyproject.toml optional extra              | `extraDependencyGroups` |
-| Add an external Python plugin not in pyproject.toml | `extraPythonPackages`   |
-| Add a system binary (pandoc, jq, etc.)              | `extraPackages`         |
-| Add a directory-based plugin source tree            | `extraPlugins`          |
+| Need | Option |
+|----|----|
+| Enable a pyproject.toml optional extra | `extraDependencyGroups` |
+| Add an external Python plugin not in pyproject.toml | `extraPythonPackages` |
+| Add a system binary (pandoc, jq, etc.) | `extraPackages` |
+| Add a directory-based plugin source tree | `extraPlugins` |
 
 ### Combining Both
 
 A directory plugin with third-party Python dependencies needs both options:
 
-``` prism-code
+``` nix
 services.hermes-agent = {
   extraPlugins = [ my-plugin-src ];          # plugin source
   extraPythonPackages = [ pkgs.python312Packages.redis ];  # its Python dep
@@ -721,7 +721,7 @@ services.hermes-agent = {
 
 External flakes can override the package directly:
 
-``` prism-code
+``` nix
 {
   inputs.hermes-agent.url = "github:NousResearch/hermes-agent";
   outputs = { hermes-agent, nixpkgs, ... }: {
@@ -737,7 +737,7 @@ External flakes can override the package directly:
 
 Plugins still need to be enabled in `config.yaml`. Add them via the declarative settings:
 
-``` prism-code
+``` nix
 services.hermes-agent.settings.plugins.enabled = [
   "hermes-lcm"
   "rtk-rewrite"
@@ -756,7 +756,7 @@ A build-time collision check prevents plugin packages from shadowing core hermes
 
 The flake provides a development shell with Python 3.12, uv, Node.js, and all runtime tools:
 
-``` prism-code
+``` bash
 cd hermes-agent
 nix develop
 
@@ -773,7 +773,7 @@ hermes chat
 
 The included `.envrc` activates the dev shell automatically:
 
-``` prism-code
+``` bash
 cd hermes-agent
 direnv allow    # one-time
 # Subsequent entries are near-instant (stamp file skips dep install)
@@ -783,7 +783,7 @@ direnv allow    # one-time
 
 The flake includes build-time verification that runs in CI and locally:
 
-``` prism-code
+``` bash
 # Run all checks
 nix flake check
 
@@ -798,14 +798,14 @@ nix build .#checks.x86_64-linux.config-roundtrip    # merge script preserves use
 
 **What each check verifies**
 
-| Check               | What it tests                                                                                                                          |
-|---------------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| `package-contents`  | `hermes` and `hermes-agent` binaries exist and `hermes version` runs                                                                   |
-| `entry-points-sync` | Every `[project.scripts]` entry in `pyproject.toml` has a wrapped binary in the Nix package                                            |
-| `cli-commands`      | `hermes --help` exposes `gateway` and `config` subcommands                                                                             |
-| `managed-guard`     | `HERMES_MANAGED=true hermes config set ...` prints the NixOS error                                                                     |
-| `bundled-skills`    | Skills directory exists, contains SKILL.md files, `HERMES_BUNDLED_SKILLS` is set in wrapper                                            |
-| `config-roundtrip`  | 7 merge scenarios: fresh install, Nix override, user key preservation, mixed merge, MCP additive merge, nested deep merge, idempotency |
+| Check | What it tests |
+|----|----|
+| `package-contents` | `hermes` and `hermes-agent` binaries exist and `hermes version` runs |
+| `entry-points-sync` | Every `[project.scripts]` entry in `pyproject.toml` has a wrapped binary in the Nix package |
+| `cli-commands` | `hermes --help` exposes `gateway` and `config` subcommands |
+| `managed-guard` | `HERMES_MANAGED=true hermes config set ...` prints the NixOS error |
+| `bundled-skills` | Skills directory exists, contains SKILL.md files, `HERMES_BUNDLED_SKILLS` is set in wrapper |
+| `config-roundtrip` | 7 merge scenarios: fresh install, Nix override, user key preservation, mixed merge, MCP additive merge, nested deep merge, idempotency |
 
 ------------------------------------------------------------------------
 
@@ -813,78 +813,78 @@ nix build .#checks.x86_64-linux.config-roundtrip    # merge script preserves use
 
 ### Core
 
-| Option                | Type      | Default                   | Description                                                       |
-|-----------------------|-----------|---------------------------|-------------------------------------------------------------------|
-| `enable`              | `bool`    | `false`                   | Enable the hermes-agent service                                   |
-| `package`             | `package` | `hermes-agent`            | The hermes-agent package to use                                   |
-| `user`                | `str`     | `"hermes"`                | System user                                                       |
-| `group`               | `str`     | `"hermes"`                | System group                                                      |
-| `createUser`          | `bool`    | `true`                    | Auto-create user/group                                            |
-| `stateDir`            | `str`     | `"/var/lib/hermes"`       | State directory (`HERMES_HOME` parent)                            |
-| `workingDirectory`    | `str`     | `"${stateDir}/workspace"` | Agent working directory                                           |
-| `addToSystemPackages` | `bool`    | `false`                   | Add `hermes` CLI to system PATH and set `HERMES_HOME` system-wide |
+| Option | Type | Default | Description |
+|----|----|----|----|
+| `enable` | `bool` | `false` | Enable the hermes-agent service |
+| `package` | `package` | `hermes-agent` | The hermes-agent package to use |
+| `user` | `str` | `"hermes"` | System user |
+| `group` | `str` | `"hermes"` | System group |
+| `createUser` | `bool` | `true` | Auto-create user/group |
+| `stateDir` | `str` | `"/var/lib/hermes"` | State directory (`HERMES_HOME` parent) |
+| `workingDirectory` | `str` | `"${stateDir}/workspace"` | Agent working directory |
+| `addToSystemPackages` | `bool` | `false` | Add `hermes` CLI to system PATH and set `HERMES_HOME` system-wide |
 
 ### Configuration
 
-| Option       | Type                  | Default | Description                                                                                                                         |
-|--------------|-----------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------|
-| `settings`   | `attrs` (deep-merged) | `{}`    | Declarative config rendered as `config.yaml`. Supports arbitrary nesting; multiple definitions are merged via `lib.recursiveUpdate` |
-| `configFile` | `null` or `path`      | `null`  | Path to an existing `config.yaml`. Overrides `settings` entirely if set                                                             |
+| Option | Type | Default | Description |
+|----|----|----|----|
+| `settings` | `attrs` (deep-merged) | `{}` | Declarative config rendered as `config.yaml`. Supports arbitrary nesting; multiple definitions are merged via `lib.recursiveUpdate` |
+| `configFile` | `null` or `path` | `null` | Path to an existing `config.yaml`. Overrides `settings` entirely if set |
 
 ### Secrets & Environment
 
-| Option                   | Type             | Default | Description                                                                         |
-|--------------------------|------------------|---------|-------------------------------------------------------------------------------------|
-| `environmentFiles`       | `listOf str`     | `[]`    | Paths to env files with secrets. Merged into `$HERMES_HOME/.env` at activation time |
-| `environment`            | `attrsOf str`    | `{}`    | Non-secret env vars. **Visible in Nix store** — do not put secrets here             |
-| `authFile`               | `null` or `path` | `null`  | OAuth credentials seed. Only copied on first deploy                                 |
-| `authFileForceOverwrite` | `bool`           | `false` | Always overwrite `auth.json` from `authFile` on activation                          |
+| Option | Type | Default | Description |
+|----|----|----|----|
+| `environmentFiles` | `listOf str` | `[]` | Paths to env files with secrets. Merged into `$HERMES_HOME/.env` at activation time |
+| `environment` | `attrsOf str` | `{}` | Non-secret env vars. **Visible in Nix store** — do not put secrets here |
+| `authFile` | `null` or `path` | `null` | OAuth credentials seed. Only copied on first deploy |
+| `authFileForceOverwrite` | `bool` | `false` | Always overwrite `auth.json` from `authFile` on activation |
 
 ### Documents
 
-| Option      | Type                        | Default | Description                                                                                                              |
-|-------------|-----------------------------|---------|--------------------------------------------------------------------------------------------------------------------------|
-| `documents` | `attrsOf (either str path)` | `{}`    | Workspace files. Keys are filenames, values are inline strings or paths. Installed into `workingDirectory` on activation |
+| Option | Type | Default | Description |
+|----|----|----|----|
+| `documents` | `attrsOf (either str path)` | `{}` | Workspace files. Keys are filenames, values are inline strings or paths. Installed into `workingDirectory` on activation |
 
 ### MCP Servers
 
-| Option                              | Type                  | Default | Description                                                |
-|-------------------------------------|-----------------------|---------|------------------------------------------------------------|
-| `mcpServers`                        | `attrsOf submodule`   | `{}`    | MCP server definitions, merged into `settings.mcp_servers` |
-| `mcpServers.<name>.command`         | `null` or `str`       | `null`  | Server command (stdio transport)                           |
-| `mcpServers.<name>.args`            | `listOf str`          | `[]`    | Command arguments                                          |
-| `mcpServers.<name>.env`             | `attrsOf str`         | `{}`    | Environment variables for the server process               |
-| `mcpServers.<name>.url`             | `null` or `str`       | `null`  | Server endpoint URL (HTTP/StreamableHTTP transport)        |
-| `mcpServers.<name>.headers`         | `attrsOf str`         | `{}`    | HTTP headers, e.g. `Authorization`                         |
-| `mcpServers.<name>.auth`            | `null` or `"oauth"`   | `null`  | Authentication method. `"oauth"` enables OAuth 2.1 PKCE    |
-| `mcpServers.<name>.enabled`         | `bool`                | `true`  | Enable or disable this server                              |
-| `mcpServers.<name>.timeout`         | `null` or `int`       | `null`  | Tool call timeout in seconds (default: 120)                |
-| `mcpServers.<name>.connect_timeout` | `null` or `int`       | `null`  | Connection timeout in seconds (default: 60)                |
-| `mcpServers.<name>.tools`           | `null` or `submodule` | `null`  | Tool filtering (`include`/`exclude` lists)                 |
-| `mcpServers.<name>.sampling`        | `null` or `submodule` | `null`  | Sampling config for server-initiated LLM requests          |
+| Option | Type | Default | Description |
+|----|----|----|----|
+| `mcpServers` | `attrsOf submodule` | `{}` | MCP server definitions, merged into `settings.mcp_servers` |
+| `mcpServers.<name>.command` | `null` or `str` | `null` | Server command (stdio transport) |
+| `mcpServers.<name>.args` | `listOf str` | `[]` | Command arguments |
+| `mcpServers.<name>.env` | `attrsOf str` | `{}` | Environment variables for the server process |
+| `mcpServers.<name>.url` | `null` or `str` | `null` | Server endpoint URL (HTTP/StreamableHTTP transport) |
+| `mcpServers.<name>.headers` | `attrsOf str` | `{}` | HTTP headers, e.g. `Authorization` |
+| `mcpServers.<name>.auth` | `null` or `"oauth"` | `null` | Authentication method. `"oauth"` enables OAuth 2.1 PKCE |
+| `mcpServers.<name>.enabled` | `bool` | `true` | Enable or disable this server |
+| `mcpServers.<name>.timeout` | `null` or `int` | `null` | Tool call timeout in seconds (default: 120) |
+| `mcpServers.<name>.connect_timeout` | `null` or `int` | `null` | Connection timeout in seconds (default: 60) |
+| `mcpServers.<name>.tools` | `null` or `submodule` | `null` | Tool filtering (`include`/`exclude` lists) |
+| `mcpServers.<name>.sampling` | `null` or `submodule` | `null` | Sampling config for server-initiated LLM requests |
 
 ### Service Behavior
 
-| Option                  | Type             | Default    | Description                                                                                                                                 |
-|-------------------------|------------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| `extraArgs`             | `listOf str`     | `[]`       | Extra args for `hermes gateway`                                                                                                             |
-| `extraPackages`         | `listOf package` | `[]`       | Extra packages available to the agent. Added to the hermes user's per-user profile so terminal commands, skills, and cron jobs all see them |
-| `extraPlugins`          | `listOf package` | `[]`       | Directory plugin packages to symlink into `$HERMES_HOME/plugins/`. Each must contain `plugin.yaml`                                          |
-| `extraPythonPackages`   | `listOf package` | `[]`       | Python packages added to PYTHONPATH for entry-point plugin discovery. Build with `python312Packages`                                        |
-| `extraDependencyGroups` | `listOf str`     | `[]`       | pyproject.toml optional extras to include in the sealed venv (e.g. `["hindsight"]`). Resolved by uv — no collisions                         |
-| `restart`               | `str`            | `"always"` | systemd `Restart=` policy                                                                                                                   |
-| `restartSec`            | `int`            | `5`        | systemd `RestartSec=` value                                                                                                                 |
+| Option | Type | Default | Description |
+|----|----|----|----|
+| `extraArgs` | `listOf str` | `[]` | Extra args for `hermes gateway` |
+| `extraPackages` | `listOf package` | `[]` | Extra packages available to the agent. Added to the hermes user's per-user profile so terminal commands, skills, and cron jobs all see them |
+| `extraPlugins` | `listOf package` | `[]` | Directory plugin packages to symlink into `$HERMES_HOME/plugins/`. Each must contain `plugin.yaml` |
+| `extraPythonPackages` | `listOf package` | `[]` | Python packages added to PYTHONPATH for entry-point plugin discovery. Build with `python312Packages` |
+| `extraDependencyGroups` | `listOf str` | `[]` | pyproject.toml optional extras to include in the sealed venv (e.g. `["hindsight"]`). Resolved by uv — no collisions |
+| `restart` | `str` | `"always"` | systemd `Restart=` policy |
+| `restartSec` | `int` | `5` | systemd `RestartSec=` value |
 
 ### Container
 
-| Option                   | Type                       | Default          | Description                                                                                                      |
-|--------------------------|----------------------------|------------------|------------------------------------------------------------------------------------------------------------------|
-| `container.enable`       | `bool`                     | `false`          | Enable OCI container mode                                                                                        |
-| `container.backend`      | `enum ["docker" "podman"]` | `"docker"`       | Container runtime                                                                                                |
-| `container.image`        | `str`                      | `"ubuntu:24.04"` | Base image (pulled at runtime)                                                                                   |
-| `container.extraVolumes` | `listOf str`               | `[]`             | Extra volume mounts (`host:container:mode`)                                                                      |
-| `container.extraOptions` | `listOf str`               | `[]`             | Extra args passed to `docker create`                                                                             |
-| `container.hostUsers`    | `listOf str`               | `[]`             | Interactive users who get a `~/.hermes` symlink to the service stateDir and are auto-added to the `hermes` group |
+| Option | Type | Default | Description |
+|----|----|----|----|
+| `container.enable` | `bool` | `false` | Enable OCI container mode |
+| `container.backend` | `enum ["docker" "podman"]` | `"docker"` | Container runtime |
+| `container.image` | `str` | `"ubuntu:24.04"` | Base image (pulled at runtime) |
+| `container.extraVolumes` | `listOf str` | `[]` | Extra volume mounts (`host:container:mode`) |
+| `container.extraOptions` | `listOf str` | `[]` | Extra args passed to `docker create` |
+| `container.hostUsers` | `listOf str` | `[]` | Interactive users who get a `~/.hermes` symlink to the service stateDir and are auto-added to the `hermes` group |
 
 ------------------------------------------------------------------------
 
@@ -892,7 +892,7 @@ nix build .#checks.x86_64-linux.config-roundtrip    # merge script preserves use
 
 ### Native Mode
 
-``` prism-code
+``` text
 /var/lib/hermes/                     # stateDir (owned by hermes:hermes, 0750)
 ├── .hermes/                         # HERMES_HOME
 │   ├── config.yaml                  # Nix-generated (deep-merged each rebuild)
@@ -917,18 +917,18 @@ nix build .#checks.x86_64-linux.config-roundtrip    # merge script preserves use
 
 Same layout, mounted into the container:
 
-| Container path               | Host path          | Mode | Notes                                                                     |
-|------------------------------|--------------------|------|---------------------------------------------------------------------------|
-| `/nix/store`                 | `/nix/store`       | `ro` | Hermes binary + all Nix deps                                              |
-| `/data`                      | `/var/lib/hermes`  | `rw` | All state, config, workspace                                              |
-| `/home/hermes`               | `${stateDir}/home` | `rw` | Persistent agent home — `pip install --user`, tool caches                 |
-| `/usr`, `/usr/local`, `/tmp` | (writable layer)   | `rw` | `apt`/`pip`/`npm` installs — persists across restarts, lost on recreation |
+| Container path | Host path | Mode | Notes |
+|----|----|----|----|
+| `/nix/store` | `/nix/store` | `ro` | Hermes binary + all Nix deps |
+| `/data` | `/var/lib/hermes` | `rw` | All state, config, workspace |
+| `/home/hermes` | `${stateDir}/home` | `rw` | Persistent agent home — `pip install --user`, tool caches |
+| `/usr`, `/usr/local`, `/tmp` | (writable layer) | `rw` | `apt`/`pip`/`npm` installs — persists across restarts, lost on recreation |
 
 ------------------------------------------------------------------------
 
 ## Updating
 
-``` prism-code
+``` bash
 # Update the flake input (run from the directory containing flake.nix)
 cd /etc/nixos && nix flake update hermes-agent
 
@@ -948,7 +948,7 @@ All `docker` commands below work the same with `podman`. Substitute accordingly 
 
 ### Service Logs
 
-``` prism-code
+``` bash
 # Both modes use the same systemd unit
 journalctl -u hermes-agent -f
 
@@ -958,7 +958,7 @@ docker logs -f hermes-agent
 
 ### Container Inspection
 
-``` prism-code
+``` bash
 systemctl status hermes-agent
 docker ps -a --filter name=hermes-agent
 docker inspect hermes-agent --format='{{.State.Status}}'
@@ -971,7 +971,7 @@ docker exec hermes-agent cat /data/.container-identity
 
 If you need to reset the writable layer (fresh Ubuntu):
 
-``` prism-code
+``` bash
 sudo systemctl stop hermes-agent
 docker rm -f hermes-agent
 sudo rm /var/lib/hermes/.container-identity
@@ -982,7 +982,7 @@ sudo systemctl start hermes-agent
 
 If the agent starts but can't authenticate with the LLM provider, check that the `.env` file was merged correctly:
 
-``` prism-code
+``` bash
 # Native mode
 sudo -u hermes cat /var/lib/hermes/.hermes/.env
 
@@ -992,20 +992,20 @@ docker exec hermes-agent cat /data/.hermes/.env
 
 ### GC Root Verification
 
-``` prism-code
+``` bash
 nix-store --query --roots $(docker exec hermes-agent readlink /data/current-package)
 ```
 
 ### Common Issues
 
-| Symptom                                                | Cause                                                          | Fix                                                                                                                                                                                                                                             |
-|--------------------------------------------------------|----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Cannot save configuration: managed by NixOS`          | CLI guards active                                              | Edit `configuration.nix` and `nixos-rebuild switch`                                                                                                                                                                                             |
-| `No adapter available for discord` (or telegram/slack) | Messaging deps missing from the sealed Nix venv                | Install `#messaging` variant: `nix profile install ...#messaging`. For NixOS module: `extraDependencyGroups = [ "messaging" ]`. Check `journalctl -u hermes-agent` for `FeatureUnavailable` or `requirements not met` for the underlying error. |
-| Container recreated unexpectedly                       | `extraVolumes`, `extraOptions`, or `image` changed             | Expected — writable layer resets. Reinstall packages or use a custom image                                                                                                                                                                      |
-| `hermes version` shows old version                     | Container not restarted                                        | `systemctl restart hermes-agent`                                                                                                                                                                                                                |
-| Permission denied on `/var/lib/hermes`                 | State dir is `0750 hermes:hermes`                              | Use `docker exec` or `sudo -u hermes`                                                                                                                                                                                                           |
-| `nix-collect-garbage` removed hermes                   | GC root missing                                                | Restart the service (preStart recreates the GC root)                                                                                                                                                                                            |
-| `no container with name or ID "hermes-agent"` (Podman) | Podman rootful container not visible to regular user           | Add passwordless sudo for podman (see [Container Mode](#container-mode) section)                                                                                                                                                                |
-| `unable to find user hermes`                           | Container still starting (entrypoint hasn't created user yet)  | Wait a few seconds and retry — the CLI retries automatically                                                                                                                                                                                    |
-| Tool added via `extraPackages` not found in terminal   | Requires `nixos-rebuild switch` to update the per-user profile | Rebuild and restart: `nixos-rebuild switch && systemctl restart hermes-agent`                                                                                                                                                                   |
+| Symptom | Cause | Fix |
+|----|----|----|
+| `Cannot save configuration: managed by NixOS` | CLI guards active | Edit `configuration.nix` and `nixos-rebuild switch` |
+| `No adapter available for discord` (or telegram/slack) | Messaging deps missing from the sealed Nix venv | Install `#messaging` variant: `nix profile install ...#messaging`. For NixOS module: `extraDependencyGroups = [ "messaging" ]`. Check `journalctl -u hermes-agent` for `FeatureUnavailable` or `requirements not met` for the underlying error. |
+| Container recreated unexpectedly | `extraVolumes`, `extraOptions`, or `image` changed | Expected — writable layer resets. Reinstall packages or use a custom image |
+| `hermes version` shows old version | Container not restarted | `systemctl restart hermes-agent` |
+| Permission denied on `/var/lib/hermes` | State dir is `0750 hermes:hermes` | Use `docker exec` or `sudo -u hermes` |
+| `nix-collect-garbage` removed hermes | GC root missing | Restart the service (preStart recreates the GC root) |
+| `no container with name or ID "hermes-agent"` (Podman) | Podman rootful container not visible to regular user | Add passwordless sudo for podman (see [Container Mode](#container-mode) section) |
+| `unable to find user hermes` | Container still starting (entrypoint hasn't created user yet) | Wait a few seconds and retry — the CLI retries automatically |
+| Tool added via `extraPackages` not found in terminal | Requires `nixos-rebuild switch` to update the per-user profile | Rebuild and restart: `nixos-rebuild switch && systemctl restart hermes-agent` |

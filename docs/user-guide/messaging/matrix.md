@@ -14,16 +14,16 @@ Before setup, here's the part most people want to know: how Hermes behaves once 
 
 ## How Hermes Behaves
 
-| Context                              | Behavior                                                                                                                                                                                                                                                                                                                                                                             |
-|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **DMs**                              | Hermes responds to every message. No `@mention` needed. Each DM has its own session. Set `MATRIX_DM_MENTION_THREADS=true` to start a thread when the bot is `@mentioned` in a DM.                                                                                                                                                                                                    |
-| **Rooms**                            | By default, Hermes requires an `@mention` to respond. Set `MATRIX_REQUIRE_MENTION=false` or add room IDs to `MATRIX_FREE_RESPONSE_ROOMS` for free-response rooms. Room invites are auto-accepted.                                                                                                                                                                                    |
-| **Threads**                          | Hermes supports Matrix threads (MSC3440). If you reply in a thread, Hermes keeps the thread context isolated from the main room timeline. Threads where the bot has already participated do not require a mention.                                                                                                                                                                   |
-| **Auto-threading**                   | By default, Hermes auto-creates a thread for each message it responds to in a room. This keeps conversations isolated. Set `MATRIX_AUTO_THREAD=false` to disable. Set `MATRIX_DM_AUTO_THREAD=true` (default false) to also auto-create threads for DM messages — this is distinct from `MATRIX_DM_MENTION_THREADS`, which only starts a thread when the bot is `@mentioned` in a DM. |
-| **Commands**                         | Hermes accepts normal `/commands` when your Matrix client sends them. If your client reserves `/` for local commands, use `!commands` instead; Hermes normalizes known `!command` aliases to `/command`.                                                                                                                                                                             |
-| **Interactive controls**             | Dangerous-command approval and `/model` selection can use Matrix reactions. Approval reactions can be limited to the user who requested the action.                                                                                                                                                                                                                                  |
-| **Thinking and tool activity**       | Matrix uses threaded, editable thinking/tool-activity panes when gateway progress is enabled, so updates do not flood the main room timeline.                                                                                                                                                                                                                                        |
-| **Shared rooms with multiple users** | By default, Hermes isolates session history per user inside the room. Two people talking in the same room do not share one transcript unless you explicitly disable that.                                                                                                                                                                                                            |
+| Context | Behavior |
+|----|----|
+| **DMs** | Hermes responds to every message. No `@mention` needed. Each DM has its own session. Set `MATRIX_DM_MENTION_THREADS=true` to start a thread when the bot is `@mentioned` in a DM. |
+| **Rooms** | By default, Hermes requires an `@mention` to respond. Set `MATRIX_REQUIRE_MENTION=false` or add room IDs to `MATRIX_FREE_RESPONSE_ROOMS` for free-response rooms. Room invites are auto-accepted. |
+| **Threads** | Hermes supports Matrix threads (MSC3440). If you reply in a thread, Hermes keeps the thread context isolated from the main room timeline. Threads where the bot has already participated do not require a mention. |
+| **Auto-threading** | By default, Hermes auto-creates a thread for each message it responds to in a room. This keeps conversations isolated. Set `MATRIX_AUTO_THREAD=false` to disable. Set `MATRIX_DM_AUTO_THREAD=true` (default false) to also auto-create threads for DM messages — this is distinct from `MATRIX_DM_MENTION_THREADS`, which only starts a thread when the bot is `@mentioned` in a DM. |
+| **Commands** | Hermes accepts normal `/commands` when your Matrix client sends them. If your client reserves `/` for local commands, use `!commands` instead; Hermes normalizes known `!command` aliases to `/command`. |
+| **Interactive controls** | Dangerous-command approval and `/model` selection can use Matrix reactions. Approval reactions can be limited to the user who requested the action. |
+| **Thinking and tool activity** | Matrix uses threaded, editable thinking/tool-activity panes when gateway progress is enabled, so updates do not flood the main room timeline. |
+| **Shared rooms with multiple users** | By default, Hermes isolates session history per user inside the room. Two people talking in the same room do not share one transcript unless you explicitly disable that. |
 
 tip
 
@@ -59,13 +59,13 @@ By default:
 
 This is controlled by `config.yaml`:
 
-``` prism-code
+``` yaml
 group_sessions_per_user: true
 ```
 
 Set it to `false` only if you explicitly want one shared conversation for the entire room:
 
-``` prism-code
+``` yaml
 group_sessions_per_user: false
 ```
 
@@ -79,7 +79,7 @@ Shared sessions can be useful for a collaborative room, but they also mean:
 
 You can configure mention and auto-threading behavior via environment variables or `config.yaml`:
 
-``` prism-code
+``` yaml
 matrix:
   require_mention: true           # Require @mention in rooms (default: true)
   allowed_users:                  # Matrix users allowed to trigger agent turns
@@ -99,7 +99,7 @@ matrix:
 
 Or via environment variables:
 
-``` prism-code
+``` bash
 MATRIX_REQUIRE_MENTION=true
 MATRIX_ALLOWED_USERS=@alice:matrix.org
 MATRIX_ALLOWED_ROOMS=!abc123:matrix.org
@@ -129,18 +129,18 @@ If you are upgrading from a version that did not have `MATRIX_REQUIRE_MENTION`, 
 
 If you use the same Matrix bot in multiple project rooms, configure stable room-scoped sessions:
 
-``` prism-code
+``` bash
 MATRIX_SESSION_SCOPE=room
 MATRIX_AUTO_THREAD=false
 ```
 
 `MATRIX_SESSION_SCOPE` accepts:
 
-| Scope    | Behavior                                                                                                   |
-|----------|------------------------------------------------------------------------------------------------------------|
-| `auto`   | Backward-compatible default. Existing `MATRIX_AUTO_THREAD` behavior controls synthetic threads.            |
-| `room`   | Unthreaded room messages stay in one stable room session. Real Matrix threads still use their thread root. |
-| `thread` | Unthreaded room messages synthesize a thread/session from the triggering event ID.                         |
+| Scope | Behavior |
+|----|----|
+| `auto` | Backward-compatible default. Existing `MATRIX_AUTO_THREAD` behavior controls synthetic threads. |
+| `room` | Unthreaded room messages stay in one stable room session. Real Matrix threads still use their thread root. |
+| `thread` | Unthreaded room messages synthesize a thread/session from the triggering event ID. |
 
 Hermes now includes the current Matrix room name, room ID, topic, message ID, and a Matrix room-boundary note in the agent prompt. `/status` also shows the current Matrix room/session scope, and `/resume` will not silently resume a named session from another Matrix room unless you explicitly use `/resume --cross-room <session name>`.
 
@@ -158,7 +158,7 @@ If you run your own homeserver (Synapse, Conduit, Dendrite):
 
 1.  Use the admin API or registration tool to create a new user:
 
-``` prism-code
+``` bash
 # Synapse example
 register_new_matrix_user -c /etc/synapse/homeserver.yaml http://localhost:8008
 ```
@@ -191,7 +191,7 @@ The most reliable way to get a token:
 
 **Via the API:**
 
-``` prism-code
+``` bash
 curl -X POST https://your-server/_matrix/client/v3/login \
   -H "Content-Type: application/json" \
   -d '{
@@ -211,7 +211,7 @@ The access token gives full access to the bot's Matrix account. Never share it p
 
 Instead of providing an access token, you can give Hermes the bot's user ID and password. Hermes will log in automatically on startup. This is simpler but means the password is stored in your `.env` file.
 
-``` prism-code
+``` bash
 MATRIX_USER_ID=@hermes:your-server.org
 MATRIX_PASSWORD=your-password
 ```
@@ -236,7 +236,7 @@ Matrix User IDs always start with `@` and contain a `:` followed by the server n
 
 Run the guided setup command:
 
-``` prism-code
+``` bash
 hermes gateway setup
 ```
 
@@ -248,7 +248,7 @@ Add the following to your `~/.hermes/.env` file:
 
 **Using an access token:**
 
-``` prism-code
+``` bash
 # Required
 MATRIX_HOMESERVER=https://matrix.example.org
 MATRIX_ACCESS_TOKEN=***
@@ -268,7 +268,7 @@ MATRIX_ALLOWED_ROOMS=!abc123:matrix.example.org
 
 **Using password login:**
 
-``` prism-code
+``` bash
 # Required
 MATRIX_HOMESERVER=https://matrix.example.org
 MATRIX_USER_ID=@hermes:matrix.example.org
@@ -282,20 +282,20 @@ MATRIX_ALLOWED_USERS=@alice:matrix.example.org
 
 For private Matrix deployments, set both user and room allowlists. If `MATRIX_ALLOWED_USERS` is unset, any sender who can reach the bot in a joined room can trigger an agent turn. If `MATRIX_ALLOWED_ROOMS` is unset, any room the bot joins can trigger an agent turn. A locked-down deployment should set both:
 
-``` prism-code
+``` bash
 MATRIX_ALLOWED_USERS=@alice:matrix.example.org,@bob:matrix.example.org
 MATRIX_ALLOWED_ROOMS=!ops:matrix.example.org,!dmroom:matrix.example.org
 ```
 
 Bridge and appservice deployments need extra loop protection. Hermes always ignores its own events, Matrix appservice-style users whose localpart starts with `_`, duplicate event IDs, old startup events, edit replacement events, and `m.notice` events by default. Add deployment-specific bridge ghost patterns when your bridge uses a different naming convention:
 
-``` prism-code
+``` bash
 MATRIX_IGNORE_USER_PATTERNS='^@telegram_,^@slack_,^@whatsapp_'
 ```
 
 Only enable notices when a trusted human workflow really sends `m.notice`:
 
-``` prism-code
+``` bash
 MATRIX_PROCESS_NOTICES=true
 ```
 
@@ -305,7 +305,7 @@ Diagnostics and debug payloads redact Matrix access tokens, recovery keys, devic
 
 Optional behavior settings in `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 group_sessions_per_user: true
 ```
 
@@ -315,7 +315,7 @@ group_sessions_per_user: true
 
 Once configured, start the Matrix gateway:
 
-``` prism-code
+``` bash
 hermes gateway
 ```
 
@@ -333,7 +333,7 @@ Hermes supports Matrix end-to-end encryption, so you can chat with your bot in e
 
 E2EE requires the `mautrix` library with encryption extras and the `libolm` C library:
 
-``` prism-code
+``` bash
 # Install mautrix with E2EE support
 pip install 'mautrix[encryption]'
 
@@ -343,7 +343,7 @@ cd ~/.hermes/hermes-agent && uv pip install -e ".[matrix]"
 
 You also need `libolm` installed on your system:
 
-``` prism-code
+``` bash
 # Debian/Ubuntu
 sudo apt install libolm-dev
 
@@ -358,17 +358,17 @@ sudo dnf install libolm-devel
 
 Add to your `~/.hermes/.env`:
 
-``` prism-code
+``` bash
 MATRIX_E2EE_MODE=required
 ```
 
 `MATRIX_E2EE_MODE` accepts:
 
-| Mode       | Behavior                                                                                                  |
-|------------|-----------------------------------------------------------------------------------------------------------|
-| `off`      | Do not initialize Matrix E2EE.                                                                            |
+| Mode | Behavior |
+|----|----|
+| `off` | Do not initialize Matrix E2EE. |
 | `optional` | Try E2EE when dependencies are available, but keep unencrypted rooms working if crypto cannot initialize. |
-| `required` | Fail closed if E2EE dependencies or crypto setup are not available.                                       |
+| `required` | Fail closed if E2EE dependencies or crypto setup are not available. |
 
 Optional mode may fall back to non-E2EE operation when crypto setup is unavailable. Required mode fails closed instead of silently downgrading.
 
@@ -409,7 +409,7 @@ Hermes uploads and downloads Matrix images, files, audio, and video through Matr
 
 By default, Matrix media over 100 MB is rejected before upload/download. Override with:
 
-``` prism-code
+``` bash
 MATRIX_MAX_MEDIA_BYTES=104857600
 ```
 
@@ -419,7 +419,7 @@ Inbound media must use Matrix `mxc://` content URIs. Hermes rejects arbitrary HT
 
 Hermes includes an opt-in Synapse harness for local validation:
 
-``` prism-code
+``` bash
 docker compose -f tests/e2e/matrix_synapse_gateway/docker-compose.yml up -d
 HERMES_MATRIX_SYNAPSE_INTEGRATION=1 \
   scripts/run_tests.sh -m "integration and matrix_synapse" \
@@ -433,7 +433,7 @@ The harness creates temporary users through Synapse shared-secret registration a
 
 If your Matrix account has cross-signing enabled (the default in Element), set the recovery key so the bot can self-sign its device on startup. Without this, other Matrix clients may refuse to share encryption sessions with the bot after a device key rotation.
 
-``` prism-code
+``` bash
 MATRIX_RECOVERY_KEY=EsT... your recovery key here
 ```
 
@@ -455,7 +455,7 @@ Hermes detects this condition on startup and refuses to enable E2EE, logging: `d
 
 1.  Stop Synapse and delete the old device from its database:
 
-    ``` prism-code
+    ``` bash
     sudo systemctl stop matrix-synapse
     sudo sqlite3 /var/lib/matrix-synapse/homeserver.db "
       DELETE FROM e2e_device_keys_json WHERE device_id = 'DEVICE_ID' AND user_id = '@hermes:your-server';
@@ -468,7 +468,7 @@ Hermes detects this condition on startup and refuses to enable E2EE, logging: `d
 
     Or via the Synapse admin API (note the URL-encoded user ID):
 
-    ``` prism-code
+    ``` bash
     curl -X DELETE -H "Authorization: Bearer ADMIN_TOKEN" \
       'https://your-server/_synapse/admin/v2/users/%40hermes%3Ayour-server/devices/DEVICE_ID'
     ```
@@ -477,7 +477,7 @@ Hermes detects this condition on startup and refuses to enable E2EE, logging: `d
 
 2.  Delete the local crypto store and restart Hermes:
 
-    ``` prism-code
+    ``` bash
     rm -f ~/.hermes/platforms/matrix/store/crypto.db*
     # restart hermes
     ```
@@ -500,7 +500,7 @@ Type `/sethome` in any Matrix room where the bot is present. That room becomes t
 
 Add this to your `~/.hermes/.env`:
 
-``` prism-code
+``` bash
 MATRIX_HOME_ROOM=!abc123def456:matrix.example.org
 ```
 
@@ -510,7 +510,7 @@ Restrict the bot to a fixed set of Matrix rooms. When set, the bot **only** resp
 
 **DMs (direct chat rooms) are exempt** from this filter, so authorized users can always reach the bot one-on-one.
 
-``` prism-code
+``` yaml
 matrix:
   allowed_rooms:
     - "!abc123def456:matrix.example.org"
@@ -519,7 +519,7 @@ matrix:
 
 Or via env var (comma-separated):
 
-``` prism-code
+``` bash
 MATRIX_ALLOWED_ROOMS="!abc123def456:matrix.example.org,!opsroom789:matrix.example.org"
 ```
 
@@ -541,7 +541,7 @@ Hermes supports the same gateway commands in Matrix that it supports on other me
 
 Some Matrix clients reserve leading `/` for local client commands and may not send unknown slash commands to the room. In that case, use `!` as a Matrix-safe alias:
 
-``` prism-code
+``` text
 !commands
 !model
 !model gpt-5.5 --provider openrouter
@@ -567,7 +567,7 @@ Hermes only normalizes `!command` when the command is known to the gateway, a re
 
 **Fix**: Sync the host clock with NTP and restart the bot:
 
-``` prism-code
+``` bash
 # Debian/Ubuntu
 sudo timedatectl set-ntp true
 timedatectl status   # confirm "System clock synchronized: yes"
@@ -582,7 +582,7 @@ sudo sntp -sS time.apple.com
 
 **Fix**: Verify `MATRIX_HOMESERVER` points to your homeserver (include `https://`, no trailing slash). Check that `MATRIX_ACCESS_TOKEN` is valid — try it with curl:
 
-``` prism-code
+``` bash
 curl -H "Authorization: Bearer YOUR_TOKEN" \
   https://your-server/_matrix/client/v3/account/whoami
 ```
@@ -595,13 +595,13 @@ If this returns your user info, the token is valid. If it returns an error, gene
 
 **Fix**: Install it:
 
-``` prism-code
+``` bash
 pip install 'mautrix[encryption]'
 ```
 
 Or with Hermes extras:
 
-``` prism-code
+``` bash
 cd ~/.hermes/hermes-agent && uv pip install -e ".[matrix]"
 ```
 
@@ -632,7 +632,7 @@ If you previously used Hermes with `MATRIX_ENCRYPTION=true` and are upgrading to
 
 1.  **Generate a new access token** to get a fresh device ID. The simplest way:
 
-    ``` prism-code
+    ``` bash
     curl -X POST https://your-server/_matrix/client/v3/login \
       -H "Content-Type: application/json" \
       -d '{
@@ -647,14 +647,14 @@ If you previously used Hermes with `MATRIX_ENCRYPTION=true` and are upgrading to
 
 2.  **Delete old encryption state**:
 
-    ``` prism-code
+    ``` bash
     rm -f ~/.hermes/platforms/matrix/store/crypto.db
     rm -f ~/.hermes/platforms/matrix/store/crypto_store.*
     ```
 
 3.  **Set your recovery key** (if you use cross-signing — most Element users do). Add to `~/.hermes/.env`:
 
-    ``` prism-code
+    ``` bash
     MATRIX_RECOVERY_KEY=EsT... your recovery key here
     ```
 
@@ -664,7 +664,7 @@ If you previously used Hermes with `MATRIX_ENCRYPTION=true` and are upgrading to
 
 5.  **Restart the gateway**:
 
-    ``` prism-code
+    ``` bash
     hermes gateway run
     ```
 
@@ -688,7 +688,7 @@ Matrix E2EE requires `libolm`, which doesn't compile on macOS ARM64 (Apple Silic
 
 ### How It Works
 
-``` prism-code
+``` text
 macOS (Host):
   └─ hermes gateway
        ├─ api_server adapter ← listens on 0.0.0.0:8642
@@ -711,7 +711,7 @@ Enable the API server so the host accepts incoming requests from the Docker cont
 
 Add to `~/.hermes/.env`:
 
-``` prism-code
+``` bash
 API_SERVER_ENABLED=true
 API_SERVER_KEY=your-secret-key-here
 API_SERVER_HOST=0.0.0.0
@@ -723,13 +723,13 @@ API_SERVER_HOST=0.0.0.0
 
 Start the gateway:
 
-``` prism-code
+``` bash
 hermes gateway
 ```
 
 You should see the API server start alongside any other platforms you have configured. Verify it's reachable from the VM:
 
-``` prism-code
+``` bash
 # From the Linux VM
 curl http://<mac-ip>:8642/health
 ```
@@ -740,7 +740,7 @@ The container needs Matrix credentials and the proxy URL. It does NOT need LLM A
 
 **`docker-compose.yml`:**
 
-``` prism-code
+``` yaml
 services:
   hermes-matrix:
     build: .
@@ -761,7 +761,7 @@ services:
 
 **`Dockerfile`:**
 
-``` prism-code
+``` dockerfile
 FROM python:3.11-slim
 
 RUN apt-get update && apt-get install -y libolm-dev && rm -rf /var/lib/apt/lists/*
@@ -776,13 +776,13 @@ That's the entire container. No API keys for OpenRouter, Anthropic, or any infer
 
 1.  Start the host gateway first:
 
-    ``` prism-code
+    ``` bash
     hermes gateway
     ```
 
 2.  Start the Docker container:
 
-    ``` prism-code
+    ``` bash
     docker compose up -d
     ```
 
@@ -792,11 +792,11 @@ That's the entire container. No API keys for OpenRouter, Anthropic, or any infer
 
 Proxy mode is configured on the **container side** (the thin gateway):
 
-| Setting             | Description                                                               |
-|---------------------|---------------------------------------------------------------------------|
-| `GATEWAY_PROXY_URL` | URL of the remote Hermes API server (e.g., `http://192.168.1.100:8642`)   |
+| Setting | Description |
+|----|----|
+| `GATEWAY_PROXY_URL` | URL of the remote Hermes API server (e.g., `http://192.168.1.100:8642`) |
 | `GATEWAY_PROXY_KEY` | Bearer token for authentication (must match `API_SERVER_KEY` on the host) |
-| `gateway.proxy_url` | Same as `GATEWAY_PROXY_URL` but in `config.yaml`                          |
+| `gateway.proxy_url` | Same as `GATEWAY_PROXY_URL` but in `config.yaml` |
 
 The host side needs:
 

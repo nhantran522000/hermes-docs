@@ -10,7 +10,7 @@ A walkthrough of the four use-cases the Hermes Kanban system was designed for, w
 
 ## Setup
 
-``` prism-code
+``` bash
 hermes kanban init           # optional; first `hermes kanban <anything>` auto-inits
 hermes dashboard             # opens http://127.0.0.1:9119 in your browser
 # click Kanban in the left nav
@@ -47,7 +47,7 @@ If the profile lanes are noisy, toggle "Lanes by profile" off and the In Progres
 
 You're building a feature. Classic flow: design a schema, implement the API, write the tests. Three tasks with parent→child dependencies.
 
-``` prism-code
+``` bash
 SCHEMA=$(hermes kanban create "Design auth schema" \
     --assignee backend-dev --tenant auth-project --priority 2 \
     --body "Design the user/session/token schema for the auth module." \
@@ -69,7 +69,7 @@ Because `API` has `SCHEMA` as its parent, and `tests` has `API` as its parent, o
 
 On the next dispatcher tick (60s by default, or immediately if you hit **Nudge dispatcher**) the `backend-dev` profile spawns as a worker with `HERMES_KANBAN_TASK=$SCHEMA` in its env. Here's what the worker's tool-call loop looks like from inside the agent:
 
-``` prism-code
+``` python
 # worker tool calls — NOT commands you run
 kanban_show()
 # → returns title, body, worker_context, parents, prior attempts, comments
@@ -102,7 +102,7 @@ The Run History section at the bottom is the key addition. One attempt: outcome 
 
 You can inspect the same data from your terminal at any time — these commands are **you** peeking at the board, not the worker:
 
-``` prism-code
+``` bash
 hermes kanban show $SCHEMA
 hermes kanban runs $SCHEMA
 # #  OUTCOME       PROFILE       ELAPSED  STARTED
@@ -116,7 +116,7 @@ You have three workers (a translator, a transcriber, a copywriter) and a pile of
 
 Create the work:
 
-``` prism-code
+``` bash
 for lang in Spanish French German; do
     hermes kanban create "Translate homepage to $lang" \
         --assignee translator --tenant content-ops
@@ -133,7 +133,7 @@ done
 
 Start the gateway and walk away — it hosts the embedded dispatcher that picks up all three specialist profiles' tasks on the same kanban.db:
 
-``` prism-code
+``` bash
 hermes gateway start
 ```
 
@@ -157,7 +157,7 @@ Three-stage chain visible at once: `Spec: password reset flow` (DONE, pm), `Impl
 
 The interesting one is the implementation task, because it was blocked and retried. Here's the full three-agent choreography, shown as the tool calls each worker's model makes:
 
-``` prism-code
+``` python
 # --- PM worker spawns on $SPEC and writes the acceptance criteria ---
 # worker tool calls
 kanban_show()
@@ -186,14 +186,14 @@ kanban_block(
 
 Now you (the human, or a separate reviewer profile) read the block reason, decide the fix direction is clear, and unblock from the dashboard's "Unblock" button — or from the CLI / slash command:
 
-``` prism-code
+``` bash
 hermes kanban unblock $IMPL
 # or from a chat: /kanban unblock $IMPL
 ```
 
 The dispatcher promotes `$IMPL` back to `ready` and, on the next tick, respawns the `backend-dev` worker. This second spawn is a **new run** on the same task:
 
-``` prism-code
+``` python
 # --- Engineer worker spawns on $IMPL (second attempt) ---
 # worker tool calls
 kanban_show()
@@ -238,7 +238,7 @@ Real workers fail. Missing credentials, OOM kills, transient network errors. The
 
 A deploy task that can't spawn its worker because `AWS_ACCESS_KEY_ID` isn't set in the profile's environment:
 
-``` prism-code
+``` bash
 hermes kanban create "Deploy to staging (missing creds)" \
     --assignee deploy-bot --tenant ops \
     --max-retries 3
@@ -254,7 +254,7 @@ Three runs, all with the same error on the `error` field. The first two are `spa
 
 On the terminal:
 
-``` prism-code
+``` bash
 hermes kanban runs t_ef5d
 # #   OUTCOME        PROFILE        ELAPSED  STARTED
 # 1   spawn_failed   deploy-bot          0s  2026-04-27 19:34
@@ -273,7 +273,7 @@ Sometimes the spawn succeeds but the worker process dies later — segfault, OOM
 
 The example in the seed data is a migration that was running out of memory:
 
-``` prism-code
+``` bash
 # Worker claims, starts scanning 2.4M rows, OOM kills it at ~2.3M
 # Dispatcher detects dead pid, releases claim, increments attempt counter
 # Retry with a chunked strategy succeeds

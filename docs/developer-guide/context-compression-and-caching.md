@@ -14,7 +14,7 @@ Source files: `agent/context_engine.py` (ABC), `agent/context_compressor.py` (de
 
 Context management is built on the `ContextEngine` ABC (`agent/context_engine.py`). The built-in `ContextCompressor` is the default implementation, but plugins can replace it with alternative engines (e.g., Lossless Context Management).
 
-``` prism-code
+``` yaml
 context:
   engine: "compressor"    # default — built-in lossy summarization
   engine: "lcm"           # example — plugin providing lossless context
@@ -43,7 +43,7 @@ For building a context engine plugin, see [Context Engine Plugins](https://herme
 
 Hermes has two separate compression layers that operate independently:
 
-``` prism-code
+``` text
                      ┌──────────────────────────┐
   Incoming message   │   Gateway Session Hygiene │  Fires at 85% of context
   ─────────────────► │   (pre-agent, rough est.) │  Safety net for large sessions
@@ -75,7 +75,7 @@ Located in `agent/context_compressor.py`. This is the **primary compression syst
 
 All compression settings are read from `config.yaml` under the `compression` key:
 
-``` prism-code
+``` yaml
 compression:
   enabled: true              # Enable/disable compression (default: true)
   threshold: 0.50            # Fraction of context window (default: 0.50 = 50%)
@@ -95,27 +95,27 @@ auxiliary:
 
 ### Parameter Details
 
-| Parameter                      | Default  | Range                     | Description                                                                                                                   |
-|--------------------------------|----------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------|
-| `threshold`                    | `0.50`   | 0.0-1.0                   | Compression triggers when prompt tokens ≥ `threshold × context_length`                                                        |
-| `target_ratio`                 | `0.20`   | 0.10-0.80                 | Controls tail protection token budget: `threshold_tokens × target_ratio`                                                      |
-| `protect_last_n`               | `20`     | ≥1                        | Minimum number of recent messages always preserved                                                                            |
-| `protect_first_n`              | `3`      | (hardcoded)               | System prompt + first exchange always preserved                                                                               |
-| `codex_gpt55_autoraise`        | `true`   | bool                      | Raise the trigger to 85% for gpt-5.5 on the ChatGPT Codex OAuth route (see below). Set `false` to keep the global `threshold` |
-| `codex_gpt55_autoraise_notice` | `true`   | bool                      | Show the one-time Codex gpt-5.5 autoraise notice. Set `false` to keep the 85% autoraise but suppress the banner               |
-| `codex_app_server_auto`        | `native` | `native`, `hermes`, `off` | Thread-compaction mode for Codex app-server sessions (see below)                                                              |
+| Parameter | Default | Range | Description |
+|----|----|----|----|
+| `threshold` | `0.50` | 0.0-1.0 | Compression triggers when prompt tokens ≥ `threshold × context_length` |
+| `target_ratio` | `0.20` | 0.10-0.80 | Controls tail protection token budget: `threshold_tokens × target_ratio` |
+| `protect_last_n` | `20` | ≥1 | Minimum number of recent messages always preserved |
+| `protect_first_n` | `3` | (hardcoded) | System prompt + first exchange always preserved |
+| `codex_gpt55_autoraise` | `true` | bool | Raise the trigger to 85% for gpt-5.5 on the ChatGPT Codex OAuth route (see below). Set `false` to keep the global `threshold` |
+| `codex_gpt55_autoraise_notice` | `true` | bool | Show the one-time Codex gpt-5.5 autoraise notice. Set `false` to keep the 85% autoraise but suppress the banner |
+| `codex_app_server_auto` | `native` | `native`, `hermes`, `off` | Thread-compaction mode for Codex app-server sessions (see below) |
 
 ### Codex gpt-5.5 threshold autoraise
 
 The ChatGPT Codex OAuth backend hard-caps gpt-5.5 at a **272K** context window (the same slug exposes 1.05M on OpenAI's direct API and OpenRouter, and 400K on GitHub Copilot). At the default 50% trigger, compaction would fire at ~136K — half the window the model can actually use. When the active route is Codex OAuth (`provider: openai-codex`) and the model is gpt-5.5, Hermes raises the trigger to **85%** (~231K) and shows a notice with the opt-out command. The notice is shown once per profile — a marker under `$HERMES_HOME` (`.codex_gpt55_autoraise_notice`) records that it ran, so repeated agent/session inits (e.g. every inbound gateway message) don't re-emit it; if the raised threshold later changes it re-notifies once. Only this exact route is affected; gpt-5.5 on any other provider keeps your global `threshold`. To opt back down to the global value:
 
-``` prism-code
+``` bash
 hermes config set compression.codex_gpt55_autoraise false
 ```
 
 To keep the 85% autoraise but hide only the one-time notice:
 
-``` prism-code
+``` bash
 hermes config set compression.codex_gpt55_autoraise_notice false
 ```
 
@@ -130,7 +130,7 @@ Hermes' local transcript is never rewritten on this runtime — state.db records
 
 ### Computed Values (for a 200K context model at defaults)
 
-``` prism-code
+``` text
 context_length       = 200,000
 threshold_tokens     = 200,000 × 0.50 = 100,000
 tail_token_budget    = 100,000 × 0.20 = 20,000
@@ -149,7 +149,7 @@ The `ContextCompressor.compress()` method follows a 4-phase algorithm:
 
 Old tool results (\>200 chars) outside the protected tail are replaced with:
 
-``` prism-code
+``` text
 [Old tool output cleared to save context space]
 ```
 
@@ -157,7 +157,7 @@ This is a cheap pre-pass that saves significant tokens from verbose tool outputs
 
 ### Phase 2: Determine Boundaries
 
-``` prism-code
+``` text
 ┌─────────────────────────────────────────────────────────────┐
 │  Message list                                               │
 │                                                             │
@@ -180,7 +180,7 @@ The summary model must have a context window **at least as large** as the main a
 
 The middle turns are summarized using the auxiliary LLM with a structured template:
 
-``` prism-code
+``` text
 ## Goal
 [What the user is trying to accomplish]
 
@@ -237,7 +237,7 @@ The `_previous_summary` field on the compressor instance stores the last summary
 
 ### Before Compression (45 messages, ~95K tokens)
 
-``` prism-code
+``` text
 [0] system:    "You are a helpful assistant..." (system prompt)
 [1] user:      "Help me set up a FastAPI project"
 [2] assistant: <tool_call> terminal: mkdir project </tool_call>
@@ -256,7 +256,7 @@ The `_previous_summary` field on the compressor instance stores the last summary
 
 ### After Compression (25 messages, ~45K tokens)
 
-``` prism-code
+``` text
 [0] system:    "You are a helpful assistant...
                [Note: Some earlier conversation turns have been compacted...]"
 [1] user:      "Help me set up a FastAPI project"
@@ -300,7 +300,7 @@ Reduces input token costs by ~75% on multi-turn conversations by caching the con
 
 Anthropic allows a maximum of 4 `cache_control` breakpoints per request. Hermes uses the "system_and_3" strategy:
 
-``` prism-code
+``` text
 Breakpoint 1: System prompt           (stable across all turns)
 Breakpoint 2: 3rd-to-last non-system message  ─┐
 Breakpoint 3: 2nd-to-last non-system message   ├─ Rolling window
@@ -311,7 +311,7 @@ Breakpoint 4: Last non-system message          ─┘
 
 `apply_anthropic_cache_control()` deep-copies the messages and injects `cache_control` markers:
 
-``` prism-code
+``` python
 # Cache marker format
 marker = {"type": "ephemeral"}
 # Or for 1-hour TTL:
@@ -320,12 +320,12 @@ marker = {"type": "ephemeral", "ttl": "1h"}
 
 The marker is applied differently based on content type:
 
-| Content Type   | Where Marker Goes                                                    |
-|----------------|----------------------------------------------------------------------|
+| Content Type | Where Marker Goes |
+|----|----|
 | String content | Converted to `[{"type": "text", "text": ..., "cache_control": ...}]` |
-| List content   | Added to the last element's dict                                     |
-| None/empty     | Added as `msg["cache_control"]`                                      |
-| Tool messages  | Added as `msg["cache_control"]` (native Anthropic only)              |
+| List content | Added to the last element's dict |
+| None/empty | Added as `msg["cache_control"]` |
+| Tool messages | Added as `msg["cache_control"]` (native Anthropic only) |
 
 ### Cache-Aware Design Patterns
 
@@ -346,7 +346,7 @@ Prompt caching is automatically enabled when:
 - The model is an Anthropic Claude model (detected by model name)
 - The provider supports `cache_control` (native Anthropic API or OpenRouter)
 
-``` prism-code
+``` yaml
 # config.yaml — TTL is configurable (must be "5m" or "1h")
 prompt_caching:
   cache_ttl: "5m"
@@ -354,7 +354,7 @@ prompt_caching:
 
 The CLI shows caching status at startup:
 
-``` prism-code
+``` text
 💾 Prompt caching: ENABLED (Claude via OpenRouter, 5m TTL)
 ```
 

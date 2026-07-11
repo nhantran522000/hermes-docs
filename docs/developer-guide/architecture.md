@@ -10,7 +10,7 @@ This page is the top-level map of Hermes Agent internals. Use it to orient yours
 
 ## System Overview
 
-``` prism-code
+``` text
 ┌─────────────────────────────────────────────────────────────────────┐
 │                        Entry Points                                  │
 │                                                                      │
@@ -50,7 +50,7 @@ This page is the top-level map of Hermes Agent internals. Use it to orient yours
 
 ## Directory Structure
 
-``` prism-code
+``` text
 hermes-agent/
 ├── run_agent.py              # AIAgent — core conversation loop (large file)
 ├── cli.py                    # HermesCLI — interactive terminal UI (large file)
@@ -137,7 +137,7 @@ hermes-agent/
 
 ### CLI Session
 
-``` prism-code
+``` text
 User input → HermesCLI.process_input()
   → AIAgent.run_conversation()
     → prompt_builder.build_system_prompt()
@@ -149,7 +149,7 @@ User input → HermesCLI.process_input()
 
 ### Gateway Message
 
-``` prism-code
+``` text
 Platform event → Adapter.on_message() → MessageEvent
   → GatewayRunner._handle_message()
     → authorize user
@@ -161,7 +161,7 @@ Platform event → Adapter.on_message() → MessageEvent
 
 ### Cron Job
 
-``` prism-code
+``` text
 Scheduler tick → load due jobs from jobs.json
   → create fresh AIAgent (no history)
   → inject attached skills as context
@@ -253,18 +253,18 @@ Generates ShareGPT-format trajectories from agent sessions for training data gen
 
 ## Design Principles
 
-| Principle                  | What it means in practice                                                                                                                  |
-|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| **Prompt stability**       | System prompt doesn't change mid-conversation. No cache-breaking mutations except explicit user actions (`/model`).                        |
-| **Observable execution**   | Every tool call is visible to the user via callbacks. Progress updates in CLI (spinner) and gateway (chat messages).                       |
-| **Interruptible**          | API calls and tool execution can be cancelled mid-flight by user input or signals.                                                         |
-| **Platform-agnostic core** | One AIAgent class serves CLI, gateway, ACP, batch, and API server. Platform differences live in the entry point, not the agent.            |
-| **Loose coupling**         | Optional subsystems (MCP, plugins, memory providers, RL environments) use registry patterns and check_fn gating, not hard dependencies.    |
-| **Profile isolation**      | Each profile (`hermes -p <name>`) gets its own HERMES_HOME, config, memory, sessions, and gateway PID. Multiple profiles run concurrently. |
+| Principle | What it means in practice |
+|----|----|
+| **Prompt stability** | System prompt doesn't change mid-conversation. No cache-breaking mutations except explicit user actions (`/model`). |
+| **Observable execution** | Every tool call is visible to the user via callbacks. Progress updates in CLI (spinner) and gateway (chat messages). |
+| **Interruptible** | API calls and tool execution can be cancelled mid-flight by user input or signals. |
+| **Platform-agnostic core** | One AIAgent class serves CLI, gateway, ACP, batch, and API server. Platform differences live in the entry point, not the agent. |
+| **Loose coupling** | Optional subsystems (MCP, plugins, memory providers, RL environments) use registry patterns and check_fn gating, not hard dependencies. |
+| **Profile isolation** | Each profile (`hermes -p <name>`) gets its own HERMES_HOME, config, memory, sessions, and gateway PID. Multiple profiles run concurrently. |
 
 ## File Dependency Chain
 
-``` prism-code
+``` text
 tools/registry.py  (no deps — imported by all tool files)
        ↑
 tools/*.py  (each calls registry.register() at import time)

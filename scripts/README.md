@@ -9,7 +9,10 @@ The weekly job (`sync-docs.sh`) does the whole loop: **fetch `llms.txt` → craw
 
 ## Requirements
 
-- `pandoc` — HTML → Markdown conversion (`brew install pandoc`)
+- `pandoc` — HTML → Markdown conversion (`brew install pandoc`). Pandoc renders code
+  fences and tables slightly differently across versions, so the GitHub Actions workflow
+  pins **pandoc 3.9**. Keep your local pandoc on the same version to avoid formatting
+  churn between local and CI crawls (bump both together if you upgrade).
 - Python 3 — the wrapper creates a local virtualenv (`.venv-crawler/`) and installs
   `requests` + `beautifulsoup4` from `requirements.txt` on first run.
 

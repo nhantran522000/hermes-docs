@@ -12,7 +12,7 @@ last_crawled: 2026-07-11
 
 **What you'll build:**
 
-``` prism-code
+``` text
 ┌───────────────────────────────────────────────────────────────────┐
 │                                                                   │
 │   Cron Timer  ──▶  Hermes Agent  ──▶  GitHub API  ──▶  Review     │
@@ -36,13 +36,13 @@ If you have a public endpoint available, check out [Automated GitHub PR Comments
 
 - **Hermes Agent installed** — see the [Installation guide](../getting-started/installation.md)
 - **Gateway running** for cron jobs:
-  ``` prism-code
+  ``` bash
   hermes gateway install   # Install as a service
   # or
   hermes gateway           # Run in foreground
   ```
 - **GitHub CLI (`gh`) installed and authenticated**:
-  ``` prism-code
+  ``` bash
   # Install
   brew install gh        # macOS
   sudo apt install gh    # Ubuntu/Debian
@@ -62,13 +62,13 @@ Use `deliver: "local"` to save reviews to `~/.hermes/cron/output/`. Great for te
 
 Make sure Hermes can access GitHub. Start a chat:
 
-``` prism-code
+``` bash
 hermes
 ```
 
 Test with a simple command:
 
-``` prism-code
+``` text
 Run: gh pr list --repo NousResearch/hermes-agent --state open --limit 3
 ```
 
@@ -80,7 +80,7 @@ You should see a list of open PRs. If this works, you're ready.
 
 Still in the chat, ask Hermes to review a real PR:
 
-``` prism-code
+``` text
 Review this pull request. Read the diff, check for bugs, security issues,
 and code quality. Be specific about line numbers and quote problematic code.
 
@@ -101,13 +101,13 @@ If you're happy with the quality, time to automate it.
 
 A skill gives Hermes consistent review guidelines that persist across sessions and cron runs. Without one, review quality varies.
 
-``` prism-code
+``` bash
 mkdir -p ~/.hermes/skills/code-review
 ```
 
 Create `~/.hermes/skills/code-review/SKILL.md`:
 
-``` prism-code
+``` markdown
 ---
 name: code-review
 description: Review pull requests for bugs, security issues, and code quality
@@ -146,14 +146,14 @@ Verify it loaded — start `hermes` and you should see `code-review` in the skil
 
 This is what makes the reviewer actually useful. Start a session and teach Hermes your team's standards:
 
-``` prism-code
+``` text
 Remember: In our backend repo, we use Python with FastAPI.
 All endpoints must have type annotations and Pydantic models.
 We don't allow raw SQL — only SQLAlchemy ORM.
 Test files go in tests/ and must use pytest fixtures.
 ```
 
-``` prism-code
+``` text
 Remember: In our frontend repo, we use TypeScript with React.
 No `any` types allowed. All components must have props interfaces.
 We use React Query for data fetching, never useEffect for API calls.
@@ -167,7 +167,7 @@ These memories persist forever — the reviewer will enforce your conventions wi
 
 Now wire it all together. Create a cron job that runs every 2 hours:
 
-``` prism-code
+``` bash
 hermes cron create "0 */2 * * *" \
   "Check for new open PRs and review them.
 
@@ -196,7 +196,7 @@ If no new PRs found, say: No new PRs to review." \
 
 Verify it's scheduled:
 
-``` prism-code
+``` bash
 hermes cron list
 ```
 
@@ -215,13 +215,13 @@ hermes cron list
 
 Don't want to wait for the schedule? Trigger it manually:
 
-``` prism-code
+``` bash
 hermes cron run pr-review
 ```
 
 Or from within a chat session:
 
-``` prism-code
+``` text
 /cron run pr-review
 ```
 
@@ -235,7 +235,7 @@ Instead of delivering to Telegram, have the agent comment on the PR itself:
 
 Add this to your cron prompt:
 
-``` prism-code
+``` text
 After reviewing, post your review:
 - For issues: gh pr review NUMBER --repo REPO --comment --body "YOUR_REVIEW"
 - For critical issues: gh pr review NUMBER --repo REPO --request-changes --body "YOUR_REVIEW"
@@ -250,7 +250,7 @@ Make sure `gh` has a token with `repo` scope. Reviews are posted as whoever `gh`
 
 Create a Monday morning overview of all your repos:
 
-``` prism-code
+``` bash
 hermes cron create "0 9 * * 1" \
   "Generate a weekly PR dashboard:
 - myorg/backend-api
@@ -288,7 +288,7 @@ The gateway runs in a minimal environment. Ensure `gh` is in the system PATH and
 
 ### Cron job doesn't run
 
-``` prism-code
+``` bash
 hermes gateway status    # Is the gateway running?
 hermes cron list         # Is the job enabled?
 ```

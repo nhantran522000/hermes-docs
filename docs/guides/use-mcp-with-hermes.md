@@ -43,7 +43,7 @@ If you installed Hermes with the standard install script, MCP support is already
 
 If you installed without extras and need to add MCP separately:
 
-``` prism-code
+``` bash
 cd ~/.hermes/hermes-agent
 uv pip install -e ".[mcp]"
 ```
@@ -58,7 +58,7 @@ Start with a single, safe server.
 
 Example: filesystem access to one project directory only.
 
-``` prism-code
+``` yaml
 mcp_servers:
   project_fs:
     command: "npx"
@@ -67,13 +67,13 @@ mcp_servers:
 
 Then start Hermes:
 
-``` prism-code
+``` bash
 hermes chat
 ```
 
 Now ask something concrete:
 
-``` prism-code
+``` text
 Inspect this project and summarize the repo layout.
 ```
 
@@ -88,7 +88,7 @@ You can verify MCP in a few ways:
 
 A practical test prompt:
 
-``` prism-code
+``` text
 Tell me which MCP-backed tools are available right now.
 ```
 
@@ -98,7 +98,7 @@ Do not wait until later if the server exposes a lot of tools.
 
 ### Example: whitelist only what you want
 
-``` prism-code
+``` yaml
 mcp_servers:
   github:
     command: "npx"
@@ -128,7 +128,7 @@ In this setup, Hermes does **not** connect to Chrome directly. Instead:
 
 Mental model:
 
-``` prism-code
+``` text
 Hermes (WSL) -> MCP stdio bridge -> Windows Chrome
 ```
 
@@ -144,19 +144,19 @@ Use `chrome-devtools-mcp`.
 
 If your Windows Chrome already has live remote debugging enabled from `chrome://inspect/#remote-debugging`, add it like this from WSL:
 
-``` prism-code
+``` bash
 hermes mcp add chrome-devtools-win --command cmd.exe --args /c npx -y chrome-devtools-mcp@latest --autoConnect --no-usage-statistics
 ```
 
 After saving the server:
 
-``` prism-code
+``` bash
 hermes mcp test chrome-devtools-win
 ```
 
 Then start a fresh Hermes session or run:
 
-``` prism-code
+``` text
 /reload-mcp
 ```
 
@@ -164,7 +164,7 @@ Then start a fresh Hermes session or run:
 
 Once loaded, Hermes can use the MCP-prefixed browser tools directly. For example:
 
-``` prism-code
+``` text
 调用 MCP 工具 mcp_chrome_devtools_win_list_pages，列出当前浏览器标签页。
 ```
 
@@ -188,7 +188,7 @@ In those cases, keep `/browser connect` for same-environment setups and use MCP 
 
 ### Example: blacklist dangerous actions
 
-``` prism-code
+``` yaml
 mcp_servers:
   stripe:
     url: "https://mcp.stripe.com"
@@ -200,7 +200,7 @@ mcp_servers:
 
 ### Example: disable utility wrappers too
 
-``` prism-code
+``` yaml
 mcp_servers:
   docs:
     url: "https://mcp.docs.example.com"
@@ -250,7 +250,7 @@ So Hermes will not pretend a server has resources/prompts if it does not.
 
 Use MCP for a repo-local filesystem or git server when you want Hermes to reason over a bounded workspace.
 
-``` prism-code
+``` yaml
 mcp_servers:
   fs:
     command: "npx"
@@ -263,11 +263,11 @@ mcp_servers:
 
 Good prompts:
 
-``` prism-code
+``` text
 Review the project structure and identify where configuration lives.
 ```
 
-``` prism-code
+``` text
 Check the local git state and summarize what changed recently.
 ```
 
@@ -277,14 +277,14 @@ Use [Open Scaffold](https://github.com/graphanov/open-scaffold) when you want He
 
 Add the server for one scaffolded repository:
 
-``` prism-code
+``` bash
 hermes mcp add open_scaffold --command npx --args -y open-scaffold@latest mcp serve --repo /absolute/path/to/repo
 hermes mcp test open_scaffold
 ```
 
 Then keep the exposed surface read-oriented. Choose `select` in the `hermes mcp add` prompt, or edit `config.yaml` afterward:
 
-``` prism-code
+``` yaml
 mcp_servers:
   open_scaffold:
     command: "npx"
@@ -307,11 +307,11 @@ mcp_servers:
 
 Good prompts:
 
-``` prism-code
+``` text
 Use the Open Scaffold MCP tools to compile the current handoff packet and tell me the next legal action.
 ```
 
-``` prism-code
+``` text
 Inspect the active plans and evidence notes, then say whether this repo is ready for human review or needs another attempt.
 ```
 
@@ -324,7 +324,7 @@ Boundary notes:
 
 ### Pattern 3: GitHub triage assistant
 
-``` prism-code
+``` yaml
 mcp_servers:
   github:
     command: "npx"
@@ -339,17 +339,17 @@ mcp_servers:
 
 Good prompts:
 
-``` prism-code
+``` text
 List open issues about MCP, cluster them by theme, and draft a high-quality issue for the most common bug.
 ```
 
-``` prism-code
+``` text
 Search the repo for uses of _discover_and_register_server and explain how MCP tools are registered.
 ```
 
 ### Pattern 4: internal API assistant
 
-``` prism-code
+``` yaml
 mcp_servers:
   internal_api:
     url: "https://mcp.internal.example.com"
@@ -363,7 +363,7 @@ mcp_servers:
 
 Good prompts:
 
-``` prism-code
+``` text
 Look up customer ACME Corp and summarize recent invoice activity.
 ```
 
@@ -373,7 +373,7 @@ This is the sort of place where a strict whitelist is far better than an exclude
 
 Some MCP servers expose prompts or resources that are more like shared knowledge assets than direct actions.
 
-``` prism-code
+``` yaml
 mcp_servers:
   docs:
     url: "https://mcp.docs.example.com"
@@ -384,11 +384,11 @@ mcp_servers:
 
 Good prompts:
 
-``` prism-code
+``` text
 List available MCP resources from the docs server, then read the onboarding guide and summarize it.
 ```
 
-``` prism-code
+``` text
 List prompts exposed by the docs server and tell me which ones would help with incident response.
 ```
 
@@ -398,7 +398,7 @@ Here is a practical progression.
 
 ### Phase 1: add GitHub MCP with a tight whitelist
 
-``` prism-code
+``` yaml
 mcp_servers:
   github:
     command: "npx"
@@ -413,7 +413,7 @@ mcp_servers:
 
 Start Hermes and ask:
 
-``` prism-code
+``` text
 Search the codebase for references to MCP and summarize the main integration points.
 ```
 
@@ -421,20 +421,20 @@ Search the codebase for references to MCP and summarize the main integration poi
 
 If you later need issue updates too:
 
-``` prism-code
+``` yaml
 tools:
   include: [list_issues, create_issue, update_issue, search_code]
 ```
 
 Then reload:
 
-``` prism-code
+``` text
 /reload-mcp
 ```
 
 ### Phase 3: add a second server with different policy
 
-``` prism-code
+``` yaml
 mcp_servers:
   github:
     command: "npx"
@@ -453,7 +453,7 @@ mcp_servers:
 
 Now Hermes can combine them:
 
-``` prism-code
+``` text
 Inspect the local project files, then create a GitHub issue summarizing the bug you find.
 ```
 
@@ -472,7 +472,7 @@ For anything financial, customer-facing, or destructive:
 
 If you do not want the model browsing server-provided resources/prompts, turn them off:
 
-``` prism-code
+``` yaml
 tools:
   resources: false
   prompts: false
@@ -488,7 +488,7 @@ Examples:
 
 ### Reload after config changes
 
-``` prism-code
+``` text
 /reload-mcp
 ```
 
@@ -527,7 +527,7 @@ Because Hermes now respects your per-server policy and capability-aware registra
 
 Use:
 
-``` prism-code
+``` yaml
 enabled: false
 ```
 

@@ -10,14 +10,14 @@ Hermes Agent automatically discovers and loads context files that shape how it b
 
 ## Supported Context Files
 
-| File                           | Purpose                                                            | Discovery                                     |
-|--------------------------------|--------------------------------------------------------------------|-----------------------------------------------|
-| **.hermes.md** / **HERMES.md** | Project instructions (highest priority)                            | Walks to git root                             |
-| **AGENTS.md**                  | Project instructions, conventions, architecture                    | CWD at startup + subdirectories progressively |
-| **CLAUDE.md**                  | Claude Code context files (also detected)                          | CWD at startup + subdirectories progressively |
-| **SOUL.md**                    | Global personality and tone customization for this Hermes instance | `HERMES_HOME/SOUL.md` only                    |
-| **.cursorrules**               | Cursor IDE coding conventions                                      | CWD only                                      |
-| **.cursor/rules/\*.mdc**       | Cursor IDE rule modules                                            | CWD only                                      |
+| File | Purpose | Discovery |
+|----|----|----|
+| **.hermes.md** / **HERMES.md** | Project instructions (highest priority) | Walks to git root |
+| **AGENTS.md** | Project instructions, conventions, architecture | CWD at startup + subdirectories progressively |
+| **CLAUDE.md** | Claude Code context files (also detected) | CWD at startup + subdirectories progressively |
+| **SOUL.md** | Global personality and tone customization for this Hermes instance | `HERMES_HOME/SOUL.md` only |
+| **.cursorrules** | Cursor IDE coding conventions | CWD only |
+| **.cursor/rules/\*.mdc** | Cursor IDE rule modules | CWD only |
 
 Priority system
 
@@ -31,7 +31,7 @@ Only **one** project context type is loaded per session (first match wins): `.he
 
 At session start, Hermes loads the `AGENTS.md` from your working directory into the system prompt. As the agent navigates into subdirectories during the session (via `read_file`, `terminal`, `search_files`, etc.), it **progressively discovers** context files in those directories and injects them into the conversation at the moment they become relevant.
 
-``` prism-code
+``` text
 my-project/
 ├── AGENTS.md              ← Loaded at startup (system prompt)
 ├── frontend/
@@ -55,7 +55,7 @@ Subdirectory context files go through the same [security scan](#security-prompt-
 
 ### Example AGENTS.md
 
-``` prism-code
+``` markdown
 # Project Context
 
 This is a Next.js 14 web application with a Python FastAPI backend.
@@ -127,7 +127,7 @@ Context files are loaded by `build_context_files_prompt()` in `agent/prompt_buil
 
 The final prompt section looks roughly like:
 
-``` prism-code
+``` text
 # Project Context
 
 The following project context files have been loaded and should be followed:
@@ -160,7 +160,7 @@ All context files are scanned for potential prompt injection before being includ
 
 If any threat pattern is detected, the file is blocked:
 
-``` prism-code
+``` text
 [BLOCKED: AGENTS.md contained potential prompt injection (prompt_injection). Content not loaded.]
 ```
 
@@ -170,16 +170,16 @@ This scanner protects against common injection patterns, but it's not a substitu
 
 ## Size Limits
 
-| Limit                 | Value                                                    |
-|-----------------------|----------------------------------------------------------|
-| Max chars per file    | `context_file_max_chars` (default 20,000, ~7,000 tokens) |
-| Head truncation ratio | 70%                                                      |
-| Tail truncation ratio | 20%                                                      |
-| Truncation marker     | 10% (shows char counts and suggests using file tools)    |
+| Limit | Value |
+|----|----|
+| Max chars per file | `context_file_max_chars` (default 20,000, ~7,000 tokens) |
+| Head truncation ratio | 70% |
+| Tail truncation ratio | 20% |
+| Truncation marker | 10% (shows char counts and suggests using file tools) |
 
 When a file exceeds the configured limit, the truncation message reads:
 
-``` prism-code
+``` text
 [...truncated AGENTS.md: kept 14000+4000 of 25000 chars. Use file tools to read the full file.]
 ```
 
@@ -198,7 +198,7 @@ Best practices for AGENTS.md
 
 For monorepos, put subdirectory-specific instructions in nested AGENTS.md files:
 
-``` prism-code
+``` markdown
 <!-- frontend/AGENTS.md -->
 # Frontend Context
 
@@ -208,7 +208,7 @@ For monorepos, put subdirectory-specific instructions in nested AGENTS.md files:
 - Run tests with `pnpm test`
 ```
 
-``` prism-code
+``` markdown
 <!-- backend/AGENTS.md -->
 # Backend Context
 

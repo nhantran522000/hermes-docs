@@ -24,11 +24,11 @@ First-time users almost always want `hermes setup --portal` — one OAuth covers
 
 ## By Experience Level
 
-| Level            | Goal                                                                               | Recommended Reading                                                                                                                                                                                                                                           | Time Estimate |
-|------------------|------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
-| **Beginner**     | Get up and running, have basic conversations, use built-in tools                   | [Installation](installation.md) → [Quickstart](quickstart.md) → [CLI Usage](../user-guide/cli.md) → [Configuration](../user-guide/configuration.md)                                                                     | ~1 hour       |
-| **Intermediate** | Set up messaging bots, use advanced features like memory, cron jobs, and skills    | [Sessions](../user-guide/sessions.md) → [Messaging](../user-guide/messaging/index.md) → [Tools](../user-guide/features/tools.md) → [Skills](../user-guide/features/skills.md) → [Memory](../user-guide/features/memory.md) → [Cron](../user-guide/features/cron.md) | ~2–3 hours    |
-| **Advanced**     | Build custom tools, create skills, train models with RL, contribute to the project | [Architecture](../developer-guide/architecture.md) → [Adding Tools](../developer-guide/adding-tools.md) → [Creating Skills](../developer-guide/creating-skills.md) → [Contributing](../developer-guide/contributing.md)                                       | ~4–6 hours    |
+| Level | Goal | Recommended Reading | Time Estimate |
+|----|----|----|----|
+| **Beginner** | Get up and running, have basic conversations, use built-in tools | [Installation](installation.md) → [Quickstart](quickstart.md) → [CLI Usage](../user-guide/cli.md) → [Configuration](../user-guide/configuration.md) | ~1 hour |
+| **Intermediate** | Set up messaging bots, use advanced features like memory, cron jobs, and skills | [Sessions](../user-guide/sessions.md) → [Messaging](../user-guide/messaging/index.md) → [Tools](../user-guide/features/tools.md) → [Skills](../user-guide/features/skills.md) → [Memory](../user-guide/features/memory.md) → [Cron](../user-guide/features/cron.md) | ~2–3 hours |
+| **Advanced** | Build custom tools, create skills, train models with RL, contribute to the project | [Architecture](../developer-guide/architecture.md) → [Adding Tools](../developer-guide/adding-tools.md) → [Creating Skills](../developer-guide/creating-skills.md) → [Contributing](../developer-guide/contributing.md) | ~4–6 hours |
 
 ## By Use Case
 
@@ -127,20 +127,20 @@ Integrate Hermes Agent into your own Python applications programmatically.
 
 Not sure what's available? Here's a quick directory of major features:
 
-| Feature              | What It Does                                                      | Link                                                           |
-|----------------------|-------------------------------------------------------------------|----------------------------------------------------------------|
-| **Tools**            | Built-in tools the agent can call (file I/O, search, shell, etc.) | [Tools](../user-guide/features/tools.md)                       |
-| **Skills**           | Installable plugin packages that add new capabilities             | [Skills](../user-guide/features/skills.md)                     |
-| **Memory**           | Persistent memory across sessions                                 | [Memory](../user-guide/features/memory.md)                     |
-| **Context Files**    | Feed files and directories into conversations                     | [Context Files](../user-guide/features/context-files.md)       |
-| **MCP**              | Connect to external tool servers via Model Context Protocol       | [MCP](../user-guide/features/mcp.md)                           |
-| **Cron**             | Schedule recurring agent tasks                                    | [Cron](../user-guide/features/cron.md)                         |
-| **Delegation**       | Spawn sub-agents for parallel work                                | [Delegation](../user-guide/features/delegation.md)             |
-| **Code Execution**   | Run Python scripts that call Hermes tools programmatically        | [Code Execution](../user-guide/features/code-execution.md)     |
-| **Browser**          | Web browsing and scraping                                         | [Browser](../user-guide/features/browser.md)                   |
-| **Hooks**            | Event-driven callbacks and middleware                             | [Hooks](../user-guide/features/hooks.md)                       |
-| **Batch Processing** | Process multiple inputs in bulk                                   | [Batch Processing](../user-guide/features/batch-processing.md) |
-| **Provider Routing** | Route requests across multiple LLM providers                      | [Provider Routing](../user-guide/features/provider-routing.md) |
+| Feature | What It Does | Link |
+|----|----|----|
+| **Tools** | Built-in tools the agent can call (file I/O, search, shell, etc.) | [Tools](../user-guide/features/tools.md) |
+| **Skills** | Installable plugin packages that add new capabilities | [Skills](../user-guide/features/skills.md) |
+| **Memory** | Persistent memory across sessions | [Memory](../user-guide/features/memory.md) |
+| **Context Files** | Feed files and directories into conversations | [Context Files](../user-guide/features/context-files.md) |
+| **MCP** | Connect to external tool servers via Model Context Protocol | [MCP](../user-guide/features/mcp.md) |
+| **Cron** | Schedule recurring agent tasks | [Cron](../user-guide/features/cron.md) |
+| **Delegation** | Spawn sub-agents for parallel work | [Delegation](../user-guide/features/delegation.md) |
+| **Code Execution** | Run Python scripts that call Hermes tools programmatically | [Code Execution](../user-guide/features/code-execution.md) |
+| **Browser** | Web browsing and scraping | [Browser](../user-guide/features/browser.md) |
+| **Hooks** | Event-driven callbacks and middleware | [Hooks](../user-guide/features/hooks.md) |
+| **Batch Processing** | Process multiple inputs in bulk | [Batch Processing](../user-guide/features/batch-processing.md) |
+| **Provider Routing** | Route requests across multiple LLM providers | [Provider Routing](../user-guide/features/provider-routing.md) |
 
 ## What to Read Next
 

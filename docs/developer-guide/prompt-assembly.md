@@ -46,7 +46,7 @@ When `skip_context_files` is set (e.g., subagent delegation), SOUL.md is not loa
 
 Here is a simplified view of what the final system prompt looks like when all layers are present (comments show the source of each section):
 
-``` prism-code
+``` text
 # Layer 1: Agent Identity (from ~/.hermes/SOUL.md)
 You are Hermes, an AI assistant created by Nous Research.
 You are an expert software engineer and researcher.
@@ -123,7 +123,7 @@ The platform hint (Layer 10 above) is the per-surface guidance Hermes injects fo
 
 An administrator can append to or replace a single platform's hint from `config.yaml` via the top-level `platform_hints` key, without touching any other platform:
 
-``` prism-code
+``` yaml
 platform_hints:
   whatsapp:
     append: >
@@ -146,7 +146,7 @@ The override is resolved when the system prompt is built (session start, and aga
 
 `SOUL.md` lives at `~/.hermes/SOUL.md` and serves as the agent's identity — the very first section of the system prompt. The loading logic in `prompt_builder.py` works as follows:
 
-``` prism-code
+``` python
 # From agent/prompt_builder.py (simplified)
 def load_soul_md() -> Optional[str]:
     soul_path = get_hermes_home() / "SOUL.md"
@@ -162,7 +162,7 @@ When `load_soul_md()` returns content, it replaces the hardcoded `DEFAULT_AGENT_
 
 If `SOUL.md` doesn't exist, the system falls back to:
 
-``` prism-code
+``` text
 You are Hermes Agent, an intelligent AI assistant created by Nous Research.
 You are helpful, knowledgeable, and direct. You assist users with a wide
 range of tasks including answering questions, writing and editing code,
@@ -176,7 +176,7 @@ Be targeted and efficient in your exploration and investigations.
 
 `build_context_files_prompt()` uses a **priority system** — only one project context type is loaded (first match wins):
 
-``` prism-code
+``` python
 # From agent/prompt_builder.py (simplified)
 def build_context_files_prompt(cwd=None, skip_soul=False):
     cwd_path = Path(cwd).resolve()
@@ -212,12 +212,12 @@ def build_context_files_prompt(cwd=None, skip_soul=False):
 
 ### Context file discovery details
 
-| Priority | Files                                 | Search scope       | Notes                         |
-|----------|---------------------------------------|--------------------|-------------------------------|
-| 1        | `.hermes.md`, `HERMES.md`             | CWD up to git root | Hermes-native project config  |
-| 2        | `AGENTS.md`                           | CWD only           | Common agent instruction file |
-| 3        | `CLAUDE.md`                           | CWD only           | Claude Code compatibility     |
-| 4        | `.cursorrules`, `.cursor/rules/*.mdc` | CWD only           | Cursor compatibility          |
+| Priority | Files | Search scope | Notes |
+|----|----|----|----|
+| 1 | `.hermes.md`, `HERMES.md` | CWD up to git root | Hermes-native project config |
+| 2 | `AGENTS.md` | CWD only | Common agent instruction file |
+| 3 | `CLAUDE.md` | CWD only | Claude Code compatibility |
+| 4 | `.cursorrules`, `.cursor/rules/*.mdc` | CWD only | Cursor compatibility |
 
 All context files are:
 

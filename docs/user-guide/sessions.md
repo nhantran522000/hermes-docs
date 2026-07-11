@@ -79,7 +79,7 @@ Resume previous conversations from the CLI using `--continue` or `--resume`:
 
 ### Continue Last Session
 
-``` prism-code
+``` bash
 # Resume the most recent CLI session
 hermes --continue
 hermes -c
@@ -95,7 +95,7 @@ This looks up the most recent `cli` session from the SQLite database and loads i
 
 If you've given a session a title (see [Session Naming](#session-naming) below), you can resume it by name:
 
-``` prism-code
+``` bash
 # Resume a named session
 hermes -c "my project"
 
@@ -106,7 +106,7 @@ hermes -c "my project"   # → resumes "my project #3"
 
 ### Resume Specific Session
 
-``` prism-code
+``` bash
 # Resume a specific session by ID
 hermes --resume 20250305_091523_a1b2c3d4
 hermes -r 20250305_091523_a1b2c3d4
@@ -139,7 +139,7 @@ The recap:
 
 To disable the recap and keep the minimal one-liner behavior, set in `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 display:
   resume_display: minimal   # default: full
 ```
@@ -152,7 +152,7 @@ Session IDs follow the format `YYYYMMDD_HHMMSS_<hex>` — CLI/TUI sessions use a
 
 Use `/handoff <platform>` from a CLI session to transfer the live conversation to a messaging platform's home channel. The agent picks up exactly where the CLI left off — same session id, full role-aware transcript, tool calls and all.
 
-``` prism-code
+``` bash
 # Inside a CLI session
 /handoff telegram
 ```
@@ -174,7 +174,7 @@ What happens:
 
 5.  When the gateway acknowledges success, the CLI prints a `/resume` hint and exits cleanly:
 
-    ``` prism-code
+    ``` text
     ↻ Handoff complete. The session is now active on telegram.
       Resume it on this CLI later with: /resume my-session-title
     ```
@@ -206,7 +206,7 @@ Auto-titling only fires once per session and is skipped if you've already set a 
 
 Use the `/title` slash command inside any chat session (CLI or gateway):
 
-``` prism-code
+``` text
 /title my research project
 ```
 
@@ -214,7 +214,7 @@ The title is applied immediately. If the session hasn't been created in the data
 
 You can also rename existing sessions from the command line:
 
-``` prism-code
+``` bash
 hermes sessions rename 20250305_091523_a1b2c3d4 "refactoring auth module"
 ```
 
@@ -229,7 +229,7 @@ hermes sessions rename 20250305_091523_a1b2c3d4 "refactoring auth module"
 
 When a session's context is compressed (manually via `/compress` or automatically), Hermes creates a new continuation session. If the original had a title, the new session automatically gets a numbered title:
 
-``` prism-code
+``` text
 "my project" → "my project #2" → "my project #3"
 ```
 
@@ -248,7 +248,7 @@ Hermes provides a full set of session management commands via `hermes sessions`:
 
 ### List Sessions
 
-``` prism-code
+``` bash
 # List recent sessions (default: last 20)
 hermes sessions list
 
@@ -261,7 +261,7 @@ hermes sessions list --limit 50
 
 When sessions have titles, the output shows titles, previews, and relative timestamps:
 
-``` prism-code
+``` text
 Title                  Preview                                  Last Active   ID
 ────────────────────────────────────────────────────────────────────────────────────────────────
 refactoring auth       Help me refactor the auth module please   2h ago        20250305_091523_a
@@ -271,7 +271,7 @@ my project #3          Can you check the test failures?          yesterday     2
 
 When no sessions have titles, a simpler format is used:
 
-``` prism-code
+``` text
 Preview                                            Last Active   Src    ID
 ──────────────────────────────────────────────────────────────────────────────────────
 Help me refactor the auth module please             2h ago        cli    20250305_091523_a
@@ -282,12 +282,12 @@ What's the weather in Las Vegas?                    3d ago        tele   2025030
 
 `hermes sessions export` is one surface for every export format, selected with `--format`:
 
-| Format            | Output                                                 | Use it for                        |
-|-------------------|--------------------------------------------------------|-----------------------------------|
-| `jsonl` (default) | one JSON object per session                            | backups, machine round-trip       |
-| `md` / `qmd`      | one Markdown/Quarto file per session + manifest        | readable archives, notes          |
-| `html`            | single self-contained page (sidebar for multi-session) | sharing, browsing                 |
-| `trace`           | Claude Code JSONL                                      | HF Agent Trace Viewer, `--upload` |
+| Format | Output | Use it for |
+|----|----|----|
+| `jsonl` (default) | one JSON object per session | backups, machine round-trip |
+| `md` / `qmd` | one Markdown/Quarto file per session + manifest | readable archives, notes |
+| `html` | single self-contained page (sidebar for multi-session) | sharing, browsing |
+| `trace` | Claude Code JSONL | HF Agent Trace Viewer, `--upload` |
 
 Plus `--only user-prompts` for a prompts-only view (jsonl or md).
 
@@ -295,7 +295,7 @@ All formats share the same selection knobs: `--session-id` for one session, or t
 
 #### JSONL (default)
 
-``` prism-code
+``` bash
 # Export all sessions to a JSONL file
 hermes sessions export backup.jsonl
 
@@ -315,7 +315,7 @@ Exported files contain one JSON object per line with full session metadata and a
 
 `--format html` writes a single self-contained HTML file — no remote dependencies — with styled message bubbles, collapsible tool output, and (for multi-session exports) a sidebar to switch between sessions:
 
-``` prism-code
+``` bash
 # One session as a standalone HTML page
 hermes sessions export --format html --session-id 20250305_091523_a1b2c3d4 transcript.html
 
@@ -327,7 +327,7 @@ hermes sessions export --format html --newer-than 1w --source telegram --redact 
 
 `--only user-prompts` exports just the prompts you wrote — no assistant replies, tool output, or system context. Useful for building prompt libraries or reviewing what you asked:
 
-``` prism-code
+``` bash
 # One JSONL record per prompt (session id, index, timestamp, text)
 hermes sessions export prompts.jsonl --session-id 20250305_091523_a1b2c3d4 --only user-prompts
 
@@ -341,7 +341,7 @@ Works with `--format jsonl` (default) or `md`, honors the same filters for bulk 
 
 `--format trace` emits Claude Code JSONL — the transcript shape the Hugging Face Hub auto-detects for its [Agent Trace Viewer](https://huggingface.co/docs/hub/agent-traces). Write it locally, or add `--upload` to push it to your own private `hermes-traces` dataset (reads `HF_TOKEN`):
 
-``` prism-code
+``` bash
 # Trace of the most recent session, to stdout
 hermes sessions export --format trace
 
@@ -358,7 +358,7 @@ Trace exports are secret-redacted by default (they're meant to leave the machine
 
 Pass `--format md` or `--format qmd` when you want a readable, file-based archive before hiding or deleting old sessions. Markdown/QMD exports write one file per session into a directory (default: `~/.hermes/session-exports`).
 
-``` prism-code
+``` bash
 # Export one session to Markdown
 hermes sessions export --format md --session-id 20250305_091523_a1b2c3d4
 
@@ -382,7 +382,7 @@ Markdown/QMD export writes one `.md` or `.qmd` file per exported session plus a 
 
 ### Delete a Session
 
-``` prism-code
+``` bash
 # Delete a specific session (with confirmation)
 hermes sessions delete 20250305_091523_a1b2c3d4
 
@@ -392,7 +392,7 @@ hermes sessions delete 20250305_091523_a1b2c3d4 --yes
 
 ### Rename a Session
 
-``` prism-code
+``` bash
 # Set or change a session's title
 hermes sessions rename 20250305_091523_a1b2c3d4 "debugging auth flow"
 
@@ -404,7 +404,7 @@ If the title is already in use by another session, an error is shown.
 
 ### Prune Old Sessions
 
-``` prism-code
+``` bash
 # Delete ended sessions older than 90 days (default)
 hermes sessions prune
 
@@ -458,7 +458,7 @@ Pruning only deletes **ended** sessions (sessions that have been explicitly ende
 
 If you want sessions out of your listings without deleting anything, `hermes sessions archive` takes the same filters as `prune` but soft-hides matching sessions instead (sets the same archived flag as archiving a single session from the Desktop/Dashboard UI — messages and search stay intact):
 
-``` prism-code
+``` bash
 # Archive everything from the last 5 hours (e.g. 75 CI smoke-test sessions)
 hermes sessions archive --newer-than 5h
 
@@ -471,13 +471,13 @@ At least one filter is required — a bare `hermes sessions archive` refuses to 
 
 ### Session Statistics
 
-``` prism-code
+``` bash
 hermes sessions stats
 ```
 
 Output:
 
-``` prism-code
+``` text
 Total sessions: 142
 Total messages: 3847
   cli: 89 sessions
@@ -498,7 +498,7 @@ The tool infers what you want from which arguments you set. There's no `mode` pa
 
 **1. Discovery — pass `query`:**
 
-``` prism-code
+``` python
 session_search(query="auth refactor", limit=3)
 ```
 
@@ -515,7 +515,7 @@ Bookends + window together reconstruct goal → match → resolution without pay
 
 **2. Scroll — pass `session_id` + `around_message_id`:**
 
-``` prism-code
+``` python
 session_search(session_id="20260510_174648_805cc2", around_message_id=590803, window=10)
 ```
 
@@ -530,7 +530,7 @@ Typical wall time: 1–2ms per scroll call.
 
 **3. Browse — no args:**
 
-``` prism-code
+``` python
 session_search()
 ```
 
@@ -564,14 +564,14 @@ Typical triggers: "we did this before", "remember when", "last time", "as I ment
 
 On messaging platforms, sessions are keyed by a deterministic session key built from the message source:
 
-| Chat Type          | Default Key Format                                  | Behavior                                                                                              |
-|--------------------|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------|
-| Telegram DM        | `agent:main:telegram:dm:<chat_id>`                  | One session per DM chat                                                                               |
-| Discord DM         | `agent:main:discord:dm:<chat_id>`                   | One session per DM chat                                                                               |
-| WhatsApp DM        | `agent:main:whatsapp:dm:<canonical_identifier>`     | One session per DM user (LID/phone aliases collapse to one identity when mapping exists)              |
-| Group chat         | `agent:main:<platform>:group:<chat_id>:<user_id>`   | Per-user inside the group when the platform exposes a user ID                                         |
+| Chat Type | Default Key Format | Behavior |
+|----|----|----|
+| Telegram DM | `agent:main:telegram:dm:<chat_id>` | One session per DM chat |
+| Discord DM | `agent:main:discord:dm:<chat_id>` | One session per DM chat |
+| WhatsApp DM | `agent:main:whatsapp:dm:<canonical_identifier>` | One session per DM user (LID/phone aliases collapse to one identity when mapping exists) |
+| Group chat | `agent:main:<platform>:group:<chat_id>:<user_id>` | Per-user inside the group when the platform exposes a user ID |
 | Group thread/topic | `agent:main:<platform>:group:<chat_id>:<thread_id>` | Shared session for all thread participants (default). Per-user with `thread_sessions_per_user: true`. |
-| Channel            | `agent:main:<platform>:channel:<chat_id>:<user_id>` | Per-user inside the channel when the platform exposes a user ID                                       |
+| Channel | `agent:main:<platform>:channel:<chat_id>:<user_id>` | Per-user inside the channel when the platform exposes a user ID |
 
 When Hermes cannot get a participant identifier for a shared chat, it falls back to one shared session for that room.
 
@@ -585,7 +585,7 @@ By default, Hermes uses `group_sessions_per_user: true` in `config.yaml`. That m
 
 If you want one shared "room brain" instead, set:
 
-``` prism-code
+``` yaml
 group_sessions_per_user: false
 ```
 
@@ -606,10 +606,10 @@ Sessions with **active background processes** are never auto-reset, regardless o
 
 ## Storage Locations
 
-| What                  | Path                               | Description                                                             |
-|-----------------------|------------------------------------|-------------------------------------------------------------------------|
-| SQLite database       | `~/.hermes/state.db`               | All session metadata + messages with FTS5                               |
-| Gateway messages      | `~/.hermes/state.db`               | SQLite — canonical store for all session messages                       |
+| What | Path | Description |
+|----|----|----|
+| SQLite database | `~/.hermes/state.db` | All session metadata + messages with FTS5 |
+| Gateway messages | `~/.hermes/state.db` | SQLite — canonical store for all session messages |
 | Gateway routing index | `~/.hermes/sessions/sessions.json` | Maps session keys to active session IDs (origin metadata, expiry flags) |
 
 The SQLite database uses WAL mode for concurrent readers and a single writer, which suits the gateway's multi-platform architecture well.
@@ -646,7 +646,7 @@ Key tables in `state.db`:
 
 Default is **off** — session history is valuable for `session_search` recall, and silently deleting it could surprise users. Enable in `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 sessions:
   auto_prune: true          # opt in — default is false
   retention_days: 90        # keep ended sessions this many days
@@ -658,7 +658,7 @@ Active sessions are never auto-pruned, regardless of age.
 
 ### Manual Cleanup
 
-``` prism-code
+``` bash
 # Prune sessions older than 90 days
 hermes sessions prune
 

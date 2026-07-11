@@ -28,8 +28,17 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
 
-      - name: Install pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
+      - name: Install pandoc (pinned)
+        # Pin the exact version so CI output byte-matches local crawls. Ubuntu's apt
+        # pandoc is older and renders code fences/tables differently, which would fight
+        # local runs on every sync. Keep this in step with your local pandoc version.
+        env:
+          PANDOC_VERSION: '3.9'
+        run: |
+          curl -fsSL -o /tmp/pandoc.deb \
+            "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-1-amd64.deb"
+          sudo dpkg -i /tmp/pandoc.deb
+          pandoc --version | head -1
 
       - name: Set up Python
         uses: actions/setup-python@v6

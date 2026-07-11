@@ -10,13 +10,13 @@ Hermes Agent can automatically snapshot your project before **destructive operat
 
 Enable checkpoints per-session with `--checkpoints`:
 
-``` prism-code
+``` bash
 hermes chat --checkpoints
 ```
 
 Or enable globally in `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 checkpoints:
   enabled: true
 ```
@@ -36,23 +36,23 @@ The agent creates **at most one checkpoint per directory per turn**, so long-run
 
 In-session slash commands:
 
-| Command                | Description                                          |
-|------------------------|------------------------------------------------------|
-| `/rollback`            | List all checkpoints with change stats               |
-| `/rollback <N>`        | Restore to checkpoint N (also undoes last chat turn) |
-| `/rollback diff <N>`   | Preview diff between checkpoint N and current state  |
-| `/rollback <N> <file>` | Restore a single file from checkpoint N              |
+| Command | Description |
+|----|----|
+| `/rollback` | List all checkpoints with change stats |
+| `/rollback <N>` | Restore to checkpoint N (also undoes last chat turn) |
+| `/rollback diff <N>` | Preview diff between checkpoint N and current state |
+| `/rollback <N> <file>` | Restore a single file from checkpoint N |
 
 CLI for inspecting and managing the store outside a session:
 
-| Command                           | Description                                               |
-|-----------------------------------|-----------------------------------------------------------|
-| `hermes checkpoints`              | Show total size, project count, per-project breakdown     |
-| `hermes checkpoints status`       | Same as bare `checkpoints`                                |
-| `hermes checkpoints list`         | Alias for `status`                                        |
-| `hermes checkpoints prune`        | Force a sweep: delete orphans/stale, GC, enforce size cap |
-| `hermes checkpoints clear`        | Nuke the entire checkpoint base (asks first)              |
-| `hermes checkpoints clear-legacy` | Delete only the `legacy-*` archives from v1 migration     |
+| Command | Description |
+|----|----|
+| `hermes checkpoints` | Show total size, project count, per-project breakdown |
+| `hermes checkpoints status` | Same as bare `checkpoints` |
+| `hermes checkpoints list` | Alias for `status` |
+| `hermes checkpoints prune` | Force a sweep: delete orphans/stale, GC, enforce size cap |
+| `hermes checkpoints clear` | Nuke the entire checkpoint base (asks first) |
+| `hermes checkpoints clear-legacy` | Delete only the `legacy-*` archives from v1 migration |
 
 ## How Checkpoints Work
 
@@ -69,7 +69,7 @@ At a high level:
 
 Configure in `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 checkpoints:
   enabled: false              # master switch (default: false — opt-in)
   max_snapshots: 20           # max checkpoints per project (enforced via ref rewrite + gc)
@@ -88,7 +88,7 @@ checkpoints:
 
 To disable everything:
 
-``` prism-code
+``` yaml
 checkpoints:
   enabled: false
   auto_prune: false
@@ -100,13 +100,13 @@ When `enabled: false`, the Checkpoint Manager is a no-op and never attempts git 
 
 From a CLI session:
 
-``` prism-code
+``` text
 /rollback
 ```
 
 Hermes responds with a formatted list showing change statistics:
 
-``` prism-code
+``` text
 📸 Checkpoints for /path/to/project:
 
   1. 4270a8c  2026-03-16 04:36  before patch  (1 file, +1/-0)
@@ -120,13 +120,13 @@ Hermes responds with a formatted list showing change statistics:
 
 ## Inspecting the Store from the Shell
 
-``` prism-code
+``` bash
 hermes checkpoints
 ```
 
 Sample output:
 
-``` prism-code
+``` text
 Checkpoint base: /home/you/.hermes/checkpoints
 Total size:      142.3 MB
   store/         138.1 MB
@@ -147,7 +147,7 @@ Clear with: hermes checkpoints clear-legacy
 
 Force a full sweep (ignores the 24h idempotency marker):
 
-``` prism-code
+``` bash
 hermes checkpoints prune --retention-days 3 --max-size-mb 200
 ```
 
@@ -155,7 +155,7 @@ hermes checkpoints prune --retention-days 3 --max-size-mb 200
 
 Before committing to a restore, preview what has changed since a checkpoint:
 
-``` prism-code
+``` text
 /rollback diff 1
 ```
 
@@ -163,7 +163,7 @@ This shows a git diff stat summary followed by the actual diff.
 
 ## Restoring with `/rollback`
 
-``` prism-code
+``` text
 /rollback 1
 ```
 
@@ -178,7 +178,7 @@ Behind the scenes, Hermes:
 
 Restore just one file from a checkpoint without affecting the rest of the directory:
 
-``` prism-code
+``` text
 /rollback 1 src/broken_file.py
 ```
 
@@ -195,7 +195,7 @@ Restore just one file from a checkpoint without affecting the rest of the direct
 
 ## Where Checkpoints Live
 
-``` prism-code
+``` text
 ~/.hermes/checkpoints/
   ├── store/                 # single shared bare git repo
   │   ├── HEAD, objects/     # git internals (shared across projects)
@@ -215,7 +215,7 @@ Before the v2 rewrite, each working directory got its own complete shadow git re
 
 On first v2 run, any pre-v2 shadow repos are moved into `~/.hermes/checkpoints/legacy-<timestamp>/` so the new single-store layout starts clean. Old `/rollback` history is still reachable by manually inspecting the legacy archive with `git`; once you're confident you don't need it, run:
 
-``` prism-code
+``` bash
 hermes checkpoints clear-legacy
 ```
 

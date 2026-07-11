@@ -937,9 +937,9 @@ Select a task, pick a provider (OAuth flows open a browser; API-key providers pr
 
 ### Video Tutorial
 
-# Đã xảy ra lỗi.
+# An error occurred.
 
-Không thể chạy JavaScript.
+Unable to execute JavaScript.
 
 ### The universal config pattern
 

@@ -12,9 +12,9 @@ The agent processes the event and can respond by posting comments on PRs, sendin
 
 ## Video Tutorial
 
-# Đã xảy ra lỗi.
+# An error occurred.
 
-Không thể chạy JavaScript.
+Unable to execute JavaScript.
 
 ------------------------------------------------------------------------
 

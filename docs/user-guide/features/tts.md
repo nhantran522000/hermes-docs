@@ -10,7 +10,7 @@ Hermes Agent supports both text-to-speech output and voice message transcription
 
 Nous Subscribers
 
-If you have a paid [Nous Portal](https://portal.nousresearch.com) subscription, OpenAI TTS is available through the **[Tool Gateway](/docs/user-guide/features/tool-gateway)** without a separate OpenAI API key. New installs can run `hermes setup --portal` to log in and turn on every gateway tool at once; existing installs can pick **Nous Subscription** for just TTS via `hermes model` or `hermes tools`.
+If you have a paid [Nous Portal](https://portal.nousresearch.com) subscription, OpenAI TTS is available through the **[Tool Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-gateway)** without a separate OpenAI API key. New installs can run `hermes setup --portal` to log in and turn on every gateway tool at once; existing installs can pick **Nous Subscription** for just TTS via `hermes model` or `hermes tools`.
 
 ## Text-to-Speech
 
@@ -31,16 +31,16 @@ Convert text to speech with ten providers:
 
 ### Platform Delivery
 
-| Platform | Delivery                                               | Format      |
-|----------|--------------------------------------------------------|-------------|
-| Telegram | Voice bubble (plays inline)                            | Opus `.ogg` |
-| Discord  | Voice bubble (Opus/OGG), falls back to file attachment | Opus/MP3    |
-| WhatsApp | Audio file attachment                                  | MP3         |
-| CLI      | Saved to `~/.hermes/audio_cache/`                      | MP3         |
+| Platform | Delivery | Format |
+|----|----|----|
+| Telegram | Voice bubble (plays inline) | Opus `.ogg` |
+| Discord | Voice bubble (Opus/OGG), falls back to file attachment | Opus/MP3 |
+| WhatsApp | Audio file attachment | MP3 |
+| CLI | Saved to `~/.hermes/audio_cache/` | MP3 |
 
 ### Configuration
 
-``` prism-code
+``` yaml
 # In ~/.hermes/config.yaml
 tts:
   provider: "edge"              # "edge" | "elevenlabs" | "openai" | "minimax" | "mistral" | "gemini" | "xai" | "neutts" | "kittentts" | "piper"
@@ -105,7 +105,7 @@ Gemini TTS can follow natural-language performance direction. Set `tts.gemini.pe
 
 If the file contains `{transcript}` or `{{ transcript }}`, Hermes replaces that placeholder with the live TTS text. Otherwise, Hermes appends a labeled `TRANSCRIPT` section automatically. The persona prompt stays local and is not shown in the chat reply.
 
-``` prism-code
+``` yaml
 tts:
   provider: gemini
   gemini:
@@ -117,7 +117,7 @@ tts:
 
 Gemini 3.1 Flash TTS supports freeform square-bracket audio tags such as `[whispers]`, `[excitedly]`, `[very slow]`, `[laughs]`, and other expressive delivery notes. Enable `tts.gemini.audio_tags` to have Hermes run a hidden rewrite pass before Gemini TTS. The rewrite inserts inline tags into the TTS script only; the visible chat reply stays unchanged.
 
-``` prism-code
+``` yaml
 tts:
   provider: gemini
   gemini:
@@ -146,17 +146,17 @@ Each provider has a documented per-request input-character cap. Hermes truncates
 
 **ElevenLabs** picks a cap from the configured `model_id`:
 
-| `model_id`                                                                                                     | Cap (chars)                            |
-|----------------------------------------------------------------------------------------------------------------|----------------------------------------|
-| `eleven_flash_v2_5`                                                                                            | 40000                                  |
-| `eleven_flash_v2`                                                                                              | 30000                                  |
-| `eleven_multilingual_v2` (default), `eleven_multilingual_v1`, `eleven_english_sts_v2`, `eleven_english_sts_v1` | 10000                                  |
-| `eleven_v3`, `eleven_ttv_v3`                                                                                   | 5000                                   |
-| Unknown model                                                                                                  | Falls back to provider default (10000) |
+| `model_id` | Cap (chars) |
+|----|----|
+| `eleven_flash_v2_5` | 40000 |
+| `eleven_flash_v2` | 30000 |
+| `eleven_multilingual_v2` (default), `eleven_multilingual_v1`, `eleven_english_sts_v2`, `eleven_english_sts_v1` | 10000 |
+| `eleven_v3`, `eleven_ttv_v3` | 5000 |
+| Unknown model | Falls back to provider default (10000) |
 
 **Override per provider** with `max_text_length:` under the provider section of your TTS config:
 
-``` prism-code
+``` yaml
 tts:
   openai:
     max_text_length: 8192   # raise or lower the provider cap
@@ -177,7 +177,7 @@ Telegram voice bubbles require Opus/OGG audio format:
 - **KittenTTS** outputs WAV and also needs **ffmpeg** to convert for Telegram voice bubbles
 - **Piper** outputs WAV and also needs **ffmpeg** to convert for Telegram voice bubbles
 
-``` prism-code
+``` bash
 # Ubuntu/Debian
 sudo apt install ffmpeg
 
@@ -198,7 +198,7 @@ If you want voice bubbles without installing ffmpeg, switch to the OpenAI, Eleve
 
 xAI supports cloning your voice and using it with TTS. Create a custom voice in the [xAI Console](https://console.x.ai/team/default/voice/voice-library), then set the resulting `voice_id` in your config:
 
-``` prism-code
+``` yaml
 tts:
   provider: xai
   xai:
@@ -215,7 +215,7 @@ Piper is a fast, local neural TTS engine from the Open Home Foundation (the Home
 
 **Switch to Piper:**
 
-``` prism-code
+``` yaml
 tts:
   provider: piper
   piper:
@@ -228,7 +228,7 @@ On the first TTS call for a voice that isn't cached locally, Hermes runs `python
 
 **Using a pre-downloaded voice.** Set `tts.piper.voice` to an absolute path ending in `.onnx`:
 
-``` prism-code
+``` yaml
 tts:
   piper:
     voice: /path/to/my-custom-voice.onnx
@@ -242,7 +242,7 @@ If a TTS engine you want isn't natively supported (VoxCPM, MLX-Kokoro, XTTS CLI,
 
 Declare one or more providers under `tts.providers.<name>` and switch between them with `tts.provider: <name>` — the same way you switch between built-ins like `edge` and `openai`.
 
-``` prism-code
+``` yaml
 tts:
   provider: voxcpm                 # pick any name under tts.providers
   providers:
@@ -269,13 +269,13 @@ tts:
 
 For high-quality Chinese TTS via ByteDance's [seed-tts-2.0](https://www.volcengine.com/docs/6561/1257544) bidirectional-streaming API, install the [`doubao-speech`](https://pypi.org/project/doubao-speech/) PyPI package and wire it in as a command provider:
 
-``` prism-code
+``` bash
 pip install doubao-speech
 export VOLCENGINE_APP_ID="your-app-id"
 export VOLCENGINE_ACCESS_TOKEN="your-access-token"
 ```
 
-``` prism-code
+``` yaml
 tts:
   provider: doubao
   providers:
@@ -307,13 +307,13 @@ Use `{{` and `}}` for literal braces.
 
 #### Optional keys
 
-| Key                | Default | Meaning                                                                                                |
-|--------------------|---------|--------------------------------------------------------------------------------------------------------|
-| `timeout`          | `120`   | Seconds; the process tree is killed on expiry (Unix `killpg`, Windows `taskkill /T`).                  |
-| `output_format`    | `mp3`   | One of `mp3` / `wav` / `ogg` / `flac`. Auto-inferred from the output extension if Hermes picks a path. |
+| Key | Default | Meaning |
+|----|----|----|
+| `timeout` | `120` | Seconds; the process tree is killed on expiry (Unix `killpg`, Windows `taskkill /T`). |
+| `output_format` | `mp3` | One of `mp3` / `wav` / `ogg` / `flac`. Auto-inferred from the output extension if Hermes picks a path. |
 | `voice_compatible` | `false` | When `true`, Hermes converts MP3/WAV output to Opus/OGG via ffmpeg so Telegram renders a voice bubble. |
-| `max_text_length`  | `5000`  | Input is truncated to this length before rendering the command.                                        |
-| `voice` / `model`  | empty   | Passed to the command as placeholder values only.                                                      |
+| `max_text_length` | `5000` | Input is truncated to this length before rendering the command. |
+| `voice` / `model` | empty | Passed to the command as placeholder values only. |
 
 #### Behavior notes
 
@@ -333,14 +333,14 @@ For TTS engines that can't be expressed as a single shell command — Python SDK
 
 #### When to pick which
 
-| Your backend has…                                                              | Use                                     |
-|--------------------------------------------------------------------------------|-----------------------------------------|
+| Your backend has… | Use |
+|----|----|
 | A single CLI reading text from a file/stdin and writing audio to a file/stdout | **Command provider** (no Python needed) |
-| Two or three CLIs chained with shell pipes                                     | **Command provider**                    |
-| A Python SDK only — no CLI                                                     | **Plugin**                              |
-| Streaming bytes you want to deliver chunked (mid-generation voice bubbles)     | **Plugin** (override `stream()`)        |
-| A voice-listing API used by `hermes setup`                                     | **Plugin** (override `list_voices()`)   |
-| OAuth refresh flow (not a static bearer token)                                 | **Plugin**                              |
+| Two or three CLIs chained with shell pipes | **Command provider** |
+| A Python SDK only — no CLI | **Plugin** |
+| Streaming bytes you want to deliver chunked (mid-generation voice bubbles) | **Plugin** (override `stream()`) |
+| A voice-listing API used by `hermes setup` | **Plugin** (override `list_voices()`) |
+| OAuth refresh flow (not a static bearer token) | **Plugin** |
 
 Built-ins always win, and command providers win over a same-name plugin — so plugins are safe to register against any non-built-in name without worrying about shadowing your existing config.
 
@@ -350,7 +350,7 @@ Drop this in `~/.hermes/plugins/my-tts/`:
 
 `plugin.yaml`:
 
-``` prism-code
+``` yaml
 name: my-tts
 version: 0.1.0
 description: "My custom Python TTS backend"
@@ -358,7 +358,7 @@ description: "My custom Python TTS backend"
 
 `__init__.py`:
 
-``` prism-code
+``` python
 from agent.tts_provider import TTSProvider
 
 class MyTTSProvider(TTSProvider):
@@ -410,11 +410,11 @@ See `agent/tts_provider.py` for the full ABC including docstrings.
 
 Voice messages sent on Telegram, Discord, WhatsApp, Slack, or Signal are automatically transcribed and injected as text into the conversation. The agent sees the transcript as normal text.
 
-| Provider                    | Quality   | Cost      | API Key                                      |
-|-----------------------------|-----------|-----------|----------------------------------------------|
-| **Local Whisper** (default) | Good      | Free      | None needed                                  |
-| **Groq Whisper API**        | Good–Best | Free tier | `GROQ_API_KEY`                               |
-| **OpenAI Whisper API**      | Good–Best | Paid      | `VOICE_TOOLS_OPENAI_KEY` or `OPENAI_API_KEY` |
+| Provider | Quality | Cost | API Key |
+|----|----|----|----|
+| **Local Whisper** (default) | Good | Free | None needed |
+| **Groq Whisper API** | Good–Best | Free tier | `GROQ_API_KEY` |
+| **OpenAI Whisper API** | Good–Best | Paid | `VOICE_TOOLS_OPENAI_KEY` or `OPENAI_API_KEY` |
 
 Zero Config
 
@@ -422,7 +422,7 @@ Local transcription works out of the box when `faster-whisper` is installed. If 
 
 ### Configuration
 
-``` prism-code
+``` yaml
 # In ~/.hermes/config.yaml
 stt:
   provider: "local"           # "local" | "groq" | "openai" | "mistral" | "xai"
@@ -462,14 +462,14 @@ stt:
 
 If you use [`doubao-speech`](https://pypi.org/project/doubao-speech/) for Doubao TTS (see [above](#example-doubao-chinese-seed-tts-20)), the same package handles speech-to-text via the local-command STT surface:
 
-``` prism-code
+``` bash
 pip install doubao-speech
 export VOLCENGINE_APP_ID="your-app-id"
 export VOLCENGINE_ACCESS_TOKEN="your-access-token"
 export HERMES_LOCAL_STT_COMMAND='doubao-speech transcribe {input_path} --out {output_dir}/transcript.txt'
 ```
 
-``` prism-code
+``` yaml
 stt:
   provider: local_command
 ```
@@ -492,7 +492,7 @@ If the STT engine you want isn't natively supported (Doubao ASR, NVIDIA Parakeet
 
 Declare one or more providers under `stt.providers.<name>` and switch between them with `stt.provider: <name>` — same shape as the TTS [command-provider registry](#custom-command-providers), adapted for the input=audio → output=transcript direction.
 
-``` prism-code
+``` yaml
 stt:
   provider: parakeet                # pick any name under stt.providers
   providers:
@@ -520,14 +520,14 @@ This complements the legacy `HERMES_LOCAL_STT_COMMAND` escape hatch — that env
 
 Your command template can reference these placeholders. Hermes substitutes them at render time and shell-quotes each value for the surrounding context (bare / single-quoted / double-quoted), so paths with spaces are safe.
 
-| Placeholder     | Meaning                                                              |
-|-----------------|----------------------------------------------------------------------|
-| `{input_path}`  | Absolute path to the input audio file (original location, read-only) |
-| `{output_path}` | Absolute path the command should write the transcript to             |
-| `{output_dir}`  | Parent directory of `{output_path}` (handy for whisper-style tools)  |
-| `{format}`      | Configured output format: `txt` / `json` / `srt` / `vtt`             |
-| `{language}`    | Configured language code (defaults to `en`)                          |
-| `{model}`       | `stt.providers.<name>.model`, empty when unset                       |
+| Placeholder | Meaning |
+|----|----|
+| `{input_path}` | Absolute path to the input audio file (original location, read-only) |
+| `{output_path}` | Absolute path the command should write the transcript to |
+| `{output_dir}` | Parent directory of `{output_path}` (handy for whisper-style tools) |
+| `{format}` | Configured output format: `txt` / `json` / `srt` / `vtt` |
+| `{language}` | Configured language code (defaults to `en`) |
+| `{model}` | `stt.providers.<name>.model`, empty when unset |
 
 Use `{{` and `}}` for literal braces (handy when embedding JSON snippets in the command).
 
@@ -545,12 +545,12 @@ For `format: json` / `srt` / `vtt`, Hermes returns the raw file content as the `
 
 #### STT command-provider optional keys
 
-| Key        | Default | Meaning                                                                                          |
-|------------|---------|--------------------------------------------------------------------------------------------------|
-| `timeout`  | `300`   | Seconds; the process tree is killed on expiry (Unix `start_new_session`, Windows `taskkill /T`). |
-| `format`   | `txt`   | One of `txt` / `json` / `srt` / `vtt`. Sets the extension of `{output_path}`.                    |
-| `language` | `en`    | Forwarded to `{language}`. Defaults to `stt.language` then `en`.                                 |
-| `model`    | empty   | Forwarded to `{model}`. The `model=` argument to `transcribe_audio()` overrides this.            |
+| Key | Default | Meaning |
+|----|----|----|
+| `timeout` | `300` | Seconds; the process tree is killed on expiry (Unix `start_new_session`, Windows `taskkill /T`). |
+| `format` | `txt` | One of `txt` / `json` / `srt` / `vtt`. Sets the extension of `{output_path}`. |
+| `language` | `en` | Forwarded to `{language}`. Defaults to `stt.language` then `en`. |
+| `model` | empty | Forwarded to `{model}`. The `model=` argument to `transcribe_audio()` overrides this. |
 
 #### STT command-provider behavior notes
 
@@ -568,13 +568,13 @@ For STT engines that aren't built-in AND can't be expressed as a shell command (
 
 #### When to pick which (STT)
 
-| Backend has…                                                   | Use                                                            |
-|----------------------------------------------------------------|----------------------------------------------------------------|
-| A single shell command that takes an audio file and emits text | `stt.providers.<name>: type: command` (no Python needed)       |
-| Only the legacy single-command escape hatch is wanted          | `HERMES_LOCAL_STT_COMMAND` env var (preserved for back-compat) |
-| A Python SDK with no CLI                                       | `register_transcription_provider()` plugin                     |
-| OAuth-refreshing auth, streaming chunks, voice-list metadata   | `register_transcription_provider()` plugin                     |
-| A built-in already covers it (`local`, `groq`, `openai`, …)    | Set `stt.provider: <name>` — built-ins are inline              |
+| Backend has… | Use |
+|----|----|
+| A single shell command that takes an audio file and emits text | `stt.providers.<name>: type: command` (no Python needed) |
+| Only the legacy single-command escape hatch is wanted | `HERMES_LOCAL_STT_COMMAND` env var (preserved for back-compat) |
+| A Python SDK with no CLI | `register_transcription_provider()` plugin |
+| OAuth-refreshing auth, streaming chunks, voice-list metadata | `register_transcription_provider()` plugin |
+| A built-in already covers it (`local`, `groq`, `openai`, …) | Set `stt.provider: <name>` — built-ins are inline |
 
 #### Resolution order
 
@@ -589,7 +589,7 @@ For STT engines that aren't built-in AND can't be expressed as a shell command (
 
 Plugins read their per-provider configuration from `stt.<provider>` in `config.yaml`, mirroring how built-ins read `stt.openai.model` / `stt.mistral.model`:
 
-``` prism-code
+``` yaml
 stt:
   provider: my-stt
   my-stt:
@@ -607,7 +607,7 @@ Drop this in `~/.hermes/plugins/my-stt/`:
 
 `plugin.yaml`:
 
-``` prism-code
+``` yaml
 name: my-stt
 version: 0.1.0
 description: "My custom Python STT backend"
@@ -615,7 +615,7 @@ description: "My custom Python STT backend"
 
 `__init__.py`:
 
-``` prism-code
+``` python
 from agent.transcription_provider import TranscriptionProvider
 
 class MySTTProvider(TranscriptionProvider):

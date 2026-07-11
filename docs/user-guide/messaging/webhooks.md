@@ -12,9 +12,9 @@ The agent processes the event and can respond by posting comments on PRs, sendin
 
 ## Video Tutorial
 
-# An error occurred.
+# Đã xảy ra lỗi.
 
-Unable to execute JavaScript.
+Không thể chạy JavaScript.
 
 ------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ There are two ways to enable the webhook adapter.
 
 ### Via setup wizard
 
-``` prism-code
+``` bash
 hermes gateway setup
 ```
 
@@ -42,7 +42,7 @@ Follow the prompts to enable webhooks, set the port, and set a global HMAC secre
 
 Add to `~/.hermes/.env`:
 
-``` prism-code
+``` bash
 WEBHOOK_ENABLED=true
 WEBHOOK_PORT=8644        # default
 WEBHOOK_SECRET=your-global-secret
@@ -52,13 +52,13 @@ WEBHOOK_SECRET=your-global-secret
 
 Once the gateway is running:
 
-``` prism-code
+``` bash
 curl http://localhost:8644/health
 ```
 
 Expected response:
 
-``` prism-code
+``` json
 {"status": "ok", "platform": "webhook"}
 ```
 
@@ -70,21 +70,21 @@ Routes define how different webhook sources are handled. Each route is a named e
 
 ### Route properties
 
-| Property        | Required | Description                                                                                                                                                                                                                                                                     |
-|-----------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `events`        | No       | List of event types to accept (e.g. `["pull_request"]`). If empty, all events are accepted. Event type is read from `X-GitHub-Event`, `X-GitLab-Event`, or `event_type` in the payload.                                                                                         |
-| `secret`        | **Yes**  | HMAC secret for signature validation. Falls back to the global `secret` if not set on the route. Set to `"INSECURE_NO_AUTH"` for testing only (skips validation).                                                                                                               |
-| `prompt`        | No       | Template string with dot-notation payload access (e.g. `{pull_request.title}`). If omitted, the full JSON payload is dumped into the prompt. Payload fields are untrusted — see [Authenticated does not mean trusted](#authenticated-does-not-mean-trusted).                    |
-| `filters`       | No       | Declarative payload filters evaluated after auth/body/event filtering and before agent or direct delivery work. Non-matches return `{"status":"ignored","reason":"filter"}` with HTTP 200.                                                                                      |
-| `script`        | No       | Filter/transform script under `~/.hermes/scripts/`. The webhook payload is passed as JSON on stdin. JSON object stdout replaces the payload before templating; text stdout is exposed as `script_output`; empty stdout, `[SILENT]`, or a nonzero exit code ignores the webhook. |
-| `skills`        | No       | List of skill names to load for the agent run.                                                                                                                                                                                                                                  |
-| `deliver`       | No       | Where to send the response: `github_comment`, `telegram`, `discord`, `slack`, `signal`, `sms`, `whatsapp`, `matrix`, `mattermost`, `homeassistant`, `email`, `dingtalk`, `feishu`, `wecom`, `weixin`, `bluebubbles`, `qqbot`, or `log` (default).                               |
-| `deliver_extra` | No       | Additional delivery config — keys depend on `deliver` type (e.g. `repo`, `pr_number`, `chat_id`). Values support the same `{dot.notation}` templates as `prompt`.                                                                                                               |
-| `deliver_only`  | No       | If `true`, skip the agent entirely — the rendered `prompt` template becomes the literal message that gets delivered. Zero LLM cost, sub-second delivery. See [Direct Delivery Mode](#direct-delivery-mode) for use cases. Requires `deliver` to be a real target (not `log`).   |
+| Property | Required | Description |
+|----|----|----|
+| `events` | No | List of event types to accept (e.g. `["pull_request"]`). If empty, all events are accepted. Event type is read from `X-GitHub-Event`, `X-GitLab-Event`, or `event_type` in the payload. |
+| `secret` | **Yes** | HMAC secret for signature validation. Falls back to the global `secret` if not set on the route. Set to `"INSECURE_NO_AUTH"` for testing only (skips validation). |
+| `prompt` | No | Template string with dot-notation payload access (e.g. `{pull_request.title}`). If omitted, the full JSON payload is dumped into the prompt. Payload fields are untrusted — see [Authenticated does not mean trusted](#authenticated-does-not-mean-trusted). |
+| `filters` | No | Declarative payload filters evaluated after auth/body/event filtering and before agent or direct delivery work. Non-matches return `{"status":"ignored","reason":"filter"}` with HTTP 200. |
+| `script` | No | Filter/transform script under `~/.hermes/scripts/`. The webhook payload is passed as JSON on stdin. JSON object stdout replaces the payload before templating; text stdout is exposed as `script_output`; empty stdout, `[SILENT]`, or a nonzero exit code ignores the webhook. |
+| `skills` | No | List of skill names to load for the agent run. |
+| `deliver` | No | Where to send the response: `github_comment`, `telegram`, `discord`, `slack`, `signal`, `sms`, `whatsapp`, `matrix`, `mattermost`, `homeassistant`, `email`, `dingtalk`, `feishu`, `wecom`, `weixin`, `bluebubbles`, `qqbot`, or `log` (default). |
+| `deliver_extra` | No | Additional delivery config — keys depend on `deliver` type (e.g. `repo`, `pr_number`, `chat_id`). Values support the same `{dot.notation}` templates as `prompt`. |
+| `deliver_only` | No | If `true`, skip the agent entirely — the rendered `prompt` template becomes the literal message that gets delivered. Zero LLM cost, sub-second delivery. See [Direct Delivery Mode](#direct-delivery-mode) for use cases. Requires `deliver` to be a real target (not `log`). |
 
 ### Full example
 
-``` prism-code
+``` yaml
 platforms:
   webhook:
     enabled: true
@@ -122,7 +122,7 @@ platforms:
 
 Use `filters` when a provider sends a broad event stream but only some payloads should wake the agent or trigger `deliver_only` delivery. Filters run after signature validation, body parsing, and `events`, but before prompt rendering, idempotency, agent dispatch, or direct delivery.
 
-``` prism-code
+``` yaml
 platforms:
   webhook:
     extra:
@@ -160,7 +160,7 @@ Use `script` when declarative filters are not enough. Scripts must live under `~
 
 The route payload is sent to stdin as JSON:
 
-``` prism-code
+``` python
 # ~/.hermes/scripts/todoist-hermes-label.py
 import json
 import sys
@@ -193,7 +193,7 @@ Prompts use dot-notation to access nested fields in the webhook payload:
 
 You can mix `{__raw__}` with regular template variables:
 
-``` prism-code
+``` yaml
 prompt: "PR #{pull_request.number} by {pull_request.user.login}: {__raw__}"
 ```
 
@@ -205,7 +205,7 @@ The same dot-notation templates work in `deliver_extra` values.
 
 When delivering webhook responses to Telegram, you can target a specific forum topic by including `message_thread_id` (or `thread_id`) in `deliver_extra`:
 
-``` prism-code
+``` yaml
 webhooks:
   routes:
     alerts:
@@ -242,7 +242,7 @@ Add the `github-pr` route to your `~/.hermes/config.yaml` as shown in the exampl
 
 The `github_comment` delivery type uses the GitHub CLI to post comments:
 
-``` prism-code
+``` bash
 gh auth login
 ```
 
@@ -266,7 +266,7 @@ GitLab webhooks work similarly but use a different authentication mechanism. Git
 
 ### 2. Add the route config
 
-``` prism-code
+``` yaml
 platforms:
   webhook:
     enabled: true
@@ -291,25 +291,25 @@ platforms:
 
 The `deliver` field controls where the agent's response goes after processing the webhook event.
 
-| Deliver Type     | Description                                                                                                                                                                                                     |
-|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `log`            | Logs the response to the gateway log output. This is the default and is useful for testing.                                                                                                                     |
+| Deliver Type | Description |
+|----|----|
+| `log` | Logs the response to the gateway log output. This is the default and is useful for testing. |
 | `github_comment` | Posts the response as a PR/issue comment via the `gh` CLI. Requires `deliver_extra.repo` and `deliver_extra.pr_number`. The `gh` CLI must be installed and authenticated on the gateway host (`gh auth login`). |
-| `telegram`       | Routes the response to Telegram. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                                |
-| `discord`        | Routes the response to Discord. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                                 |
-| `slack`          | Routes the response to Slack. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                                   |
-| `signal`         | Routes the response to Signal. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                                  |
-| `sms`            | Routes the response to SMS via Twilio. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                          |
-| `whatsapp`       | Routes the response to WhatsApp. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                                |
-| `matrix`         | Routes the response to Matrix. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                                  |
-| `mattermost`     | Routes the response to Mattermost. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                              |
-| `homeassistant`  | Routes the response to Home Assistant. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                          |
-| `email`          | Routes the response to Email. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                                   |
-| `dingtalk`       | Routes the response to DingTalk. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                                |
-| `feishu`         | Routes the response to Feishu/Lark. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                             |
-| `wecom`          | Routes the response to WeCom. Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                                   |
-| `weixin`         | Routes the response to Weixin (WeChat). Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                         |
-| `bluebubbles`    | Routes the response to BlueBubbles (iMessage). Uses the home channel, or specify `chat_id` in `deliver_extra`.                                                                                                  |
+| `telegram` | Routes the response to Telegram. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `discord` | Routes the response to Discord. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `slack` | Routes the response to Slack. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `signal` | Routes the response to Signal. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `sms` | Routes the response to SMS via Twilio. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `whatsapp` | Routes the response to WhatsApp. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `matrix` | Routes the response to Matrix. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `mattermost` | Routes the response to Mattermost. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `homeassistant` | Routes the response to Home Assistant. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `email` | Routes the response to Email. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `dingtalk` | Routes the response to DingTalk. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `feishu` | Routes the response to Feishu/Lark. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `wecom` | Routes the response to WeCom. Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `weixin` | Routes the response to Weixin (WeChat). Uses the home channel, or specify `chat_id` in `deliver_extra`. |
+| `bluebubbles` | Routes the response to BlueBubbles (iMessage). Uses the home channel, or specify `chat_id` in `deliver_extra`. |
 
 For cross-platform delivery, the target platform must also be enabled and connected in the gateway. If no `chat_id` is provided in `deliver_extra`, the response is sent to that platform's configured home channel.
 
@@ -337,7 +337,7 @@ Benefits:
 
 ### Example: Telegram push from Supabase
 
-``` prism-code
+``` yaml
 platforms:
   webhook:
     enabled: true
@@ -358,7 +358,7 @@ Your Supabase edge function signs the payload with HMAC-SHA256 and POSTs to `htt
 
 ### Example: Dynamic subscription via CLI
 
-``` prism-code
+``` bash
 hermes webhook subscribe antenna-matches \
   --deliver telegram \
   --deliver-chat-id "123456789" \
@@ -369,16 +369,16 @@ hermes webhook subscribe antenna-matches \
 
 ### Response codes
 
-| Status                      | Meaning                                                                                                                                                              |
-|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `200 OK`                    | Delivered successfully. Body: `{"status": "delivered", "route": "...", "target": "...", "delivery_id": "..."}`                                                       |
-| `200 OK` (status=duplicate) | Duplicate `X-GitHub-Delivery` ID within the idempotency TTL (1 hour). Not re-delivered.                                                                              |
-| `401 Unauthorized`          | HMAC signature invalid or missing.                                                                                                                                   |
-| `400 Bad Request`           | Malformed JSON body.                                                                                                                                                 |
-| `404 Not Found`             | Unknown route name.                                                                                                                                                  |
-| `413 Payload Too Large`     | Body exceeded `max_body_bytes`.                                                                                                                                      |
-| `429 Too Many Requests`     | Route rate limit exceeded.                                                                                                                                           |
-| `502 Bad Gateway`           | Target adapter rejected the message or raised. The error is logged server-side; the response body is a generic `Delivery failed` to avoid leaking adapter internals. |
+| Status | Meaning |
+|----|----|
+| `200 OK` | Delivered successfully. Body: `{"status": "delivered", "route": "...", "target": "...", "delivery_id": "..."}` |
+| `200 OK` (status=duplicate) | Duplicate `X-GitHub-Delivery` ID within the idempotency TTL (1 hour). Not re-delivered. |
+| `401 Unauthorized` | HMAC signature invalid or missing. |
+| `400 Bad Request` | Malformed JSON body. |
+| `404 Not Found` | Unknown route name. |
+| `413 Payload Too Large` | Body exceeded `max_body_bytes`. |
+| `429 Too Many Requests` | Route rate limit exceeded. |
+| `502 Bad Gateway` | Target adapter rejected the message or raised. The error is logged server-side; the response body is a generic `Delivery failed` to avoid leaking adapter internals. |
 
 ### Configuration gotchas
 
@@ -395,7 +395,7 @@ In addition to static routes in `config.yaml`, you can create webhook subscripti
 
 ### Create a subscription
 
-``` prism-code
+``` bash
 hermes webhook subscribe github-issues \
   --events "issues" \
   --prompt "New issue #{issue.number}: {issue.title}\nBy: {issue.user.login}\n\n{issue.body}" \
@@ -408,19 +408,19 @@ This returns the webhook URL and an auto-generated HMAC secret. Configure your s
 
 ### List subscriptions
 
-``` prism-code
+``` bash
 hermes webhook list
 ```
 
 ### Remove a subscription
 
-``` prism-code
+``` bash
 hermes webhook remove github-issues
 ```
 
 ### Test a subscription
 
-``` prism-code
+``` bash
 hermes webhook test github-issues
 hermes webhook test github-issues --payload '{"issue": {"number": 42, "title": "Test"}}'
 ```
@@ -464,7 +464,7 @@ Every route must have a secret — either set directly on the route or inherited
 
 Each route is rate-limited to **30 requests per minute** by default (fixed-window). Configure this globally:
 
-``` prism-code
+``` yaml
 platforms:
   webhook:
     extra:
@@ -481,7 +481,7 @@ Delivery IDs (from `X-GitHub-Delivery`, `X-Request-ID`, or a timestamp fallback)
 
 Payloads exceeding **1 MB** are rejected before the body is read. Configure this:
 
-``` prism-code
+``` yaml
 platforms:
   webhook:
     extra:
@@ -547,8 +547,8 @@ This is the same trust model that applies to everything the agent reads: web pag
 
 ## Environment Variables
 
-| Variable          | Description                                                               | Default  |
-|-------------------|---------------------------------------------------------------------------|----------|
-| `WEBHOOK_ENABLED` | Enable the webhook platform adapter                                       | `false`  |
-| `WEBHOOK_PORT`    | HTTP server port for receiving webhooks                                   | `8644`   |
-| `WEBHOOK_SECRET`  | Global HMAC secret (used as fallback when routes don't specify their own) | *(none)* |
+| Variable | Description | Default |
+|----|----|----|
+| `WEBHOOK_ENABLED` | Enable the webhook platform adapter | `false` |
+| `WEBHOOK_PORT` | HTTP server port for receiving webhooks | `8644` |
+| `WEBHOOK_SECRET` | Global HMAC secret (used as fallback when routes don't specify their own) | *(none)* |

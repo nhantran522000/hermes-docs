@@ -12,12 +12,12 @@ Gateway adapter only: no external dependencies
 
 This page covers the Email gateway adapter, which uses Python's built-in `imaplib`, `smtplib`, and `email` modules. No additional packages or external services are required for this gateway path.
 
-This is separate from the bundled [Himalaya email skill](/docs/user-guide/skills/bundled/email/email-himalaya), which lets the agent manage email through terminal commands and requires the external `himalaya` CLI plus a Himalaya config file.
+This is separate from the bundled [Himalaya email skill](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/email/email-himalaya), which lets the agent manage email through terminal commands and requires the external `himalaya` CLI plus a Himalaya config file.
 
-| Use case                                                                              | What to configure                  | External dependency                                 |
-|---------------------------------------------------------------------------------------|------------------------------------|-----------------------------------------------------|
-| Let people email the Hermes agent and receive replies                                 | Email gateway adapter on this page | None beyond an IMAP/SMTP email account              |
-| Let the agent inspect, compose, move, and manage mailbox messages from terminal tools | Himalaya email skill               | `himalaya` CLI and `~/.config/himalaya/config.toml` |
+| Use case | What to configure | External dependency |
+|----|----|----|
+| Let people email the Hermes agent and receive replies | Email gateway adapter on this page | None beyond an IMAP/SMTP email account |
+| Let the agent inspect, compose, move, and manage mailbox messages from terminal tools | Himalaya email skill | `himalaya` CLI and `~/.config/himalaya/config.toml` |
 
 ------------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ Most email providers support IMAP/SMTP. Check your provider's documentation for:
 
 The easiest way:
 
-``` prism-code
+``` bash
 hermes gateway setup
 ```
 
@@ -65,7 +65,7 @@ Select **Email** from the platform menu. The wizard prompts for your email addre
 
 Add to `~/.hermes/.env`:
 
-``` prism-code
+``` bash
 # Required
 EMAIL_ADDRESS=hermes@gmail.com
 EMAIL_PASSWORD=abcd efgh ijkl mnop    # App password (not your regular password)
@@ -86,7 +86,7 @@ EMAIL_HOME_ADDRESS=your@email.com      # Default delivery target for cron jobs
 
 ## Step 2: Start the Gateway
 
-``` prism-code
+``` bash
 hermes gateway              # Run in foreground
 hermes gateway install      # Install as a user service
 sudo hermes gateway install --system   # Linux only: boot-time system service
@@ -132,7 +132,7 @@ The agent can send file attachments in replies. Include `MEDIA:/path/to/file` in
 
 To ignore all incoming attachments (for malware protection or bandwidth savings), add to your `config.yaml`:
 
-``` prism-code
+``` yaml
 platforms:
   email:
     skip_attachments: true
@@ -159,15 +159,15 @@ warning
 
 ## Troubleshooting
 
-| Problem                                 | Solution                                                                                                                                           |
-|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| Problem | Solution |
+|----|----|
 | **"IMAP connection failed"** at startup | Verify `EMAIL_IMAP_HOST` and `EMAIL_IMAP_PORT`. Ensure IMAP is enabled on the account. For Gmail, enable it in Settings → Forwarding and POP/IMAP. |
-| **"SMTP connection failed"** at startup | Verify `EMAIL_SMTP_HOST` and `EMAIL_SMTP_PORT`. Check that your password is correct (use App Password for Gmail).                                  |
-| **Messages not received**               | Check `EMAIL_ALLOWED_USERS` includes the sender's email. Check spam folder — some providers flag automated replies.                                |
-| **"Authentication failed"**             | For Gmail, you must use an App Password, not your regular password. Ensure 2FA is enabled first.                                                   |
-| **Duplicate replies**                   | Ensure only one gateway instance is running. Check `hermes gateway status`.                                                                        |
-| **Slow response**                       | The default poll interval is 15 seconds. Reduce with `EMAIL_POLL_INTERVAL=5` for faster response (but more IMAP connections).                      |
-| **Replies not threading**               | The adapter uses In-Reply-To headers. Some email clients (especially web-based) may not thread correctly with automated messages.                  |
+| **"SMTP connection failed"** at startup | Verify `EMAIL_SMTP_HOST` and `EMAIL_SMTP_PORT`. Check that your password is correct (use App Password for Gmail). |
+| **Messages not received** | Check `EMAIL_ALLOWED_USERS` includes the sender's email. Check spam folder — some providers flag automated replies. |
+| **"Authentication failed"** | For Gmail, you must use an App Password, not your regular password. Ensure 2FA is enabled first. |
+| **Duplicate replies** | Ensure only one gateway instance is running. Check `hermes gateway status`. |
+| **Slow response** | The default poll interval is 15 seconds. Reduce with `EMAIL_POLL_INTERVAL=5` for faster response (but more IMAP connections). |
+| **Replies not threading** | The adapter uses In-Reply-To headers. Some email clients (especially web-based) may not thread correctly with automated messages. |
 
 ------------------------------------------------------------------------
 
@@ -186,15 +186,15 @@ warning
 
 ## Environment Variables Reference
 
-| Variable                | Required | Default | Description                               |
-|-------------------------|----------|---------|-------------------------------------------|
-| `EMAIL_ADDRESS`         | Yes      | —       | Agent's email address                     |
-| `EMAIL_PASSWORD`        | Yes      | —       | Email password or app password            |
-| `EMAIL_IMAP_HOST`       | Yes      | —       | IMAP server host (e.g., `imap.gmail.com`) |
-| `EMAIL_SMTP_HOST`       | Yes      | —       | SMTP server host (e.g., `smtp.gmail.com`) |
-| `EMAIL_IMAP_PORT`       | No       | `993`   | IMAP server port                          |
-| `EMAIL_SMTP_PORT`       | No       | `587`   | SMTP server port                          |
-| `EMAIL_POLL_INTERVAL`   | No       | `15`    | Seconds between inbox checks              |
-| `EMAIL_ALLOWED_USERS`   | No       | —       | Comma-separated allowed sender addresses  |
-| `EMAIL_HOME_ADDRESS`    | No       | —       | Default delivery target for cron jobs     |
-| `EMAIL_ALLOW_ALL_USERS` | No       | `false` | Allow all senders (not recommended)       |
+| Variable | Required | Default | Description |
+|----|----|----|----|
+| `EMAIL_ADDRESS` | Yes | — | Agent's email address |
+| `EMAIL_PASSWORD` | Yes | — | Email password or app password |
+| `EMAIL_IMAP_HOST` | Yes | — | IMAP server host (e.g., `imap.gmail.com`) |
+| `EMAIL_SMTP_HOST` | Yes | — | SMTP server host (e.g., `smtp.gmail.com`) |
+| `EMAIL_IMAP_PORT` | No | `993` | IMAP server port |
+| `EMAIL_SMTP_PORT` | No | `587` | SMTP server port |
+| `EMAIL_POLL_INTERVAL` | No | `15` | Seconds between inbox checks |
+| `EMAIL_ALLOWED_USERS` | No | — | Comma-separated allowed sender addresses |
+| `EMAIL_HOME_ADDRESS` | No | — | Default delivery target for cron jobs |
+| `EMAIL_ALLOW_ALL_USERS` | No | `false` | Allow all senders (not recommended) |

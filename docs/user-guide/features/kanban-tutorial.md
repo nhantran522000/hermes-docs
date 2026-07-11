@@ -6,29 +6,29 @@ last_crawled: 2026-07-11
 
 # Kanban tutorial
 
-A walkthrough of the four use-cases the Hermes Kanban system was designed for, with the dashboard open in a browser. If you haven't read the [Kanban overview](/docs/user-guide/features/kanban) yet, start there — this assumes you know what a task, run, assignee, and dispatcher are.
+A walkthrough of the four use-cases the Hermes Kanban system was designed for, with the dashboard open in a browser. If you haven't read the [Kanban overview](kanban.md) yet, start there — this assumes you know what a task, run, assignee, and dispatcher are.
 
 ## Setup
 
-``` prism-code
+``` bash
 hermes kanban init           # optional; first `hermes kanban <anything>` auto-inits
 hermes dashboard             # opens http://127.0.0.1:9119 in your browser
 # click Kanban in the left nav
 ```
 
-The dashboard is the most comfortable place for **you** to watch the system. Agent workers the dispatcher spawns never see the dashboard or the CLI — they drive the board through a dedicated `kanban_*` [toolset](/docs/user-guide/features/kanban#how-workers-interact-with-the-board) (`kanban_show`, `kanban_list`, `kanban_complete`, `kanban_block`, `kanban_heartbeat`, `kanban_comment`, `kanban_create`, `kanban_link`, `kanban_unblock`). All three surfaces — dashboard, CLI, worker tools — route through the same per-board SQLite DB (`~/.hermes/kanban.db` for the default board, `~/.hermes/kanban/boards/<slug>/kanban.db` for any board you create later), so each board is consistent no matter which side of the fence a change came from.
+The dashboard is the most comfortable place for **you** to watch the system. Agent workers the dispatcher spawns never see the dashboard or the CLI — they drive the board through a dedicated `kanban_*` [toolset](kanban.md#how-workers-interact-with-the-board) (`kanban_show`, `kanban_list`, `kanban_complete`, `kanban_block`, `kanban_heartbeat`, `kanban_comment`, `kanban_create`, `kanban_link`, `kanban_unblock`). All three surfaces — dashboard, CLI, worker tools — route through the same per-board SQLite DB (`~/.hermes/kanban.db` for the default board, `~/.hermes/kanban/boards/<slug>/kanban.db` for any board you create later), so each board is consistent no matter which side of the fence a change came from.
 
-This tutorial uses the `default` board throughout. If you want multiple isolated queues (one per project / repo / domain), see [Boards (multi-project)](/docs/user-guide/features/kanban#boards-multi-project) in the overview — the same CLI / dashboard / worker flows apply per board, and workers physically cannot see tasks on other boards.
+This tutorial uses the `default` board throughout. If you want multiple isolated queues (one per project / repo / domain), see [Boards (multi-project)](kanban.md#boards-multi-project) in the overview — the same CLI / dashboard / worker flows apply per board, and workers physically cannot see tasks on other boards.
 
 Throughout the tutorial, **code blocks labelled `bash` are commands *you* run.** Code blocks labelled `# worker tool calls` are what the spawned worker's model emits as tool calls — shown here so you can see the loop end-to-end, not because you'd ever run them yourself.
 
 ## The board at a glance
 
-![Kanban board overview](/docs/assets/images/01-board-overview-dd98ac39283d95534d6df59f90df98b0.png)
+![Kanban board overview](https://hermes-agent.nousresearch.com/docs/assets/images/01-board-overview-dd98ac39283d95534d6df59f90df98b0.png)
 
 Six columns, left to right:
 
-- **Triage** — raw ideas. By default the dispatcher auto-runs the **decomposer** on tasks here: the built-in decomposer uses `auxiliary.kanban_decomposer`, reads your profile roster + descriptions, and produces a graph of child tasks routed to the best-fit specialists. The original task is held alive as the parent so its assignee (`kanban.orchestrator_profile`, or the active default profile when unset) wakes back up to judge completion when everything finishes. Flip the **Orchestration: Auto/Manual** pill at the top of the kanban page to switch modes. In Manual mode click **⚗ Decompose** on a card, or run `hermes kanban decompose <id>` / `/kanban decompose <id>`. For single tasks that don't need fan-out, **✨ Specify** does a one-shot spec rewrite (goal, approach, acceptance criteria) and promotes to `todo`. Configure the models under `auxiliary.kanban_decomposer` and `auxiliary.triage_specifier` in `config.yaml`. See [Auto vs Manual orchestration](/docs/user-guide/features/kanban#auto-vs-manual-orchestration) in the main Kanban guide.
+- **Triage** — raw ideas. By default the dispatcher auto-runs the **decomposer** on tasks here: the built-in decomposer uses `auxiliary.kanban_decomposer`, reads your profile roster + descriptions, and produces a graph of child tasks routed to the best-fit specialists. The original task is held alive as the parent so its assignee (`kanban.orchestrator_profile`, or the active default profile when unset) wakes back up to judge completion when everything finishes. Flip the **Orchestration: Auto/Manual** pill at the top of the kanban page to switch modes. In Manual mode click **⚗ Decompose** on a card, or run `hermes kanban decompose <id>` / `/kanban decompose <id>`. For single tasks that don't need fan-out, **✨ Specify** does a one-shot spec rewrite (goal, approach, acceptance criteria) and promotes to `todo`. Configure the models under `auxiliary.kanban_decomposer` and `auxiliary.triage_specifier` in `config.yaml`. See [Auto vs Manual orchestration](kanban.md#auto-vs-manual-orchestration) in the main Kanban guide.
 - **Todo** — created but waiting on dependencies, or not yet assigned.
 - **Ready** — assigned and waiting for the dispatcher to claim.
 - **In progress** — a worker is actively running the task. With "Lanes by profile" on (the default), this column sub-groups by assignee so you can see at a glance what each worker is doing.
@@ -41,13 +41,13 @@ The top bar has filters for search, tenant, and assignee, plus a `Lanes by profi
 
 If the profile lanes are noisy, toggle "Lanes by profile" off and the In Progress column collapses to a single flat list ordered by claim time:
 
-![Board with lanes by profile off](/docs/assets/images/02-board-flat-019a7cf4f943c0ff4d95ffa7d579bf25.png)
+![Board with lanes by profile off](https://hermes-agent.nousresearch.com/docs/assets/images/02-board-flat-019a7cf4f943c0ff4d95ffa7d579bf25.png)
 
 ## Story 1 — Solo dev shipping a feature
 
 You're building a feature. Classic flow: design a schema, implement the API, write the tests. Three tasks with parent→child dependencies.
 
-``` prism-code
+``` bash
 SCHEMA=$(hermes kanban create "Design auth schema" \
     --assignee backend-dev --tenant auth-project --priority 2 \
     --body "Design the user/session/token schema for the auth module." \
@@ -69,7 +69,7 @@ Because `API` has `SCHEMA` as its parent, and `tests` has `API` as its parent, o
 
 On the next dispatcher tick (60s by default, or immediately if you hit **Nudge dispatcher**) the `backend-dev` profile spawns as a worker with `HERMES_KANBAN_TASK=$SCHEMA` in its env. Here's what the worker's tool-call loop looks like from inside the agent:
 
-``` prism-code
+``` python
 # worker tool calls — NOT commands you run
 kanban_show()
 # → returns title, body, worker_context, parents, prior attempts, comments
@@ -96,13 +96,13 @@ When `SCHEMA` hits `done`, the dependency engine promotes `API` to `ready` autom
 
 Click the completed schema task on the board and the drawer shows everything:
 
-![Solo dev — completed schema task drawer](/docs/assets/images/03-drawer-schema-task-217f2993df9ebe7c0f2a678df97d934e.png)
+![Solo dev — completed schema task drawer](https://hermes-agent.nousresearch.com/docs/assets/images/03-drawer-schema-task-217f2993df9ebe7c0f2a678df97d934e.png)
 
 The Run History section at the bottom is the key addition. One attempt: outcome `completed`, worker `@backend-dev`, duration, timestamp, and the handoff summary in full. The metadata blob (`changed_files`, `decisions`) is stored on the run too and surfaced to any downstream worker that reads this parent.
 
 You can inspect the same data from your terminal at any time — these commands are **you** peeking at the board, not the worker:
 
-``` prism-code
+``` bash
 hermes kanban show $SCHEMA
 hermes kanban runs $SCHEMA
 # #  OUTCOME       PROFILE       ELAPSED  STARTED
@@ -116,7 +116,7 @@ You have three workers (a translator, a transcriber, a copywriter) and a pile of
 
 Create the work:
 
-``` prism-code
+``` bash
 for lang in Spanish French German; do
     hermes kanban create "Translate homepage to $lang" \
         --assignee translator --tenant content-ops
@@ -133,13 +133,13 @@ done
 
 Start the gateway and walk away — it hosts the embedded dispatcher that picks up all three specialist profiles' tasks on the same kanban.db:
 
-``` prism-code
+``` bash
 hermes gateway start
 ```
 
 Now filter the board to `content-ops` (or just search for "Transcribe") and you get this:
 
-![Fleet view filtered to transcribe tasks](/docs/assets/images/07-fleet-transcribes-cf7345a3270df63f9336252cada8da61.png)
+![Fleet view filtered to transcribe tasks](https://hermes-agent.nousresearch.com/docs/assets/images/07-fleet-transcribes-cf7345a3270df63f9336252cada8da61.png)
 
 Two transcribes done, one running, two ready waiting for the next dispatcher tick. The In Progress column is grouped by profile (the "Lanes by profile" default) so you see each worker's active task without scanning a mixed list. The dispatcher will promote the next ready task to running as soon as the current one completes. With three daemons working on three assignee pools in parallel, the whole content queue drains without further human input.
 
@@ -151,13 +151,13 @@ This is where Kanban earns its keep over a flat TODO list. A PM writes a spec. A
 
 The dashboard view, filtered by `auth-project`:
 
-![Pipeline view for a multi-role feature](/docs/assets/images/08-pipeline-auth-2dc4dcc631cf371f649ad70ab1e71611.png)
+![Pipeline view for a multi-role feature](https://hermes-agent.nousresearch.com/docs/assets/images/08-pipeline-auth-2dc4dcc631cf371f649ad70ab1e71611.png)
 
 Three-stage chain visible at once: `Spec: password reset flow` (DONE, pm), `Implement password reset flow` (DONE, backend-dev), `Review password reset PR` (READY, reviewer). Each has its parent in green at the bottom and children as dependencies.
 
 The interesting one is the implementation task, because it was blocked and retried. Here's the full three-agent choreography, shown as the tool calls each worker's model makes:
 
-``` prism-code
+``` python
 # --- PM worker spawns on $SPEC and writes the acceptance criteria ---
 # worker tool calls
 kanban_show()
@@ -186,14 +186,14 @@ kanban_block(
 
 Now you (the human, or a separate reviewer profile) read the block reason, decide the fix direction is clear, and unblock from the dashboard's "Unblock" button — or from the CLI / slash command:
 
-``` prism-code
+``` bash
 hermes kanban unblock $IMPL
 # or from a chat: /kanban unblock $IMPL
 ```
 
 The dispatcher promotes `$IMPL` back to `ready` and, on the next tick, respawns the `backend-dev` worker. This second spawn is a **new run** on the same task:
 
-``` prism-code
+``` python
 # --- Engineer worker spawns on $IMPL (second attempt) ---
 # worker tool calls
 kanban_show()
@@ -217,7 +217,7 @@ kanban_complete(
 
 Click the implementation task. The drawer shows **two attempts**:
 
-![Implementation task with two runs — blocked then completed](/docs/assets/images/04b-drawer-retry-history-scrolled-356e4195a55572cfc522c5236f02c594.png)
+![Implementation task with two runs — blocked then completed](https://hermes-agent.nousresearch.com/docs/assets/images/04b-drawer-retry-history-scrolled-356e4195a55572cfc522c5236f02c594.png)
 
 - **Run 1** — `blocked` by `@backend-dev`. The review feedback sits right under the outcome: "password strength check missing, reset link isn't single-use (can be replayed within 30min)".
 - **Run 2** — `completed` by `@backend-dev`. Fresh summary, fresh metadata.
@@ -226,7 +226,7 @@ Each run is a row in `task_runs` with its own outcome, summary, and metadata. Re
 
 The reviewer picks up next. When they open `Review password reset PR`, they see:
 
-![Reviewer&#39;s drawer view of the pipeline](/docs/assets/images/09-drawer-pipeline-review-12ea45e97703570d5e889812347a0778.png)
+![Reviewer&#39;s drawer view of the pipeline](https://hermes-agent.nousresearch.com/docs/assets/images/09-drawer-pipeline-review-12ea45e97703570d5e889812347a0778.png)
 
 The parent link is the completed implementation. When the reviewer's worker spawns on `Review password reset PR` and calls `kanban_show()`, the returned `worker_context` includes the parent's most-recent-completed-run summary + metadata — so the reviewer reads "added zxcvbn strength check, reset tokens are now single-use" and has the list of changed files in hand before looking at a diff.
 
@@ -238,7 +238,7 @@ Real workers fail. Missing credentials, OOM kills, transient network errors. The
 
 A deploy task that can't spawn its worker because `AWS_ACCESS_KEY_ID` isn't set in the profile's environment:
 
-``` prism-code
+``` bash
 hermes kanban create "Deploy to staging (missing creds)" \
     --assignee deploy-bot --tenant ops \
     --max-retries 3
@@ -248,13 +248,13 @@ The dispatcher tries to spawn the worker. Spawn fails (`RuntimeError: AWS_ACCESS
 
 Click the blocked task:
 
-![Circuit breaker — 2 spawn_failed + 1 gave_up](/docs/assets/images/11-drawer-gave-up-04cdec442b239748a9904b8651efde1d.png)
+![Circuit breaker — 2 spawn_failed + 1 gave_up](https://hermes-agent.nousresearch.com/docs/assets/images/11-drawer-gave-up-04cdec442b239748a9904b8651efde1d.png)
 
 Three runs, all with the same error on the `error` field. The first two are `spawn_failed` (retryable), the third is `gave_up` (terminal). The event log above shows the full sequence: `created → claimed → spawn_failed → claimed → spawn_failed → claimed → gave_up`.
 
 On the terminal:
 
-``` prism-code
+``` bash
 hermes kanban runs t_ef5d
 # #   OUTCOME        PROFILE        ELAPSED  STARTED
 # 1   spawn_failed   deploy-bot          0s  2026-04-27 19:34
@@ -273,7 +273,7 @@ Sometimes the spawn succeeds but the worker process dies later — segfault, OOM
 
 The example in the seed data is a migration that was running out of memory:
 
-``` prism-code
+``` bash
 # Worker claims, starts scanning 2.4M rows, OOM kills it at ~2.3M
 # Dispatcher detects dead pid, releases claim, increments attempt counter
 # Retry with a chunked strategy succeeds
@@ -281,7 +281,7 @@ The example in the seed data is a migration that was running out of memory:
 
 The drawer shows the full two-attempt history:
 
-![Crash and recovery — 1 crashed + 1 completed](/docs/assets/images/06-drawer-crash-recovery-17edcbea131d965bb8dc7283e5622e35.png)
+![Crash and recovery — 1 crashed + 1 completed](https://hermes-agent.nousresearch.com/docs/assets/images/06-drawer-crash-recovery-17edcbea131d965bb8dc7283e5622e35.png)
 
 Run 1 — `crashed`, with the error `OOM kill at row 2.3M (process 99999 gone)`. Run 2 — `completed`, with `"strategy": "chunked with LIMIT + WHERE id > last_id"` in its metadata. The retrying worker saw the crash of run 1 in its context and picked a safer strategy; the metadata makes it obvious to a future observer (or postmortem writer) what changed.
 
@@ -302,13 +302,13 @@ The bulk-close guard exists because this data is per-run. `hermes kanban complet
 
 For completeness — here's the drawer of a task still in flight (the API implementation from Story 1, claimed by `backend-dev` but not yet complete):
 
-![Claimed, in-flight task](/docs/assets/images/10-drawer-in-flight-0b6c924e986c7862439f00d776e432f4.png)
+![Claimed, in-flight task](https://hermes-agent.nousresearch.com/docs/assets/images/10-drawer-in-flight-0b6c924e986c7862439f00d776e432f4.png)
 
 Status is `Running`. The active run appears in the Run History section with outcome `active` and no `ended_at`. If this worker dies or times out, the dispatcher closes this run with the appropriate outcome and opens a new one on the next claim — the attempt row never disappears.
 
 ## Next steps
 
-- [Kanban overview](/docs/user-guide/features/kanban) — the full data model, event vocabulary, and CLI reference.
+- [Kanban overview](kanban.md) — the full data model, event vocabulary, and CLI reference.
 - `hermes kanban --help` — every subcommand, every flag.
 - `hermes kanban watch --kinds completed,gave_up,timed_out` — live stream terminal events across the whole board.
 - `hermes kanban notify-subscribe <task> --platform telegram --chat-id <id>` — get a gateway ping when a specific task finishes.

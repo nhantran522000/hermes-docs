@@ -8,7 +8,7 @@ last_crawled: 2026-07-11
 
 Hermes Agent has three layers of resilience that keep your sessions running when providers hit issues:
 
-1.  **[Credential pools](/docs/user-guide/features/credential-pools)** — rotate across multiple API keys for the *same* provider (tried first)
+1.  **[Credential pools](credential-pools.md)** — rotate across multiple API keys for the *same* provider (tried first)
 2.  **Primary model fallback** — automatically switches to a *different* provider:model when your main model fails
 3.  **Auxiliary task fallback** — independent provider resolution for side tasks like vision, compression, and web extraction
 
@@ -22,7 +22,7 @@ When your main LLM provider encounters errors — rate limits, server overload, 
 
 The easiest path is the interactive manager:
 
-``` prism-code
+``` bash
 hermes fallback
 ```
 
@@ -30,7 +30,7 @@ hermes fallback
 
 If you'd rather edit the YAML directly, add a top-level `fallback_providers` list to `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 fallback_providers:
   - provider: openrouter
     model: anthropic/claude-sonnet-4
@@ -44,50 +44,50 @@ Each entry requires both `provider` and `model`. Entries missing either field ar
 
 ### Supported Providers
 
-| Provider                   | Value                            | Requirements                                                              |
-|----------------------------|----------------------------------|---------------------------------------------------------------------------|
-| OpenRouter                 | `openrouter`                     | `OPENROUTER_API_KEY`                                                      |
-| Nous Portal                | `nous`                           | `hermes setup --portal` (fresh) or `hermes auth add nous` (OAuth)         |
-| OpenAI Codex               | `openai-codex`                   | `hermes model` (ChatGPT OAuth)                                            |
-| GitHub Copilot             | `copilot`                        | `COPILOT_GITHUB_TOKEN`, `GH_TOKEN`, or `GITHUB_TOKEN`                     |
-| GitHub Copilot ACP         | `copilot-acp`                    | External process (editor integration)                                     |
-| Anthropic                  | `anthropic`                      | `ANTHROPIC_API_KEY` or Claude Code credentials                            |
-| z.ai / GLM                 | `zai`                            | `GLM_API_KEY`                                                             |
-| Kimi / Moonshot            | `kimi-coding`                    | `KIMI_API_KEY`                                                            |
-| MiniMax                    | `minimax`                        | `MINIMAX_API_KEY`                                                         |
-| MiniMax (China)            | `minimax-cn`                     | `MINIMAX_CN_API_KEY`                                                      |
-| DeepSeek                   | `deepseek`                       | `DEEPSEEK_API_KEY`                                                        |
-| NVIDIA NIM                 | `nvidia`                         | `NVIDIA_API_KEY` (optional: `NVIDIA_BASE_URL`)                            |
-| GMI Cloud                  | `gmi`                            | `GMI_API_KEY` (optional: `GMI_BASE_URL`)                                  |
-| StepFun                    | `stepfun`                        | `STEPFUN_API_KEY` (optional: `STEPFUN_BASE_URL`)                          |
-| Ollama Cloud               | `ollama-cloud`                   | `OLLAMA_API_KEY`                                                          |
-| Google AI Studio           | `gemini`                         | `GOOGLE_API_KEY` (alias: `GEMINI_API_KEY`)                                |
-| xAI (Grok)                 | `xai` (alias `grok`)             | `XAI_API_KEY` (optional: `XAI_BASE_URL`)                                  |
-| xAI Grok OAuth (SuperGrok) | `xai-oauth` (alias `grok-oauth`) | `hermes model` → xAI Grok OAuth (browser login; SuperGrok subscription)   |
-| AWS Bedrock                | `bedrock`                        | Standard boto3 auth (`AWS_REGION` + `AWS_PROFILE` or `AWS_ACCESS_KEY_ID`) |
-| Qwen Portal (OAuth)        | `qwen-oauth`                     | `hermes model` (Qwen Portal OAuth; optional: `HERMES_QWEN_BASE_URL`)      |
-| MiniMax (OAuth)            | `minimax-oauth`                  | `hermes model` (MiniMax portal OAuth)                                     |
-| OpenCode Zen               | `opencode-zen`                   | `OPENCODE_ZEN_API_KEY`                                                    |
-| OpenCode Go                | `opencode-go`                    | `OPENCODE_GO_API_KEY`                                                     |
-| Kilo Code                  | `kilocode`                       | `KILOCODE_API_KEY`                                                        |
-| Xiaomi MiMo                | `xiaomi`                         | `XIAOMI_API_KEY`                                                          |
-| Arcee AI                   | `arcee`                          | `ARCEEAI_API_KEY`                                                         |
-| GMI Cloud                  | `gmi`                            | `GMI_API_KEY`                                                             |
-| Alibaba / DashScope        | `alibaba`                        | `DASHSCOPE_API_KEY`                                                       |
-| Alibaba Coding Plan        | `alibaba-coding-plan`            | `ALIBABA_CODING_PLAN_API_KEY` (falls back to `DASHSCOPE_API_KEY`)         |
-| Kimi / Moonshot (China)    | `kimi-coding-cn`                 | `KIMI_CN_API_KEY`                                                         |
-| StepFun                    | `stepfun`                        | `STEPFUN_API_KEY`                                                         |
-| Tencent TokenHub           | `tencent-tokenhub`               | `TOKENHUB_API_KEY`                                                        |
-| Microsoft Foundry          | `azure-foundry`                  | `AZURE_FOUNDRY_API_KEY` + `AZURE_FOUNDRY_BASE_URL`                        |
-| LM Studio (local)          | `lmstudio`                       | `LM_API_KEY` (or none for local) + `LM_BASE_URL`                          |
-| Hugging Face               | `huggingface`                    | `HF_TOKEN`                                                                |
-| Custom endpoint            | `custom`                         | `base_url` + `key_env` (see below)                                        |
+| Provider | Value | Requirements |
+|----|----|----|
+| OpenRouter | `openrouter` | `OPENROUTER_API_KEY` |
+| Nous Portal | `nous` | `hermes setup --portal` (fresh) or `hermes auth add nous` (OAuth) |
+| OpenAI Codex | `openai-codex` | `hermes model` (ChatGPT OAuth) |
+| GitHub Copilot | `copilot` | `COPILOT_GITHUB_TOKEN`, `GH_TOKEN`, or `GITHUB_TOKEN` |
+| GitHub Copilot ACP | `copilot-acp` | External process (editor integration) |
+| Anthropic | `anthropic` | `ANTHROPIC_API_KEY` or Claude Code credentials |
+| z.ai / GLM | `zai` | `GLM_API_KEY` |
+| Kimi / Moonshot | `kimi-coding` | `KIMI_API_KEY` |
+| MiniMax | `minimax` | `MINIMAX_API_KEY` |
+| MiniMax (China) | `minimax-cn` | `MINIMAX_CN_API_KEY` |
+| DeepSeek | `deepseek` | `DEEPSEEK_API_KEY` |
+| NVIDIA NIM | `nvidia` | `NVIDIA_API_KEY` (optional: `NVIDIA_BASE_URL`) |
+| GMI Cloud | `gmi` | `GMI_API_KEY` (optional: `GMI_BASE_URL`) |
+| StepFun | `stepfun` | `STEPFUN_API_KEY` (optional: `STEPFUN_BASE_URL`) |
+| Ollama Cloud | `ollama-cloud` | `OLLAMA_API_KEY` |
+| Google AI Studio | `gemini` | `GOOGLE_API_KEY` (alias: `GEMINI_API_KEY`) |
+| xAI (Grok) | `xai` (alias `grok`) | `XAI_API_KEY` (optional: `XAI_BASE_URL`) |
+| xAI Grok OAuth (SuperGrok) | `xai-oauth` (alias `grok-oauth`) | `hermes model` → xAI Grok OAuth (browser login; SuperGrok subscription) |
+| AWS Bedrock | `bedrock` | Standard boto3 auth (`AWS_REGION` + `AWS_PROFILE` or `AWS_ACCESS_KEY_ID`) |
+| Qwen Portal (OAuth) | `qwen-oauth` | `hermes model` (Qwen Portal OAuth; optional: `HERMES_QWEN_BASE_URL`) |
+| MiniMax (OAuth) | `minimax-oauth` | `hermes model` (MiniMax portal OAuth) |
+| OpenCode Zen | `opencode-zen` | `OPENCODE_ZEN_API_KEY` |
+| OpenCode Go | `opencode-go` | `OPENCODE_GO_API_KEY` |
+| Kilo Code | `kilocode` | `KILOCODE_API_KEY` |
+| Xiaomi MiMo | `xiaomi` | `XIAOMI_API_KEY` |
+| Arcee AI | `arcee` | `ARCEEAI_API_KEY` |
+| GMI Cloud | `gmi` | `GMI_API_KEY` |
+| Alibaba / DashScope | `alibaba` | `DASHSCOPE_API_KEY` |
+| Alibaba Coding Plan | `alibaba-coding-plan` | `ALIBABA_CODING_PLAN_API_KEY` (falls back to `DASHSCOPE_API_KEY`) |
+| Kimi / Moonshot (China) | `kimi-coding-cn` | `KIMI_CN_API_KEY` |
+| StepFun | `stepfun` | `STEPFUN_API_KEY` |
+| Tencent TokenHub | `tencent-tokenhub` | `TOKENHUB_API_KEY` |
+| Microsoft Foundry | `azure-foundry` | `AZURE_FOUNDRY_API_KEY` + `AZURE_FOUNDRY_BASE_URL` |
+| LM Studio (local) | `lmstudio` | `LM_API_KEY` (or none for local) + `LM_BASE_URL` |
+| Hugging Face | `huggingface` | `HF_TOKEN` |
+| Custom endpoint | `custom` | `base_url` + `key_env` (see below) |
 
 ### Custom Endpoint Fallback
 
 For a custom OpenAI-compatible endpoint, add `base_url` and optionally `key_env`:
 
-``` prism-code
+``` yaml
 fallback_providers:
   - provider: custom
     model: my-local-model
@@ -126,7 +126,7 @@ Fallback is **turn-scoped**: each new user message starts with the primary model
 
 **OpenRouter as fallback for Anthropic native:**
 
-``` prism-code
+``` yaml
 model:
   provider: anthropic
   default: claude-sonnet-4-6
@@ -138,7 +138,7 @@ fallback_providers:
 
 **Nous Portal as fallback for OpenRouter:**
 
-``` prism-code
+``` yaml
 model:
   provider: openrouter
   default: anthropic/claude-opus-4
@@ -150,7 +150,7 @@ fallback_providers:
 
 **Local model as fallback for cloud:**
 
-``` prism-code
+``` yaml
 fallback_providers:
   - provider: custom
     model: llama-3.1-70b
@@ -160,7 +160,7 @@ fallback_providers:
 
 **Codex OAuth as fallback:**
 
-``` prism-code
+``` yaml
 fallback_providers:
   - provider: openai-codex
     model: gpt-5.3-codex
@@ -168,13 +168,13 @@ fallback_providers:
 
 ### Where Fallback Works
 
-| Context                                     | Fallback Supported                                                                    |
-|---------------------------------------------|---------------------------------------------------------------------------------------|
-| CLI sessions                                | ✔                                                                                     |
-| Messaging gateway (Telegram, Discord, etc.) | ✔                                                                                     |
-| Subagent delegation                         | ✔ (subagents inherit the parent fallback chain)                                       |
-| Cron jobs                                   | ✔ (cron agents inherit configured fallback providers)                                 |
-| Auxiliary tasks on `provider: auto`         | ✔ (try per-task fallback, then the main fallback chain before built-in aux discovery) |
+| Context | Fallback Supported |
+|----|----|
+| CLI sessions | ✔ |
+| Messaging gateway (Telegram, Discord, etc.) | ✔ |
+| Subagent delegation | ✔ (subagents inherit the parent fallback chain) |
+| Cron jobs | ✔ (cron agents inherit configured fallback providers) |
+| Auxiliary tasks on `provider: auto` | ✔ (try per-task fallback, then the main fallback chain before built-in aux discovery) |
 
 tip
 
@@ -188,22 +188,22 @@ Hermes uses separate lightweight models for side tasks. Each task has its own pr
 
 ### Tasks with Independent Provider Resolution
 
-| Task             | What It Does                                                                                         | Config Key                   |
-|------------------|------------------------------------------------------------------------------------------------------|------------------------------|
-| Vision           | Image analysis, browser screenshots                                                                  | `auxiliary.vision`           |
-| Web Extract      | Web page summarization                                                                               | `auxiliary.web_extract`      |
-| Compression      | Context compression summaries                                                                        | `auxiliary.compression`      |
-| Skills Hub       | Skill search and discovery                                                                           | `auxiliary.skills_hub`       |
-| MCP              | MCP helper operations                                                                                | `auxiliary.mcp`              |
-| Approval         | Smart command-approval classification                                                                | `auxiliary.approval`         |
-| Title Generation | Session title summaries                                                                              | `auxiliary.title_generation` |
+| Task | What It Does | Config Key |
+|----|----|----|
+| Vision | Image analysis, browser screenshots | `auxiliary.vision` |
+| Web Extract | Web page summarization | `auxiliary.web_extract` |
+| Compression | Context compression summaries | `auxiliary.compression` |
+| Skills Hub | Skill search and discovery | `auxiliary.skills_hub` |
+| MCP | MCP helper operations | `auxiliary.mcp` |
+| Approval | Smart command-approval classification | `auxiliary.approval` |
+| Title Generation | Session title summaries | `auxiliary.title_generation` |
 | Triage Specifier | `hermes kanban specify` / dashboard ✨ button — fleshes out a one-liner triage task into a real spec | `auxiliary.triage_specifier` |
 
 ### Auto-Detection Chain
 
 When a task's provider is set to `"auto"` (the default), Hermes first tries the main provider + main model for that auxiliary task. If that route is unavailable or later fails with a capacity-style error, Hermes now honors user-configured fallback policy before using the built-in discovery chain:
 
-``` prism-code
+``` text
 Main provider + main model → auxiliary.<task>.fallback_chain →
 fallback_providers / fallback_model → built-in auxiliary discovery chain
 ```
@@ -212,14 +212,14 @@ The task-specific chain is most precise and wins when present. The top-level `fa
 
 **Built-in text discovery chain (compression, web extract, title generation, etc.):**
 
-``` prism-code
+``` text
 OpenRouter → Nous Portal → Custom endpoint → Codex OAuth →
 API-key providers (z.ai, Kimi, MiniMax, Xiaomi MiMo, Hugging Face, Anthropic) → give up
 ```
 
 **Built-in vision discovery chain:**
 
-``` prism-code
+``` text
 Main provider (if vision-capable) → OpenRouter → Nous Portal →
 Codex OAuth → Anthropic → Custom endpoint → give up
 ```
@@ -230,7 +230,7 @@ Those built-in chains are a convenience fallback for users who have not declared
 
 Each task can be configured independently in `config.yaml`:
 
-``` prism-code
+``` yaml
 auxiliary:
   vision:
     provider: "auto"              # auto | openrouter | nous | codex | main | anthropic
@@ -262,7 +262,7 @@ Every task above follows the same **provider / model / base_url** pattern. Each 
 
 Context compression is configured under `auxiliary.compression`:
 
-``` prism-code
+``` yaml
 auxiliary:
   compression:
     provider: main                                    # Same provider options as other auxiliary tasks
@@ -272,7 +272,7 @@ auxiliary:
 
 And the primary fallback chain uses:
 
-``` prism-code
+``` yaml
 fallback_providers:
   - provider: openrouter
     model: anthropic/claude-sonnet-4
@@ -283,22 +283,22 @@ All three — auxiliary, compression, fallback — work the same way: set `provi
 
 ### Provider Options for Auxiliary Tasks
 
-These options apply to `auxiliary:`, `compression:`, and `fallback_providers:` entries only — `"main"` is **not** a valid value for your top-level `model.provider`. For custom endpoints, use `provider: custom` in your `model:` section (see [AI Providers](/docs/integrations/providers)).
+These options apply to `auxiliary:`, `compression:`, and `fallback_providers:` entries only — `"main"` is **not** a valid value for your top-level `model.provider`. For custom endpoints, use `provider: custom` in your `model:` section (see [AI Providers](../../integrations/providers.md)).
 
-| Provider       | Description                                                      | Requirements                                   |
-|----------------|------------------------------------------------------------------|------------------------------------------------|
-| `"auto"`       | Try providers in order until one works (default)                 | At least one provider configured               |
-| `"openrouter"` | Force OpenRouter                                                 | `OPENROUTER_API_KEY`                           |
-| `"nous"`       | Force Nous Portal                                                | `hermes auth`                                  |
-| `"codex"`      | Force Codex OAuth                                                | `hermes model` → Codex                         |
-| `"main"`       | Use whatever provider the main agent uses (auxiliary tasks only) | Active main provider configured                |
-| `"anthropic"`  | Force Anthropic native                                           | `ANTHROPIC_API_KEY` or Claude Code credentials |
+| Provider | Description | Requirements |
+|----|----|----|
+| `"auto"` | Try providers in order until one works (default) | At least one provider configured |
+| `"openrouter"` | Force OpenRouter | `OPENROUTER_API_KEY` |
+| `"nous"` | Force Nous Portal | `hermes auth` |
+| `"codex"` | Force Codex OAuth | `hermes model` → Codex |
+| `"main"` | Use whatever provider the main agent uses (auxiliary tasks only) | Active main provider configured |
+| `"anthropic"` | Force Anthropic native | `ANTHROPIC_API_KEY` or Claude Code credentials |
 
 ### Direct Endpoint Override
 
 For any auxiliary task, setting `base_url` bypasses provider resolution entirely and sends requests directly to that endpoint:
 
-``` prism-code
+``` yaml
 auxiliary:
   vision:
     base_url: "http://localhost:1234/v1"
@@ -327,7 +327,7 @@ For users on `provider: auto` (no explicit aux provider), the existing auto-dete
 
 If you want a different fallback ordering than "main agent model first", configure `fallback_chain` explicitly. Each entry needs at least `provider`; `model`, `base_url`, and `api_key` are optional.
 
-``` prism-code
+``` yaml
 auxiliary:
   vision:
     provider: glm
@@ -363,7 +363,7 @@ If your provider returns a different phrase for daily-quota exhaustion and Herme
 
 Context compression uses the `auxiliary.compression` config block to control which model and provider handles summarization:
 
-``` prism-code
+``` yaml
 auxiliary:
   compression:
     provider: "auto"                              # auto | openrouter | nous | main
@@ -382,7 +382,7 @@ If no provider is available for compression, Hermes drops middle conversation tu
 
 Subagents spawned by `delegate_task` inherit the parent agent's primary fallback chain. You can still route subagents to a different primary provider:model pair for cost optimization:
 
-``` prism-code
+``` yaml
 delegation:
   provider: "openrouter"                      # override provider for all subagents
   model: "google/gemini-3-flash-preview"      # override model
@@ -390,7 +390,7 @@ delegation:
   # api_key: "local-key"
 ```
 
-See [Subagent Delegation](/docs/user-guide/features/delegation) for full configuration details.
+See [Subagent Delegation](delegation.md) for full configuration details.
 
 ------------------------------------------------------------------------
 
@@ -398,7 +398,7 @@ See [Subagent Delegation](/docs/user-guide/features/delegation) for full configu
 
 Cron jobs inherit your configured `fallback_providers` chain (or legacy `fallback_model`) when they create an agent. To use a different primary provider for a cron job, configure `provider` and `model` overrides on the cron job itself:
 
-``` prism-code
+``` python
 cronjob(
     action="create",
     schedule="every 2h",
@@ -408,24 +408,24 @@ cronjob(
 )
 ```
 
-See [Scheduled Tasks (Cron)](/docs/user-guide/features/cron) for full configuration details.
+See [Scheduled Tasks (Cron)](cron.md) for full configuration details.
 
 ------------------------------------------------------------------------
 
 ## Summary
 
-| Feature                                   | Fallback Mechanism                                                                             | Config Location                            |
-|-------------------------------------------|------------------------------------------------------------------------------------------------|--------------------------------------------|
-| Main agent model                          | `fallback_providers` in config.yaml — per-turn failover on errors (primary restored each turn) | `fallback_providers:` (top-level list)     |
-| Auxiliary tasks (any) — auto users        | Full auto-detection chain (main agent model first, then provider chain) on capacity errors     | `auxiliary.<task>.provider: auto`          |
-| Auxiliary tasks (any) — explicit provider | `fallback_chain` (if set) → main agent model → warn + raise, on capacity errors only           | `auxiliary.<task>.fallback_chain`          |
-| Vision                                    | Layered (see above) + internal OpenRouter retry                                                | `auxiliary.vision`                         |
-| Web extraction                            | Layered (see above) + internal OpenRouter retry                                                | `auxiliary.web_extract`                    |
-| Context compression                       | Layered (see above); degrades to no-summary if all layers unavailable                          | `auxiliary.compression`                    |
-| Skills hub                                | Layered (see above)                                                                            | `auxiliary.skills_hub`                     |
-| MCP helpers                               | Layered (see above)                                                                            | `auxiliary.mcp`                            |
-| Approval classification                   | Layered (see above)                                                                            | `auxiliary.approval`                       |
-| Title generation                          | Layered (see above)                                                                            | `auxiliary.title_generation`               |
-| Triage specifier                          | Layered (see above)                                                                            | `auxiliary.triage_specifier`               |
-| Delegation                                | Provider override only (no automatic fallback)                                                 | `delegation.provider` / `delegation.model` |
-| Cron jobs                                 | Per-job provider override only (no automatic fallback)                                         | Per-job `provider` / `model`               |
+| Feature | Fallback Mechanism | Config Location |
+|----|----|----|
+| Main agent model | `fallback_providers` in config.yaml — per-turn failover on errors (primary restored each turn) | `fallback_providers:` (top-level list) |
+| Auxiliary tasks (any) — auto users | Full auto-detection chain (main agent model first, then provider chain) on capacity errors | `auxiliary.<task>.provider: auto` |
+| Auxiliary tasks (any) — explicit provider | `fallback_chain` (if set) → main agent model → warn + raise, on capacity errors only | `auxiliary.<task>.fallback_chain` |
+| Vision | Layered (see above) + internal OpenRouter retry | `auxiliary.vision` |
+| Web extraction | Layered (see above) + internal OpenRouter retry | `auxiliary.web_extract` |
+| Context compression | Layered (see above); degrades to no-summary if all layers unavailable | `auxiliary.compression` |
+| Skills hub | Layered (see above) | `auxiliary.skills_hub` |
+| MCP helpers | Layered (see above) | `auxiliary.mcp` |
+| Approval classification | Layered (see above) | `auxiliary.approval` |
+| Title generation | Layered (see above) | `auxiliary.title_generation` |
+| Triage specifier | Layered (see above) | `auxiliary.triage_specifier` |
+| Delegation | Provider override only (no automatic fallback) | `delegation.provider` / `delegation.model` |
+| Cron jobs | Per-job provider override only (no automatic fallback) | Per-job `provider` / `model` |

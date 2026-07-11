@@ -32,13 +32,13 @@ With worktrees, each agent gets:
 - Its **own branch and working directory**
 - Its **own Checkpoint Manager history** for `/rollback`
 
-See also: [Checkpoints and /rollback](/docs/user-guide/checkpoints-and-rollback).
+See also: [Checkpoints and /rollback](checkpoints-and-rollback.md).
 
 ## Quick Start: Creating a Worktree
 
 From your main repository (containing `.git/`), create a new worktree for a feature branch:
 
-``` prism-code
+``` bash
 # From the main repo root
 cd /path/to/your/repo
 
@@ -53,7 +53,7 @@ This creates:
 
 Now you can `cd` into the new worktree and run Hermes there:
 
-``` prism-code
+``` bash
 cd ../repo-feature
 
 # Start Hermes in the worktree
@@ -70,7 +70,7 @@ Hermes will:
 
 You can create multiple worktrees, each with its own branch:
 
-``` prism-code
+``` bash
 cd /path/to/your/repo
 
 git worktree add ../repo-experiment-a feature/hermes-a
@@ -79,7 +79,7 @@ git worktree add ../repo-experiment-b feature/hermes-b
 
 In separate terminals:
 
-``` prism-code
+``` bash
 # Terminal 1
 cd ../repo-experiment-a
 hermes
@@ -110,7 +110,7 @@ When you are done with an experiment:
     - Merge the branch into your main branch as usual.
 3.  Remove the worktree:
 
-``` prism-code
+``` bash
 cd /path/to/your/repo
 
 # Remove the worktree directory and its reference
@@ -132,7 +132,7 @@ Notes:
   - e.g. `feature/hermes-checkpoints-docs`, `feature/hermes-refactor-tests`.
 - **Commit frequently**
   - Use git commits for high‑level milestones.
-  - Use [checkpoints and /rollback](/docs/user-guide/checkpoints-and-rollback) as a safety net for tool‑driven edits in between.
+  - Use [checkpoints and /rollback](checkpoints-and-rollback.md) as a safety net for tool‑driven edits in between.
 - **Avoid running Hermes from the bare repo root when using worktrees**
   - Prefer the worktree directories instead, so each agent has a clear scope.
 
@@ -140,7 +140,7 @@ Notes:
 
 Hermes has a built‑in `-w` flag that **automatically creates a disposable git worktree** with its own branch. You don't need to set up worktrees manually — just `cd` into your repo and run:
 
-``` prism-code
+``` bash
 cd /path/to/your/repo
 hermes -w
 ```
@@ -153,7 +153,7 @@ Hermes will:
 
 This is the easiest way to get worktree isolation. You can also combine it with a single query:
 
-``` prism-code
+``` bash
 hermes -w -z "Fix issue #123"
 ```
 

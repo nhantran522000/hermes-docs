@@ -6,13 +6,13 @@ last_crawled: 2026-07-11
 
 # TUI
 
-The TUI is the modern front-end for Hermes — a terminal UI backed by the same Python runtime as the [Classic CLI](/docs/user-guide/cli). Same agent, same sessions, same slash commands; a cleaner, more responsive surface for interacting with them.
+The TUI is the modern front-end for Hermes — a terminal UI backed by the same Python runtime as the [Classic CLI](cli.md). Same agent, same sessions, same slash commands; a cleaner, more responsive surface for interacting with them.
 
 It's the recommended way to run Hermes interactively.
 
 ## Launch
 
-``` prism-code
+``` bash
 # Launch the TUI
 hermes --tui
 
@@ -30,7 +30,7 @@ hermes --tui --dev
 
 You can also enable it via env var:
 
-``` prism-code
+``` bash
 export HERMES_TUI=1
 hermes          # now uses the TUI
 hermes chat     # same
@@ -38,14 +38,14 @@ hermes chat     # same
 
 Or make it the persistent default in `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 display:
   interface: tui   # "cli" (default) or "tui"
 ```
 
 With `display.interface: tui`, a bare `hermes` (and `hermes chat`) launches the TUI. Explicit flags always win — run `hermes --cli` to drop back to the classic REPL for a single invocation, or `hermes --tui` / `HERMES_TUI=1` to force the TUI when the config default is `cli`.
 
-The classic CLI remains the shipped default. Anything documented in [CLI Interface](/docs/user-guide/cli) — slash commands, quick commands, skill preloading, personalities, multi-line input, interrupts — works in the TUI identically.
+The classic CLI remains the shipped default. Anything documented in [CLI Interface](cli.md) — slash commands, quick commands, skill preloading, personalities, multi-line input, interrupts — works in the TUI identically.
 
 ## Why the TUI
 
@@ -57,7 +57,7 @@ The classic CLI remains the shipped default. Anything documented in [CLI Interfa
 - **Alternate-screen rendering** — differential updates mean no flicker when streaming, no scrollback clutter after you quit.
 - **Composer affordances** — inline paste-collapse for long snippets, `Cmd+V` / `Ctrl+V` text paste with clipboard-image fallback, bracketed-paste safety, and image/file-path attachment normalization.
 
-Same [skins](/docs/user-guide/features/skins) and [personalities](/docs/user-guide/features/personality) apply. Switch mid-session with `/skin ares`, `/personality pirate`, and the UI repaints live. See [Skins & Themes](/docs/user-guide/features/skins) for the full list of customizable keys and which ones apply to classic vs TUI — the TUI honors the banner palette, UI colors, prompt glyph/color, session display, completion menu, selection bg, `tool_prefix`, and `help_header`.
+Same [skins](https://hermes-agent.nousresearch.com/docs/user-guide/features/skins) and [personalities](features/personality.md) apply. Switch mid-session with `/skin ares`, `/personality pirate`, and the UI repaints live. See [Skins & Themes](https://hermes-agent.nousresearch.com/docs/user-guide/features/skins) for the full list of customizable keys and which ones apply to classic vs TUI — the TUI honors the banner palette, UI colors, prompt glyph/color, session display, completion menu, selection bg, `tool_prefix`, and `help_header`.
 
 ### Collapsible banner sections
 
@@ -83,7 +83,7 @@ On first launch Hermes installs the TUI's Node dependencies into `ui-tui/node_mo
 
 Distributions that ship a prebuilt bundle (Nix, system packages) can point Hermes at it:
 
-``` prism-code
+``` bash
 export HERMES_TUI_DIR=/path/to/prebuilt/ui-tui
 hermes --tui
 ```
@@ -92,7 +92,7 @@ The directory must contain `dist/entry.js`.
 
 ## Keybindings
 
-Keybindings match the [Classic CLI](/docs/user-guide/cli#keybindings) exactly. The only behavioral differences:
+Keybindings match the [Classic CLI](cli.md#keybindings) exactly. The only behavioral differences:
 
 - **Mouse drag** highlights text with a uniform selection background.
 - **`Cmd+V` / `Ctrl+V`** first tries normal text paste, then falls back to OSC52/native clipboard reads, and finally image attach when the clipboard or pasted payload resolves to an image.
@@ -105,19 +105,19 @@ Keybindings match the [Classic CLI](/docs/user-guide/cli#keybindings) exactly. T
 
 All slash commands work unchanged. A few are TUI-owned — they produce richer output or render as overlays rather than inline panels:
 
-| Command                                    | TUI behavior                                                                                                                                                                                                                                                                                                               |
-|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `/help`                                    | Overlay with categorized commands, arrow-key navigable                                                                                                                                                                                                                                                                     |
-| `/sessions` (alias `/switch`)              | Live session switcher — list open TUI sessions, switch between them, close them, or start another one                                                                                                                                                                                                                      |
-| `/model`                                   | Modal model picker grouped by provider, with cost hints                                                                                                                                                                                                                                                                    |
-| `/skin`                                    | Live preview — theme change applies as you browse                                                                                                                                                                                                                                                                          |
-| `/details`                                 | Toggle verbose tool-call details (global or per-section)                                                                                                                                                                                                                                                                   |
-| `/usage`                                   | Rich token / cost / context panel                                                                                                                                                                                                                                                                                          |
-| `/agents` (alias `/tasks`)                 | Observability overlay — live subagent tree with kill/pause controls, per-branch cost / token / file rollups, turn-by-turn history                                                                                                                                                                                          |
-| `/reload`                                  | Re-reads `~/.hermes/.env` into the running TUI process so newly added API keys take effect without a restart                                                                                                                                                                                                               |
+| Command | TUI behavior |
+|----|----|
+| `/help` | Overlay with categorized commands, arrow-key navigable |
+| `/sessions` (alias `/switch`) | Live session switcher — list open TUI sessions, switch between them, close them, or start another one |
+| `/model` | Modal model picker grouped by provider, with cost hints |
+| `/skin` | Live preview — theme change applies as you browse |
+| `/details` | Toggle verbose tool-call details (global or per-section) |
+| `/usage` | Rich token / cost / context panel |
+| `/agents` (alias `/tasks`) | Observability overlay — live subagent tree with kill/pause controls, per-branch cost / token / file rollups, turn-by-turn history |
+| `/reload` | Re-reads `~/.hermes/.env` into the running TUI process so newly added API keys take effect without a restart |
 | `/mouse [on|off|toggle|wheel|buttons|all]` | Pick a mouse tracking preset at runtime (also persists to `display.mouse_tracking` in `config.yaml`). `wheel` (1000+1006) keeps scroll-wheel scrolling without the hover events that make tmux spam "No image in clipboard" over the prompt row; `buttons` adds drag-to-select; `all` is the default with hover-driven UI. |
 
-Every other slash command (including installed skills, quick commands, and personality toggles) works identically to the classic CLI. See [Slash Commands Reference](/docs/reference/slash-commands).
+Every other slash command (including installed skills, quick commands, and personality toggles) works identically to the classic CLI. See [Slash Commands Reference](../reference/slash-commands.md).
 
 ## Live session switcher
 
@@ -158,7 +158,7 @@ The TUI auto-detects light terminals and swaps to the light theme accordingly. D
 
 If you want the light theme permanently regardless of terminal:
 
-``` prism-code
+``` bash
 export HERMES_TUI_THEME=light
 ```
 
@@ -166,7 +166,7 @@ export HERMES_TUI_THEME=light
 
 The status-bar busy indicator is pluggable — the default rotates Hermes' kawaii face palette every 2.5 seconds during agent work. Pick a different style via config or the `/indicator` slash command:
 
-``` prism-code
+``` yaml
 display:
   tui_status_indicator: kaomoji   # kaomoji | emoji | unicode | ascii
 ```
@@ -177,7 +177,7 @@ Or in-session: `/indicator emoji` (etc.). Styles ship with matched glyph widths 
 
 By default, `hermes --tui` starts a fresh session each launch. To re-attach to the most recent TUI session automatically (useful when your terminal or SSH connection drops unexpectedly), opt in:
 
-``` prism-code
+``` bash
 export HERMES_TUI_RESUME=1          # most-recent TUI session
 # or:
 export HERMES_TUI_RESUME=<session-id>   # specific session
@@ -189,15 +189,15 @@ Unset the variable or pass `--resume <id>` explicitly to override on a per-launc
 
 The TUI's status line tracks agent state in real time:
 
-| Status                           | Meaning                                                                                                      |
-|----------------------------------|--------------------------------------------------------------------------------------------------------------|
-| `starting agent…`                | Session ID is live; tools and skills still coming online. You can type — messages queue and send when ready. |
-| `ready`                          | Agent is idle, accepting input.                                                                              |
-| `thinking…` / `running…`         | Agent is reasoning or running a tool.                                                                        |
-| `interrupted`                    | Current turn was cancelled; press Enter to send again.                                                       |
-| `forging session…` / `resuming…` | Initial connect or `--resume` handshake.                                                                     |
+| Status | Meaning |
+|----|----|
+| `starting agent…` | Session ID is live; tools and skills still coming online. You can type — messages queue and send when ready. |
+| `ready` | Agent is idle, accepting input. |
+| `thinking…` / `running…` | Agent is reasoning or running a tool. |
+| `interrupted` | Current turn was cancelled; press Enter to send again. |
+| `forging session…` / `resuming…` | Initial connect or `--resume` handshake. |
 
-The per-skin status-bar colors and thresholds are shared with the classic CLI — see [Skins](/docs/user-guide/features/skins) for customization.
+The per-skin status-bar colors and thresholds are shared with the classic CLI — see [Skins](https://hermes-agent.nousresearch.com/docs/user-guide/features/skins) for customization.
 
 The status line also shows:
 
@@ -213,7 +213,7 @@ The TUI respects all standard Hermes config: `~/.hermes/config.yaml`, profiles, 
 
 A handful of keys tune the TUI surface specifically:
 
-``` prism-code
+``` yaml
 display:
   skin: default              # any built-in or custom skin
   personality: helpful
@@ -258,7 +258,7 @@ Anything set explicitly in `display.sections` wins over the defaults, so existin
 
 Sessions are shared between the TUI and the classic CLI — both write to the same `~/.hermes/state.db`. You can start a session in one, resume in the other. The session picker surfaces sessions from both sources, with a source tag.
 
-See [Sessions](/docs/user-guide/sessions) for lifecycle, search, compression, and export.
+See [Sessions](sessions.md) for lifecycle, search, compression, and export.
 
 ## How the TUI talks to its gateway
 
@@ -268,7 +268,7 @@ You may see a `HERMES_TUI_GATEWAY_URL` env var referenced in the codebase or log
 
 There is no general "point any TUI at any standalone gateway port" mode. In particular, the OpenAI-compatible API server (`hermes gateway` / the `api_server` platform) does **not** serve `/api/ws` — it's the model-backend surface (`/v1/chat/completions`, `/v1/models`, …) and deliberately does not expose the TUI's JSON-RPC control channel. Setting `HERMES_TUI_GATEWAY_URL` to that port will 404.
 
-If you want multiple surfaces to share one set of sessions, use the shared `~/.hermes/state.db` (see [Sessions](/docs/user-guide/sessions)) or the web dashboard's embedded chat (see [Web Dashboard](/docs/user-guide/features/web-dashboard#chat)) — not a hand-set gateway URL.
+If you want multiple surfaces to share one set of sessions, use the shared `~/.hermes/state.db` (see [Sessions](sessions.md)) or the web dashboard's embedded chat (see [Web Dashboard](https://hermes-agent.nousresearch.com/docs/user-guide/features/web-dashboard#chat)) — not a hand-set gateway URL.
 
 ## Reverting to the classic CLI
 
@@ -278,8 +278,8 @@ If the TUI fails to launch (no Node, missing bundle, TTY issue), Hermes prints a
 
 ## See also
 
-- [CLI Interface](/docs/user-guide/cli) — full slash command and keybinding reference (shared)
-- [Sessions](/docs/user-guide/sessions) — resume, branch, and history
-- [Skins & Themes](/docs/user-guide/features/skins) — theme the banner, status bar, and overlays
-- [Voice Mode](/docs/user-guide/features/voice-mode) — works in both interfaces
-- [Configuration](/docs/user-guide/configuration) — all config keys
+- [CLI Interface](cli.md) — full slash command and keybinding reference (shared)
+- [Sessions](sessions.md) — resume, branch, and history
+- [Skins & Themes](https://hermes-agent.nousresearch.com/docs/user-guide/features/skins) — theme the banner, status bar, and overlays
+- [Voice Mode](features/voice-mode.md) — works in both interfaces
+- [Configuration](configuration.md) — all config keys

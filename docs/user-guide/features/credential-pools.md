@@ -8,7 +8,7 @@ last_crawled: 2026-07-11
 
 Credential pools let you register multiple API keys or OAuth tokens for the same provider. When one key hits a rate limit or billing quota, Hermes automatically rotates to the next healthy key — keeping your session alive without switching providers.
 
-This is different from [fallback providers](/docs/user-guide/features/fallback-providers), which switch to a *different* provider entirely. Credential pools are same-provider rotation; fallback providers are cross-provider failover. Pools are tried first — if all pool keys are exhausted, *then* the fallback provider activates.
+This is different from [fallback providers](fallback-providers.md), which switch to a *different* provider entirely. Credential pools are same-provider rotation; fallback providers are cross-provider failover. Pools are tried first — if all pool keys are exhausted, *then* the fallback provider activates.
 
 Key rotation resets the prompt cache
 
@@ -16,11 +16,11 @@ Provider-side prompt caches (Anthropic, OpenAI, OpenRouter) are scoped to the ac
 
 tip
 
-Credential pools are mainly for API-key providers (OpenRouter, Anthropic). A single [Nous Portal](/docs/integrations/nous-portal) OAuth covers 300+ models, so most users don't need a pool when on Portal.
+Credential pools are mainly for API-key providers (OpenRouter, Anthropic). A single [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal) OAuth covers 300+ models, so most users don't need a pool when on Portal.
 
 ## How It Works
 
-``` prism-code
+``` text
 Your request
   → Pick key from pool (round_robin / least_used / fill_first / random)
   → Send to provider
@@ -43,7 +43,7 @@ Your request
 
 If you already have an API key set in `.env`, Hermes auto-discovers it as a 1-key pool. To benefit from pooling, add more keys:
 
-``` prism-code
+``` bash
 # Add a second OpenRouter key
 hermes auth add openrouter --api-key sk-or-v1-your-second-key
 
@@ -57,13 +57,13 @@ hermes auth add anthropic --type oauth
 
 Check your pools:
 
-``` prism-code
+``` bash
 hermes auth list
 ```
 
 Output:
 
-``` prism-code
+``` text
 openrouter (2 credentials):
   #1  OPENROUTER_API_KEY   api_key env:OPENROUTER_API_KEY ←
   #2  backup-key           api_key manual
@@ -80,13 +80,13 @@ The `←` marks the currently selected credential.
 
 Run `hermes auth` with no subcommand for an interactive wizard:
 
-``` prism-code
+``` bash
 hermes auth
 ```
 
 This shows your full pool status and offers a menu:
 
-``` prism-code
+``` text
 What would you like to do?
   1. Add a credential
   2. Remove a credential
@@ -97,7 +97,7 @@ What would you like to do?
 
 For providers that support both API keys and OAuth (Anthropic, Nous, Codex), the add flow asks which type:
 
-``` prism-code
+``` text
 anthropic supports both API keys and OAuth login.
   1. API key (paste a key from the provider dashboard)
   2. OAuth login (authenticate via browser)
@@ -106,44 +106,44 @@ Type [1/2]:
 
 ## CLI Commands
 
-| Command                                                     | Description                                 |
-|-------------------------------------------------------------|---------------------------------------------|
-| `hermes auth`                                               | Interactive pool management wizard          |
-| `hermes auth list`                                          | Show all pools and credentials              |
-| `hermes auth list <provider>`                               | Show a specific provider's pool             |
-| `hermes auth add <provider>`                                | Add a credential (prompts for type and key) |
-| `hermes auth add <provider> --type api-key --api-key <key>` | Add an API key non-interactively            |
-| `hermes auth add <provider> --type oauth`                   | Add an OAuth credential via browser login   |
-| `hermes auth remove <provider> <index>`                     | Remove credential by 1-based index          |
-| `hermes auth reset <provider>`                              | Clear all cooldowns/exhaustion status       |
+| Command | Description |
+|----|----|
+| `hermes auth` | Interactive pool management wizard |
+| `hermes auth list` | Show all pools and credentials |
+| `hermes auth list <provider>` | Show a specific provider's pool |
+| `hermes auth add <provider>` | Add a credential (prompts for type and key) |
+| `hermes auth add <provider> --type api-key --api-key <key>` | Add an API key non-interactively |
+| `hermes auth add <provider> --type oauth` | Add an OAuth credential via browser login |
+| `hermes auth remove <provider> <index>` | Remove credential by 1-based index |
+| `hermes auth reset <provider>` | Clear all cooldowns/exhaustion status |
 
 ## Rotation Strategies
 
 Configure via `hermes auth` → "Set rotation strategy" or in `config.yaml`:
 
-``` prism-code
+``` yaml
 credential_pool_strategies:
   openrouter: round_robin
   anthropic: least_used
 ```
 
-| Strategy               | Behavior                                                              |
-|------------------------|-----------------------------------------------------------------------|
+| Strategy | Behavior |
+|----|----|
 | `fill_first` (default) | Use the first healthy key until it's exhausted, then move to the next |
-| `round_robin`          | Cycle through keys evenly, rotating after each selection              |
-| `least_used`           | Always pick the key with the lowest request count                     |
-| `random`               | Random selection among healthy keys                                   |
+| `round_robin` | Cycle through keys evenly, rotating after each selection |
+| `least_used` | Always pick the key with the lowest request count |
+| `random` | Random selection among healthy keys |
 
 ## Error Recovery
 
 The pool handles different errors differently:
 
-| Error                  | Behavior                                                                    | Cooldown |
-|------------------------|-----------------------------------------------------------------------------|----------|
-| **429 Rate Limit**     | Retry same key once (transient). Second consecutive 429 rotates to next key | 1 hour   |
-| **402 Billing/Quota**  | Immediately rotate to next key                                              | 24 hours |
-| **401 Auth Expired**   | Try refreshing the OAuth token first. Rotate only if refresh fails          | —        |
-| **All keys exhausted** | Fall through to `fallback_model` if configured                              | —        |
+| Error | Behavior | Cooldown |
+|----|----|----|
+| **429 Rate Limit** | Retry same key once (transient). Second consecutive 429 rotates to next key | 1 hour |
+| **402 Billing/Quota** | Immediately rotate to next key | 24 hours |
+| **401 Auth Expired** | Try refreshing the OAuth token first. Rotate only if refresh fails | — |
+| **All keys exhausted** | Fall through to `fallback_model` if configured | — |
 
 The `has_retried_429` flag resets on every successful API call, so a single transient 429 doesn't trigger rotation.
 
@@ -153,7 +153,7 @@ Custom OpenAI-compatible endpoints (Together.ai, RunPod, local servers) get thei
 
 When you set up a custom endpoint via `hermes model`, it auto-generates a name like "Together.ai" or "Local (localhost:8080)". This name becomes the pool key.
 
-``` prism-code
+``` bash
 # After setting up a custom endpoint via hermes model:
 hermes auth list
 # Shows:
@@ -166,7 +166,7 @@ hermes auth add Together.ai --api-key sk-together-second-key
 
 Custom endpoint pools are stored in `auth.json` under `credential_pool` with a `custom:` prefix:
 
-``` prism-code
+``` json
 {
   "credential_pool": {
     "openrouter": [...],
@@ -179,14 +179,14 @@ Custom endpoint pools are stored in `auth.json` under `credential_pool` with a `
 
 Hermes automatically discovers credentials from multiple sources and seeds the pool on startup:
 
-| Source                   | Example                                   | Auto-seeded?           |
-|--------------------------|-------------------------------------------|------------------------|
-| Environment variables    | `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY` | Yes                    |
-| OAuth tokens (auth.json) | Codex device code, Nous device code       | Yes                    |
-| Claude Code credentials  | `~/.claude/.credentials.json`             | Yes (Anthropic)        |
-| Hermes PKCE OAuth        | `~/.hermes/auth.json`                     | Yes (Anthropic)        |
-| Custom endpoint config   | `model.api_key` in config.yaml            | Yes (custom endpoints) |
-| Manual entries           | Added via `hermes auth add`               | Persisted in auth.json |
+| Source | Example | Auto-seeded? |
+|----|----|----|
+| Environment variables | `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY` | Yes |
+| OAuth tokens (auth.json) | Codex device code, Nous device code | Yes |
+| Claude Code credentials | `~/.claude/.credentials.json` | Yes (Anthropic) |
+| Hermes PKCE OAuth | `~/.hermes/auth.json` | Yes (Anthropic) |
+| Custom endpoint config | `model.api_key` in config.yaml | Yes (custom endpoints) |
+| Manual entries | Added via `hermes auth add` | Persisted in auth.json |
 
 Auto-seeded entries are updated on each pool load — if you remove an env var, its pool entry is automatically pruned. Manual entries (added via `hermes auth add`) are never auto-pruned.
 
@@ -221,7 +221,7 @@ The credential pool integrates at the provider resolution layer:
 
 Pool state is stored in `~/.hermes/auth.json` under the `credential_pool` key:
 
-``` prism-code
+``` json
 {
   "version": 1,
   "credential_pool": {
@@ -256,7 +256,7 @@ The OpenRouter entry above was borrowed from an external source, so the raw key 
 
 Strategies are stored in `config.yaml` (not `auth.json`):
 
-``` prism-code
+``` yaml
 credential_pool_strategies:
   openrouter: round_robin
   anthropic: least_used

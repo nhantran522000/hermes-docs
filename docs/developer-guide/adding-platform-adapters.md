@@ -17,7 +17,7 @@ There are two ways to add a platform:
 
 ## Architecture Overview
 
-``` prism-code
+``` text
 User ↔ Messaging Platform ↔ Platform Adapter ↔ Gateway Runner ↔ AIAgent
 ```
 
@@ -35,7 +35,7 @@ Inbound messages are received by the adapter and forwarded via `self.handle_mess
 
 The plugin system lets you add a platform adapter without modifying any core Hermes code. Your plugin is a directory with two files:
 
-``` prism-code
+``` text
 ~/.hermes/plugins/my-platform/
   plugin.yaml      # Plugin metadata
   adapter.py       # Adapter class + register() entry point
@@ -45,7 +45,7 @@ The plugin system lets you add a platform adapter without modifying any core Her
 
 Plugin metadata. The `requires_env` and `optional_env` blocks auto-populate `hermes config` UI entries (see [Surfacing Env Vars](#surfacing-env-vars-in-hermes-config) below).
 
-``` prism-code
+``` yaml
 name: my-platform
 label: My Platform
 kind: platform
@@ -66,7 +66,7 @@ optional_env:
 
 ### adapter.py
 
-``` prism-code
+``` python
 import os
 from gateway.platforms.base import (
     BasePlatformAdapter, SendResult, MessageEvent, MessageType,
@@ -157,7 +157,7 @@ def register(ctx):
 
 Users configure the platform in `config.yaml`:
 
-``` prism-code
+``` yaml
 gateway:
   platforms:
     my_platform:
@@ -173,34 +173,34 @@ Or via environment variables (which the adapter reads in `__init__`).
 
 When you call `ctx.register_platform()`, the following integration points are handled for you — no core code changes needed:
 
-| Integration point                          | How it works                                                                |
-|--------------------------------------------|-----------------------------------------------------------------------------|
-| Gateway adapter creation                   | Registry checked before built-in if/elif chain                              |
-| Config parsing                             | `Platform._missing_()` accepts any platform name                            |
-| Connected platform validation              | Registry `validate_config()` called                                         |
-| User authorization                         | `allowed_users_env` / `allow_all_env` checked                               |
-| Env-only auto-enable                       | `env_enablement_fn` seeds `PlatformConfig.extra` + `home_channel`           |
-| YAML config bridge                         | `apply_yaml_config_fn` translates `config.yaml` keys into env vars / extras |
-| Cron delivery                              | `cron_deliver_env_var` makes `deliver=<name>` work                          |
-| `hermes config` UI entries                 | `requires_env` / `optional_env` in `plugin.yaml` auto-populate              |
-| send engine (`tools/send_message_tool.py`) | Routes through live gateway adapter                                         |
-| Webhook cross-platform delivery            | Registry checked for known platforms                                        |
-| `/update` command access                   | `allow_update_command` flag                                                 |
-| Channel directory                          | Plugin platforms included in enumeration                                    |
-| System prompt hints                        | `platform_hint` injected into LLM context                                   |
-| Message chunking                           | `max_message_length` for smart splitting                                    |
-| PII redaction                              | `pii_safe` flag                                                             |
-| `hermes status`                            | Shows plugin platforms with `(plugin)` tag                                  |
-| `hermes gateway setup`                     | Plugin platforms appear in setup menu                                       |
-| `hermes tools` / `hermes skills`           | Plugin platforms in per-platform config                                     |
-| Token lock (multi-profile)                 | Use `acquire_scoped_lock()` in your `connect()`                             |
-| Orphaned config warning                    | Descriptive log when plugin is missing                                      |
+| Integration point | How it works |
+|----|----|
+| Gateway adapter creation | Registry checked before built-in if/elif chain |
+| Config parsing | `Platform._missing_()` accepts any platform name |
+| Connected platform validation | Registry `validate_config()` called |
+| User authorization | `allowed_users_env` / `allow_all_env` checked |
+| Env-only auto-enable | `env_enablement_fn` seeds `PlatformConfig.extra` + `home_channel` |
+| YAML config bridge | `apply_yaml_config_fn` translates `config.yaml` keys into env vars / extras |
+| Cron delivery | `cron_deliver_env_var` makes `deliver=<name>` work |
+| `hermes config` UI entries | `requires_env` / `optional_env` in `plugin.yaml` auto-populate |
+| send engine (`tools/send_message_tool.py`) | Routes through live gateway adapter |
+| Webhook cross-platform delivery | Registry checked for known platforms |
+| `/update` command access | `allow_update_command` flag |
+| Channel directory | Plugin platforms included in enumeration |
+| System prompt hints | `platform_hint` injected into LLM context |
+| Message chunking | `max_message_length` for smart splitting |
+| PII redaction | `pii_safe` flag |
+| `hermes status` | Shows plugin platforms with `(plugin)` tag |
+| `hermes gateway setup` | Plugin platforms appear in setup menu |
+| `hermes tools` / `hermes skills` | Plugin platforms in per-platform config |
+| Token lock (multi-profile) | Use `acquire_scoped_lock()` in your `connect()` |
+| Orphaned config warning | Descriptive log when plugin is missing |
 
 ## Env-Driven Auto-Configuration
 
 Most users set up a platform by dropping env vars into `~/.hermes/.env` rather than editing `config.yaml`. The `env_enablement_fn` hook lets your plugin pick those env vars up **before** the adapter is constructed, so `hermes gateway status`, `get_connected_platforms()`, and cron delivery see the correct state without instantiating the platform SDK.
 
-``` prism-code
+``` python
 def _env_enablement() -> dict | None:
     """Seed PlatformConfig.extra from env vars.
 
@@ -241,7 +241,7 @@ def register(ctx):
 
 Some users prefer setting `config.yaml` keys (`my_platform.require_mention`, `my_platform.allowed_channels`, etc.) over env vars. The `apply_yaml_config_fn` hook lets your plugin own this translation instead of forcing core `gateway/config.py` to know your platform's YAML schema.
 
-``` prism-code
+``` python
 import os
 
 def _apply_yaml_config(yaml_cfg: dict, platform_cfg: dict) -> dict | None:
@@ -279,7 +279,7 @@ Exceptions raised by the hook are swallowed and logged at debug level — a misb
 
 To let `deliver=my_platform` cron jobs route to a configured home channel, set `cron_deliver_env_var` to the env var name that holds the default chat/room/channel ID:
 
-``` prism-code
+``` python
 ctx.register_platform(
     name="my_platform",
     ...
@@ -293,7 +293,7 @@ The scheduler reads this env var when resolving the home target for `deliver=my_
 
 `cron_deliver_env_var` makes your platform a recognized `deliver=` target. To make the actual send succeed when the cron job runs in a separate process from the gateway (i.e., `hermes cron run` separate from `hermes gateway`), register a `standalone_sender_fn`:
 
-``` prism-code
+``` python
 async def _standalone_send(
     pconfig,
     chat_id,
@@ -324,7 +324,7 @@ The function receives the same `pconfig` and `chat_id` that the live adapter wou
 
 `hermes_cli/config.py` scans `plugins/platforms/*/plugin.yaml` at import time and auto-populates `OPTIONAL_ENV_VARS` from `requires_env` and (optional) `optional_env` blocks. Use the rich-dict form to contribute proper descriptions, prompts, password flags, and URLs — the CLI setup UI picks them up for free.
 
-``` prism-code
+``` yaml
 # plugins/platforms/my_platform/plugin.yaml
 name: my_platform-platform
 label: My Platform
@@ -372,7 +372,7 @@ These are real constraints the base `BasePlatformAdapter` can't anticipate. The 
 
 `BasePlatformAdapter._keep_typing` is the typing-indicator heartbeat — it runs as a background task while the LLM is generating, and is cancelled when the response is delivered. To layer a platform-specific behavior at a threshold (e.g. send a "still thinking" bubble at 45s), override `_keep_typing` in your adapter, schedule your own task alongside `super()._keep_typing()`, and tear it down in `finally`:
 
-``` prism-code
+``` python
 class LineAdapter(BasePlatformAdapter):
     async def _keep_typing(self, chat_id: str, *args, **kwargs) -> None:
         if self.slow_response_threshold <= 0:
@@ -416,7 +416,7 @@ If your slow-response UX caches the response for later retrieval (LINE's postbac
 2.  **System busy-ack** (`⚡ Interrupting`, `⏳ Queued`, `⏩ Steered`) → bypass the cache and send visibly so the user sees the gateway's response to their input.
 3.  **Normal response** → send via reply-token-or-push as usual.
 
-``` prism-code
+``` python
 async def send(self, chat_id: str, content: str, **kw) -> SendResult:
     if _is_system_bypass(content):
         return await self._send_text_chunks(chat_id, content, force_push=False)
@@ -463,7 +463,7 @@ This checklist is for adding a platform directly to the Hermes core codebase —
 
 Add your platform to the `Platform` enum in `gateway/config.py`:
 
-``` prism-code
+``` python
 class Platform(str, Enum):
     # ... existing platforms ...
     NEWPLAT = "newplat"
@@ -473,7 +473,7 @@ class Platform(str, Enum):
 
 Create `plugins/platforms/newplat/adapter.py`:
 
-``` prism-code
+``` python
 from gateway.config import Platform, PlatformConfig
 from gateway.platforms.base import (
     BasePlatformAdapter, MessageEvent, MessageType, SendResult,
@@ -509,7 +509,7 @@ class NewPlatAdapter(BasePlatformAdapter):
 
 For inbound messages, build a `MessageEvent` and call `self.handle_message(event)`:
 
-``` prism-code
+``` python
 source = self.build_source(
     chat_id=chat_id,
     chat_name=name,
@@ -573,7 +573,7 @@ Five touchpoints:
 
 **`agent/prompt_builder.py`** — If your platform has specific rendering limitations (no markdown, message length limits, etc.), add an entry to the `_PLATFORM_HINTS` dict. This injects platform-specific guidance into the system prompt:
 
-``` prism-code
+``` python
 _PLATFORM_HINTS = {
     # ...
     "newplat": (
@@ -596,22 +596,22 @@ Create `tests/gateway/test_newplat.py` covering:
 
 ### 11. Documentation
 
-| File                                                | What to add                                                                                        |
-|-----------------------------------------------------|----------------------------------------------------------------------------------------------------|
-| `website/docs/user-guide/messaging/newplat.md`      | Full platform setup page                                                                           |
-| `website/docs/user-guide/messaging/index.md`        | Platform comparison table, architecture diagram, toolsets table, security section, next-steps link |
-| `website/docs/reference/environment-variables.md`   | All NEWPLAT\_\* env vars                                                                           |
-| `website/docs/reference/toolsets-reference.md`      | hermes-newplat toolset                                                                             |
-| `website/docs/integrations/index.md`                | Platform link                                                                                      |
-| `website/sidebars.ts`                               | Sidebar entry for the docs page                                                                    |
-| `website/docs/developer-guide/architecture.md`      | Adapter count + listing                                                                            |
-| `website/docs/developer-guide/gateway-internals.md` | Adapter file listing                                                                               |
+| File | What to add |
+|----|----|
+| `website/docs/user-guide/messaging/newplat.md` | Full platform setup page |
+| `website/docs/user-guide/messaging/index.md` | Platform comparison table, architecture diagram, toolsets table, security section, next-steps link |
+| `website/docs/reference/environment-variables.md` | All NEWPLAT\_\* env vars |
+| `website/docs/reference/toolsets-reference.md` | hermes-newplat toolset |
+| `website/docs/integrations/index.md` | Platform link |
+| `website/sidebars.ts` | Sidebar entry for the docs page |
+| `website/docs/developer-guide/architecture.md` | Adapter count + listing |
+| `website/docs/developer-guide/gateway-internals.md` | Adapter file listing |
 
 ## Parity Audit
 
 Before marking a new platform PR as complete, run a parity audit against an established platform:
 
-``` prism-code
+``` bash
 # Find every .py file mentioning the reference platform
 search_files "bluebubbles" output_mode="files_only" file_glob="*.py"
 
@@ -629,7 +629,7 @@ Repeat for `.md` and `.ts` files. Investigate each gap — is it a platform enum
 
 If your adapter uses long-polling (like Telegram or Weixin), use a polling loop task:
 
-``` prism-code
+``` python
 async def connect(self):
     self._poll_task = asyncio.create_task(self._poll_loop())
     self._mark_connected()
@@ -645,7 +645,7 @@ async def _poll_loop(self):
 
 If the platform pushes messages to your endpoint (like WeCom Callback), run an HTTP server:
 
-``` prism-code
+``` python
 async def connect(self):
     self._app = web.Application()
     self._app.router.add_post("/callback", self._handle_callback)
@@ -664,7 +664,7 @@ For platforms with tight response deadlines (e.g., WeCom's 5-second limit), alwa
 
 If the adapter holds a persistent connection with a unique credential, add a scoped lock to prevent two profiles from using the same credential:
 
-``` prism-code
+``` python
 from gateway.status import acquire_scoped_lock, release_scoped_lock
 
 async def connect(self):
@@ -679,9 +679,9 @@ async def disconnect(self):
 
 ## Reference Implementations
 
-| Adapter                            | Pattern                  | Complexity | Good reference for                                  |
-|------------------------------------|--------------------------|------------|-----------------------------------------------------|
-| `bluebubbles.py`                   | REST + webhook           | Medium     | Simple REST API integration                         |
-| `weixin.py`                        | Long-poll + CDN          | High       | Media handling, encryption                          |
-| `wecom_callback.py`                | Callback/webhook         | Medium     | HTTP server, AES crypto, multi-app                  |
-| `plugins/platforms/irc/adapter.py` | Long-poll + IRC protocol | High       | Full-featured plugin adapter with scoped token lock |
+| Adapter | Pattern | Complexity | Good reference for |
+|----|----|----|----|
+| `bluebubbles.py` | REST + webhook | Medium | Simple REST API integration |
+| `weixin.py` | Long-poll + CDN | High | Media handling, encryption |
+| `wecom_callback.py` | Callback/webhook | Medium | HTTP server, AES crypto, multi-app |
+| `plugins/platforms/irc/adapter.py` | Long-poll + IRC protocol | High | Full-featured plugin adapter with scoped token lock |

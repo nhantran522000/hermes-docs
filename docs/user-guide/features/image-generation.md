@@ -10,19 +10,19 @@ Hermes Agent generates images from text prompts via FAL.ai. Eleven models are su
 
 ## Supported Models
 
-| Model                                 | Speed   | Strengths                                                   | Price               |
-|---------------------------------------|---------|-------------------------------------------------------------|---------------------|
-| `fal-ai/flux-2/klein/9b` *(default)*  | `<1s`   | Fast, crisp text                                            | \$0.006/MP          |
-| `fal-ai/flux-2-pro`                   | ~6s     | Studio photorealism                                         | \$0.03/MP           |
-| `fal-ai/z-image/turbo`                | ~2s     | Bilingual EN/CN, 6B params                                  | \$0.005/MP          |
-| `fal-ai/nano-banana-pro`              | ~8s     | Gemini 3 Pro, reasoning depth, text rendering               | \$0.15/image (1K)   |
-| `fal-ai/gpt-image-1.5`                | ~15s    | Prompt adherence                                            | \$0.034/image       |
-| `fal-ai/gpt-image-2`                  | ~20s    | SOTA text rendering + CJK, world-aware photorealism         | \$0.04–0.06/image   |
-| `fal-ai/ideogram/v3`                  | ~5s     | Best typography                                             | \$0.03–0.09/image   |
-| `fal-ai/recraft/v4/pro/text-to-image` | ~8s     | Design, brand systems, production-ready                     | \$0.25/image        |
-| `fal-ai/qwen-image`                   | ~12s    | LLM-based, complex text                                     | \$0.02/MP           |
-| `fal-ai/krea/v2/medium/text-to-image` | ~15-25s | Illustration, anime, painting, expressive/artistic styles   | \$0.030–0.035/image |
-| `fal-ai/krea/v2/large/text-to-image`  | ~25-60s | Photorealism, raw textured looks (motion blur, grain, film) | \$0.060–0.065/image |
+| Model | Speed | Strengths | Price |
+|----|----|----|----|
+| `fal-ai/flux-2/klein/9b` *(default)* | `<1s` | Fast, crisp text | \$0.006/MP |
+| `fal-ai/flux-2-pro` | ~6s | Studio photorealism | \$0.03/MP |
+| `fal-ai/z-image/turbo` | ~2s | Bilingual EN/CN, 6B params | \$0.005/MP |
+| `fal-ai/nano-banana-pro` | ~8s | Gemini 3 Pro, reasoning depth, text rendering | \$0.15/image (1K) |
+| `fal-ai/gpt-image-1.5` | ~15s | Prompt adherence | \$0.034/image |
+| `fal-ai/gpt-image-2` | ~20s | SOTA text rendering + CJK, world-aware photorealism | \$0.04–0.06/image |
+| `fal-ai/ideogram/v3` | ~5s | Best typography | \$0.03–0.09/image |
+| `fal-ai/recraft/v4/pro/text-to-image` | ~8s | Design, brand systems, production-ready | \$0.25/image |
+| `fal-ai/qwen-image` | ~12s | LLM-based, complex text | \$0.02/MP |
+| `fal-ai/krea/v2/medium/text-to-image` | ~15-25s | Illustration, anime, painting, expressive/artistic styles | \$0.030–0.035/image |
+| `fal-ai/krea/v2/large/text-to-image` | ~25-60s | Photorealism, raw textured looks (motion blur, grain, film) | \$0.060–0.065/image |
 
 Prices are FAL's pricing at time of writing; check [fal.ai](https://fal.ai/) for current numbers.
 
@@ -30,7 +30,7 @@ Prices are FAL's pricing at time of writing; check [fal.ai](https://fal.ai/) for
 
 Nous Subscribers
 
-If you have a paid [Nous Portal](https://portal.nousresearch.com) subscription, you can use image generation through the **[Tool Gateway](/docs/user-guide/features/tool-gateway)** without a FAL API key. Your model selection persists across both paths. New installs can run `hermes setup --portal` to log in and turn on every gateway tool at once; existing installs can pick **Nous Subscription** as the image-gen backend via `hermes tools`.
+If you have a paid [Nous Portal](https://portal.nousresearch.com) subscription, you can use image generation through the **[Tool Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-gateway)** without a FAL API key. Your model selection persists across both paths. New installs can run `hermes setup --portal` to log in and turn on every gateway tool at once; existing installs can pick **Nous Subscription** as the image-gen backend via `hermes tools`.
 
 If the managed gateway returns `HTTP 4xx` for a specific model, that model isn't yet proxied on the portal side — the agent will tell you so, with remediation steps (set `FAL_KEY` for direct access, or pick a different model).
 
@@ -43,13 +43,13 @@ If the managed gateway returns `HTTP 4xx` for a specific model, that model isn't
 
 Run the tools command:
 
-``` prism-code
+``` bash
 hermes tools
 ```
 
 Navigate to **🎨 Image Generation**, pick your backend (Nous Subscription or FAL.ai), then the picker shows all supported models in a column-aligned table — arrow keys to navigate, Enter to select:
 
-``` prism-code
+``` text
   Model                          Speed    Strengths                    Price
   fal-ai/flux-2/klein/9b         <1s      Fast, crisp text             $0.006/MP   ← currently in use
   fal-ai/flux-2-pro              ~6s      Studio photorealism          $0.03/MP
@@ -59,7 +59,7 @@ Navigate to **🎨 Image Generation**, pick your backend (Nous Subscription or F
 
 Your selection is saved to `config.yaml`:
 
-``` prism-code
+``` yaml
 image_gen:
   model: fal-ai/flux-2/klein/9b
   use_gateway: false            # true if using Nous Subscription
@@ -73,15 +73,15 @@ The `fal-ai/gpt-image-1.5` and `fal-ai/gpt-image-2` request quality is pinned to
 
 The agent-facing schema is intentionally minimal — the model picks up whatever you've configured:
 
-``` prism-code
+``` text
 Generate an image of a serene mountain landscape with cherry blossoms
 ```
 
-``` prism-code
+``` text
 Create a square portrait of a wise old owl — use the typography model
 ```
 
-``` prism-code
+``` text
 Make me a futuristic cityscape, landscape orientation
 ```
 
@@ -89,11 +89,11 @@ Make me a futuristic cityscape, landscape orientation
 
 The same `image_generate` tool also **edits existing images** when the active model supports it — pass a source image and the backend routes to its editing endpoint automatically (mirrors how `video_generate` handles image-to-video). Omit the source image and it's plain text-to-image.
 
-``` prism-code
+``` text
 Take this photo and make it a rainy Tokyo street at night → <image>
 ```
 
-``` prism-code
+``` text
 Blend these two product shots into one hero image → <image1> <image2>
 ```
 
@@ -104,13 +104,13 @@ Two inputs drive the edit:
 
 ### Which backends support editing
 
-| Backend                                | Image-to-image | Reference cap | How                                                                      |
-|----------------------------------------|----------------|---------------|--------------------------------------------------------------------------|
-| **FAL.ai** (edit-capable models below) | ✓              | up to 9       | routes to the model's `/edit` endpoint                                   |
-| **OpenAI** (`gpt-image-2`)             | ✓              | up to 16      | `images.edit()`                                                          |
-| **xAI** (Grok Imagine)                 | ✓              | 1             | `/v1/images/edits` (`grok-imagine-image-quality`)                        |
-| **Krea** (`Krea 2`)                    | ✓              | up to 10      | reference-guided generation (`image_style_references`)                   |
-| **OpenAI (Codex auth)**                | ✓              | up to 16      | Codex Responses `image_generation` tool with `input_image` content parts |
+| Backend | Image-to-image | Reference cap | How |
+|----|----|----|----|
+| **FAL.ai** (edit-capable models below) | ✓ | up to 9 | routes to the model's `/edit` endpoint |
+| **OpenAI** (`gpt-image-2`) | ✓ | up to 16 | `images.edit()` |
+| **xAI** (Grok Imagine) | ✓ | 1 | `/v1/images/edits` (`grok-imagine-image-quality`) |
+| **Krea** (`Krea 2`) | ✓ | up to 10 | reference-guided generation (`image_style_references`) |
+| **OpenAI (Codex auth)** | ✓ | up to 16 | Codex Responses `image_generation` tool with `input_image` content parts |
 
 FAL models with an editing endpoint: `flux-2/klein/9b`, `flux-2-pro`, `nano-banana-pro`, `gpt-image-1.5`, `gpt-image-2`, `ideogram/v3`, and `qwen-image`. Pure text-to-image FAL models (`z-image/turbo`, `recraft`, `krea/*`) reject image inputs with a clear error pointing you at an edit-capable model.
 
@@ -120,11 +120,11 @@ The active model's editing capability is surfaced in the tool description at run
 
 Every model accepts the same three aspect ratios from the agent's perspective. Internally, each model's native size spec is filled in automatically:
 
-| Agent input | image_size (flux/z-image/qwen/recraft/ideogram) | aspect_ratio (nano-banana-pro) | image_size (gpt-image-1.5) | image_size (gpt-image-2)   |
-|-------------|-------------------------------------------------|--------------------------------|----------------------------|----------------------------|
-| `landscape` | `landscape_16_9`                                | `16:9`                         | `1536x1024`                | `landscape_4_3` (1024×768) |
-| `square`    | `square_hd`                                     | `1:1`                          | `1024x1024`                | `square_hd` (1024×1024)    |
-| `portrait`  | `portrait_16_9`                                 | `9:16`                         | `1024x1536`                | `portrait_4_3` (768×1024)  |
+| Agent input | image_size (flux/z-image/qwen/recraft/ideogram) | aspect_ratio (nano-banana-pro) | image_size (gpt-image-1.5) | image_size (gpt-image-2) |
+|----|----|----|----|----|
+| `landscape` | `landscape_16_9` | `16:9` | `1536x1024` | `landscape_4_3` (1024×768) |
+| `square` | `square_hd` | `1:1` | `1024x1024` | `square_hd` (1024×1024) |
+| `portrait` | `portrait_16_9` | `9:16` | `1024x1536` | `portrait_4_3` (768×1024) |
 
 GPT Image 2 maps to 4:3 presets rather than 16:9 because its minimum pixel count is 655,360 — the `landscape_16_9` preset (1024×576 = 589,824) would be rejected.
 
@@ -134,10 +134,10 @@ This translation happens in `_build_fal_payload()` — agent code never has to k
 
 Upscaling via FAL's **Clarity Upscaler** is gated per-model:
 
-| Model               | Upscale? | Why                                                                             |
-|---------------------|----------|---------------------------------------------------------------------------------|
-| `fal-ai/flux-2-pro` | ✓        | Backward-compat (was the pre-picker default)                                    |
-| All others          | ✗        | Fast models would lose their sub-second value prop; hi-res models don't need it |
+| Model | Upscale? | Why |
+|----|----|----|
+| `fal-ai/flux-2-pro` | ✓ | Backward-compat (was the pre-picker default) |
+| All others | ✗ | Fast models would lose their sub-second value prop; hi-res models don't need it |
 
 When upscaling runs, it uses these settings:
 
@@ -163,7 +163,7 @@ If upscaling fails (network issue, rate limit), the original image is returned a
 
 Enable debug logging:
 
-``` prism-code
+``` bash
 export IMAGE_TOOLS_DEBUG=true
 ```
 

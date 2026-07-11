@@ -12,7 +12,7 @@ By the end, you'll have a fully automated workflow combining **web search**, **c
 
 tip
 
-This recipe hits web search, summarization, and optional TTS — all bundled in a Portal subscription. The fastest setup is `hermes setup --portal`. See [Nous Portal](/docs/integrations/nous-portal).
+This recipe hits web search, summarization, and optional TTS — all bundled in a Portal subscription. The fastest setup is `hermes setup --portal`. See [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal).
 
 ## What We're Building
 
@@ -30,16 +30,16 @@ The whole thing runs hands-free. You just read your briefing with your morning c
 
 Before starting, make sure you have:
 
-- **Hermes Agent installed** — see the [Installation guide](/docs/getting-started/installation)
+- **Hermes Agent installed** — see the [Installation guide](../getting-started/installation.md)
 - **Gateway running** — the gateway daemon handles cron execution:
-  ``` prism-code
+  ``` bash
   hermes gateway install   # Install as a user service
   sudo hermes gateway install --system   # Linux servers: boot-time system service
   # or
   hermes gateway           # Run in foreground
   ```
 - **Firecrawl API key** — set `FIRECRAWL_API_KEY` in your environment for web search
-- **Messaging configured** (optional but recommended) — [Telegram](/docs/user-guide/messaging/telegram) or Discord set up with a home channel
+- **Messaging configured** (optional but recommended) — [Telegram](../user-guide/messaging/telegram.md) or Discord set up with a home channel
 
 No messaging? No problem
 
@@ -49,20 +49,20 @@ You can still follow this tutorial using `deliver: "local"`. Briefings will be s
 
 Before automating anything, let's make sure the briefing works. Start a chat session:
 
-``` prism-code
+``` bash
 hermes
 ```
 
 Then enter this prompt:
 
-``` prism-code
+``` text
 Search for the latest news about AI agents and open source LLMs.
 Summarize the top 3 stories in a concise briefing format with links.
 ```
 
 Hermes will search the web, read through results, and produce something like:
 
-``` prism-code
+``` text
 ☀️ Your AI Briefing — March 8, 2026
 
 1. Qwen 3 Released with 235B Parameters
@@ -100,7 +100,7 @@ Before creating cron jobs, ensure Hermes has a default model and provider config
 
 Just tell Hermes what you want:
 
-``` prism-code
+``` text
 Every morning at 8am, search the web for the latest news about AI agents
 and open source LLMs. Summarize the top 3 stories in a concise briefing
 with links. Use a friendly, professional tone. Deliver to telegram.
@@ -112,7 +112,7 @@ Hermes will create the cron job for you using the unified `cronjob` tool.
 
 Use the `/cron` command for more control:
 
-``` prism-code
+``` text
 /cron add "0 8 * * *" "Search the web for the latest news about AI agents and open source LLMs. Find at least 5 recent articles from the past 24 hours. Summarize the top 3 most important stories in a concise daily briefing format. For each story include: a clear headline, a 2-sentence summary, and the source URL. Use a friendly, professional tone. Format with emoji bullet points and end with a total story count."
 ```
 
@@ -124,13 +124,13 @@ Cron jobs run in a **completely fresh session** — no memory of your previous c
 
 **Bad prompt:**
 
-``` prism-code
+``` text
 Do my usual morning briefing.
 ```
 
 **Good prompt:**
 
-``` prism-code
+``` text
 Search the web for the latest news about AI agents and open source LLMs.
 Find at least 5 recent articles from the past 24 hours. Summarize the
 top 3 most important stories in a concise daily briefing format. For each
@@ -148,7 +148,7 @@ Once the basic briefing works, you can get creative.
 
 Cover several areas in one briefing:
 
-``` prism-code
+``` text
 /cron add "0 8 * * *" "Create a morning briefing covering three topics. For each topic, search the web for recent news from the past 24 hours and summarize the top 2 stories with links.
 
 Topics:
@@ -163,7 +163,7 @@ Format as a clean briefing with section headers and emoji. End with today's date
 
 For faster briefings, tell Hermes to delegate each topic to a sub-agent:
 
-``` prism-code
+``` text
 /cron add "0 8 * * *" "Create a morning briefing by delegating research to sub-agents. Delegate three parallel tasks:
 
 1. Delegate: Search for the top 2 AI/ML news stories from the past 24 hours with links
@@ -173,13 +173,13 @@ For faster briefings, tell Hermes to delegate each topic to a sub-agent:
 Collect all results and combine them into a single clean briefing with section headers, emoji formatting, and source links. Add today's date as a header."
 ```
 
-Each sub-agent searches independently and in parallel, then the main agent combines everything into one polished briefing. See the [Delegation docs](/docs/user-guide/features/delegation) for more on how this works.
+Each sub-agent searches independently and in parallel, then the main agent combines everything into one polished briefing. See the [Delegation docs](../user-guide/features/delegation.md) for more on how this works.
 
 ### Weekday-Only Schedule
 
 Don't need briefings on weekends? Use a cron expression that targets Monday–Friday:
 
-``` prism-code
+``` text
 /cron add "0 8 * * 1-5" "Search for the latest AI and tech news..."
 ```
 
@@ -187,16 +187,16 @@ Don't need briefings on weekends? Use a cron expression that targets Monday–Fr
 
 Get a morning overview and an evening recap:
 
-``` prism-code
+``` text
 /cron add "0 8 * * *" "Morning briefing: search for AI news from the past 12 hours..."
 /cron add "0 18 * * *" "Evening recap: search for AI news from the past 12 hours..."
 ```
 
 ### Adding Personal Context with Memory
 
-If you have [memory](/docs/user-guide/features/memory) enabled, you can store preferences that persist across sessions. But remember — cron jobs run in fresh sessions without conversational memory. To add personal context, bake it directly into the prompt:
+If you have [memory](../user-guide/features/memory.md) enabled, you can store preferences that persist across sessions. But remember — cron jobs run in fresh sessions without conversational memory. To add personal context, bake it directly into the prompt:
 
-``` prism-code
+``` text
 /cron add "0 8 * * *" "You are creating a briefing for a senior ML engineer who cares about: PyTorch ecosystem, transformer architectures, open-weight models, and AI regulation in the EU. Skip stories about product launches or funding rounds unless they involve open source.
 
 Search for the latest news on these topics. Summarize the top 3 stories with links. Be concise and technical — this reader doesn't need basic explanations."
@@ -212,19 +212,19 @@ Including details about who the briefing is *for* dramatically improves relevanc
 
 In chat:
 
-``` prism-code
+``` text
 /cron list
 ```
 
 Or from the terminal:
 
-``` prism-code
+``` bash
 hermes cron list
 ```
 
 You'll see output like:
 
-``` prism-code
+``` text
 ID          | Name              | Schedule    | Next Run           | Deliver
 ------------|-------------------|-------------|--------------------|--------
 a1b2c3d4    | Morning Briefing  | 0 8 * * *   | 2026-03-09 08:00   | telegram
@@ -235,13 +235,13 @@ e5f6g7h8    | Evening Recap     | 0 18 * * *  | 2026-03-08 18:00   | telegram
 
 In chat:
 
-``` prism-code
+``` text
 /cron remove a1b2c3d4
 ```
 
 Or ask conversationally:
 
-``` prism-code
+``` text
 Remove my morning briefing cron job.
 ```
 
@@ -251,13 +251,13 @@ Hermes will use `cronjob(action="list")` to find it and `cronjob(action="remove"
 
 Make sure the scheduler is actually running:
 
-``` prism-code
+``` bash
 hermes cron status
 ```
 
 If the gateway isn't running, your jobs won't execute. Install it as a background service for reliability:
 
-``` prism-code
+``` bash
 hermes gateway install
 # or on Linux servers
 sudo hermes gateway install --system
@@ -267,11 +267,11 @@ sudo hermes gateway install --system
 
 You've built a working daily briefing bot. Here are some directions to explore next:
 
-- **[Scheduled Tasks (Cron)](/docs/user-guide/features/cron)** — Full reference for schedule formats, repeat limits, and delivery options
-- **[Delegation](/docs/user-guide/features/delegation)** — Deep dive into parallel sub-agent workflows
-- **[Messaging Platforms](/docs/user-guide/messaging)** — Set up Telegram, Discord, or other delivery targets
-- **[Memory](/docs/user-guide/features/memory)** — Persistent context across sessions
-- **[Tips & Best Practices](/docs/guides/tips)** — More prompt engineering advice
+- **[Scheduled Tasks (Cron)](../user-guide/features/cron.md)** — Full reference for schedule formats, repeat limits, and delivery options
+- **[Delegation](../user-guide/features/delegation.md)** — Deep dive into parallel sub-agent workflows
+- **[Messaging Platforms](../user-guide/messaging/index.md)** — Set up Telegram, Discord, or other delivery targets
+- **[Memory](../user-guide/features/memory.md)** — Persistent context across sessions
+- **[Tips & Best Practices](tips.md)** — More prompt engineering advice
 
 What else can you schedule?
 

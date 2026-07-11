@@ -6,14 +6,14 @@ last_crawled: 2026-07-11
 
 # Adding Tools
 
-Before writing a tool, ask yourself: **should this be a [skill](/docs/developer-guide/creating-skills) instead?**
+Before writing a tool, ask yourself: **should this be a [skill](creating-skills.md) instead?**
 
 Built-in Core Tools Only
 
 This page is for adding a **built-in Hermes tool** to the repository itself. If you want a personal, project-local, or otherwise custom tool without modifying Hermes core, use the plugin route instead:
 
-- [Plugins](/docs/user-guide/features/plugins)
-- [Build a Hermes Plugin](/docs/developer-guide/plugins)
+- [Plugins](../user-guide/features/plugins.md)
+- [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
 
 Default to plugins for most custom tool creation. Only follow this page when you explicitly want to ship a new built-in tool in `tools/` and `toolsets.py`.
 
@@ -34,7 +34,7 @@ Any `tools/*.py` file with a top-level `registry.register()` call is auto-discov
 
 Every tool file follows the same structure:
 
-``` prism-code
+``` python
 # tools/weather_tool.py
 """Weather Tool -- look up current weather for a location."""
 
@@ -115,7 +115,7 @@ Important
 
 In `toolsets.py`, add the tool name:
 
-``` prism-code
+``` python
 # If it should be available on all platforms (CLI + messaging):
 _HERMES_CORE_TOOLS = [
     ...
@@ -138,7 +138,7 @@ Tool modules with a top-level `registry.register()` call are auto-discovered by 
 
 If your handler needs async code, mark it with `is_async=True`:
 
-``` prism-code
+``` python
 async def weather_tool_async(location: str) -> str:
     async with aiohttp.ClientSession() as session:
         ...
@@ -160,7 +160,7 @@ The registry handles async bridging transparently — you never call `asyncio.ru
 
 Tools that manage per-session state receive `task_id` via `**kwargs`:
 
-``` prism-code
+``` python
 def _handle_weather(args, **kw):
     task_id = kw.get("task_id")
     return weather_tool(args.get("location", ""), task_id=task_id)
@@ -180,7 +180,7 @@ Some tools (`todo`, `memory`, `session_search`, `delegate_task`) need access to 
 
 If your tool requires an API key, add it to `hermes_cli/config.py`:
 
-``` prism-code
+``` python
 OPTIONAL_ENV_VARS = {
     ...
     "WEATHER_API_KEY": {
@@ -195,10 +195,10 @@ OPTIONAL_ENV_VARS = {
 
 ## Checklist
 
-- Tool file created with handler, schema, check function, and registration
-- Added to appropriate toolset in `toolsets.py`
-- Confirmed this really should be a built-in/core tool and not a plugin
-- Handler returns JSON strings, errors returned as `{"error": "..."}`
-- Optional: API key added to `OPTIONAL_ENV_VARS` in `hermes_cli/config.py`
-- Optional: Added to `toolset_distributions.py` for batch processing
-- Tested with `hermes chat -q "Use the weather tool for London"`
+- [ ] Tool file created with handler, schema, check function, and registration
+- [ ] Added to appropriate toolset in `toolsets.py`
+- [ ] Confirmed this really should be a built-in/core tool and not a plugin
+- [ ] Handler returns JSON strings, errors returned as `{"error": "..."}`
+- [ ] Optional: API key added to `OPTIONAL_ENV_VARS` in `hermes_cli/config.py`
+- [ ] Optional: Added to `toolset_distributions.py` for batch processing
+- [ ] Tested with `hermes chat -q "Use the weather tool for London"`

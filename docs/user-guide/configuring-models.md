@@ -15,13 +15,13 @@ This page covers configuring both from the dashboard. If you prefer config files
 
 Fastest path: Nous Portal
 
-[Nous Portal](/docs/user-guide/features/tool-gateway) provides 300+ models under one subscription. On a fresh install, run `hermes setup --portal` to log in and set Nous as your provider in one command. Inspect what's wired up with `hermes portal info`.
+[Nous Portal](https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-gateway) provides 300+ models under one subscription. On a fresh install, run `hermes setup --portal` to log in and set Nous as your provider in one command. Inspect what's wired up with `hermes portal info`.
 
 - Portal subscribers also get **10% off token-billed providers**.
 
 `model:` schema — empty string vs. mapping
 
-On a brand-new install the bundled default config has `model: ""` (an empty string sentinel meaning "not configured yet"). The first time you run `hermes setup` or `hermes model`, that key is upgraded in-place to a mapping with `provider`, `default`, `base_url`, and `api_mode` sub-keys — the shape shown throughout this page and in [`profiles.md`](/docs/user-guide/profiles) / [`configuration.md`](/docs/user-guide/configuration). If you ever see an empty string in `config.yaml`, run `hermes model` (or click **Change** in the dashboard) and Hermes will write the dict form for you.
+On a brand-new install the bundled default config has `model: ""` (an empty string sentinel meaning "not configured yet"). The first time you run `hermes setup` or `hermes model`, that key is upgraded in-place to a mapping with `provider`, `default`, `base_url`, and `api_mode` sub-keys — the shape shown throughout this page and in [`profiles.md`](profiles.md) / [`configuration.md`](configuration.md). If you ever see an empty string in `config.yaml`, run `hermes model` (or click **Change** in the dashboard) and Hermes will write the dict form for you.
 
 ## The Models page
 
@@ -30,7 +30,7 @@ Open the dashboard and click **Models** in the sidebar. You get two sections:
 1.  **Model Settings** — the top panel, where you assign models to slots.
 2.  **Usage analytics** — ranked cards showing every model that ran a session in the selected period, with token counts, cost, and capability badges.
 
-![Models page overview](/docs/assets/images/overview-7ea6bbb1b2b6a12e2ff92ae07084c434.png)
+![Models page overview](https://hermes-agent.nousresearch.com/docs/assets/images/overview-7ea6bbb1b2b6a12e2ff92ae07084c434.png)
 
 The top card is the **Model Settings** panel. The main row always shows what the agent will spin up for new sessions. Click **Change** to open the picker.
 
@@ -38,7 +38,7 @@ The top card is the **Model Settings** panel. The main row always shows what the
 
 Click **Change** on the Main model row:
 
-![Model picker dialog](/docs/assets/images/picker-dialog-6fa8d5ea35b1ebcbad9b1e862822bf91.png)
+![Model picker dialog](https://hermes-agent.nousresearch.com/docs/assets/images/picker-dialog-6fa8d5ea35b1ebcbad9b1e862822bf91.png)
 
 The picker has two columns:
 
@@ -51,35 +51,35 @@ Pick a model, hit **Switch**, and Hermes writes it to `~/.hermes/config.yaml` un
 
 ### Mid-session switches and context warnings
 
-When you switch models **inside an active session** (Herm TUI model picker, `hermes` CLI, or `/model` on Telegram/Discord), Hermes estimates whether your **next message** will run **preflight context compression** against the new model's window. If the session is already near or above that model's compression threshold (see [Context Compression](/docs/user-guide/configuration#context-compression)), the switch reply includes a warning — the same `warning_message` path used for expensive-model notices. The switch still applies immediately; compression runs on the **first user message after the switch**, before the model answers.
+When you switch models **inside an active session** (Herm TUI model picker, `hermes` CLI, or `/model` on Telegram/Discord), Hermes estimates whether your **next message** will run **preflight context compression** against the new model's window. If the session is already near or above that model's compression threshold (see [Context Compression](configuration.md#context-compression)), the switch reply includes a warning — the same `warning_message` path used for expensive-model notices. The switch still applies immediately; compression runs on the **first user message after the switch**, before the model answers.
 
 Mid-session switches reset the prompt cache
 
-Prompt caches are keyed to the model serving the request, so any mid-conversation model change — an explicit `/model` switch, an [automatic fallback](/docs/user-guide/features/fallback-providers), or a [credential-pool](/docs/user-guide/features/credential-pools) rotation onto a different account — means the next message re-reads the entire conversation at full input-token price instead of the cached (~75–90% discounted) rate. On a long session this one-time re-read can dwarf the per-token difference between the two models. Switch when you need to, but prefer doing it early in a conversation or right after starting a fresh session.
+Prompt caches are keyed to the model serving the request, so any mid-conversation model change — an explicit `/model` switch, an [automatic fallback](features/fallback-providers.md), or a [credential-pool](features/credential-pools.md) rotation onto a different account — means the next message re-reads the entire conversation at full input-token price instead of the cached (~75–90% discounted) rate. On a long session this one-time re-read can dwarf the per-token difference between the two models. Switch when you need to, but prefer doing it early in a conversation or right after starting a fresh session.
 
 ## Setting auxiliary models
 
 Click **Show auxiliary** to reveal the 11 task slots:
 
-![Auxiliary panel expanded](/docs/assets/images/auxiliary-expanded-bc717f35df24e9d19ca45d5086688b56.png)
+![Auxiliary panel expanded](https://hermes-agent.nousresearch.com/docs/assets/images/auxiliary-expanded-bc717f35df24e9d19ca45d5086688b56.png)
 
 Every auxiliary task defaults to `auto` — meaning Hermes tries your main model for that job too. If that route is unavailable or hits a capacity-style failure, `auto` follows any task-specific `auxiliary.<task>.fallback_chain`, then the main `fallback_providers` / `fallback_model` chain, then Hermes' built-in auxiliary discovery chain. Override a specific task when you want a cheaper or faster model for a side-job.
 
 ### Common override patterns
 
-| Task                  | When to override                                                                                                                                               |
-|-----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Title Gen**         | Almost always. A \$0.10/M flash model writes session titles as well as Opus. Default config sets this to `google/gemini-3-flash-preview` on OpenRouter.        |
-| **Vision**            | When your main model lacks vision support. Point it at `google/gemini-2.5-flash` or `gpt-4o-mini`.                                                             |
-| **Compression**       | When you're burning reasoning tokens on Opus/M2.7 just to summarize context. A fast chat model does the job at 1/50th the cost.                                |
-| **Approval**          | For `approval_mode: smart` — a fast/cheap model (haiku, flash, gpt-5-mini) decides whether to auto-approve low-risk commands. Expensive models here are waste. |
-| **Web Extract**       | When you use `web_extract` heavily. Same logic as compression — summarization doesn't need reasoning.                                                          |
-| **Skills Hub**        | `hermes skills search` uses this. Usually fine at `auto`.                                                                                                      |
-| **MCP**               | MCP tool routing. Usually fine at `auto`.                                                                                                                      |
-| **Triage Specifier**  | Routes the Kanban triage specifier (`hermes kanban specify`) that expands a rough one-liner into a concrete spec. A cheap, capable model works well.           |
-| **Kanban Decomposer** | Routes Kanban task decomposition — splits a triage task into a graph of child tasks for specialist profiles.                                                   |
-| **Profile Describer** | Routes profile-description generation (`hermes profile describe --auto` / the dashboard auto-generate button). Short, cheap call.                              |
-| **Curator**           | Routes the curator skill-usage review pass. Can run for minutes on reasoning models, so a cheaper aux model is often worthwhile.                               |
+| Task | When to override |
+|----|----|
+| **Title Gen** | Almost always. A \$0.10/M flash model writes session titles as well as Opus. Default config sets this to `google/gemini-3-flash-preview` on OpenRouter. |
+| **Vision** | When your main model lacks vision support. Point it at `google/gemini-2.5-flash` or `gpt-4o-mini`. |
+| **Compression** | When you're burning reasoning tokens on Opus/M2.7 just to summarize context. A fast chat model does the job at 1/50th the cost. |
+| **Approval** | For `approval_mode: smart` — a fast/cheap model (haiku, flash, gpt-5-mini) decides whether to auto-approve low-risk commands. Expensive models here are waste. |
+| **Web Extract** | When you use `web_extract` heavily. Same logic as compression — summarization doesn't need reasoning. |
+| **Skills Hub** | `hermes skills search` uses this. Usually fine at `auto`. |
+| **MCP** | MCP tool routing. Usually fine at `auto`. |
+| **Triage Specifier** | Routes the Kanban triage specifier (`hermes kanban specify`) that expands a rough one-liner into a concrete spec. A cheap, capable model works well. |
+| **Kanban Decomposer** | Routes Kanban task decomposition — splits a triage task into a graph of child tasks for specialist profiles. |
+| **Profile Describer** | Routes profile-description generation (`hermes profile describe --auto` / the dashboard auto-generate button). Short, cheap call. |
+| **Curator** | Routes the curator skill-usage review pass. Can run for minutes on reasoning models, so a cheaper aux model is often worthwhile. |
 
 ### Per-task override
 
@@ -93,7 +93,7 @@ If you've over-tuned and want to start over, click **Reset all to auto** at the 
 
 Every model card on the page has a **Use as** dropdown. This is the fast path — pick a model you see in your analytics, click **Use as**, and assign it to the main slot or any specific auxiliary task in one click:
 
-![Use as dropdown](/docs/assets/images/use-as-dropdown-6795915e52daf2b74eb099fe11fde7ac.png)
+![Use as dropdown](https://hermes-agent.nousresearch.com/docs/assets/images/use-as-dropdown-6795915e52daf2b74eb099fe11fde7ac.png)
 
 The dropdown has:
 
@@ -109,7 +109,7 @@ When you save via the dashboard, Hermes writes to `~/.hermes/config.yaml`:
 
 **Main model:**
 
-``` prism-code
+``` yaml
 model:
   provider: openrouter
   default: anthropic/claude-opus-4.7
@@ -119,7 +119,7 @@ model:
 
 **Auxiliary override (example — vision on gemini-flash):**
 
-``` prism-code
+``` yaml
 auxiliary:
   vision:
     provider: openrouter
@@ -133,7 +133,7 @@ auxiliary:
 
 **Auxiliary on auto (default):**
 
-``` prism-code
+``` yaml
 auxiliary:
   compression:
     provider: auto
@@ -146,7 +146,7 @@ auxiliary:
 
 Optional task-specific fallback chains live under the same auxiliary task:
 
-``` prism-code
+``` yaml
 auxiliary:
   title_generation:
     provider: auto
@@ -194,7 +194,7 @@ On OpenRouter (or any aggregator), bare model names resolve *within* the aggrega
 
 Inside any `hermes chat` session:
 
-``` prism-code
+``` text
 /model gpt-5.4 --provider openrouter             # session-only
 /model gpt-5.4 --provider openrouter --global    # also persists to config.yaml
 ```
@@ -207,7 +207,7 @@ Define your own short names for models you reach for often, then use `/model <al
 
 **Canonical (top-level `model_aliases:`)** — full control over provider + base_url:
 
-``` prism-code
+``` yaml
 # ~/.hermes/config.yaml
 model_aliases:
   fav:
@@ -220,18 +220,18 @@ model_aliases:
 
 **Short string form (`model.aliases.<name>: provider/model`)** — convenient from the shell because `hermes config set` only writes scalar values, but it can't carry a custom `base_url`:
 
-``` prism-code
+``` bash
 hermes config set model.aliases.fav anthropic/claude-opus-4.6
 hermes config set model.aliases.grok x-ai/grok-4
 ```
 
 Both paths feed the same loader (`hermes_cli/model_switch.py`). Entries declared in `model_aliases:` take precedence over `model.aliases:` entries with the same name.
 
-Then `/model fav` or `/model grok` in chat. User aliases shadow built-in short names (`sonnet`, `kimi`, `opus`, etc.). See [Custom model aliases](/docs/reference/slash-commands#custom-model-aliases) for the full reference.
+Then `/model fav` or `/model grok` in chat. User aliases shadow built-in short names (`sonnet`, `kimi`, `opus`, etc.). See [Custom model aliases](../reference/slash-commands.md#custom-model-aliases) for the full reference.
 
 ### `hermes model` subcommand
 
-``` prism-code
+``` bash
 hermes model            # Interactive provider + model picker (the canonical way to switch defaults)
 ```
 
@@ -241,13 +241,13 @@ To list providers/models without launching the picker, use the dashboard or the 
 
 ### Direct config edit
 
-Edit `~/.hermes/config.yaml` and restart whatever reads it. See the [Configuration reference](/docs/user-guide/configuration) for the full schema.
+Edit `~/.hermes/config.yaml` and restart whatever reads it. See the [Configuration reference](configuration.md) for the full schema.
 
 ### REST API
 
 The dashboard uses three endpoints. Useful for scripting:
 
-``` prism-code
+``` bash
 # List authenticated providers + curated model lists
 curl -H "X-Hermes-Session-Token: $TOKEN" http://localhost:PORT/api/model/options
 

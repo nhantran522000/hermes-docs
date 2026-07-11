@@ -10,12 +10,12 @@ This page is the compact reference companion to the main MCP docs.
 
 For conceptual guidance, see:
 
-- [MCP (Model Context Protocol)](/docs/user-guide/features/mcp)
-- [Use MCP with Hermes](/docs/guides/use-mcp-with-hermes)
+- [MCP (Model Context Protocol)](../user-guide/features/mcp.md)
+- [Use MCP with Hermes](../guides/use-mcp-with-hermes.md)
 
 ## Root config shape
 
-``` prism-code
+``` yaml
 mcp_servers:
   <server_name>:
     command: "..."      # stdio servers
@@ -44,33 +44,33 @@ mcp_servers:
 
 ## Server keys
 
-| Key                            | Type           | Applies to | Meaning                                                                                                                                                       |
-|--------------------------------|----------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `command`                      | string         | stdio      | Executable to launch                                                                                                                                          |
-| `args`                         | list           | stdio      | Arguments for the subprocess                                                                                                                                  |
-| `env`                          | mapping        | stdio      | Environment passed to the subprocess                                                                                                                          |
-| `url`                          | string         | HTTP       | Remote MCP endpoint                                                                                                                                           |
-| `headers`                      | mapping        | HTTP       | Headers for remote server requests                                                                                                                            |
-| `ssl_verify`                   | bool or string | HTTP       | TLS verification. `true` (default) uses system CAs, `false` disables verification (insecure), or a string path to a custom CA bundle (PEM)                    |
-| `client_cert`                  | string or list | HTTP       | mTLS client certificate. String = path to a PEM file containing cert + key. List `[cert, key]` = separate files. List `[cert, key, password]` = encrypted key |
-| `client_key`                   | string         | HTTP       | Path to the client private key, when `client_cert` is a string and the key is in a separate file                                                              |
-| `enabled`                      | bool           | both       | Skip the server entirely when false                                                                                                                           |
-| `timeout`                      | number         | both       | Tool call timeout in seconds (default: `300`)                                                                                                                 |
-| `connect_timeout`              | number         | both       | Initial connection timeout in seconds (default: `60`)                                                                                                         |
-| `supports_parallel_tool_calls` | bool           | both       | Allow tools from this server to run concurrently                                                                                                              |
-| `skip_preflight`               | bool           | HTTP       | Bypass the fail-fast content-type probe for valid Streamable HTTP endpoints whose HEAD/GET answers a non-MCP content type (default: `false`)                  |
-| `tools`                        | mapping        | both       | Filtering and utility-tool policy                                                                                                                             |
-| `auth`                         | string         | HTTP       | Authentication method. Set to `oauth` to enable OAuth 2.1 with PKCE                                                                                           |
-| `sampling`                     | mapping        | both       | Server-initiated LLM request policy (see MCP guide)                                                                                                           |
+| Key | Type | Applies to | Meaning |
+|----|----|----|----|
+| `command` | string | stdio | Executable to launch |
+| `args` | list | stdio | Arguments for the subprocess |
+| `env` | mapping | stdio | Environment passed to the subprocess |
+| `url` | string | HTTP | Remote MCP endpoint |
+| `headers` | mapping | HTTP | Headers for remote server requests |
+| `ssl_verify` | bool or string | HTTP | TLS verification. `true` (default) uses system CAs, `false` disables verification (insecure), or a string path to a custom CA bundle (PEM) |
+| `client_cert` | string or list | HTTP | mTLS client certificate. String = path to a PEM file containing cert + key. List `[cert, key]` = separate files. List `[cert, key, password]` = encrypted key |
+| `client_key` | string | HTTP | Path to the client private key, when `client_cert` is a string and the key is in a separate file |
+| `enabled` | bool | both | Skip the server entirely when false |
+| `timeout` | number | both | Tool call timeout in seconds (default: `300`) |
+| `connect_timeout` | number | both | Initial connection timeout in seconds (default: `60`) |
+| `supports_parallel_tool_calls` | bool | both | Allow tools from this server to run concurrently |
+| `skip_preflight` | bool | HTTP | Bypass the fail-fast content-type probe for valid Streamable HTTP endpoints whose HEAD/GET answers a non-MCP content type (default: `false`) |
+| `tools` | mapping | both | Filtering and utility-tool policy |
+| `auth` | string | HTTP | Authentication method. Set to `oauth` to enable OAuth 2.1 with PKCE |
+| `sampling` | mapping | both | Server-initiated LLM request policy (see MCP guide) |
 
 ## `tools` policy keys
 
-| Key         | Type           | Meaning                                           |
-|-------------|----------------|---------------------------------------------------|
-| `include`   | string or list | Whitelist server-native MCP tools                 |
-| `exclude`   | string or list | Blacklist server-native MCP tools                 |
-| `resources` | bool-like      | Enable/disable `list_resources` + `read_resource` |
-| `prompts`   | bool-like      | Enable/disable `list_prompts` + `get_prompt`      |
+| Key | Type | Meaning |
+|----|----|----|
+| `include` | string or list | Whitelist server-native MCP tools |
+| `exclude` | string or list | Blacklist server-native MCP tools |
+| `resources` | bool-like | Enable/disable `list_resources` + `read_resource` |
+| `prompts` | bool-like | Enable/disable `list_prompts` + `get_prompt` |
 
 ## Filtering semantics
 
@@ -78,7 +78,7 @@ mcp_servers:
 
 If `include` is set, only those server-native MCP tools are registered.
 
-``` prism-code
+``` yaml
 tools:
   include: [create_issue, list_issues]
 ```
@@ -87,7 +87,7 @@ tools:
 
 If `exclude` is set and `include` is not, every server-native MCP tool except those names is registered.
 
-``` prism-code
+``` yaml
 tools:
   exclude: [delete_customer]
 ```
@@ -96,7 +96,7 @@ tools:
 
 If both are set, `include` wins.
 
-``` prism-code
+``` yaml
 tools:
   include: [create_issue]
   exclude: [create_issue, delete_issue]
@@ -123,14 +123,14 @@ Prompts:
 
 ### Disable resources
 
-``` prism-code
+``` yaml
 tools:
   resources: false
 ```
 
 ### Disable prompts
 
-``` prism-code
+``` yaml
 tools:
   prompts: false
 ```
@@ -147,7 +147,7 @@ So this is normal:
 
 ## `enabled: false`
 
-``` prism-code
+``` yaml
 mcp_servers:
   legacy:
     url: "https://mcp.legacy.internal"
@@ -169,7 +169,7 @@ If filtering removes all server-native tools and no utility tools are registered
 
 ### Safe GitHub allowlist
 
-``` prism-code
+``` yaml
 mcp_servers:
   github:
     command: "npx"
@@ -184,7 +184,7 @@ mcp_servers:
 
 ### Stripe blacklist
 
-``` prism-code
+``` yaml
 mcp_servers:
   stripe:
     url: "https://mcp.stripe.com"
@@ -196,7 +196,7 @@ mcp_servers:
 
 ### Resource-only docs server
 
-``` prism-code
+``` yaml
 mcp_servers:
   docs:
     url: "https://mcp.docs.example.com"
@@ -210,7 +210,7 @@ mcp_servers:
 
 For HTTP/SSE servers that require a client certificate, set `client_cert` (and optionally `client_key`):
 
-``` prism-code
+``` yaml
 mcp_servers:
   # Combined cert + key in a single PEM file
   internal_api:
@@ -245,7 +245,7 @@ Notes:
 
 After changing MCP config, reload servers with:
 
-``` prism-code
+``` text
 /reload-mcp
 ```
 
@@ -253,7 +253,7 @@ After changing MCP config, reload servers with:
 
 Server-native MCP tools become:
 
-``` prism-code
+``` text
 mcp_<server>_<tool>
 ```
 
@@ -276,7 +276,7 @@ Hyphens (`-`) and dots (`.`) in both server names and tool names are replaced wi
 
 For example, a server named `my-api` exposing a tool called `list-items.v2` becomes:
 
-``` prism-code
+``` text
 mcp_my_api_list_items_v2
 ```
 
@@ -286,7 +286,7 @@ Keep this in mind when writing `include` / `exclude` filters — use the **origi
 
 For HTTP servers that require OAuth, set `auth: oauth` on the server entry:
 
-``` prism-code
+``` yaml
 mcp_servers:
   protected_api:
     url: "https://mcp.example.com/mcp"

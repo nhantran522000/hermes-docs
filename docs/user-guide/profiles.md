@@ -16,7 +16,7 @@ When you create a profile, it automatically becomes its own command. Create a pr
 
 ## Quick start
 
-``` prism-code
+``` bash
 hermes profile create coder       # creates profile + "coder" command alias
 coder setup                       # configure API keys and model
 coder chat                        # start chatting
@@ -28,11 +28,11 @@ That's it. `coder` is now its own Hermes profile with its own config, memory, an
 
 tip
 
-Quickest setup: run `hermes setup --portal` inside the new profile to wire up models + tools at once. See [Nous Portal](/docs/integrations/nous-portal).
+Quickest setup: run `hermes setup --portal` inside the new profile to wire up models + tools at once. See [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal).
 
 ### Blank profile
 
-``` prism-code
+``` bash
 hermes profile create mybot
 ```
 
@@ -40,15 +40,15 @@ Creates a fresh profile with bundled skills seeded. Run `mybot setup` to configu
 
 If you plan to use this profile as a kanban worker (or want the kanban orchestrator to route work to it), pass `--description "<role>"` at create time so the orchestrator knows what it's good at:
 
-``` prism-code
+``` bash
 hermes profile create researcher --description "Reads source code and external docs, writes findings."
 ```
 
-You can also set or auto-generate the description later with `hermes profile describe` — see the [Kanban guide](/docs/user-guide/features/kanban#auto-vs-manual-orchestration) for the full routing model.
+You can also set or auto-generate the description later with `hermes profile describe` — see the [Kanban guide](features/kanban.md#auto-vs-manual-orchestration) for the full routing model.
 
 ### Clone config only (`--clone`)
 
-``` prism-code
+``` bash
 hermes profile create work --clone
 ```
 
@@ -56,7 +56,7 @@ Copies your current profile's `config.yaml`, `.env`, `SOUL.md`, and skills into 
 
 ### Clone everything (`--clone-all`)
 
-``` prism-code
+``` bash
 hermes profile create backup --clone-all
 ```
 
@@ -64,19 +64,19 @@ Copies **everything** — config, API keys, personality, all memories, skills, c
 
 ### Clone from a specific profile
 
-``` prism-code
+``` bash
 hermes profile create work --clone-from coder
 ```
 
 `--clone-from <source>` selects the source profile directly and implies a config/skills/SOUL clone. Combine it with `--clone-all` when you want a full copy of that source profile:
 
-``` prism-code
+``` bash
 hermes profile create work-backup --clone-from coder --clone-all
 ```
 
 Honcho memory + profiles
 
-When Honcho is enabled, clone operations automatically create a dedicated AI peer for the new profile while sharing the same user workspace. Each profile builds its own observations and identity. See [Honcho -- Multi-agent / Profiles](/docs/user-guide/features/memory-providers#honcho) for details.
+When Honcho is enabled, clone operations automatically create a dedicated AI peer for the new profile while sharing the same user workspace. Each profile builds its own observations and identity. See [Honcho -- Multi-agent / Profiles](features/memory-providers.md#honcho) for details.
 
 ## Using profiles
 
@@ -84,7 +84,7 @@ When Honcho is enabled, clone operations automatically create a dedicated AI pee
 
 Every profile automatically gets a command alias at `~/.local/bin/<name>`:
 
-``` prism-code
+``` bash
 coder chat                    # chat with the coder agent
 coder setup                   # configure coder's settings
 coder gateway start           # start coder's gateway
@@ -99,7 +99,7 @@ The alias works with every hermes subcommand — it's just `hermes -p <name>` un
 
 You can also target a profile explicitly with any command:
 
-``` prism-code
+``` bash
 hermes -p coder chat
 hermes --profile=coder doctor
 hermes chat -p coder -q "hello"    # works in any position
@@ -107,7 +107,7 @@ hermes chat -p coder -q "hello"    # works in any position
 
 ### Sticky default (`hermes profile use`)
 
-``` prism-code
+``` bash
 hermes profile use coder
 hermes chat                   # now targets coder
 hermes tools                  # configures coder's tools
@@ -136,7 +136,7 @@ On the default `local` terminal backend, the agent still has the same filesystem
 
 If you want a profile to start in a specific project folder, set an explicit absolute `terminal.cwd` in that profile's `config.yaml`:
 
-``` prism-code
+``` yaml
 terminal:
   backend: local
   cwd: /absolute/path/to/project
@@ -154,7 +154,7 @@ Also note:
 
 Each profile runs its own gateway as a separate process with its own bot token:
 
-``` prism-code
+``` bash
 coder gateway start           # starts coder's gateway
 assistant gateway start       # starts assistant's gateway (separate process)
 ```
@@ -163,7 +163,7 @@ assistant gateway start       # starts assistant's gateway (separate process)
 
 Each profile has its own `.env` file. Configure a different Telegram/Discord/Slack bot token in each:
 
-``` prism-code
+``` bash
 # Edit coder's tokens
 nano ~/.hermes/profiles/coder/.env
 
@@ -177,7 +177,7 @@ If two profiles accidentally use the same bot token, the second gateway will be 
 
 ### Persistent services
 
-``` prism-code
+``` bash
 coder gateway install         # creates hermes-gateway-coder systemd/launchd service
 assistant gateway install     # creates hermes-gateway-assistant service
 ```
@@ -186,7 +186,7 @@ Each profile gets its own service name. They run independently.
 
 Inside the official Docker image
 
-Per-profile gateways are supervised by [s6-overlay](https://github.com/just-containers/s6-overlay) (PID 1 in the container), so `hermes profile create <name>` automatically registers an s6 service slot at `/run/service/gateway-<name>/`. `hermes -p <name> gateway start/stop/restart` dispatches to `s6-svc` instead of spawning a bare process — crashes are auto-restarted and `docker restart` preserves the previously-running set of gateways. See [Per-profile gateway supervision](/docs/user-guide/docker#per-profile-gateway-supervision) for details.
+Per-profile gateways are supervised by [s6-overlay](https://github.com/just-containers/s6-overlay) (PID 1 in the container), so `hermes profile create <name>` automatically registers an s6 service slot at `/run/service/gateway-<name>/`. `hermes -p <name> gateway start/stop/restart` dispatches to `s6-svc` instead of spawning a bare process — crashes are auto-restarted and `docker restart` preserves the previously-running set of gateways. See [Per-profile gateway supervision](docker.md#per-profile-gateway-supervision) for details.
 
 ## Configuring profiles
 
@@ -196,20 +196,20 @@ Each profile has its own:
 - **`.env`** — API keys, bot tokens
 - **`SOUL.md`** — personality and instructions
 
-``` prism-code
+``` bash
 coder config set model.default anthropic/claude-sonnet-4
 echo "You are a focused coding assistant." > ~/.hermes/profiles/coder/SOUL.md
 ```
 
 If you want this profile to work in a specific project by default, also set its own `terminal.cwd`:
 
-``` prism-code
+``` bash
 coder config set terminal.cwd /absolute/path/to/project
 ```
 
 ### From the dashboard
 
-The [web dashboard](/docs/user-guide/features/web-dashboard#managing-multiple-profiles) is a machine-level surface that can manage **any** profile's config, API keys, skills, MCPs, and model via the profile switcher in its sidebar — no per-profile dashboard needed. `coder dashboard` routes to the machine dashboard with the `coder` profile preselected. The dashboard's Chat tab also follows the switcher, spawning a conversation under the selected profile's home.
+The [web dashboard](https://hermes-agent.nousresearch.com/docs/user-guide/features/web-dashboard#managing-multiple-profiles) is a machine-level surface that can manage **any** profile's config, API keys, skills, MCPs, and model via the profile switcher in its sidebar — no per-profile dashboard needed. `coder dashboard` routes to the machine dashboard with the `coder` profile preselected. The dashboard's Chat tab also follows the switcher, spawning a conversation under the selected profile's home.
 
 Note: "Set as active" on the dashboard's Profiles page is the sticky default for **future CLI/gateway runs** (same as `hermes profile use`) — to edit a profile from the dashboard, use the switcher instead.
 
@@ -217,7 +217,7 @@ Note: "Set as active" on the dashboard's Profiles page is the sticky default for
 
 `hermes update` pulls code once (shared) and syncs new bundled skills to **all** profiles automatically:
 
-``` prism-code
+``` bash
 hermes update
 # → Code updated (12 commits)
 # → Skills synced: default (up to date), coder (+2 new), assistant (+2 new)
@@ -227,7 +227,7 @@ User-modified skills are never overwritten.
 
 ## Managing profiles
 
-``` prism-code
+``` bash
 hermes profile list           # show all profiles with status
 hermes profile show coder     # detailed info for one profile
 hermes profile rename coder dev-bot   # rename (updates alias + service)
@@ -237,7 +237,7 @@ hermes profile import coder.tar.gz   # import from archive
 
 ## Deleting a profile
 
-``` prism-code
+``` bash
 hermes profile delete coder
 ```
 
@@ -251,7 +251,7 @@ You cannot delete the default profile (`~/.hermes`). To remove everything, use `
 
 ## Tab completion
 
-``` prism-code
+``` bash
 # Bash
 eval "$(hermes completion bash)"
 
@@ -284,7 +284,7 @@ The default profile is simply `~/.hermes` itself. No migration needed — existi
 
 A profile you built on one machine can be packaged as a **git repository** and installed with one command on another machine — your own workstation, a teammate's laptop, or a community user's environment. The shared package includes the SOUL, config, skills, cron jobs, and MCP connections. Credentials, memories, and sessions stay per-machine.
 
-``` prism-code
+``` bash
 # Install a whole agent from a git repo
 hermes profile install github.com/you/research-bot --alias
 
@@ -292,4 +292,4 @@ hermes profile install github.com/you/research-bot --alias
 hermes profile update research-bot
 ```
 
-See **[Profile Distributions: Share a Whole Agent](/docs/user-guide/profile-distributions)** for the full guide — authoring, publishing, update semantics, security model, and use cases.
+See **[Profile Distributions: Share a Whole Agent](https://hermes-agent.nousresearch.com/docs/user-guide/profile-distributions)** for the full guide — authoring, publishing, update semantics, security model, and use cases.

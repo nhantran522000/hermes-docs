@@ -6,9 +6,9 @@ last_crawled: 2026-07-11
 
 # Automate Anything with Cron
 
-The [daily briefing bot tutorial](/docs/guides/daily-briefing-bot) covers the basics. This guide goes further — five real-world automation patterns you can adapt for your own workflows.
+The [daily briefing bot tutorial](daily-briefing-bot.md) covers the basics. This guide goes further — five real-world automation patterns you can adapt for your own workflows.
 
-For the full feature reference, see [Scheduled Tasks (Cron)](/docs/user-guide/features/cron).
+For the full feature reference, see [Scheduled Tasks (Cron)](../user-guide/features/cron.md).
 
 Key Concept
 
@@ -16,8 +16,8 @@ Cron jobs run in fresh agent sessions with no memory of your current chat. Promp
 
 Don't need the LLM? You have two zero-token options.
 
-- **Recurring watchdog** where the script already produces the exact message (memory alerts, disk alerts, heartbeats): use [script-only cron jobs](/docs/guides/cron-script-only). Same scheduler, no LLM. You can ask Hermes to set one up for you in chat — the `cronjob` tool knows when to pick `no_agent=True` and writes the script for you.
-- **One-shot from a script that's already running** (CI step, post-commit hook, deploy script, externally-scheduled monitor): use [`hermes send`](/docs/guides/pipe-script-output) to pipe stdout or a file straight to Telegram / Discord / Slack / etc. without setting up a cron entry.
+- **Recurring watchdog** where the script already produces the exact message (memory alerts, disk alerts, heartbeats): use [script-only cron jobs](https://hermes-agent.nousresearch.com/docs/guides/cron-script-only). Same scheduler, no LLM. You can ask Hermes to set one up for you in chat — the `cronjob` tool knows when to pick `no_agent=True` and writes the script for you.
+- **One-shot from a script that's already running** (CI step, post-commit hook, deploy script, externally-scheduled monitor): use [`hermes send`](https://hermes-agent.nousresearch.com/docs/guides/pipe-script-output) to pipe stdout or a file straight to Telegram / Discord / Slack / etc. without setting up a cron entry.
 
 ------------------------------------------------------------------------
 
@@ -29,13 +29,13 @@ The `script` parameter is the secret weapon here. A Python script runs before ea
 
 Create the monitoring script:
 
-``` prism-code
+``` bash
 mkdir -p ~/.hermes/scripts
 ```
 
 ~/.hermes/scripts/watch-site.py
 
-``` prism-code
+``` python
 import hashlib, json, os, urllib.request
 
 URL = "https://example.com/pricing"
@@ -68,7 +68,7 @@ else:
 
 Set up the cron job:
 
-``` prism-code
+``` bash
 /cron add "every 1h" "If the script output says CHANGE DETECTED, summarize what changed on the page and why it might matter. If it says NO_CHANGE, respond with just [SILENT]." --script ~/.hermes/scripts/watch-site.py --name "Pricing monitor" --deliver telegram
 ```
 
@@ -82,7 +82,7 @@ For cron monitoring jobs, instruct the agent to respond with only `[SILENT]` whe
 
 Compile information from multiple sources into a formatted summary. This runs once a week and delivers to your home channel.
 
-``` prism-code
+``` bash
 /cron add "0 9 * * 1" "Generate a weekly report covering:
 
 1. Search the web for the top 5 AI news stories from the past week
@@ -95,7 +95,7 @@ Keep it under 500 words — highlight only what matters." --name "Weekly AI dige
 
 From the CLI:
 
-``` prism-code
+``` bash
 hermes cron create "0 9 * * 1" \
   "Generate a weekly report covering the top AI news, trending ML GitHub repos, and most-discussed HN posts. Format with sections, include links, keep under 500 words." \
   --name "Weekly AI digest" \
@@ -110,7 +110,7 @@ The `0 9 * * 1` is a standard cron expression: 9:00 AM every Monday.
 
 Monitor a repository for new issues, PRs, or releases.
 
-``` prism-code
+``` bash
 /cron add "every 6h" "Check the GitHub repository NousResearch/hermes-agent for:
 - New issues opened in the last 6 hours
 - New PRs opened or merged in the last 6 hours
@@ -136,7 +136,7 @@ Scrape data at regular intervals, save to files, and detect trends over time. Th
 
 ~/.hermes/scripts/collect-prices.py
 
-``` prism-code
+``` python
 import json, os, urllib.request
 from datetime import datetime
 
@@ -165,7 +165,7 @@ for r in recent[-6:]:
     print(f"  {r['timestamp']}: BTC=${r['prices']['bitcoin']['usd']}, ETH=${r['prices']['ethereum']['usd']}")
 ```
 
-``` prism-code
+``` bash
 /cron add "every 1h" "Analyze the price data from the script output. Report:
 1. Current prices
 2. Trend direction over the last 6 data points (up/down/flat)
@@ -186,7 +186,7 @@ The script does the mechanical collection; the agent adds the reasoning layer.
 
 Chain skills together for complex scheduled tasks. Skills are loaded in order before the prompt executes.
 
-``` prism-code
+``` bash
 # Use the arxiv skill to find papers, then the obsidian skill to save notes
 /cron add "0 8 * * *" "Search arXiv for the 3 most interesting papers on 'language model reasoning' from the past day. For each paper, create an Obsidian note with the title, authors, abstract summary, and key contribution." \
   --skill arxiv \
@@ -196,7 +196,7 @@ Chain skills together for complex scheduled tasks. Skills are loaded in order be
 
 From the tool directly:
 
-``` prism-code
+``` python
 cronjob(
     action="create",
     skills=["arxiv", "obsidian"],
@@ -213,7 +213,7 @@ Skills are loaded in order — `arxiv` first (teaches the agent how to search pa
 
 ## Managing Your Jobs
 
-``` prism-code
+``` bash
 # List all active jobs
 /cron list
 
@@ -241,15 +241,15 @@ Skills are loaded in order — `arxiv` first (teaches the agent how to search pa
 
 The `--deliver` flag controls where results go:
 
-| Target        | Example                                   | Use case                                 |
-|---------------|-------------------------------------------|------------------------------------------|
-| `origin`      | `--deliver origin`                        | Same chat that created the job (default) |
-| `local`       | `--deliver local`                         | Save to local file only                  |
-| `telegram`    | `--deliver telegram`                      | Your Telegram home channel               |
-| `discord`     | `--deliver discord`                       | Your Discord home channel                |
-| `slack`       | `--deliver slack`                         | Your Slack home channel                  |
-| Specific chat | `--deliver telegram:-1001234567890`       | A specific Telegram group                |
-| Threaded      | `--deliver telegram:-1001234567890:17585` | A specific Telegram topic thread         |
+| Target | Example | Use case |
+|----|----|----|
+| `origin` | `--deliver origin` | Same chat that created the job (default) |
+| `local` | `--deliver local` | Save to local file only |
+| `telegram` | `--deliver telegram` | Your Telegram home channel |
+| `discord` | `--deliver discord` | Your Discord home channel |
+| `slack` | `--deliver slack` | Your Slack home channel |
+| Specific chat | `--deliver telegram:-1001234567890` | A specific Telegram group |
+| Threaded | `--deliver telegram:-1001234567890:17585` | A specific Telegram topic thread |
 
 ------------------------------------------------------------------------
 
@@ -267,4 +267,4 @@ The `--deliver` flag controls where results go:
 
 ------------------------------------------------------------------------
 
-*For the complete cron reference — all parameters, edge cases, and internals — see [Scheduled Tasks (Cron)](/docs/user-guide/features/cron).*
+*For the complete cron reference — all parameters, edge cases, and internals — see [Scheduled Tasks (Cron)](../user-guide/features/cron.md).*

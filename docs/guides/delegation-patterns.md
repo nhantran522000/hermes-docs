@@ -8,7 +8,7 @@ last_crawled: 2026-07-11
 
 Hermes can spawn isolated child agents to work on tasks in parallel. Each subagent gets its own conversation, terminal session, and toolset. Only the final summary comes back — intermediate tool calls never enter your context window.
 
-For the full feature reference, see [Subagent Delegation](/docs/user-guide/features/delegation).
+For the full feature reference, see [Subagent Delegation](../user-guide/features/delegation.md).
 
 ------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ For the full feature reference, see [Subagent Delegation](/docs/user-guide/featu
 
 Research three topics simultaneously and get structured summaries back:
 
-``` prism-code
+``` text
 Research these three topics in parallel:
 1. Current state of WebAssembly outside the browser
 2. RISC-V server chip adoption in 2025
@@ -46,7 +46,7 @@ Focus on recent developments and key players.
 
 Behind the scenes, Hermes uses:
 
-``` prism-code
+``` python
 delegate_task(tasks=[
     {
         "goal": "Research WebAssembly outside the browser in 2025",
@@ -74,7 +74,7 @@ All three run concurrently. Each subagent searches the web independently and ret
 
 Delegate a security review to a fresh-context subagent that approaches the code without preconceptions:
 
-``` prism-code
+``` text
 Review the authentication module at src/auth/ for security issues.
 Check for SQL injection, JWT validation problems, password handling,
 and session management. Fix anything you find and run the tests.
@@ -82,7 +82,7 @@ and session management. Fix anything you find and run the tests.
 
 The key is the `context` field — it must include everything the subagent needs:
 
-``` prism-code
+``` python
 delegate_task(
     goal="Review src/auth/ for security issues and fix any found",
     context="""Project at /home/user/webapp. Python 3.11, Flask, PyJWT, bcrypt.
@@ -104,7 +104,7 @@ Subagents know **absolutely nothing** about your conversation. They start comple
 
 Evaluate multiple approaches to the same problem in parallel, then pick the best:
 
-``` prism-code
+``` text
 I need to add full-text search to our Django app. Evaluate three approaches
 in parallel:
 1. PostgreSQL tsvector (built-in)
@@ -123,7 +123,7 @@ Each subagent researches one option independently. Because they're isolated, the
 
 Split a large refactoring task across parallel subagents, each handling a different part of the codebase:
 
-``` prism-code
+``` python
 delegate_task(tasks=[
     {
         "goal": "Refactor all API endpoint handlers to use the new response format",
@@ -165,7 +165,7 @@ Each subagent gets its own terminal session. They can work on the same project d
 
 Use `execute_code` for mechanical data gathering, then delegate the reasoning-heavy analysis:
 
-``` prism-code
+``` python
 # Step 1: Mechanical gathering (execute_code is better here — no reasoning needed)
 execute_code("""
 from hermes_tools import web_search, web_extract
@@ -206,12 +206,12 @@ This is often the most efficient pattern: `execute_code` handles the 10+ sequent
 
 Choose toolsets based on what the subagent needs:
 
-| Task type          | Toolsets                      | Why                            |
-|--------------------|-------------------------------|--------------------------------|
-| Web research       | `["web"]`                     | web_search + web_extract only  |
-| Code work          | `["terminal", "file"]`        | Shell access + file operations |
-| Full-stack         | `["terminal", "file", "web"]` | Everything except messaging    |
-| Read-only analysis | `["file"]`                    | Can only read files, no shell  |
+| Task type | Toolsets | Why |
+|----|----|----|
+| Web research | `["web"]` | web_search + web_extract only |
+| Code work | `["terminal", "file"]` | Shell access + file operations |
+| Full-stack | `["terminal", "file", "web"]` | Everything except messaging |
+| Read-only analysis | `["file"]` | Can only read files, no shell |
 
 Restricting toolsets keeps the subagent focused and prevents accidental side effects (like a research subagent running shell commands).
 
@@ -224,14 +224,14 @@ Restricting toolsets keeps the subagent focused and prevents accidental side eff
 
 ### Tuning Concurrency and Depth
 
-| Config                    | Default | Range | Effect                                       |
-|---------------------------|---------|-------|----------------------------------------------|
-| `max_concurrent_children` | 3       | \>=1  | Parallel batch size per `delegate_task` call |
-| `max_spawn_depth`         | 1       | \>=1  | How many delegation levels can spawn further |
+| Config | Default | Range | Effect |
+|----|----|----|----|
+| `max_concurrent_children` | 3 | \>=1 | Parallel batch size per `delegate_task` call |
+| `max_spawn_depth` | 1 | \>=1 | How many delegation levels can spawn further |
 
 Example: running 30 parallel workers with nested subagents:
 
-``` prism-code
+``` yaml
 delegation:
   max_concurrent_children: 30
   max_spawn_depth: 2
@@ -256,4 +256,4 @@ delegation:
 
 ------------------------------------------------------------------------
 
-*For the complete delegation reference — all parameters, ACP integration, and advanced configuration — see [Subagent Delegation](/docs/user-guide/features/delegation).*
+*For the complete delegation reference — all parameters, ACP integration, and advanced configuration — see [Subagent Delegation](../user-guide/features/delegation.md).*

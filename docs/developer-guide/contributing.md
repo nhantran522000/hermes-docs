@@ -16,33 +16,33 @@ We value contributions in this order:
 2.  **Cross-platform compatibility** — macOS, different Linux distros, WSL2
 3.  **Security hardening** — shell injection, prompt injection, path traversal
 4.  **Performance and robustness** — retry logic, error handling, graceful degradation
-5.  **New skills** — broadly useful ones (see [Creating Skills](/docs/developer-guide/creating-skills))
+5.  **New skills** — broadly useful ones (see [Creating Skills](creating-skills.md))
 6.  **New tools** — rarely needed; most capabilities should be skills
 7.  **Documentation** — fixes, clarifications, new examples
 
 ## Common contribution paths
 
-- Building a custom/local tool without modifying Hermes core? Start with [Build a Hermes Plugin](/docs/developer-guide/plugins)
-- Building a new built-in core tool for Hermes itself? Start with [Adding Tools](/docs/developer-guide/adding-tools)
-- Building a new skill? Start with [Creating Skills](/docs/developer-guide/creating-skills)
-- Building a new inference provider? Start with [Adding Providers](/docs/developer-guide/adding-providers)
+- Building a custom/local tool without modifying Hermes core? Start with [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
+- Building a new built-in core tool for Hermes itself? Start with [Adding Tools](adding-tools.md)
+- Building a new skill? Start with [Creating Skills](creating-skills.md)
+- Building a new inference provider? Start with [Adding Providers](adding-providers.md)
 
 ## Development Setup
 
 ### Prerequisites
 
-| Requirement          | Notes                                                                                         |
-|----------------------|-----------------------------------------------------------------------------------------------|
-| **Git**              | With the `git-lfs` extension installed                                                        |
-| **Python 3.11–3.13** | uv will install it if missing                                                                 |
-| **uv**               | Fast Python package manager ([install](https://docs.astral.sh/uv/))                           |
-| **Node.js 20+**      | Optional — needed for browser tools and WhatsApp bridge (matches root `package.json` engines) |
+| Requirement | Notes |
+|----|----|
+| **Git** | With the `git-lfs` extension installed |
+| **Python 3.11–3.13** | uv will install it if missing |
+| **uv** | Fast Python package manager ([install](https://docs.astral.sh/uv/)) |
+| **Node.js 20+** | Optional — needed for browser tools and WhatsApp bridge (matches root `package.json` engines) |
 
 ### Install with the standard installer
 
 For most contributors, the best development bootstrap is the same path users take: run the standard installer, then work inside the repository it cloned. The installer creates the Hermes venv, wires the `hermes` command, stamps the install method for `hermes update`, and clones the full git project into `$HERMES_HOME/hermes-agent` (usually `~/.hermes/hermes-agent`). That keeps your development environment on the same layout the CLI, updater, lazy dependency installer, gateway, and docs assume.
 
-``` prism-code
+``` bash
 curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 cd "${HERMES_HOME:-$HOME/.hermes}/hermes-agent"
 
@@ -55,14 +55,14 @@ npm install
 
 After that, create branches and run tests from that checkout:
 
-``` prism-code
+``` bash
 git checkout -b fix/description
 scripts/run_tests.sh
 ```
 
 You can also run a fully isolated Hermes instance (throwaway HERMES_HOME, separate Electron userData, distinct Electron app name to avoid the single-instance lock):
 
-``` prism-code
+``` bash
 scripts/dev-sandbox.sh python -m hermes_cli.main
 scripts/dev-sandbox.sh --persistent python -m hermes_cli.main desktop  # state survives restarts, but lives in the worktree :)
 ```
@@ -73,7 +73,7 @@ Use this only if you intentionally do not want Hermes' managed install layout (f
 
 Create the venv **outside** the cloned source tree. A venv that lives inside the directory the agent operates from can be wiped by a relative-path command the agent runs against its own checkout (`rm -rf venv`, `uv venv venv`, etc.), which silently destroys the running runtime mid-session. Keeping it outside the tree means no relative path from the workspace resolves to it.
 
-``` prism-code
+``` bash
 git clone https://github.com/NousResearch/hermes-agent.git
 cd hermes-agent
 
@@ -91,7 +91,7 @@ npm install
 
 ### Configure for Development
 
-``` prism-code
+``` bash
 mkdir -p ~/.hermes/{cron,sessions,logs,memories,skills}
 cp cli-config.yaml.example ~/.hermes/config.yaml
 touch ~/.hermes/.env
@@ -102,7 +102,7 @@ echo 'OPENROUTER_API_KEY=sk-or-v1-your-key' >> ~/.hermes/.env
 
 ### Run
 
-``` prism-code
+``` bash
 # The standard installer already put `hermes` on PATH.
 hermes doctor
 hermes chat -q "Hello"
@@ -110,14 +110,14 @@ hermes chat -q "Hello"
 
 If you used the manual clone fallback, run `./hermes` from the checkout or symlink this clone's venv explicitly:
 
-``` prism-code
+``` bash
 mkdir -p ~/.local/bin
 ln -sf "$(pwd)/venv/bin/hermes" ~/.local/bin/hermes
 ```
 
 ### Run Tests
 
-``` prism-code
+``` bash
 scripts/run_tests.sh
 ```
 
@@ -131,7 +131,7 @@ scripts/run_tests.sh
 
 ## Cross-Platform Compatibility
 
-See **[Platform Support](/docs/getting-started/platform-support)**. Native Windows uses Git Bash (from [Git for Windows](https://git-scm.com/download/win)) for shell commands. A few features require POSIX kernel primitives and are gated: the dashboard's embedded PTY terminal pane (`/chat` tab) needs a POSIX PTY (Linux, macOS, or WSL2). If you're doing Windows-heavy dev, run the Windows-footgun lint (`scripts/check-windows-footguns.py`) before pushing.
+See **[Platform Support](https://hermes-agent.nousresearch.com/docs/getting-started/platform-support)**. Native Windows uses Git Bash (from [Git for Windows](https://git-scm.com/download/win)) for shell commands. A few features require POSIX kernel primitives and are gated: the dashboard's embedded PTY terminal pane (`/chat` tab) needs a POSIX PTY (Linux, macOS, or WSL2). If you're doing Windows-heavy dev, run the Windows-footgun lint (`scripts/check-windows-footguns.py`) before pushing.
 
 When contributing code, keep these rules in mind:
 
@@ -147,7 +147,7 @@ Key patterns:
 
 Always catch both `ImportError` and `NotImplementedError`:
 
-``` prism-code
+``` python
 try:
     from simple_term_menu import TerminalMenu
     menu = TerminalMenu(options)
@@ -163,7 +163,7 @@ except (ImportError, NotImplementedError):
 
 Some environments may save `.env` files in non-UTF-8 encodings:
 
-``` prism-code
+``` python
 try:
     load_dotenv(env_path)
 except UnicodeDecodeError:
@@ -174,7 +174,7 @@ except UnicodeDecodeError:
 
 `os.setsid()`, `os.killpg()`, and signal handling differ across platforms:
 
-``` prism-code
+``` python
 import platform
 if platform.system() != "Windows":
     kwargs["preexec_fn"] = os.setsid
@@ -190,15 +190,15 @@ Hermes has terminal access. Security matters.
 
 ### Existing Protections
 
-| Layer                           | Implementation                                                              |
-|---------------------------------|-----------------------------------------------------------------------------|
-| **Sudo password piping**        | Uses `shlex.quote()` to prevent shell injection                             |
-| **Dangerous command detection** | Regex patterns in `tools/approval.py` with user approval flow               |
-| **Cron prompt injection**       | Scanner blocks instruction-override patterns                                |
-| **Write deny list**             | Protected paths resolved via `os.path.realpath()` to prevent symlink bypass |
-| **Skills guard**                | Security scanner for hub-installed skills                                   |
-| **Code execution sandbox**      | Child process runs with API keys stripped                                   |
-| **Container hardening**         | Docker: all capabilities dropped, no privilege escalation, PID limits       |
+| Layer | Implementation |
+|----|----|
+| **Sudo password piping** | Uses `shlex.quote()` to prevent shell injection |
+| **Dangerous command detection** | Regex patterns in `tools/approval.py` with user approval flow |
+| **Cron prompt injection** | Scanner blocks instruction-override patterns |
+| **Write deny list** | Protected paths resolved via `os.path.realpath()` to prevent symlink bypass |
+| **Skills guard** | Security scanner for hub-installed skills |
+| **Code execution sandbox** | Child process runs with API keys stripped |
+| **Container hardening** | Docker: all capabilities dropped, no privilege escalation, PID limits |
 
 ### Contributing Security-Sensitive Code
 
@@ -212,7 +212,7 @@ Hermes has terminal access. Security matters.
 
 ### Branch Naming
 
-``` prism-code
+``` text
 fix/description        # Bug fixes
 feat/description       # New features
 docs/description       # Documentation
@@ -240,7 +240,7 @@ Include:
 
 We use [Conventional Commits](https://www.conventionalcommits.org/):
 
-``` prism-code
+``` text
 <type>(<scope>): <description>
 ```
 
@@ -257,7 +257,7 @@ Scopes: `cli`, `gateway`, `tools`, `skills`, `agent`, `install`, `whatsapp`, `se
 
 Examples:
 
-``` prism-code
+``` text
 fix(cli): prevent crash in save_config_value when model is a string
 feat(gateway): add WhatsApp multi-user session isolation
 fix(security): prevent shell injection in sudo password piping

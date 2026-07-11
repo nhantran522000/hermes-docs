@@ -10,7 +10,7 @@ A quick-wins collection of practical tips that make you immediately more effecti
 
 Confused which model to pick?
 
-Run `hermes setup --portal` — you get 300+ models including Claude, GPT-5, and Gemini under one subscription. See [Nous Portal](/docs/integrations/nous-portal).
+Run `hermes setup --portal` — you get 300+ models including Claude, GPT-5, and Gemini under one subscription. See [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal).
 
 ------------------------------------------------------------------------
 
@@ -72,7 +72,7 @@ Use `/verbose` to cycle through tool output display modes: **off → new → all
 
 Create an `AGENTS.md` in your project root with architecture decisions, coding conventions, and project-specific instructions. This is automatically injected into every session, so the agent always knows your project's rules.
 
-``` prism-code
+``` markdown
 # Project Context
 - This is a FastAPI backend with SQLAlchemy ORM
 - Always use async/await for database operations
@@ -84,9 +84,9 @@ Create an `AGENTS.md` in your project root with architecture decisions, coding c
 
 Want Hermes to have a stable default voice? Edit `~/.hermes/SOUL.md` (or `$HERMES_HOME/SOUL.md` if you use a custom Hermes home). Hermes now seeds a starter SOUL automatically and uses that global file as the instance-wide personality source.
 
-For a full walkthrough, see [Use SOUL.md with Hermes](/docs/guides/use-soul-with-hermes).
+For a full walkthrough, see [Use SOUL.md with Hermes](use-soul-with-hermes.md).
 
-``` prism-code
+``` markdown
 # Soul
 You are a senior backend engineer. Be terse and direct.
 Skip explanations unless asked. Prefer one-liners over verbose solutions.
@@ -133,7 +133,7 @@ Memory is a frozen snapshot — changes made during a session don't appear in th
 
 ### Don't Break the Prompt Cache
 
-Most LLM providers cache the conversation prefix (system prompt + history). If you keep your system prompt stable (same context files, same memory), subsequent messages in a session get **cache hits** that are significantly cheaper. The cache is keyed to the model and account — so an explicit `/model` switch, an [automatic provider fallback](/docs/user-guide/features/fallback-providers), or a [credential-pool rotation](/docs/user-guide/features/credential-pools) all force the next turn to re-read the entire conversation at full input price. Occasional switches are fine; frequent switching in a long session multiplies your cost.
+Most LLM providers cache the conversation prefix (system prompt + history). If you keep your system prompt stable (same context files, same memory), subsequent messages in a session get **cache hits** that are significantly cheaper. The cache is keyed to the model and account — so an explicit `/model` switch, an [automatic provider fallback](../user-guide/features/fallback-providers.md), or a [credential-pool rotation](../user-guide/features/credential-pools.md) all force the next turn to re-read the entire conversation at full input price. Occasional switches are fine; frequent switching in a long session multiplies your cost.
 
 ### Use /compress Before Hitting Limits
 
@@ -183,7 +183,7 @@ By default, messaging sessions never auto-reset — context lives until you `/re
 
 When working with untrusted repositories or running unfamiliar code, use Docker or Daytona as your terminal backend. Set `TERMINAL_BACKEND=docker` in your `.env`. Destructive commands inside a container can't harm your host system.
 
-``` prism-code
+``` bash
 # In your .env:
 TERMINAL_BACKEND=docker
 TERMINAL_DOCKER_IMAGE=hermes-sandbox:latest
@@ -195,14 +195,14 @@ On Windows, some default encodings (such as `cp125x`) cannot represent all Unico
 
 - Prefer opening files with an explicit UTF-8 encoding:
 
-``` prism-code
+``` python
 with open("results.txt", "w", encoding="utf-8") as f:
     f.write("✓ All good\n")
 ```
 
 - In PowerShell, you can also switch the current session to UTF-8 for console and native command output:
 
-``` prism-code
+``` powershell
 $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
 ```
 
@@ -224,7 +224,7 @@ When running in a container backend (Docker, Singularity, Modal, Daytona), dange
 
 Never set `GATEWAY_ALLOW_ALL_USERS=true` on a bot with terminal access. Always use platform-specific allowlists (`TELEGRAM_ALLOWED_USERS`, `DISCORD_ALLOWED_USERS`) or DM pairing to control who can interact with your agent.
 
-``` prism-code
+``` bash
 # Recommended: explicit allowlists per platform
 TELEGRAM_ALLOWED_USERS=123456789,987654321
 DISCORD_ALLOWED_USERS=123456789012345678

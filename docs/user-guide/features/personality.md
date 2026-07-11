@@ -17,13 +17,13 @@ If you want to change who Hermes is — or replace it with an entirely different
 
 Hermes now seeds a default `SOUL.md` automatically in:
 
-``` prism-code
+``` text
 ~/.hermes/SOUL.md
 ```
 
 More precisely, it uses the current instance's `HERMES_HOME`, so if you run Hermes with a custom home directory, it will use:
 
-``` prism-code
+``` text
 $HERMES_HOME/SOUL.md
 ```
 
@@ -54,13 +54,13 @@ That also makes it easier to teach users:
 
 For most users:
 
-``` prism-code
+``` bash
 ~/.hermes/SOUL.md
 ```
 
 If you use a custom home:
 
-``` prism-code
+``` bash
 $HERMES_HOME/SOUL.md
 ```
 
@@ -95,7 +95,7 @@ A good SOUL file is:
 
 ### Example
 
-``` prism-code
+``` markdown
 # Personality
 
 You are a pragmatic senior engineer with strong taste.
@@ -207,7 +207,7 @@ Hermes ships with built-in personalities you can switch to with `/personality`.
 
 ### CLI
 
-``` prism-code
+``` text
 /personality
 /personality concise
 /personality technical
@@ -215,7 +215,7 @@ Hermes ships with built-in personalities you can switch to with `/personality`.
 
 ### Messaging platforms
 
-``` prism-code
+``` text
 /personality teacher
 ```
 
@@ -225,7 +225,7 @@ These are convenient overlays, but your global `SOUL.md` still gives Hermes its 
 
 You can also define named custom personalities in `~/.hermes/config.yaml` under `agent.personalities`.
 
-``` prism-code
+``` yaml
 agent:
   personalities:
     codereviewer: >
@@ -235,7 +235,7 @@ agent:
 
 Then switch to it with:
 
-``` prism-code
+``` text
 /personality codereviewer
 ```
 
@@ -270,10 +270,10 @@ At a high level, the prompt stack includes:
 
 ## Related docs
 
-- [Context Files](/docs/user-guide/features/context-files)
-- [Configuration](/docs/user-guide/configuration)
-- [Tips & Best Practices](/docs/guides/tips)
-- [SOUL.md Guide](/docs/guides/use-soul-with-hermes)
+- [Context Files](context-files.md)
+- [Configuration](../configuration.md)
+- [Tips & Best Practices](../../guides/tips.md)
+- [SOUL.md Guide](../../guides/use-soul-with-hermes.md)
 
 ## CLI appearance vs conversational personality
 
@@ -282,4 +282,4 @@ Conversational personality and CLI appearance are separate:
 - `SOUL.md`, `agent.system_prompt`, and `/personality` affect how Hermes speaks
 - `display.skin` and `/skin` affect how Hermes looks in the terminal
 
-For terminal appearance, see [Skins & Themes](/docs/user-guide/features/skins).
+For terminal appearance, see [Skins & Themes](https://hermes-agent.nousresearch.com/docs/user-guide/features/skins).

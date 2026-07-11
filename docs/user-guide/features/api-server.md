@@ -12,7 +12,7 @@ Your agent handles requests with its full toolset (terminal, file operations, we
 
 One backend covers models + tools
 
-Hermes itself needs a configured provider and tool backends for the API server to be useful. A [Nous Portal](/docs/user-guide/features/tool-gateway) subscription handles both — 300+ models plus web/image/TTS/browser via the Tool Gateway. Run `hermes setup --portal` once before starting the API server and frontends like Open WebUI or LobeChat get a fully tool-equipped backend.
+Hermes itself needs a configured provider and tool backends for the API server to be useful. A [Nous Portal](https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-gateway) subscription handles both — 300+ models plus web/image/TTS/browser via the Tool Gateway. Run `hermes setup --portal` once before starting the API server and frontends like Open WebUI or LobeChat get a fully tool-equipped backend.
 
 ## Quick Start
 
@@ -20,7 +20,7 @@ Hermes itself needs a configured provider and tool backends for the API server t
 
 Add to `~/.hermes/.env`:
 
-``` prism-code
+``` bash
 API_SERVER_ENABLED=true
 API_SERVER_KEY=change-me-local-dev
 # Optional: only if a browser must call Hermes directly
@@ -29,13 +29,13 @@ API_SERVER_KEY=change-me-local-dev
 
 ### 2. Start the gateway
 
-``` prism-code
+``` bash
 hermes gateway
 ```
 
 You'll see:
 
-``` prism-code
+``` text
 [API Server] API server listening on http://127.0.0.1:8642
 ```
 
@@ -43,7 +43,7 @@ You'll see:
 
 Point any OpenAI-compatible client at `http://localhost:8642/v1`:
 
-``` prism-code
+``` bash
 # Test with curl
 curl http://localhost:8642/v1/chat/completions \
   -H "Authorization: Bearer change-me-local-dev" \
@@ -51,7 +51,7 @@ curl http://localhost:8642/v1/chat/completions \
   -d '{"model": "hermes-agent", "messages": [{"role": "user", "content": "Hello!"}]}'
 ```
 
-Or connect Open WebUI, LobeChat, or any other frontend — see the [Open WebUI integration guide](/docs/user-guide/messaging/open-webui) for step-by-step instructions.
+Or connect Open WebUI, LobeChat, or any other frontend — see the [Open WebUI integration guide](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/open-webui) for step-by-step instructions.
 
 ## Endpoints
 
@@ -61,7 +61,7 @@ Standard OpenAI Chat Completions format. Stateless — the full conversation is 
 
 **Request:**
 
-``` prism-code
+``` json
 {
   "model": "hermes-agent",
   "messages": [
@@ -74,7 +74,7 @@ Standard OpenAI Chat Completions format. Stateless — the full conversation is 
 
 **Response:**
 
-``` prism-code
+``` json
 {
   "id": "chatcmpl-abc123",
   "object": "chat.completion",
@@ -91,7 +91,7 @@ Standard OpenAI Chat Completions format. Stateless — the full conversation is 
 
 **Inline image input:** user messages may send `content` as an array of `text` and `image_url` parts. Both remote `http(s)` URLs and `data:image/...` URLs are supported:
 
-``` prism-code
+``` json
 {
   "model": "hermes-agent",
   "messages": [
@@ -121,7 +121,7 @@ OpenAI Responses API format. Supports server-side conversation state via `previo
 
 **Request:**
 
-``` prism-code
+``` json
 {
   "model": "hermes-agent",
   "input": "What files are in my project?",
@@ -132,7 +132,7 @@ OpenAI Responses API format. Supports server-side conversation state via `previo
 
 **Response:**
 
-``` prism-code
+``` json
 {
   "id": "resp_abc123",
   "object": "response",
@@ -149,7 +149,7 @@ OpenAI Responses API format. Supports server-side conversation state via `previo
 
 **Inline image input:** `input[].content` can contain `input_text` and `input_image` parts. Both remote URLs and `data:image/...` URLs are supported:
 
-``` prism-code
+``` json
 {
   "model": "hermes-agent",
   "input": [
@@ -170,7 +170,7 @@ Uploaded files (`input_file` / `file_id`) and non-image `data:` URLs return `400
 
 Chain responses to maintain full context (including tool calls) across turns:
 
-``` prism-code
+``` json
 {
   "input": "Now show me the README",
   "previous_response_id": "resp_abc123"
@@ -183,7 +183,7 @@ The server reconstructs the full conversation from the stored response chain —
 
 Use the `conversation` parameter instead of tracking response IDs:
 
-``` prism-code
+``` json
 {"input": "Hello", "conversation": "my-project"}
 {"input": "What's in src/?", "conversation": "my-project"}
 {"input": "Run the tests", "conversation": "my-project"}
@@ -201,13 +201,13 @@ Delete a stored response.
 
 ### GET /v1/models
 
-Lists the agent as an available model. The advertised model name defaults to the [profile](/docs/user-guide/profiles) name (or `hermes-agent` for the default profile). Required by most frontends for model discovery.
+Lists the agent as an available model. The advertised model name defaults to the [profile](../profiles.md) name (or `hermes-agent` for the default profile). Required by most frontends for model discovery.
 
 ### GET /v1/capabilities
 
 Returns a machine-readable description of the API server's stable surface for external UIs, orchestrators, and plugin bridges.
 
-``` prism-code
+``` json
 {
   "object": "hermes.api_server.capabilities",
   "platform": "hermes-agent",
@@ -242,7 +242,7 @@ In addition to `/v1/chat/completions` and `/v1/responses`, the server exposes a 
 
 Create a new agent run. Returns a `run_id` that can be used to subscribe to progress events.
 
-``` prism-code
+``` json
 {
   "run_id": "run_abc123",
   "status": "started"
@@ -255,7 +255,7 @@ Runs accept a simple `input` string and optional `session_id`, `instructions`, `
 
 Poll the current run state. This is useful for dashboards that need status without holding an SSE connection open, or for UIs that reconnect after navigation.
 
-``` prism-code
+``` json
 {
   "object": "hermes.run",
   "run_id": "run_abc123",
@@ -321,21 +321,21 @@ Trigger the job to run immediately, out of schedule.
 
 External UIs can manage Hermes sessions over REST without standing up the dashboard. All endpoints are gated by `API_SERVER_KEY` and live under `/api/sessions/*`.
 
-| Method   | Path                             | Description                                                                                                        |
-|----------|----------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| `GET`    | `/api/sessions`                  | List sessions (paginated — `limit`, `offset`, `source`, `include_children`)                                        |
-| `POST`   | `/api/sessions`                  | Create an empty session                                                                                            |
-| `GET`    | `/api/sessions/{id}`             | Read session metadata                                                                                              |
-| `PATCH`  | `/api/sessions/{id}`             | Update title or `end_reason`                                                                                       |
-| `DELETE` | `/api/sessions/{id}`             | Delete a session                                                                                                   |
-| `GET`    | `/api/sessions/{id}/messages`    | Message history for a session                                                                                      |
-| `POST`   | `/api/sessions/{id}/fork`        | Branch the session via `SessionDB` lineage (matches CLI `/branch` semantics)                                       |
-| `POST`   | `/api/sessions/{id}/chat`        | Run one synchronous agent turn                                                                                     |
-| `POST`   | `/api/sessions/{id}/chat/stream` | SSE wrapper over a single turn — emits `assistant.delta`, `tool.started`, `tool.completed`, `run.completed` events |
+| Method | Path | Description |
+|----|----|----|
+| `GET` | `/api/sessions` | List sessions (paginated — `limit`, `offset`, `source`, `include_children`) |
+| `POST` | `/api/sessions` | Create an empty session |
+| `GET` | `/api/sessions/{id}` | Read session metadata |
+| `PATCH` | `/api/sessions/{id}` | Update title or `end_reason` |
+| `DELETE` | `/api/sessions/{id}` | Delete a session |
+| `GET` | `/api/sessions/{id}/messages` | Message history for a session |
+| `POST` | `/api/sessions/{id}/fork` | Branch the session via `SessionDB` lineage (matches CLI `/branch` semantics) |
+| `POST` | `/api/sessions/{id}/chat` | Run one synchronous agent turn |
+| `POST` | `/api/sessions/{id}/chat/stream` | SSE wrapper over a single turn — emits `assistant.delta`, `tool.started`, `tool.completed`, `run.completed` events |
 
 `/v1/capabilities` advertises the full surface via `session_*` feature flags and `endpoints.session_*` entries so external UIs can detect support and fall back safely. Inline images are supported in `chat` and `chat/stream` payloads (multimodal-aware path).
 
-``` prism-code
+``` bash
 # fork a session and run one turn
 curl -X POST http://localhost:8642/api/sessions/$ID/fork \
   -H "Authorization: Bearer $API_SERVER_KEY" \
@@ -351,7 +351,7 @@ curl -N -X POST http://localhost:8642/api/sessions/$ID/chat/stream \
 
 `GET /v1/skills` and `GET /v1/toolsets` let external clients enumerate the agent's capabilities deterministically over REST instead of asking the model. Both are read-only and gated by `API_SERVER_KEY`.
 
-``` prism-code
+``` bash
 curl http://localhost:8642/v1/skills \
   -H "Authorization: Bearer $API_SERVER_KEY"
 # → [{"name": "github-pr-workflow", "description": "...", "category": "..."}, ...]
@@ -368,7 +368,7 @@ curl http://localhost:8642/v1/toolsets \
 
 Multi-user frontends like Open WebUI need a stable per-channel identifier for long-term memory (Honcho, etc.) that is **independent** of the transcript-scoped `X-Hermes-Session-Id` (which rotates on `/new`). Pass `X-Hermes-Session-Key` on `/v1/chat/completions`, `/v1/responses`, or `/v1/runs` and Hermes threads it through to `AIAgent(gateway_session_key=...)`, where the Honcho memory provider uses it to derive a stable scope.
 
-``` prism-code
+``` http
 POST /v1/chat/completions HTTP/1.1
 Authorization: Bearer ***
 X-Hermes-Session-Id: transcript-alpha
@@ -390,7 +390,7 @@ This means you can customize behavior per-frontend without losing capabilities:
 
 Bearer token auth via the `Authorization` header:
 
-``` prism-code
+``` text
 Authorization: Bearer ***
 ```
 
@@ -404,18 +404,18 @@ The API server gives full access to hermes-agent's toolset, **including terminal
 
 ### Environment Variables
 
-| Variable                  | Default          | Description                                                                                  |
-|---------------------------|------------------|----------------------------------------------------------------------------------------------|
-| `API_SERVER_ENABLED`      | `false`          | Enable the API server                                                                        |
-| `API_SERVER_PORT`         | `8642`           | HTTP server port                                                                             |
-| `API_SERVER_HOST`         | `127.0.0.1`      | Bind address (localhost only by default)                                                     |
-| `API_SERVER_KEY`          | *(required)*     | Bearer token for auth                                                                        |
-| `API_SERVER_CORS_ORIGINS` | *(none)*         | Comma-separated allowed browser origins                                                      |
-| `API_SERVER_MODEL_NAME`   | *(profile name)* | Model name on `/v1/models`. Defaults to profile name, or `hermes-agent` for default profile. |
+| Variable | Default | Description |
+|----|----|----|
+| `API_SERVER_ENABLED` | `false` | Enable the API server |
+| `API_SERVER_PORT` | `8642` | HTTP server port |
+| `API_SERVER_HOST` | `127.0.0.1` | Bind address (localhost only by default) |
+| `API_SERVER_KEY` | *(required)* | Bearer token for auth |
+| `API_SERVER_CORS_ORIGINS` | *(none)* | Comma-separated allowed browser origins |
+| `API_SERVER_MODEL_NAME` | *(profile name)* | Model name on `/v1/models`. Defaults to profile name, or `hermes-agent` for default profile. |
 
 ### config.yaml
 
-``` prism-code
+``` yaml
 # Not yet supported — use environment variables.
 # config.yaml support coming in a future release.
 ```
@@ -433,7 +433,7 @@ The API server does **not** enable browser CORS by default.
 
 For direct browser access, set an explicit allowlist:
 
-``` prism-code
+``` bash
 API_SERVER_CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
 ```
 
@@ -449,25 +449,25 @@ Most documented frontends such as Open WebUI connect server-to-server and do not
 
 Any frontend that supports the OpenAI API format works. Tested/documented integrations:
 
-| Frontend                                            | Stars | Connection                                    |
-|-----------------------------------------------------|-------|-----------------------------------------------|
-| [Open WebUI](/docs/user-guide/messaging/open-webui) | 126k  | Full guide available                          |
-| LobeChat                                            | 73k   | Custom provider endpoint                      |
-| LibreChat                                           | 34k   | Custom endpoint in librechat.yaml             |
-| AnythingLLM                                         | 56k   | Generic OpenAI provider                       |
-| NextChat                                            | 87k   | BASE_URL env var                              |
-| ChatBox                                             | 39k   | API Host setting                              |
-| Jan                                                 | 26k   | Remote model config                           |
-| HF Chat-UI                                          | 8k    | OPENAI_BASE_URL                               |
-| big-AGI                                             | 7k    | Custom endpoint                               |
-| OpenAI Python SDK                                   | —     | `OpenAI(base_url="http://localhost:8642/v1")` |
-| curl                                                | —     | Direct HTTP requests                          |
+| Frontend | Stars | Connection |
+|----|----|----|
+| [Open WebUI](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/open-webui) | 126k | Full guide available |
+| LobeChat | 73k | Custom provider endpoint |
+| LibreChat | 34k | Custom endpoint in librechat.yaml |
+| AnythingLLM | 56k | Generic OpenAI provider |
+| NextChat | 87k | BASE_URL env var |
+| ChatBox | 39k | API Host setting |
+| Jan | 26k | Remote model config |
+| HF Chat-UI | 8k | OPENAI_BASE_URL |
+| big-AGI | 7k | Custom endpoint |
+| OpenAI Python SDK | — | `OpenAI(base_url="http://localhost:8642/v1")` |
+| curl | — | Direct HTTP requests |
 
 ## Multi-User Setup with Profiles
 
-To give multiple users their own isolated Hermes instance (separate config, memory, skills), use [profiles](/docs/user-guide/profiles):
+To give multiple users their own isolated Hermes instance (separate config, memory, skills), use [profiles](../profiles.md):
 
-``` prism-code
+``` bash
 # Create a profile per user
 hermes profile create alice
 hermes profile create bob
@@ -496,7 +496,7 @@ Each profile's API server automatically advertises the profile name as the model
 - `http://localhost:8643/v1/models` → model `alice`
 - `http://localhost:8644/v1/models` → model `bob`
 
-In Open WebUI, add each as a separate connection. The model dropdown shows `alice` and `bob` as distinct models, each backed by a fully isolated Hermes instance. See the [Open WebUI guide](/docs/user-guide/messaging/open-webui#multi-user-setup-with-profiles) for details.
+In Open WebUI, add each as a separate connection. The model dropdown shows `alice` and `bob` as distinct models, each backed by a fully isolated Hermes instance. See the [Open WebUI guide](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/open-webui#multi-user-setup-with-profiles) for details.
 
 ## Limitations
 
@@ -508,4 +508,4 @@ In Open WebUI, add each as a separate connection. The model dropdown shows `alic
 
 The API server also serves as the backend for **gateway proxy mode**. When another Hermes gateway instance is configured with `GATEWAY_PROXY_URL` pointing at this API server, it forwards all messages here instead of running its own agent. This enables split deployments — for example, a Docker container handling Matrix E2EE that relays to a host-side agent.
 
-See [Matrix Proxy Mode](/docs/user-guide/messaging/matrix#proxy-mode-e2ee-on-macos) for the full setup guide.
+See [Matrix Proxy Mode](../messaging/matrix.md#proxy-mode-e2ee-on-macos) for the full setup guide.

@@ -25,7 +25,7 @@ Primary implementation:
 
 `get_provider_profile()` in `providers/` returns a `ProviderProfile` for a given provider id. `runtime_provider.py` calls this at resolution time to get the canonical `base_url`, `env_vars` priority list, `api_mode`, and `fallback_models` without needing to duplicate that data in multiple files. Adding a new plugin under `plugins/model-providers/<your-provider>/` (or `$HERMES_HOME/plugins/model-providers/<your-provider>/`) that calls `register_provider()` is enough for `runtime_provider.py` to pick it up — no branch needed in the resolver itself.
 
-If you are trying to add a new first-class inference provider, read [Adding Providers](/docs/developer-guide/adding-providers) and the [Model Provider Plugin guide](/docs/developer-guide/model-provider-plugin) alongside this page.
+If you are trying to add a new first-class inference provider, read [Adding Providers](adding-providers.md) and the [Model Provider Plugin guide](https://hermes-agent.nousresearch.com/docs/developer-guide/model-provider-plugin) alongside this page.
 
 ## Resolution precedence
 
@@ -192,7 +192,7 @@ Hermes supports a configured fallback provider chain — a list of `(provider, m
 - **Subagent delegation** (`tools/delegate_tool.py`): subagents inherit the parent's provider but not the fallback config
 - **Auxiliary tasks**: use their own independent provider auto-detection chain (see Auxiliary model routing above)
 
-Cron jobs **do** support fallback: `run_job()` reads `fallback_providers` (or legacy `fallback_model`) from `config.yaml` and passes it to `AIAgent(fallback_model=...)`, matching the gateway's `_load_fallback_model()` pattern. See [Cron Internals](/docs/developer-guide/cron-internals).
+Cron jobs **do** support fallback: `run_job()` reads `fallback_providers` (or legacy `fallback_model`) from `config.yaml` and passes it to `AIAgent(fallback_model=...)`, matching the gateway's `_load_fallback_model()` pattern. See [Cron Internals](https://hermes-agent.nousresearch.com/docs/developer-guide/cron-internals).
 
 ### Test coverage
 
@@ -204,6 +204,6 @@ Fallback behavior is exercised across several suites:
 
 ## Related docs
 
-- [Agent Loop Internals](/docs/developer-guide/agent-loop)
-- [ACP Internals](/docs/developer-guide/acp-internals)
-- [Context Compression & Prompt Caching](/docs/developer-guide/context-compression-and-caching)
+- [Agent Loop Internals](agent-loop.md)
+- [ACP Internals](https://hermes-agent.nousresearch.com/docs/developer-guide/acp-internals)
+- [Context Compression & Prompt Caching](context-compression-and-caching.md)

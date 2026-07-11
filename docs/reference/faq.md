@@ -17,7 +17,7 @@ Quick answers and fixes for the most common questions and issues.
 Hermes Agent works with any OpenAI-compatible API. Supported providers include:
 
 - **[OpenRouter](https://openrouter.ai/)** — access hundreds of models through one API key (recommended for flexibility)
-- **[Nous Portal](/docs/integrations/nous-portal)** — Nous Research's subscription gateway — 300+ models plus web/image/TTS/browser through one OAuth login (recommended for newcomers)
+- **[Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal)** — Nous Research's subscription gateway — 300+ models plus web/image/TTS/browser through one OAuth login (recommended for newcomers)
 - **OpenAI** — GPT-5.4, GPT-5-codex, GPT-4.1, GPT-4o, etc.
 - **Anthropic** — Claude models (direct API, OAuth via `hermes auth add anthropic`, OpenRouter, or any compatible proxy)
 - **Google** — Gemini models (direct API via `gemini` provider, OpenRouter, or compatible proxy)
@@ -26,11 +26,11 @@ Hermes Agent works with any OpenAI-compatible API. Supported providers include:
 - **MiniMax** — global and China endpoints
 - **Local models** — via [Ollama](https://ollama.com/), [vLLM](https://docs.vllm.ai/), [llama.cpp](https://github.com/ggerganov/llama.cpp), [SGLang](https://github.com/sgl-project/sglang), or any OpenAI-compatible server
 
-Set your provider with `hermes model` or by editing `~/.hermes/.env`. See the [Environment Variables](/docs/reference/environment-variables) reference for all provider keys.
+Set your provider with `hermes model` or by editing `~/.hermes/.env`. See the [Environment Variables](environment-variables.md) reference for all provider keys.
 
 ### Does it work on Windows/Android/Termux/my plataform??
 
-See **[Platform Support](/docs/getting-started/platform-support)** for the full platform availability matrix.
+See **[Platform Support](https://hermes-agent.nousresearch.com/docs/getting-started/platform-support)** for the full platform availability matrix.
 
 ### I run Hermes in WSL2. What's the best way to control my normal Windows Chrome?
 
@@ -47,8 +47,8 @@ This is more reliable than trying to force Hermes core browser transport to atta
 
 See:
 
-- [Use MCP with Hermes](/docs/guides/use-mcp-with-hermes#wsl2-bridge-hermes-in-wsl-to-windows-chrome)
-- [Browser Automation](/docs/user-guide/features/browser#wsl2--windows-chrome-prefer-mcp-over-browser-connect)
+- [Use MCP with Hermes](../guides/use-mcp-with-hermes.md#wsl2-bridge-hermes-in-wsl-to-windows-chrome)
+- [Browser Automation](../user-guide/features/browser.md#wsl2--windows-chrome-prefer-mcp-over-browser-connect)
 
 ### Is my data sent anywhere?
 
@@ -58,7 +58,7 @@ API calls go **only to the LLM provider you configure** (e.g., OpenRouter, your 
 
 Yes. Run `hermes model`, select **Custom endpoint**, and enter your server's URL:
 
-``` prism-code
+``` bash
 hermes model
 # Select: Custom endpoint (enter URL manually)
 # API base URL: http://localhost:11434/v1
@@ -69,7 +69,7 @@ hermes model
 
 Or configure it directly in `config.yaml`:
 
-``` prism-code
+``` yaml
 model:
   default: qwen3.5:27b
   provider: custom
@@ -78,7 +78,7 @@ model:
 
 Hermes persists the endpoint, provider, and base URL in `config.yaml` so it survives restarts. If your local server has exactly one model loaded, `/model custom` auto-detects it. You can also set `provider: custom` in config.yaml — it's a first-class provider, not an alias for anything else.
 
-This works with Ollama, vLLM, llama.cpp server, SGLang, LocalAI, and others. See the [Configuration guide](/docs/user-guide/configuration) for details.
+This works with Ollama, vLLM, llama.cpp server, SGLang, LocalAI, and others. See the [Configuration guide](../user-guide/configuration.md) for details.
 
 Ollama users
 
@@ -86,7 +86,7 @@ If you set a custom `num_ctx` in Ollama (e.g., `ollama run --num_ctx 64000`), ma
 
 Timeouts with local models
 
-Hermes auto-detects local endpoints and relaxes streaming timeouts (read timeout raised from 120s to 1800s, stale stream detection disabled). If you still hit timeouts on very large contexts, set `HERMES_STREAM_READ_TIMEOUT=1800` in your `.env`. See the [Local LLM guide](/docs/guides/local-llm-on-mac#timeouts) for details.
+Hermes auto-detects local endpoints and relaxes streaming timeouts (read timeout raised from 120s to 1800s, stale stream detection disabled). If you still hit timeouts on very large contexts, set `HERMES_STREAM_READ_TIMEOUT=1800` in your `.env`. See the [Local LLM guide](../guides/local-llm-on-mac.md#timeouts) for details.
 
 ### How much does it cost?
 
@@ -94,27 +94,27 @@ Hermes Agent itself is **free and open-source** (MIT license). You pay only for 
 
 ### Can multiple people use one instance?
 
-Yes. The [messaging gateway](/docs/user-guide/messaging/) lets multiple users interact with the same Hermes Agent instance via Telegram, Discord, Slack, WhatsApp, or Home Assistant. Access is controlled through allowlists (specific user IDs) and DM pairing (first user to message claims access).
+Yes. The [messaging gateway](../user-guide/messaging/index.md) lets multiple users interact with the same Hermes Agent instance via Telegram, Discord, Slack, WhatsApp, or Home Assistant. Access is controlled through allowlists (specific user IDs) and DM pairing (first user to message claims access).
 
 ### What's the difference between memory and skills?
 
 - **Memory** stores **facts** — things the agent knows about you, your projects, and preferences. Memories are retrieved automatically based on relevance.
 - **Skills** store **procedures** — step-by-step instructions for how to do things. Skills are recalled when the agent encounters a similar task.
 
-Both persist across sessions. See [Memory](/docs/user-guide/features/memory) and [Skills](/docs/user-guide/features/skills) for details.
+Both persist across sessions. See [Memory](../user-guide/features/memory.md) and [Skills](../user-guide/features/skills.md) for details.
 
 ### Can I use it in my own Python project?
 
 Yes. Import the `AIAgent` class and use Hermes programmatically:
 
-``` prism-code
+``` python
 from run_agent import AIAgent
 
 agent = AIAgent(model="anthropic/claude-opus-4.7")
 response = agent.chat("Explain quantum computing briefly")
 ```
 
-See the [Python Library guide](/docs/user-guide/features/code-execution) for full API usage.
+See the [Python Library guide](../user-guide/features/code-execution.md) for full API usage.
 
 ------------------------------------------------------------------------
 
@@ -128,7 +128,7 @@ See the [Python Library guide](/docs/user-guide/features/code-execution) for ful
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Reload your shell profile
 source ~/.bashrc    # bash
 source ~/.zshrc     # zsh
@@ -138,7 +138,7 @@ source ~/.zshrc     # zsh
 
 If it still doesn't work, verify the install location:
 
-``` prism-code
+``` bash
 which hermes
 ls ~/.local/bin/hermes
 ```
@@ -153,7 +153,7 @@ The installer adds `~/.local/bin` to your PATH. If you use a non-standard shell 
 
 **Solution:**
 
-``` prism-code
+``` bash
 python3 --version   # Check current version
 
 # Install a newer Python
@@ -169,7 +169,7 @@ The installer handles this automatically — if you see this error during manual
 
 **Solution:** Hermes auto-sources `~/.bashrc` by default. If that's not enough — e.g. you're a zsh user whose PATH lives in `~/.zshrc`, or you init `nvm` from a standalone file — list the extra files to source in `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 terminal:
   shell_init_files:
     - ~/.zshrc                     # zsh users: pulls zsh-managed PATH into the bash snapshot
@@ -185,7 +185,7 @@ Missing files are skipped silently. Sourcing happens in bash, so files that rely
 
 To disable the auto-source behaviour (strict login-shell semantics only):
 
-``` prism-code
+``` yaml
 terminal:
   auto_source_bashrc: false
 ```
@@ -196,7 +196,7 @@ terminal:
 
 **Solution:**
 
-``` prism-code
+``` bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 source ~/.bashrc
 ```
@@ -207,7 +207,7 @@ source ~/.bashrc
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Don't use sudo with the installer — it installs to ~/.local/bin
 # If you previously installed with sudo, clean up:
 sudo rm /usr/local/bin/hermes
@@ -225,7 +225,7 @@ curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 
 **Solution:** Exit your session and use `hermes model` from your terminal to add new providers:
 
-``` prism-code
+``` bash
 # Exit the Hermes chat session first (Ctrl+C or /quit)
 
 # Run the full provider setup wizard
@@ -238,11 +238,11 @@ After adding a new provider via `hermes model`, start a new chat session — `/m
 
 Quick reference
 
-| Want to...                              | Use                                      |
-|-----------------------------------------|------------------------------------------|
-| Add a new provider                      | `hermes model` (from terminal)           |
-| Enter/change API keys                   | `hermes model` (from terminal)           |
-| Switch model mid-session                | `/model <name>` (inside session)         |
+| Want to... | Use |
+|----|----|
+| Add a new provider | `hermes model` (from terminal) |
+| Enter/change API keys | `hermes model` (from terminal) |
+| Switch model mid-session | `/model <name>` (inside session) |
 | Switch to different configured provider | `/model provider:model` (inside session) |
 
 #### API key not working
@@ -251,7 +251,7 @@ Quick reference
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Check your configuration
 hermes config show
 
@@ -272,7 +272,7 @@ Make sure the key matches the provider. An OpenAI key won't work with OpenRouter
 
 **Solution:**
 
-``` prism-code
+``` bash
 # List available models for your provider
 hermes model
 
@@ -299,7 +299,7 @@ hermes chat --model openrouter/meta-llama/llama-3.1-70b-instruct
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Compress the current session
 /compress
 
@@ -316,7 +316,7 @@ Look at the CLI startup line — it shows the detected context length (e.g., `�
 
 To fix context detection, set it explicitly:
 
-``` prism-code
+``` yaml
 # In ~/.hermes/config.yaml
 model:
   default: your-model-name
@@ -325,7 +325,7 @@ model:
 
 Or for custom endpoints, add it per-model:
 
-``` prism-code
+``` yaml
 custom_providers:
   - name: "My Server"
     base_url: "http://localhost:11434/v1"
@@ -334,7 +334,7 @@ custom_providers:
         context_length: 64000
 ```
 
-See [Context Length Detection](/docs/integrations/providers#context-length-detection) for how auto-detection works and all override options.
+See [Context Length Detection](../integrations/providers.md#context-length-detection) for how auto-detection works and all override options.
 
 ------------------------------------------------------------------------
 
@@ -347,7 +347,7 @@ See [Context Length Detection](/docs/integrations/providers#context-length-detec
 **Solution:** When prompted, review the command and type `y` to approve it. You can also:
 
 - Ask the agent to use a safer alternative
-- See the full list of dangerous patterns in the [Security docs](/docs/user-guide/security)
+- See the full list of dangerous patterns in the [Security docs](../user-guide/security.md)
 
 tip
 
@@ -369,7 +369,7 @@ This is working as intended — Hermes never silently runs destructive commands.
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Check Docker is running
 docker info
 
@@ -391,7 +391,7 @@ docker run hello-world
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Check if the gateway is running
 hermes gateway status
 
@@ -424,7 +424,7 @@ cat ~/.hermes/logs/gateway.log | tail -50
 | **DM pairing** | First user to message in DM claims exclusive access  |
 | **Open**       | Anyone can interact (not recommended for production) |
 
-Configure in `~/.hermes/config.yaml` under your gateway's settings. See the [Messaging docs](/docs/user-guide/messaging/).
+Configure in `~/.hermes/config.yaml` under your gateway's settings. See the [Messaging docs](../user-guide/messaging/index.md).
 
 #### Gateway won't start
 
@@ -432,7 +432,7 @@ Configure in `~/.hermes/config.yaml` under your gateway's settings. See the [Mes
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Install core messaging gateway dependencies
 cd ~/.hermes/hermes-agent && uv pip install -e ".[messaging]"  # Telegram, Discord, Slack, and shared gateway deps
 
@@ -449,7 +449,7 @@ hermes config show
 
 **Solution:** Use foreground mode instead of the systemd service:
 
-``` prism-code
+``` bash
 # Option 1: Direct foreground (simplest)
 hermes gateway run
 
@@ -465,7 +465,7 @@ If you want to try systemd anyway, make sure it's enabled:
 
 1.  Open `/etc/wsl.conf` (create it if it doesn't exist)
 2.  Add:
-    ``` prism-code
+    ``` ini
     [boot]
     systemd=true
     ```
@@ -486,14 +486,14 @@ For reliable auto-start, use Windows Task Scheduler to launch WSL + the gateway 
 
 **Solution:** The gateway captures your shell PATH when you run `hermes gateway install`. If you installed tools after setting up the gateway, re-run the install to capture the updated PATH:
 
-``` prism-code
+``` bash
 hermes gateway install    # Re-snapshots your current PATH
 hermes gateway start      # Detects the updated plist and reloads
 ```
 
 You can verify the plist has the correct PATH:
 
-``` prism-code
+``` bash
 /usr/libexec/PlistBuddy -c "Print :EnvironmentVariables:PATH" \
   ~/Library/LaunchAgents/ai.hermes.gateway.plist
 ```
@@ -519,7 +519,7 @@ You can verify the plist has the correct PATH:
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Compress the conversation to reduce tokens
 /compress
 
@@ -537,7 +537,7 @@ Use `/compress` regularly during long sessions. It summarizes the conversation h
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Compress current session (preserves key context)
 /compress
 
@@ -558,7 +558,7 @@ hermes chat --continue
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Ensure MCP dependencies are installed (already included in standard install)
 cd ~/.hermes/hermes-agent && uv pip install -e ".[mcp]"
 
@@ -572,7 +572,7 @@ npx -y @modelcontextprotocol/server-filesystem /tmp
 
 Verify your `~/.hermes/config.yaml` MCP configuration:
 
-``` prism-code
+``` yaml
 mcp_servers:
   filesystem:
     command: "npx"
@@ -591,7 +591,7 @@ mcp_servers:
 - Remember that resource/prompt utility tools are only registered when the session actually supports those capabilities
 - Use `/reload-mcp` after changing config
 
-``` prism-code
+``` bash
 # Verify MCP servers are configured
 hermes config show | grep -A 12 mcp_servers
 
@@ -601,9 +601,9 @@ hermes chat
 
 See also:
 
-- [MCP (Model Context Protocol)](/docs/user-guide/features/mcp)
-- [Use MCP with Hermes](/docs/guides/use-mcp-with-hermes)
-- [MCP Config Reference](/docs/reference/mcp-config-reference)
+- [MCP (Model Context Protocol)](../user-guide/features/mcp.md)
+- [Use MCP with Hermes](../guides/use-mcp-with-hermes.md)
+- [MCP Config Reference](mcp-config-reference.md)
 
 #### MCP timeout errors
 
@@ -653,7 +653,7 @@ There is no hard limit. Each profile is just a directory under `~/.hermes/profil
 
 **Solution: Delegation config.** Hermes can route subagents to a different model automatically. Set this in `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 delegation:
   model: "google/gemini-3-flash-preview"   # subagents use this model
   provider: "openrouter"                    # provider for subagents
@@ -665,7 +665,7 @@ You can also be explicit in your prompt: *"Delegate a task to write social media
 
 For one-off model switches without delegation, use `/model` in the CLI:
 
-``` prism-code
+``` bash
 /model google/gemini-3-flash-preview    # switch for this session
 # ... write your content ...
 /model openai/gpt-5.4                   # switch back
@@ -675,7 +675,7 @@ warning
 
 Each `/model` switch resets the prompt cache — the cache key includes the model, so the first message after every switch re-reads the whole conversation at full input price. On long sessions, prefer delegation (subagents get their own fresh context) or a new session over repeated back-and-forth switching.
 
-See [Subagent Delegation](/docs/user-guide/features/delegation) for more on how delegation works.
+See [Subagent Delegation](../user-guide/features/delegation.md) for more on how delegation works.
 
 ### Running multiple agents on one WhatsApp number (per-chat binding)
 
@@ -693,7 +693,7 @@ See [Subagent Delegation](/docs/user-guide/features/delegation) for more on how 
 
 4.  **Use Telegram or Discord instead.** These platforms support per-chat binding more naturally — each Telegram group or Discord channel gets its own session, and you can run multiple bot tokens (one per profile) on the same account.
 
-See [Profiles](/docs/user-guide/profiles) and [WhatsApp setup](/docs/user-guide/messaging/whatsapp) for more details.
+See [Profiles](../user-guide/profiles.md) and [WhatsApp setup](../user-guide/messaging/whatsapp.md) for more details.
 
 ### Controlling what shows up in Telegram (hiding logs and reasoning)
 
@@ -701,7 +701,7 @@ See [Profiles](/docs/user-guide/profiles) and [WhatsApp setup](/docs/user-guide/
 
 **Solution:** The `display.tool_progress` setting in `config.yaml` controls how much tool activity is shown:
 
-``` prism-code
+``` yaml
 display:
   tool_progress: "off"   # options: off, new, all, verbose
 ```
@@ -715,7 +715,7 @@ For messaging platforms, `off` or `new` is usually what you want. After editing 
 
 You can also toggle this per-session with the `/verbose` command (if enabled):
 
-``` prism-code
+``` yaml
 display:
   tool_progress_command: true   # enables /verbose in the gateway
 ```
@@ -726,7 +726,7 @@ display:
 
 **Solution:** Use `hermes skills config` to disable skills per-platform. This writes to `config.yaml`:
 
-``` prism-code
+``` yaml
 skills:
   disabled: []                    # globally disabled skills
   platform_disabled:
@@ -761,13 +761,13 @@ Skills with very long descriptions are truncated to 40 characters in the Telegra
 
 1.  Install Hermes Agent on the new machine:
 
-    ``` prism-code
+    ``` bash
     curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
     ```
 
 2.  On the **source machine**, create a full backup:
 
-    ``` prism-code
+    ``` bash
     hermes backup
     ```
 
@@ -775,7 +775,7 @@ Skills with very long descriptions are truncated to 40 characters in the Telegra
 
 3.  Copy the zip to the new machine and import it:
 
-    ``` prism-code
+    ``` bash
     # On the source machine
     scp ~/hermes-backup-<timestamp>.zip newmachine:~/
 
@@ -789,7 +789,7 @@ Skills with very long descriptions are truncated to 40 characters in the Telegra
 
 **Scenario:** You want to move or share one specific profile — not your full installation.
 
-``` prism-code
+``` bash
 # On the source machine
 hermes profile export work ./work-backup.tar.gz
 
@@ -801,17 +801,17 @@ The imported profile will have all config, memories, sessions, and skills from t
 
 ### `hermes backup` vs `hermes profile export`
 
-| Feature         | `hermes backup`                                 | `hermes profile export`                             |
-|:----------------|:------------------------------------------------|:----------------------------------------------------|
-| **Use Case**    | **Full machine migration**                      | **Porting/sharing a specific profile**              |
-| **Scope**       | Global (entire `~/.hermes` directory)           | Local (single profile directory)                    |
-| **Includes**    | All profiles, global config, API keys, sessions | Single profile: SOUL.md, memories, sessions, skills |
-| **Credentials** | **Included** (`.env` and `auth.json`)           | **Excluded** (stripped for safe sharing)            |
-| **Format**      | `.zip`                                          | `.tar.gz`                                           |
+| Feature | `hermes backup` | `hermes profile export` |
+|:---|:---|:---|
+| **Use Case** | **Full machine migration** | **Porting/sharing a specific profile** |
+| **Scope** | Global (entire `~/.hermes` directory) | Local (single profile directory) |
+| **Includes** | All profiles, global config, API keys, sessions | Single profile: SOUL.md, memories, sessions, skills |
+| **Credentials** | **Included** (`.env` and `auth.json`) | **Excluded** (stripped for safe sharing) |
+| **Format** | `.zip` | `.tar.gz` |
 
 **Manual fallback (rsync):** If you prefer to copy files directly, exclude the code repo:
 
-``` prism-code
+``` bash
 rsync -av --exclude='hermes-agent' ~/.hermes/ newmachine:~/.hermes/
 ```
 
@@ -827,7 +827,7 @@ tip
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Check permissions
 ls -la ~/.zshrc
 
@@ -842,7 +842,7 @@ source ~/.zshrc
 
 If the installer added the PATH line but permissions are wrong, you can add it manually:
 
-``` prism-code
+``` bash
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 ```
 
@@ -854,7 +854,7 @@ echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 
 **Solution:**
 
-``` prism-code
+``` bash
 # Check what model and provider are configured
 hermes config show | head -20
 

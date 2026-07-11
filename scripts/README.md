@@ -90,7 +90,11 @@ each doc URL it:
 2. Extracts the `<div class="theme-doc-markdown">` article body, stripping Docusaurus
    heading anchors, decorative inline SVG/`data:` icons, and copy buttons.
 3. Converts to GitHub-Flavored Markdown with `pandoc`.
-4. Writes `docs/<mirrored path>.md` with front matter (`source`, `title`, `last_crawled`).
+4. Rewrites internal doc links: references to other crawled pages become **local relative
+   `.md` paths** (so the corpus is self-contained and navigable, e.g. in Obsidian); links
+   to pages not in `llms.txt` become full `https://…` site URLs so they never dead-end.
+5. Writes `docs/<mirrored path>.md` with front matter (`source`, `title`, `last_crawled`).
 
-Internal doc links keep their site-absolute form (e.g. `/docs/...`) — they point at the
-live site, not the local files.
+After crawling, it regenerates **`docs/INDEX.md`** — a table of contents mirroring
+`llms.txt`'s sections, with each entry linked to its local file. A root **`CLAUDE.md`**
+tells Claude Code how the mirror is laid out and how to search it.

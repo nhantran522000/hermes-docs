@@ -12,28 +12,28 @@ Not sure which guide you need?
 
 Hermes has several distinct pluggable interfaces — some use Python `register_*` APIs, others are config-driven or drop-in directories. Use this map first:
 
-| If you want to add…                                                       | Read                                                                                                                                                             |
-|---------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Custom tools, hooks, slash commands, skills, or CLI subcommands           | **This guide** (the general plugin surface)                                                                                                                      |
-| An **LLM / inference backend** (new provider)                             | [Model Provider Plugins](/docs/developer-guide/model-provider-plugin)                                                                                            |
-| A **gateway channel** (Discord/Telegram/IRC/Teams/etc.)                   | [Adding Platform Adapters](/docs/developer-guide/adding-platform-adapters)                                                                                       |
-| A **memory backend** (Honcho/Mem0/Supermemory/etc.)                       | [Memory Provider Plugins](/docs/developer-guide/memory-provider-plugin)                                                                                          |
-| A **context-compression engine**                                          | [Context Engine Plugins](/docs/developer-guide/context-engine-plugin)                                                                                            |
-| An **image-generation backend**                                           | [Image Generation Provider Plugins](/docs/developer-guide/image-gen-provider-plugin)                                                                             |
-| A **video-generation backend**                                            | [Video Generation Provider Plugins](/docs/developer-guide/video-gen-provider-plugin)                                                                             |
-| A **web-search / extract backend**                                        | [Web Search Provider Plugins](/docs/developer-guide/web-search-provider-plugin)                                                                                  |
-| A **cloud browser backend** (Browserbase-style CDP session provider)      | [Browser Provider Plugins](/docs/developer-guide/browser-provider-plugin)                                                                                        |
-| A **secret-manager backend** (vault / password manager / OS keystore)     | [Secret Source Plugins](/docs/developer-guide/secret-source-plugin)                                                                                              |
-| A **dashboard OIDC/auth provider**                                        | [Web Dashboard — custom providers](/docs/user-guide/features/web-dashboard#custom-providers) — `ctx.register_dashboard_auth_provider()`                          |
-| A **TTS backend** (any CLI — Piper, VoxCPM, Kokoro, voice cloning, …)     | [TTS custom command providers](/docs/user-guide/features/tts#custom-command-providers) — config-driven, no Python needed                                         |
-| An **STT backend** (custom whisper / ASR CLI)                             | [Voice Message Transcription](/docs/user-guide/features/tts#voice-message-transcription-stt) — set `HERMES_LOCAL_STT_COMMAND` to a shell template                |
-| **External tools via MCP** (filesystem, GitHub, Linear, any MCP server)   | [MCP](/docs/user-guide/features/mcp) — declare `mcp_servers.<name>` in `config.yaml`                                                                             |
-| **Gateway event hooks** (fire on startup, session events, commands)       | [Event Hooks](/docs/user-guide/features/hooks#gateway-event-hooks) — drop `HOOK.yaml` + `handler.py` into `~/.hermes/hooks/<name>/`                              |
-| **Shell hooks** (run a shell command on events)                           | [Shell Hooks](/docs/user-guide/features/hooks#shell-hooks) — declare under `hooks:` in `config.yaml`                                                             |
-| **Additional skill sources** (custom GitHub repos, private skill indexes) | [Skills](/docs/user-guide/features/skills) — `hermes skills tap add <repo>` · [Publishing a tap](/docs/user-guide/features/skills#publishing-a-custom-skill-tap) |
-| A first-class **core** inference provider (not a plugin)                  | [Adding Providers](/docs/developer-guide/adding-providers)                                                                                                       |
+| If you want to add… | Read |
+|----|----|
+| Custom tools, hooks, slash commands, skills, or CLI subcommands | **This guide** (the general plugin surface) |
+| An **LLM / inference backend** (new provider) | [Model Provider Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/model-provider-plugin) |
+| A **gateway channel** (Discord/Telegram/IRC/Teams/etc.) | [Adding Platform Adapters](../developer-guide/adding-platform-adapters.md) |
+| A **memory backend** (Honcho/Mem0/Supermemory/etc.) | [Memory Provider Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/memory-provider-plugin) |
+| A **context-compression engine** | [Context Engine Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/context-engine-plugin) |
+| An **image-generation backend** | [Image Generation Provider Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/image-gen-provider-plugin) |
+| A **video-generation backend** | [Video Generation Provider Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/video-gen-provider-plugin) |
+| A **web-search / extract backend** | [Web Search Provider Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/web-search-provider-plugin) |
+| A **cloud browser backend** (Browserbase-style CDP session provider) | [Browser Provider Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/browser-provider-plugin) |
+| A **secret-manager backend** (vault / password manager / OS keystore) | [Secret Source Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/secret-source-plugin) |
+| A **dashboard OIDC/auth provider** | [Web Dashboard — custom providers](https://hermes-agent.nousresearch.com/docs/user-guide/features/web-dashboard#custom-providers) — `ctx.register_dashboard_auth_provider()` |
+| A **TTS backend** (any CLI — Piper, VoxCPM, Kokoro, voice cloning, …) | [TTS custom command providers](../user-guide/features/tts.md#custom-command-providers) — config-driven, no Python needed |
+| An **STT backend** (custom whisper / ASR CLI) | [Voice Message Transcription](../user-guide/features/tts.md#voice-message-transcription-stt) — set `HERMES_LOCAL_STT_COMMAND` to a shell template |
+| **External tools via MCP** (filesystem, GitHub, Linear, any MCP server) | [MCP](../user-guide/features/mcp.md) — declare `mcp_servers.<name>` in `config.yaml` |
+| **Gateway event hooks** (fire on startup, session events, commands) | [Event Hooks](../user-guide/features/hooks.md#gateway-event-hooks) — drop `HOOK.yaml` + `handler.py` into `~/.hermes/hooks/<name>/` |
+| **Shell hooks** (run a shell command on events) | [Shell Hooks](../user-guide/features/hooks.md#shell-hooks) — declare under `hooks:` in `config.yaml` |
+| **Additional skill sources** (custom GitHub repos, private skill indexes) | [Skills](../user-guide/features/skills.md) — `hermes skills tap add <repo>` · [Publishing a tap](../user-guide/features/skills.md#publishing-a-custom-skill-tap) |
+| A first-class **core** inference provider (not a plugin) | [Adding Providers](../developer-guide/adding-providers.md) |
 
-See the full [Pluggable interfaces table](/docs/user-guide/features/plugins#pluggable-interfaces--where-to-go-for-each) for a consolidated view of every extension surface including config-driven (TTS, STT, MCP, shell hooks) and drop-in directory (gateway hooks) styles.
+See the full [Pluggable interfaces table](../user-guide/features/plugins.md#pluggable-interfaces--where-to-go-for-each) for a consolidated view of every extension surface including config-driven (TTS, STT, MCP, shell hooks) and drop-in directory (gateway hooks) styles.
 
 Third-party-product plugins ship standalone — not into the core tree
 
@@ -50,7 +50,7 @@ Plus a hook that logs every tool call, and a bundled skill file.
 
 ## Step 1: Create the plugin directory
 
-``` prism-code
+``` bash
 mkdir -p ~/.hermes/plugins/calculator
 cd ~/.hermes/plugins/calculator
 ```
@@ -59,7 +59,7 @@ cd ~/.hermes/plugins/calculator
 
 Create `plugin.yaml`:
 
-``` prism-code
+``` yaml
 name: calculator
 version: 1.0.0
 description: Math calculator — evaluate expressions and convert units
@@ -74,7 +74,7 @@ This tells Hermes: "I'm a plugin called calculator, I provide tools and hooks." 
 
 Optional fields you could add:
 
-``` prism-code
+``` yaml
 author: Your Name
 requires_env:          # gate loading on env vars; prompted during install
   - SOME_API_KEY       # simple format — plugin disabled if missing
@@ -88,7 +88,7 @@ requires_env:          # gate loading on env vars; prompted during install
 
 Create `schemas.py` — this is what the LLM reads to decide when to call your tools:
 
-``` prism-code
+``` python
 """Tool schemas — what the LLM sees."""
 
 CALCULATE = {
@@ -145,7 +145,7 @@ UNIT_CONVERT = {
 
 Create `tools.py` — this is the code that actually executes when the LLM calls your tools:
 
-``` prism-code
+``` python
 """Tool handlers — the code that runs when the LLM calls each tool."""
 
 import json
@@ -235,7 +235,7 @@ def unit_convert(args: dict, **kwargs) -> str:
 
 Create `__init__.py` — this wires schemas to handlers:
 
-``` prism-code
+``` python
 """Calculator plugin — registration."""
 
 import logging
@@ -277,7 +277,7 @@ def register(ctx):
 
 **`dispatch_tool` example — a slash command that runs a tool:**
 
-``` prism-code
+``` python
 def handle_scan(ctx, raw_args: str):
     """Implement /scan by invoking the terminal tool through the registry."""
     result = ctx.dispatch_tool("terminal", {"command": f"find . -name '{raw_args}'"})
@@ -298,7 +298,7 @@ The dispatched tool goes through the normal approval, redaction, and budget pipe
 
 Start Hermes:
 
-``` prism-code
+``` bash
 hermes
 ```
 
@@ -306,7 +306,7 @@ You should see `calculator: calculate, unit_convert` in the banner's tool list.
 
 Try these prompts:
 
-``` prism-code
+``` text
 What's 2 to the power of 16?
 Convert 100 fahrenheit to celsius
 What's the square root of 2 times pi?
@@ -315,13 +315,13 @@ How many gigabytes is 1.5 terabytes?
 
 Check plugin status:
 
-``` prism-code
+``` text
 /plugins
 ```
 
 Output:
 
-``` prism-code
+``` text
 Plugins (1):
   ✓ calculator v1.0.0 (2 tools, 1 hooks)
 ```
@@ -330,7 +330,7 @@ Plugins (1):
 
 If your plugin doesn't show up — or shows up but isn't loading — set `HERMES_PLUGINS_DEBUG=1` to get verbose discovery logs on stderr:
 
-``` prism-code
+``` bash
 HERMES_PLUGINS_DEBUG=1 hermes plugins list
 ```
 
@@ -345,7 +345,7 @@ You'll see, for every plugin source (bundled, user, project, entry-points):
 
 The same logs are always written to `~/.hermes/logs/agent.log` at WARNING level (failures only) and DEBUG level (everything) when the env var is set. So if you can't run with the env var (e.g. from inside the gateway), tail the log file instead:
 
-``` prism-code
+``` bash
 hermes logs --level WARNING | grep -i plugin
 ```
 
@@ -358,7 +358,7 @@ Common reasons a plugin doesn't appear:
 
 ## Your plugin's final structure
 
-``` prism-code
+``` text
 ~/.hermes/plugins/calculator/
 ├── plugin.yaml      # "I'm calculator, I provide tools and hooks"
 ├── __init__.py      # Wiring: schemas → handlers, register hooks
@@ -379,7 +379,7 @@ Four files, clear separation:
 
 Put any files in your plugin directory and read them at import time:
 
-``` prism-code
+``` python
 # In tools.py or __init__.py
 from pathlib import Path
 
@@ -394,7 +394,7 @@ with open(_DATA_FILE) as f:
 
 Plugins can ship skill files that the agent loads via `skill_view("plugin:skill")`. Register them in your `__init__.py`:
 
-``` prism-code
+``` text
 ~/.hermes/plugins/my-plugin/
 ├── __init__.py
 ├── plugin.yaml
@@ -405,7 +405,7 @@ Plugins can ship skill files that the agent loads via `skill_view("plugin:skill"
         └── SKILL.md
 ```
 
-``` prism-code
+``` python
 from pathlib import Path
 
 def register(ctx):
@@ -418,7 +418,7 @@ def register(ctx):
 
 The agent can now load your skills with their namespaced name:
 
-``` prism-code
+``` python
 skill_view("my-plugin:my-workflow")   # → plugin's version
 skill_view("my-workflow")              # → built-in version (unchanged)
 ```
@@ -438,7 +438,7 @@ The old `shutil.copy2` pattern (copying a skill into `~/.hermes/skills/`) still 
 
 If your plugin needs an API key:
 
-``` prism-code
+``` yaml
 # plugin.yaml — simple format (backwards-compatible)
 requires_env:
   - WEATHER_API_KEY
@@ -450,7 +450,7 @@ When users run `hermes plugins install`, they're **prompted interactively** for 
 
 For a better install experience, use the rich format with descriptions and signup URLs:
 
-``` prism-code
+``` yaml
 # plugin.yaml — rich format
 requires_env:
   - name: WEATHER_API_KEY
@@ -472,7 +472,7 @@ Both formats can be mixed in the same list. Already-set variables are skipped si
 
 If your plugin wraps an SDK that not every user will have installed (a vendor SDK, a heavy ML lib, a platform-specific package), don't `import` it at the top of the module. Use the `tools.lazy_deps.ensure(...)` helper inside the tool handler — Hermes will install the package on first use, gated by the user's `security.allow_lazy_installs` config.
 
-``` prism-code
+``` python
 # tools.py
 from tools.lazy_deps import ensure, FeatureUnavailable
 
@@ -488,10 +488,10 @@ def my_tool_handler(args, **kwargs):
 
 Two rules from the security model in `tools/lazy_deps.py`:
 
-| Rule                                                              | Why                                                                                                                              |
-|-------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| Rule | Why |
+|----|----|
 | Your feature key must appear in the in-tree `LAZY_DEPS` allowlist | Prevents a malicious config from coaxing Hermes into installing arbitrary packages — only specs Hermes itself ships are eligible |
-| Specs are PyPI-by-name only                                       | No `--index-url`, `git+https://`, or file: paths. Pin versions with PEP 440 (`"my-sdk>=1.2,<2"`) inside the allowlist entry      |
+| Specs are PyPI-by-name only | No `--index-url`, `git+https://`, or file: paths. Pin versions with PEP 440 (`"my-sdk>=1.2,<2"`) inside the allowlist entry |
 
 For third-party plugins distributed via pip, declare the optional deps as `[project.optional-dependencies]` extras in your own `pyproject.toml` and tell users to `pip install your-plugin[backend]` — that path doesn't go through `lazy_deps`. The lazy-install dance is most useful for **bundled** plugins where shipping a hard dependency on every install would bloat the base Hermes footprint.
 
@@ -501,7 +501,7 @@ When `security.allow_lazy_installs: false` is set globally, `ensure()` raises `F
 
 Plugins often cache an expensive object — an SDK client, an HTTP session, a connection pool — in a module-level variable built on first use:
 
-``` prism-code
+``` python
 _client = None
 
 def get_client():
@@ -516,7 +516,7 @@ This is a footgun. Hermes runs multiple threads in one process (delegated tool c
 
 Don't hand-roll the lock. Use the helpers in `plugins/plugin_utils.py`:
 
-``` prism-code
+``` python
 from plugins.plugin_utils import lazy_singleton, SingletonSlot
 
 # Zero-arg accessor → decorate it:
@@ -545,7 +545,7 @@ Both serialize concurrent first calls with double-checked locking and run the fa
 
 For tools that depend on optional libraries:
 
-``` prism-code
+``` python
 ctx.register_tool(
     name="my_tool",
     schema={...},
@@ -558,7 +558,7 @@ ctx.register_tool(
 
 To replace a built-in tool with your own implementation (e.g. swap the default browser tool for a headed-Chrome CDP backend, or replace `web_search` with a custom corporate index), pass `override=True`:
 
-``` prism-code
+``` python
 def register(ctx):
     ctx.register_tool(
         name="browser_navigate",             # same name as the built-in
@@ -573,7 +573,7 @@ Without `override=True`, the registry rejects any registration that would shadow
 
 ### Register multiple hooks
 
-``` prism-code
+``` python
 def register(ctx):
     ctx.register_hook("pre_tool_call", before_any_tool)
     ctx.register_hook("post_tool_call", after_any_tool)
@@ -584,21 +584,21 @@ def register(ctx):
 
 ### Hook reference
 
-Each hook is documented in full on the **[Event Hooks reference](/docs/user-guide/features/hooks#plugin-hooks)** — callback signatures, parameter tables, exactly when each fires, and examples. Here's the summary:
+Each hook is documented in full on the **[Event Hooks reference](../user-guide/features/hooks.md#plugin-hooks)** — callback signatures, parameter tables, exactly when each fires, and examples. Here's the summary:
 
-| Hook                                                                         | Fires when                                                              | Callback signature                                                                                                   | Returns                                              |
-|------------------------------------------------------------------------------|-------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
-| [`pre_tool_call`](/docs/user-guide/features/hooks#pre_tool_call)             | Before any tool executes                                                | `tool_name: str, args: dict, task_id: str`                                                                           | ignored                                              |
-| [`post_tool_call`](/docs/user-guide/features/hooks#post_tool_call)           | After any tool returns                                                  | `tool_name: str, args: dict, result: str, task_id: str, duration_ms: int`                                            | ignored                                              |
-| [`pre_llm_call`](/docs/user-guide/features/hooks#pre_llm_call)               | Once per turn, before the tool-calling loop                             | `session_id: str, user_message: str, conversation_history: list, is_first_turn: bool, model: str, platform: str`     | [context injection](#pre_llm_call-context-injection) |
-| [`post_llm_call`](/docs/user-guide/features/hooks#post_llm_call)             | Once per turn, after the tool-calling loop (successful turns only)      | `session_id: str, user_message: str, assistant_response: str, conversation_history: list, model: str, platform: str` | ignored                                              |
-| [`on_session_start`](/docs/user-guide/features/hooks#on_session_start)       | New session created (first turn only)                                   | `session_id: str, model: str, platform: str`                                                                         | ignored                                              |
-| [`on_session_end`](/docs/user-guide/features/hooks#on_session_end)           | End of every `run_conversation` call + CLI exit                         | `session_id: str, completed: bool, interrupted: bool, model: str, platform: str`                                     | ignored                                              |
-| [`on_session_finalize`](/docs/user-guide/features/hooks#on_session_finalize) | CLI/gateway tears down an active session                                | `session_id: str | None, platform: str`                                                                              | ignored                                              |
-| [`on_session_reset`](/docs/user-guide/features/hooks#on_session_reset)       | Gateway swaps in a new session key (`/new`, `/reset`)                   | `session_id: str, platform: str`                                                                                     | ignored                                              |
-| `kanban_task_claimed`                                                        | A kanban task is claimed (dispatcher process, before the worker spawns) | `task_id: str, board: str | None, assignee: str | None, run_id: int | None, profile_name: str`                       | ignored                                              |
-| `kanban_task_completed`                                                      | A kanban task completes (worker process)                                | `task_id, board, assignee, run_id, profile_name, summary: str | None`                                                | ignored                                              |
-| `kanban_task_blocked`                                                        | A kanban task is blocked (worker process)                               | `task_id, board, assignee, run_id, profile_name, reason: str | None`                                                 | ignored                                              |
+| Hook | Fires when | Callback signature | Returns |
+|----|----|----|----|
+| [`pre_tool_call`](../user-guide/features/hooks.md#pre_tool_call) | Before any tool executes | `tool_name: str, args: dict, task_id: str` | ignored |
+| [`post_tool_call`](../user-guide/features/hooks.md#post_tool_call) | After any tool returns | `tool_name: str, args: dict, result: str, task_id: str, duration_ms: int` | ignored |
+| [`pre_llm_call`](../user-guide/features/hooks.md#pre_llm_call) | Once per turn, before the tool-calling loop | `session_id: str, user_message: str, conversation_history: list, is_first_turn: bool, model: str, platform: str` | [context injection](#pre_llm_call-context-injection) |
+| [`post_llm_call`](../user-guide/features/hooks.md#post_llm_call) | Once per turn, after the tool-calling loop (successful turns only) | `session_id: str, user_message: str, assistant_response: str, conversation_history: list, model: str, platform: str` | ignored |
+| [`on_session_start`](../user-guide/features/hooks.md#on_session_start) | New session created (first turn only) | `session_id: str, model: str, platform: str` | ignored |
+| [`on_session_end`](../user-guide/features/hooks.md#on_session_end) | End of every `run_conversation` call + CLI exit | `session_id: str, completed: bool, interrupted: bool, model: str, platform: str` | ignored |
+| [`on_session_finalize`](../user-guide/features/hooks.md#on_session_finalize) | CLI/gateway tears down an active session | `session_id: str | None, platform: str` | ignored |
+| [`on_session_reset`](../user-guide/features/hooks.md#on_session_reset) | Gateway swaps in a new session key (`/new`, `/reset`) | `session_id: str, platform: str` | ignored |
+| `kanban_task_claimed` | A kanban task is claimed (dispatcher process, before the worker spawns) | `task_id: str, board: str | None, assignee: str | None, run_id: int | None, profile_name: str` | ignored |
+| `kanban_task_completed` | A kanban task completes (worker process) | `task_id, board, assignee, run_id, profile_name, summary: str | None` | ignored |
+| `kanban_task_blocked` | A kanban task is blocked (worker process) | `task_id, board, assignee, run_id, profile_name, reason: str | None` | ignored |
 
 Most hooks are fire-and-forget observers — their return values are ignored. The exception is `pre_llm_call`, which can inject context into the conversation.
 
@@ -612,7 +612,7 @@ This is the only hook whose return value matters. When a `pre_llm_call` callback
 
 #### Return format
 
-``` prism-code
+``` python
 # Dict with context key
 return {"context": "Recalled memories:\n- User prefers dark mode\n- Last project: hermes-agent"}
 
@@ -629,7 +629,7 @@ Any non-None, non-empty return with a `"context"` key (or a plain non-empty stri
 
 Per-hook context is capped at `10,000` characters by default. Anything above the cap is written to `$HERMES_HOME/hook_outputs/<session_id>/<uuid>.txt` and replaced with a head/tail preview plus the saved path. The model can read the full content via `read_file` or `terminal` if it genuinely needs it. This keeps a runaway plugin from inflating every subsequent turn's prompt and blowing out the prompt cache prefix. Tune in `config.yaml`:
 
-``` prism-code
+``` yaml
 hooks:
   output_spill:
     enabled: true          # default: true
@@ -649,7 +649,7 @@ Injected context is appended to the **user message**, not the system prompt. Thi
 
 #### Example: Memory recall plugin
 
-``` prism-code
+``` python
 """Memory plugin — recalls relevant context from a vector store."""
 
 import httpx
@@ -679,7 +679,7 @@ def register(ctx):
 
 #### Example: Guardrails plugin
 
-``` prism-code
+``` python
 """Guardrails plugin — enforces content policies."""
 
 POLICY = """You MUST follow these content policies for this session:
@@ -697,7 +697,7 @@ def register(ctx):
 
 #### Example: Observer-only hook (no injection)
 
-``` prism-code
+``` python
 """Analytics plugin — tracks turn metadata without injecting context."""
 
 import logging
@@ -721,7 +721,7 @@ When multiple plugins return context from `pre_llm_call`, their outputs are join
 
 Plugins can add their own `hermes <plugin>` subcommand tree:
 
-``` prism-code
+``` python
 def _my_command(args):
     """Handler for hermes my-plugin <subcommand>."""
     sub = getattr(args, "my_command", None)
@@ -751,7 +751,7 @@ def register(ctx):
 
 After registration, users can run `hermes my-plugin status`, `hermes my-plugin config`, etc.
 
-**Memory provider plugins** use a convention-based approach instead: add a `register_cli(subparser)` function to your plugin's `cli.py` file. The memory plugin discovery system finds it automatically — no `ctx.register_cli_command()` call needed. See the [Memory Provider Plugin guide](/docs/developer-guide/memory-provider-plugin#adding-cli-commands) for details.
+**Memory provider plugins** use a convention-based approach instead: add a `register_cli(subparser)` function to your plugin's `cli.py` file. The memory plugin discovery system finds it automatically — no `ctx.register_cli_command()` call needed. See the [Memory Provider Plugin guide](https://hermes-agent.nousresearch.com/docs/developer-guide/memory-provider-plugin#adding-cli-commands) for details.
 
 **Active-provider gating:** Memory plugin CLI commands only appear when their provider is the active `memory.provider` in config. If a user hasn't set up your provider, your CLI commands won't clutter the help output.
 
@@ -759,7 +759,7 @@ After registration, users can run `hermes my-plugin status`, `hermes my-plugin c
 
 Plugins can register in-session slash commands — commands users type during a conversation (like `/lcm status` or `/ping`). These work in both CLI and gateway (Telegram, Discord, etc.).
 
-``` prism-code
+``` python
 def _handle_status(raw_args: str) -> str:
     """Handler for /mystatus — called with everything after the command name."""
     if raw_args.strip() == "help":
@@ -778,26 +778,26 @@ After registration, users can type `/mystatus` in any session. The command appea
 
 **Signature:** `ctx.register_command(name: str, handler: Callable, description: str = "", args_hint: str = "")`
 
-| Parameter     | Type                          | Description                                                         |
-|---------------|-------------------------------|---------------------------------------------------------------------|
-| `name`        | `str`                         | Command name without the leading slash (e.g. `"lcm"`, `"mystatus"`) |
-| `handler`     | `Callable[[str], str | None]` | Called with the raw argument string. May also be `async`.           |
-| `description` | `str`                         | Shown in `/help`, autocomplete, and Telegram bot menu               |
+| Parameter | Type | Description |
+|----|----|----|
+| `name` | `str` | Command name without the leading slash (e.g. `"lcm"`, `"mystatus"`) |
+| `handler` | `Callable[[str], str | None]` | Called with the raw argument string. May also be `async`. |
+| `description` | `str` | Shown in `/help`, autocomplete, and Telegram bot menu |
 
 **Key differences from `register_cli_command()`:**
 
-|                  | `register_command()`                  | `register_cli_command()`                |
-|------------------|---------------------------------------|-----------------------------------------|
-| Invoked as       | `/name` in a session                  | `hermes name` in a terminal             |
-| Where it works   | CLI sessions, Telegram, Discord, etc. | Terminal only                           |
-| Handler receives | Raw args string                       | argparse `Namespace`                    |
-| Use case         | Diagnostics, status, quick actions    | Complex subcommand trees, setup wizards |
+|  | `register_command()` | `register_cli_command()` |
+|----|----|----|
+| Invoked as | `/name` in a session | `hermes name` in a terminal |
+| Where it works | CLI sessions, Telegram, Discord, etc. | Terminal only |
+| Handler receives | Raw args string | argparse `Namespace` |
+| Use case | Diagnostics, status, quick actions | Complex subcommand trees, setup wizards |
 
 **Conflict protection:** If a plugin tries to register a name that conflicts with a built-in command (`help`, `model`, `new`, etc.), the registration is silently rejected with a log warning. Built-in commands always take precedence.
 
 **Async handlers:** The gateway dispatch automatically detects and awaits async handlers, so you can use either sync or async functions:
 
-``` prism-code
+``` python
 async def _handle_check(raw_args: str) -> str:
     result = await some_async_operation()
     return f"Check result: {result}"
@@ -810,7 +810,7 @@ def register(ctx):
 
 Slash command handlers that need to orchestrate tools (spawn a subagent via `delegate_task`, call `file_edit`, etc.) should use `ctx.dispatch_tool()` instead of reaching into framework internals. The parent-agent context (workspace hints, spinner, model inheritance) is wired up automatically.
 
-``` prism-code
+``` python
 def register(ctx):
     def _handle_deliver(raw_args: str):
         result = ctx.dispatch_tool(
@@ -831,10 +831,10 @@ def register(ctx):
 
 **Signature:** `ctx.dispatch_tool(name: str, args: dict, *, parent_agent=None) -> str`
 
-| Parameter      | Type           | Description                                                                                                   |
-|----------------|----------------|---------------------------------------------------------------------------------------------------------------|
-| `name`         | `str`          | Tool name as registered in the tool registry (e.g. `"delegate_task"`, `"file_edit"`)                          |
-| `args`         | `dict`         | Tool arguments, same shape the model would send                                                               |
+| Parameter | Type | Description |
+|----|----|----|
+| `name` | `str` | Tool name as registered in the tool registry (e.g. `"delegate_task"`, `"file_edit"`) |
+| `args` | `dict` | Tool arguments, same shape the model would send |
 | `parent_agent` | `Agent | None` | Optional override. When omitted, resolves from the current CLI agent (or degrades gracefully in gateway mode) |
 
 **Runtime behavior:**
@@ -854,7 +854,7 @@ This is the public, stable interface for tool dispatch from plugin commands. Plu
 
 Together these let a kanban lifecycle hook observe a transition and act on the board without touching framework internals:
 
-``` prism-code
+``` python
 def register(ctx):
     def on_blocked(*, task_id, reason=None, **kw):
         # Runs in the worker process; ctx._cli_ref is None here.
@@ -871,7 +871,7 @@ For running a full `hermes <subcommand>` (e.g. `hermes kanban show`), shell out 
 
 Plugins that post Block Kit messages with interactive elements (buttons, overflow menus, datepickers, etc.) can register the click handlers directly with the Slack adapter — no monkey-patching of `slack_bolt.AsyncApp` required.
 
-``` prism-code
+``` python
 def register(ctx):
     async def _on_approve(ack, body, action):
         # ack within 3 seconds — slack_bolt requirement.
@@ -886,10 +886,10 @@ def register(ctx):
 
 **Signature:** `ctx.register_slack_action_handler(action_id, callback) -> None`
 
-| Parameter   | Type                      | Description                                                                                                                                                                    |
-|-------------|---------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Parameter | Type | Description |
+|----|----|----|
 | `action_id` | `str | re.Pattern | dict` | Whatever `slack_bolt.App.action()` accepts: a literal `action_id`, a compiled regex matching multiple ids, or a constraint dict like `{"action_id": "...", "block_id": "..."}` |
-| `callback`  | async callable            | Receives `(ack, body, action)` per the slack_bolt convention                                                                                                                   |
+| `callback` | async callable | Receives `(ack, body, action)` per the slack_bolt convention |
 
 **Runtime behavior:**
 
@@ -912,7 +912,7 @@ Hermes has five specialized plugin types beyond the general surface. Each ships 
 
 Drop a profile into `plugins/model-providers/<name>/`:
 
-``` prism-code
+``` python
 # plugins/model-providers/acme/__init__.py
 from providers import register_provider
 from providers.base import ProviderProfile
@@ -929,7 +929,7 @@ register_provider(ProviderProfile(
 ))
 ```
 
-``` prism-code
+``` yaml
 # plugins/model-providers/acme/plugin.yaml
 name: acme-provider
 kind: model-provider
@@ -939,13 +939,13 @@ description: Acme Inference — OpenAI-compatible direct API
 
 Lazy-discovered the first time anything calls `get_provider_profile()` or `list_providers()` — `auth.py`, `config.py`, `doctor.py`, `models.py`, `runtime_provider.py`, and the chat_completions transport auto-wire to it. User plugins override bundled ones by name.
 
-**Full guide:** [Model Provider Plugins](/docs/developer-guide/model-provider-plugin) — field reference, overridable hooks (`prepare_messages`, `build_extra_body`, `build_api_kwargs_extras`, `fetch_models`), api_mode selection, auth types, testing.
+**Full guide:** [Model Provider Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/model-provider-plugin) — field reference, overridable hooks (`prepare_messages`, `build_extra_body`, `build_api_kwargs_extras`, `fetch_models`), api_mode selection, auth types, testing.
 
 ### Platform plugins — add a gateway channel
 
 Drop an adapter into `plugins/platforms/<name>/`:
 
-``` prism-code
+``` python
 # plugins/platforms/myplatform/adapter.py
 from gateway.platforms.base import BasePlatformAdapter
 
@@ -982,7 +982,7 @@ def register(ctx):
     )
 ```
 
-``` prism-code
+``` yaml
 # plugins/platforms/myplatform/plugin.yaml
 name: myplatform-platform
 label: MyPlatform
@@ -999,13 +999,13 @@ optional_env:
     password: false
 ```
 
-**Full guide:** [Adding Platform Adapters](/docs/developer-guide/adding-platform-adapters) — complete `BasePlatformAdapter` contract, message routing, auth gating, setup wizard integration. Look at `plugins/platforms/irc/` for a stdlib-only working example.
+**Full guide:** [Adding Platform Adapters](../developer-guide/adding-platform-adapters.md) — complete `BasePlatformAdapter` contract, message routing, auth gating, setup wizard integration. Look at `plugins/platforms/irc/` for a stdlib-only working example.
 
 ### Memory provider plugins — add a cross-session knowledge backend
 
 Drop an implementation of `MemoryProvider` into `plugins/memory/<name>/`:
 
-``` prism-code
+``` python
 # plugins/memory/my-memory/__init__.py
 from agent.memory_provider import MemoryProvider
 
@@ -1037,11 +1037,11 @@ def register(ctx):
 
 Memory providers are single-select — only one is active at a time, chosen via `memory.provider` in `config.yaml`.
 
-**Full guide:** [Memory Provider Plugins](/docs/developer-guide/memory-provider-plugin) — full `MemoryProvider` ABC, threading contract, profile isolation, CLI command registration via `cli.py`.
+**Full guide:** [Memory Provider Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/memory-provider-plugin) — full `MemoryProvider` ABC, threading contract, profile isolation, CLI command registration via `cli.py`.
 
 ### Context engine plugins — replace the context compressor
 
-``` prism-code
+``` python
 # plugins/context_engine/my-engine/__init__.py
 from agent.context_engine import ContextEngine
 
@@ -1060,13 +1060,13 @@ def register(ctx):
 
 Context engines are single-select — chosen via `context.engine` in `config.yaml`.
 
-**Full guide:** [Context Engine Plugins](/docs/developer-guide/context-engine-plugin).
+**Full guide:** [Context Engine Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/context-engine-plugin).
 
 ### Image-generation backends
 
 Drop a provider into `plugins/image_gen/<name>/`:
 
-``` prism-code
+``` python
 # plugins/image_gen/my-imggen/__init__.py
 from agent.image_gen_provider import ImageGenProvider
 
@@ -1084,7 +1084,7 @@ def register(ctx):
     ctx.register_image_gen_provider(MyImageGenProvider())
 ```
 
-``` prism-code
+``` yaml
 # plugins/image_gen/my-imggen/plugin.yaml
 name: my-imggen
 kind: backend
@@ -1092,19 +1092,19 @@ version: 1.0.0
 description: Custom image generation backend
 ```
 
-**Full guide:** [Image Generation Provider Plugins](/docs/developer-guide/image-gen-provider-plugin) — full `ImageGenProvider` ABC, `list_models()` / `get_setup_schema()` metadata, `success_response()`/`error_response()` helpers, base64 vs URL output, user overrides, pip distribution.
+**Full guide:** [Image Generation Provider Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/image-gen-provider-plugin) — full `ImageGenProvider` ABC, `list_models()` / `get_setup_schema()` metadata, `success_response()`/`error_response()` helpers, base64 vs URL output, user overrides, pip distribution.
 
 **Reference examples:** `plugins/image_gen/openai/` (DALL-E / GPT-Image via OpenAI SDK), `plugins/image_gen/openai-codex/`, `plugins/image_gen/xai/` (Grok image gen).
 
 ## Non-Python extension surfaces
 
-Hermes also accepts extensions that aren't Python plugins at all. These are shown in the [Pluggable interfaces table](/docs/user-guide/features/plugins#pluggable-interfaces--where-to-go-for-each); the sections below sketch each authoring style briefly.
+Hermes also accepts extensions that aren't Python plugins at all. These are shown in the [Pluggable interfaces table](../user-guide/features/plugins.md#pluggable-interfaces--where-to-go-for-each); the sections below sketch each authoring style briefly.
 
 ### MCP servers — register external tools
 
 Model Context Protocol (MCP) servers register their own tools into Hermes without any Python plugin. Declare them in `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 mcp_servers:
   filesystem:
     command: "npx"
@@ -1117,13 +1117,13 @@ mcp_servers:
       type: "oauth"
 ```
 
-Hermes connects to each server at startup, lists its tools, and registers them alongside built-ins. The LLM sees them exactly like any other tool. **Full guide:** [MCP](/docs/user-guide/features/mcp).
+Hermes connects to each server at startup, lists its tools, and registers them alongside built-ins. The LLM sees them exactly like any other tool. **Full guide:** [MCP](../user-guide/features/mcp.md).
 
 ### Gateway event hooks — fire on lifecycle events
 
 Drop a manifest + handler into `~/.hermes/hooks/<name>/`:
 
-``` prism-code
+``` yaml
 # ~/.hermes/hooks/long-task-alert/HOOK.yaml
 name: long-task-alert
 description: Send a push notification when a long task finishes
@@ -1131,7 +1131,7 @@ events:
   - agent:end
 ```
 
-``` prism-code
+``` python
 # ~/.hermes/hooks/long-task-alert/handler.py
 async def handle(event_type: str, context: dict) -> None:
     if context.get("duration_seconds", 0) > 120:
@@ -1141,13 +1141,13 @@ async def handle(event_type: str, context: dict) -> None:
 
 Events include `gateway:startup`, `session:start`, `session:end`, `session:reset`, `agent:start`, `agent:step`, `agent:end`, and wildcard `command:*`. Errors in hooks are caught and logged — they never block the main pipeline.
 
-**Full guide:** [Gateway Event Hooks](/docs/user-guide/features/hooks#gateway-event-hooks).
+**Full guide:** [Gateway Event Hooks](../user-guide/features/hooks.md#gateway-event-hooks).
 
 ### Shell hooks — run a shell command on tool calls
 
 If you just want to run a script when a tool fires (notifications, audit logs, desktop alerts, auto-formatters), use shell hooks in `config.yaml` — no Python required:
 
-``` prism-code
+``` yaml
 hooks:
   - event: post_tool_call
     command: "notify-send 'Tool ran: {tool_name}'"
@@ -1157,13 +1157,13 @@ hooks:
 
 Supports all the same events as Python plugin hooks (`pre_tool_call`, `post_tool_call`, `pre_llm_call`, `post_llm_call`, `on_session_start`, `on_session_end`, `pre_gateway_dispatch`) plus structured JSON output for `pre_tool_call` blocking decisions.
 
-**Full guide:** [Shell Hooks](/docs/user-guide/features/hooks#shell-hooks).
+**Full guide:** [Shell Hooks](../user-guide/features/hooks.md#shell-hooks).
 
 ### Skill sources — add a custom skill registry
 
 If you maintain a GitHub repo of skills (or want to pull from a community index beyond the built-in sources), add it as a **tap**:
 
-``` prism-code
+``` bash
 hermes skills tap add myorg/skills-repo
 hermes skills search my-workflow --source myorg/skills-repo
 hermes skills install myorg/skills-repo/my-workflow
@@ -1171,13 +1171,13 @@ hermes skills install myorg/skills-repo/my-workflow
 
 Publishing your own tap is just a GitHub repo with `skills/<skill-name>/SKILL.md` directories — no server or registry signup needed.
 
-**Full guides:** [Skills Hub](/docs/user-guide/features/skills#skills-hub) · [Publishing a custom tap](/docs/user-guide/features/skills#publishing-a-custom-skill-tap) (repo layout, minimal example, non-default paths, trust levels).
+**Full guides:** [Skills Hub](../user-guide/features/skills.md#skills-hub) · [Publishing a custom tap](../user-guide/features/skills.md#publishing-a-custom-skill-tap) (repo layout, minimal example, non-default paths, trust levels).
 
 ### TTS / STT via command templates
 
 Any CLI that reads/writes audio or text can be plugged in through `config.yaml` — no Python code:
 
-``` prism-code
+``` yaml
 tts:
   provider: voxcpm
   providers:
@@ -1190,19 +1190,19 @@ tts:
 
 For STT, point `HERMES_LOCAL_STT_COMMAND` at a shell template. Supported placeholders: `{input_path}`, `{output_path}`, `{format}`, `{voice}`, `{model}`, `{speed}` (TTS); `{input_path}`, `{output_dir}`, `{language}`, `{model}` (STT). Any path-interacting CLI is automatically a plugin.
 
-**Full guides:** [TTS custom command providers](/docs/user-guide/features/tts#custom-command-providers) · [STT](/docs/user-guide/features/tts#voice-message-transcription-stt).
+**Full guides:** [TTS custom command providers](../user-guide/features/tts.md#custom-command-providers) · [STT](../user-guide/features/tts.md#voice-message-transcription-stt).
 
 ## Distribute via pip
 
 For sharing plugins publicly, add an entry point to your Python package:
 
-``` prism-code
+``` toml
 # pyproject.toml
 [project.entry-points."hermes_agent.plugins"]
 my-plugin = "my_plugin_package"
 ```
 
-``` prism-code
+``` bash
 pip install hermes-plugin-calculator
 # Plugin auto-discovered on next hermes startup
 ```
@@ -1211,13 +1211,13 @@ pip install hermes-plugin-calculator
 
 Nix is no longer explicitly supported
 
-Nix/NixOS is no longer an explicitly supported install path (best-effort only) — see [Nix Setup](/docs/getting-started/nix-setup). This section is kept for users already deploying on NixOS.
+Nix/NixOS is no longer an explicitly supported install path (best-effort only) — see [Nix Setup](../getting-started/nix-setup.md). This section is kept for users already deploying on NixOS.
 
 NixOS users can install your plugin declaratively if you provide a `pyproject.toml` with entry points:
 
 **Entry-point plugins** (recommended for distribution):
 
-``` prism-code
+``` nix
 # User's configuration.nix
 services.hermes-agent.extraPythonPackages = [
   (pkgs.python312Packages.buildPythonPackage {
@@ -1237,7 +1237,7 @@ services.hermes-agent.extraPythonPackages = [
 
 **Directory plugins** (no `pyproject.toml` needed):
 
-``` prism-code
+``` nix
 services.hermes-agent.extraPlugins = [
   (pkgs.fetchFromGitHub {
     owner = "you";
@@ -1248,13 +1248,13 @@ services.hermes-agent.extraPlugins = [
 ];
 ```
 
-See the [Nix Setup guide](/docs/getting-started/nix-setup#plugins) for complete documentation including overlay usage and collision checking.
+See the [Nix Setup guide](../getting-started/nix-setup.md#plugins) for complete documentation including overlay usage and collision checking.
 
 ## Common mistakes
 
 **Handler doesn't return JSON string:**
 
-``` prism-code
+``` python
 # Wrong — returns a dict
 def handler(args, **kwargs):
     return {"result": 42}
@@ -1266,7 +1266,7 @@ def handler(args, **kwargs):
 
 **Missing `**kwargs` in handler signature:**
 
-``` prism-code
+``` python
 # Wrong — will break if Hermes passes extra context
 def handler(args):
     ...
@@ -1278,7 +1278,7 @@ def handler(args, **kwargs):
 
 **Handler raises exceptions:**
 
-``` prism-code
+``` python
 # Wrong — exception propagates, tool call fails
 def handler(args, **kwargs):
     result = 1 / int(args["value"])  # ZeroDivisionError!
@@ -1295,7 +1295,7 @@ def handler(args, **kwargs):
 
 **Schema description too vague:**
 
-``` prism-code
+``` python
 # Bad — model doesn't know when to use it
 "description": "Does stuff"
 

@@ -8,13 +8,13 @@ last_crawled: 2026-07-11
 
 Hermes Agent supports full voice interaction across CLI and messaging platforms. Talk to the agent using your microphone, hear spoken replies, and have live voice conversations in Discord voice channels.
 
-If you want a practical setup walkthrough with recommended configurations and real usage patterns, see [Use Voice Mode with Hermes](/docs/guides/use-voice-mode-with-hermes).
+If you want a practical setup walkthrough with recommended configurations and real usage patterns, see [Use Voice Mode with Hermes](../../guides/use-voice-mode-with-hermes.md).
 
 ## Prerequisites
 
 Before using voice features, make sure you have:
 
-1.  **Hermes Agent installed** — via the install script (see [Installation](/docs/getting-started/installation))
+1.  **Hermes Agent installed** — via the install script (see [Installation](../../getting-started/installation.md))
 2.  **An LLM provider configured** — run `hermes model` or set your preferred provider credentials in `~/.hermes/.env`
 3.  **A working base setup** — run `hermes` to verify the agent responds to text before enabling voice
 
@@ -24,21 +24,21 @@ The `~/.hermes/` directory and default `config.yaml` are created automatically t
 
 Nous Portal covers both
 
-A paid [Nous Portal](/docs/user-guide/features/tool-gateway) subscription supplies the LLM (step 2) **and** OpenAI TTS via the Tool Gateway — no separate OpenAI key needed. On a fresh install, `hermes setup --portal` wires both up at once.
+A paid [Nous Portal](https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-gateway) subscription supplies the LLM (step 2) **and** OpenAI TTS via the Tool Gateway — no separate OpenAI key needed. On a fresh install, `hermes setup --portal` wires both up at once.
 
 ## Overview
 
-| Feature               | Platform          | Description                                                     |
-|-----------------------|-------------------|-----------------------------------------------------------------|
-| **Interactive Voice** | CLI               | Press Ctrl+B to record, agent auto-detects silence and responds |
-| **Auto Voice Reply**  | Telegram, Discord | Agent sends spoken audio alongside text responses               |
-| **Voice Channel**     | Discord           | Bot joins VC, listens to users speaking, speaks replies back    |
+| Feature | Platform | Description |
+|----|----|----|
+| **Interactive Voice** | CLI | Press Ctrl+B to record, agent auto-detects silence and responds |
+| **Auto Voice Reply** | Telegram, Discord | Agent sends spoken audio alongside text responses |
+| **Voice Channel** | Discord | Bot joins VC, listens to users speaking, speaks replies back |
 
 ## Requirements
 
 ### Python Packages
 
-``` prism-code
+``` bash
 # CLI voice mode (microphone + audio playback)
 cd ~/.hermes/hermes-agent && uv pip install -e ".[voice]"
 
@@ -55,11 +55,11 @@ python -m pip install -U neutts[all]
 cd ~/.hermes/hermes-agent && uv pip install -e ".[all]"
 ```
 
-| Extra         | Packages                                              | Required For            |
-|---------------|-------------------------------------------------------|-------------------------|
-| `voice`       | `sounddevice`, `numpy`                                | CLI voice mode          |
-| `messaging`   | `discord.py[voice]`, `python-telegram-bot`, `aiohttp` | Discord & Telegram bots |
-| `tts-premium` | `elevenlabs`                                          | ElevenLabs TTS provider |
+| Extra | Packages | Required For |
+|----|----|----|
+| `voice` | `sounddevice`, `numpy` | CLI voice mode |
+| `messaging` | `discord.py[voice]`, `python-telegram-bot`, `aiohttp` | Discord & Telegram bots |
+| `tts-premium` | `elevenlabs` | ElevenLabs TTS provider |
 
 Optional local TTS provider: install `neutts` separately with `python -m pip install -U neutts[all]`. On first use it downloads the model automatically.
 
@@ -69,7 +69,7 @@ info
 
 ### System Dependencies
 
-``` prism-code
+``` bash
 # macOS
 brew install portaudio ffmpeg opus
 brew install espeak-ng   # for NeuTTS
@@ -79,18 +79,18 @@ sudo apt install portaudio19-dev ffmpeg libopus0
 sudo apt install espeak-ng   # for NeuTTS
 ```
 
-| Dependency    | Purpose                                         | Required For           |
-|---------------|-------------------------------------------------|------------------------|
-| **PortAudio** | Microphone input and audio playback             | CLI voice mode         |
-| **ffmpeg**    | Audio format conversion (MP3 → Opus, PCM → WAV) | All platforms          |
-| **Opus**      | Discord voice codec                             | Discord voice channels |
-| **espeak-ng** | Phonemizer backend                              | Local NeuTTS provider  |
+| Dependency | Purpose | Required For |
+|----|----|----|
+| **PortAudio** | Microphone input and audio playback | CLI voice mode |
+| **ffmpeg** | Audio format conversion (MP3 → Opus, PCM → WAV) | All platforms |
+| **Opus** | Discord voice codec | Discord voice channels |
+| **espeak-ng** | Phonemizer backend | Local NeuTTS provider |
 
 ### API Keys
 
 Add to `~/.hermes/.env`:
 
-``` prism-code
+``` bash
 # Speech-to-Text — local provider needs NO key at all
 # pip install faster-whisper          # Free, runs locally, recommended
 GROQ_API_KEY=your-key                 # Groq Whisper — fast, free tier (cloud)
@@ -115,13 +115,13 @@ Voice mode is available in both the **classic CLI** (`hermes chat`) and the **TU
 
 Start the CLI and enable voice mode:
 
-``` prism-code
+``` bash
 hermes                # Start the interactive CLI
 ```
 
 Then use these commands inside the CLI:
 
-``` prism-code
+``` text
 /voice          Toggle voice mode on/off
 /voice on       Enable voice mode
 /voice off      Disable voice mode
@@ -175,12 +175,12 @@ Whisper sometimes generates phantom text from silence or background noise ("Than
 
 If you haven't set up your messaging bots yet, see the platform-specific guides:
 
-- [Telegram Setup Guide](/docs/user-guide/messaging/telegram)
-- [Discord Setup Guide](/docs/user-guide/messaging/discord)
+- [Telegram Setup Guide](../messaging/telegram.md)
+- [Discord Setup Guide](../messaging/discord.md)
 
 Start the gateway to connect to your messaging platforms:
 
-``` prism-code
+``` bash
 hermes gateway        # Start the gateway (connects to configured platforms)
 hermes gateway setup  # Interactive setup wizard for first-time configuration
 ```
@@ -189,10 +189,10 @@ hermes gateway setup  # Interactive setup wizard for first-time configuration
 
 The bot supports two interaction modes on Discord:
 
-| Mode                    | How to Talk                                     | Mention Required | Setup                             |
-|-------------------------|-------------------------------------------------|------------------|-----------------------------------|
-| **Direct Message (DM)** | Open the bot's profile → "Message"              | No               | Works immediately                 |
-| **Server Channel**      | Type in a text channel where the bot is present | Yes (`@botname`) | Bot must be invited to the server |
+| Mode | How to Talk | Mention Required | Setup |
+|----|----|----|----|
+| **Direct Message (DM)** | Open the bot's profile → "Message" | No | Works immediately |
+| **Server Channel** | Type in a text channel where the bot is present | Yes (`@botname`) | Bot must be invited to the server |
 
 **DM (recommended for personal use):** Just open a DM with the bot and type — no @mention needed. Voice replies and all commands work the same as in channels.
 
@@ -202,13 +202,13 @@ tip
 
 To disable the mention requirement in server channels, add to `~/.hermes/.env`:
 
-``` prism-code
+``` bash
 DISCORD_REQUIRE_MENTION=false
 ```
 
 Or set specific channels as free-response (no mention needed):
 
-``` prism-code
+``` bash
 DISCORD_FREE_RESPONSE_CHANNELS=123456789,987654321
 ```
 
@@ -216,7 +216,7 @@ DISCORD_FREE_RESPONSE_CHANNELS=123456789,987654321
 
 These work in both Telegram and Discord (DMs and text channels):
 
-``` prism-code
+``` text
 /voice          Toggle voice mode on/off
 /voice on       Voice replies only when you send a voice message
 /voice tts      Voice replies for ALL messages
@@ -236,10 +236,10 @@ Voice mode setting is persisted across gateway restarts.
 
 ### Platform Delivery
 
-| Platform     | Format                         | Notes                                                                                           |
-|--------------|--------------------------------|-------------------------------------------------------------------------------------------------|
-| **Telegram** | Voice bubble (Opus/OGG)        | Plays inline in chat. ffmpeg converts MP3 → Opus if needed                                      |
-| **Discord**  | Native voice bubble (Opus/OGG) | Plays inline like a user voice message. Falls back to file attachment if voice bubble API fails |
+| Platform | Format | Notes |
+|----|----|----|
+| **Telegram** | Voice bubble (Opus/OGG) | Plays inline in chat. ffmpeg converts MP3 → Opus if needed |
+| **Discord** | Native voice bubble (Opus/OGG) | Plays inline like a user voice message. Falls back to file attachment if voice bubble API fails |
 
 ------------------------------------------------------------------------
 
@@ -251,7 +251,7 @@ The most immersive voice feature: the bot joins a Discord voice channel, listens
 
 #### 1. Discord Bot Permissions
 
-If you already have a Discord bot set up for text (see [Discord Setup Guide](/docs/user-guide/messaging/discord)), you need to add voice permissions.
+If you already have a Discord bot set up for text (see [Discord Setup Guide](../messaging/discord.md)), you need to add voice permissions.
 
 Go to the [Discord Developer Portal](https://discord.com/developers/applications) → your application → **Installation** → **Default Install Settings** → **Guild Install**:
 
@@ -265,14 +265,14 @@ Go to the [Discord Developer Portal](https://discord.com/developers/applications
 
 **Updated Permissions Integer:**
 
-| Level        | Integer        | What's Included                                                                                            |
-|--------------|----------------|------------------------------------------------------------------------------------------------------------|
-| Text only    | `309237763136` | View Channels, Send Messages, Read History, Embeds, Attachments, Threads, Reactions, Create Public Threads |
-| Text + Voice | `309240908864` | All above + Connect, Speak                                                                                 |
+| Level | Integer | What's Included |
+|----|----|----|
+| Text only | `309237763136` | View Channels, Send Messages, Read History, Embeds, Attachments, Threads, Reactions, Create Public Threads |
+| Text + Voice | `309240908864` | All above + Connect, Speak |
 
 **Re-invite the bot** with the updated permissions URL:
 
-``` prism-code
+``` text
 https://discord.com/oauth2/authorize?client_id=YOUR_APP_ID&scope=bot+applications.commands&permissions=309240908864
 ```
 
@@ -286,11 +286,11 @@ Re-inviting the bot to a server it's already in will update its permissions with
 
 In the [Developer Portal](https://discord.com/developers/applications) → your application → **Bot** → **Privileged Gateway Intents**, enable all three:
 
-| Intent                     | Purpose                                                                   |
-|----------------------------|---------------------------------------------------------------------------|
-| **Presence Intent**        | Detect user online/offline status                                         |
-| **Server Members Intent**  | Resolve usernames in `DISCORD_ALLOWED_USERS` to numeric IDs (conditional) |
-| **Message Content Intent** | Read text message content in channels                                     |
+| Intent | Purpose |
+|----|----|
+| **Presence Intent** | Detect user online/offline status |
+| **Server Members Intent** | Resolve usernames in `DISCORD_ALLOWED_USERS` to numeric IDs (conditional) |
+| **Message Content Intent** | Read text message content in channels |
 
 **Message Content Intent** is required. **Server Members Intent** is only needed if your `DISCORD_ALLOWED_USERS` list uses usernames — if you use numeric user IDs, you can leave it OFF. Voice-channel SSRC → user_id mapping comes from Discord's SPEAKING opcode on the voice websocket and does **not** require the Server Members Intent.
 
@@ -298,7 +298,7 @@ In the [Developer Portal](https://discord.com/developers/applications) → your 
 
 The Opus codec library must be installed on the machine running the gateway:
 
-``` prism-code
+``` bash
 # macOS (Homebrew)
 brew install opus
 
@@ -313,7 +313,7 @@ The bot auto-loads the codec from:
 
 #### 4. Environment Variables
 
-``` prism-code
+``` bash
 # ~/.hermes/.env
 
 # Discord bot (already configured for text)
@@ -330,7 +330,7 @@ DISCORD_ALLOWED_USERS=your-user-id
 
 ### Start the Gateway
 
-``` prism-code
+``` bash
 hermes gateway        # Start with existing configuration
 ```
 
@@ -340,7 +340,7 @@ The bot should come online in Discord within a few seconds.
 
 Use these in the Discord text channel where the bot is present:
 
-``` prism-code
+``` text
 /voice join      Bot joins your current voice channel
 /voice channel   Alias for /voice join
 /voice leave     Bot disconnects from voice channel
@@ -377,7 +377,7 @@ The bot automatically pauses its audio listener while playing TTS replies, preve
 
 Only users listed in `DISCORD_ALLOWED_USERS` can interact via voice. Other users' audio is silently ignored.
 
-``` prism-code
+``` bash
 # ~/.hermes/.env
 DISCORD_ALLOWED_USERS=284102345871466496
 ```
@@ -388,7 +388,7 @@ DISCORD_ALLOWED_USERS=284102345871466496
 
 ### config.yaml
 
-``` prism-code
+``` yaml
 # Voice recording (CLI)
 voice:
   record_key: "ctrl+b"            # Key to start/stop recording
@@ -431,7 +431,7 @@ tts:
 
 ### Environment Variables
 
-``` prism-code
+``` bash
 # Speech-to-Text providers (local needs no key)
 # pip install faster-whisper        # Free local STT — no API key needed
 GROQ_API_KEY=...                    # Groq Whisper (fast, free tier)
@@ -454,17 +454,17 @@ DISCORD_ALLOWED_USERS=...
 
 ### STT Provider Comparison
 
-| Provider    | Model                    | Speed                     | Quality | Cost      | API Key |
-|-------------|--------------------------|---------------------------|---------|-----------|---------|
-| **Local**   | `base`                   | Fast (depends on CPU/GPU) | Good    | Free      | No      |
-| **Local**   | `small`                  | Medium                    | Better  | Free      | No      |
-| **Local**   | `large-v3`               | Slow                      | Best    | Free      | No      |
-| **Groq**    | `whisper-large-v3-turbo` | Very fast (~0.5s)         | Good    | Free tier | Yes     |
-| **Groq**    | `whisper-large-v3`       | Fast (~1s)                | Better  | Free tier | Yes     |
-| **OpenAI**  | `whisper-1`              | Fast (~1s)                | Good    | Paid      | Yes     |
-| **OpenAI**  | `gpt-4o-transcribe`      | Medium (~2s)              | Best    | Paid      | Yes     |
-| **Mistral** | `voxtral-mini-latest`    | Fast                      | Good    | Paid      | Yes     |
-| **xAI**     | `grok-stt`               | Fast                      | Good    | Paid      | Yes     |
+| Provider | Model | Speed | Quality | Cost | API Key |
+|----|----|----|----|----|----|
+| **Local** | `base` | Fast (depends on CPU/GPU) | Good | Free | No |
+| **Local** | `small` | Medium | Better | Free | No |
+| **Local** | `large-v3` | Slow | Best | Free | No |
+| **Groq** | `whisper-large-v3-turbo` | Very fast (~0.5s) | Good | Free tier | Yes |
+| **Groq** | `whisper-large-v3` | Fast (~1s) | Better | Free tier | Yes |
+| **OpenAI** | `whisper-1` | Fast (~1s) | Good | Paid | Yes |
+| **OpenAI** | `gpt-4o-transcribe` | Medium (~2s) | Best | Paid | Yes |
+| **Mistral** | `voxtral-mini-latest` | Fast | Good | Paid | Yes |
+| **xAI** | `grok-stt` | Fast | Good | Paid | Yes |
 
 Provider priority (automatic fallback): **local** \> **groq** \> **openai**
 
@@ -487,12 +487,12 @@ NeuTTS uses the `tts.neutts` config block above.
 
 PortAudio is not installed:
 
-``` prism-code
+``` bash
 brew install portaudio    # macOS
 sudo apt install portaudio19-dev  # Ubuntu
 ```
 
-If you are running Hermes inside Docker on a Linux desktop, the container also needs access to your host audio socket. See the [Docker audio bridge](/docs/user-guide/docker#optional-linux-desktop-audio-bridge) notes for a PulseAudio/PipeWire-compatible setup.
+If you are running Hermes inside Docker on a Linux desktop, the container also needs access to your host audio socket. See the [Docker audio bridge](../docker.md#optional-linux-desktop-audio-bridge) notes for a PulseAudio/PipeWire-compatible setup.
 
 ### Bot doesn't respond in Discord server channels
 

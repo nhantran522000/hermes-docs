@@ -24,7 +24,7 @@ If you have ever wanted Hermes to use a tool that already exists somewhere else,
 
 2.  Add an MCP server to `~/.hermes/config.yaml`:
 
-``` prism-code
+``` yaml
 mcp_servers:
   filesystem:
     command: "npx"
@@ -33,7 +33,7 @@ mcp_servers:
 
 3.  Start Hermes:
 
-``` prism-code
+``` bash
 hermes chat
 ```
 
@@ -41,7 +41,7 @@ hermes chat
 
 For example:
 
-``` prism-code
+``` text
 List the files in /home/user/projects and summarize the repo structure.
 ```
 
@@ -51,7 +51,7 @@ Hermes will discover the MCP server's tools and use them like any other tool.
 
 Hermes ships a curated catalog of MCP servers that Nous staff has reviewed and merged. They're disabled by default — install only what you actually want.
 
-``` prism-code
+``` bash
 hermes mcp                # interactive picker (default)
 hermes mcp catalog        # plain-text list, scriptable
 hermes mcp install n8n    # install a catalog entry by name
@@ -59,7 +59,7 @@ hermes mcp install n8n    # install a catalog entry by name
 
 The picker shows each entry with its current status:
 
-``` prism-code
+``` text
 n8n          available              Manage and inspect n8n workflows from Hermes
 linear       enabled                Linear issue/project management (remote OAuth)
 github       installed (disabled)   GitHub repo + PR tools
@@ -77,7 +77,7 @@ Catalog entries can require:
 
 After credentials are configured, Hermes probes the MCP server to list every tool it exposes and presents a checklist:
 
-``` prism-code
+``` text
 Select tools for 'linear' (SPACE toggle, ENTER confirm)
   [x] find_issues       Find issues matching a query
   [x] get_issue         Get a single issue
@@ -114,7 +114,7 @@ Note this is distinct from `${INSTALL_DIR}` in catalog manifests, which is subst
 
 ### Updating tool selection later
 
-``` prism-code
+``` bash
 hermes mcp configure linear
 ```
 
@@ -132,7 +132,7 @@ To add an MCP to the catalog, open a PR against [`optional-mcps/`](https://githu
 
 Stdio servers run as local subprocesses and talk over stdin/stdout.
 
-``` prism-code
+``` yaml
 mcp_servers:
   github:
     command: "npx"
@@ -151,7 +151,7 @@ Use stdio servers when:
 
 HTTP MCP servers are remote endpoints Hermes connects to directly.
 
-``` prism-code
+``` yaml
 mcp_servers:
   remote_api:
     url: "https://mcp.example.com/mcp"
@@ -169,7 +169,7 @@ Use HTTP servers when:
 
 Most hosted MCP servers (Linear, Sentry, Atlassian, Asana, Figma, Stripe, …) require OAuth 2.1 instead of a static bearer token. Set `auth: oauth` and Hermes handles discovery, dynamic client registration, PKCE, token exchange, refresh, and step-up auth via the MCP Python SDK.
 
-``` prism-code
+``` yaml
 mcp_servers:
   linear:
     url: "https://mcp.linear.app/mcp"
@@ -183,11 +183,11 @@ On first connect, Hermes prints an authorize URL, opens your browser when possib
 - **Paste-back (no setup):** on an interactive terminal Hermes prints "Or paste the redirect URL here…" alongside the authorize URL. Open the URL in your browser, approve, copy the full URL the browser ends up on (the redirect will show a connection error — that's expected), paste it at the prompt. Bare `?code=…&state=…` query strings work too.
 - **SSH port forward:** `ssh -N -L <port>:127.0.0.1:<port> user@host` in a separate terminal, then let the redirect flow normally.
 
-See [OAuth over SSH / Remote Hosts](/docs/guides/oauth-over-ssh#mcp-servers) for the full walkthrough, including DCR-less servers (e.g. Slack), pre-registered `client_id`/`client_secret`, scope customization, and re-auth via `hermes mcp login <server>`.
+See [OAuth over SSH / Remote Hosts](https://hermes-agent.nousresearch.com/docs/guides/oauth-over-ssh#mcp-servers) for the full walkthrough, including DCR-less servers (e.g. Slack), pre-registered `client_id`/`client_secret`, scope customization, and re-auth via `hermes mcp login <server>`.
 
 **Pitfall — providers that don't support automatic registration (Google Drive, Atlassian).** Some servers reject the dynamic client registration step (RFC 7591) that bare `auth: oauth` relies on — Google's official Drive server (`https://drivemcp.googleapis.com/mcp/v1`) returns a `400 Bad Request`, so no OAuth client is created and no token is acquired. The symptom is subtle: these servers also serve `tools/list` *without* auth, so `hermes mcp login` can list the tools and look like it worked, but every real tool call later times out. `hermes mcp login` now detects this (it checks that a token actually landed on disk) and tells you to supply your own OAuth client. Create one in the provider's console and add it to config:
 
-``` prism-code
+``` yaml
 mcp_servers:
   googledrive:
     url: "https://drivemcp.googleapis.com/mcp/v1"
@@ -209,7 +209,7 @@ Remote HTTP MCP servers that require mutual TLS (client-certificate authenticati
 
 - **A single combined PEM path** — one file holding both the certificate and the private key:
 
-``` prism-code
+``` yaml
 mcp_servers:
   internal_api:
     url: "https://mcp.internal.example.com/mcp"
@@ -218,7 +218,7 @@ mcp_servers:
 
 - **A `[cert, key]` 2-tuple** — certificate and key in separate files (equivalent to setting `client_cert` + `client_key`):
 
-``` prism-code
+``` yaml
 mcp_servers:
   internal_api:
     url: "https://mcp.internal.example.com/mcp"
@@ -227,7 +227,7 @@ mcp_servers:
 
 - **A `[cert, key, password]` 3-tuple** — when the private key is encrypted, the third element is the key passphrase:
 
-``` prism-code
+``` yaml
 mcp_servers:
   internal_api:
     url: "https://mcp.internal.example.com/mcp"
@@ -242,26 +242,26 @@ Hermes reads MCP config from `~/.hermes/config.yaml` under `mcp_servers`.
 
 ### Common keys
 
-| Key                            | Type           | Meaning                                                                                                                                             |
-|--------------------------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `command`                      | string         | Executable for a stdio MCP server                                                                                                                   |
-| `args`                         | list           | Arguments for the stdio server                                                                                                                      |
-| `env`                          | mapping        | Environment variables passed to the stdio server                                                                                                    |
-| `url`                          | string         | HTTP MCP endpoint                                                                                                                                   |
-| `headers`                      | mapping        | HTTP headers for remote servers                                                                                                                     |
-| `client_cert`                  | string \| list | Client certificate for mTLS — a combined PEM path, or `[cert, key]` / `[cert, key, password]`                                                       |
-| `client_key`                   | string         | Client private-key PEM path (when separate from `client_cert`)                                                                                      |
-| `timeout`                      | number         | Tool call timeout                                                                                                                                   |
-| `connect_timeout`              | number         | Initial connection timeout (also bounds the MCP `initialize` handshake)                                                                             |
-| `idle_timeout_seconds`         | number         | Recycle a stdio server after this many seconds without a tool call (`0` = never, default). The server restarts transparently on the next tool call. |
-| `max_lifetime_seconds`         | number         | Recycle a stdio server after this total age (`0` = never, default). Restarts transparently on next use.                                             |
-| `enabled`                      | bool           | If `false`, Hermes skips the server entirely                                                                                                        |
-| `supports_parallel_tool_calls` | bool           | If `true`, tools from this server may run concurrently                                                                                              |
-| `tools`                        | mapping        | Per-server tool filtering and utility policy                                                                                                        |
+| Key | Type | Meaning |
+|----|----|----|
+| `command` | string | Executable for a stdio MCP server |
+| `args` | list | Arguments for the stdio server |
+| `env` | mapping | Environment variables passed to the stdio server |
+| `url` | string | HTTP MCP endpoint |
+| `headers` | mapping | HTTP headers for remote servers |
+| `client_cert` | string \| list | Client certificate for mTLS — a combined PEM path, or `[cert, key]` / `[cert, key, password]` |
+| `client_key` | string | Client private-key PEM path (when separate from `client_cert`) |
+| `timeout` | number | Tool call timeout |
+| `connect_timeout` | number | Initial connection timeout (also bounds the MCP `initialize` handshake) |
+| `idle_timeout_seconds` | number | Recycle a stdio server after this many seconds without a tool call (`0` = never, default). The server restarts transparently on the next tool call. |
+| `max_lifetime_seconds` | number | Recycle a stdio server after this total age (`0` = never, default). Restarts transparently on next use. |
+| `enabled` | bool | If `false`, Hermes skips the server entirely |
+| `supports_parallel_tool_calls` | bool | If `true`, tools from this server may run concurrently |
+| `tools` | mapping | Per-server tool filtering and utility policy |
 
 ### Minimal stdio example
 
-``` prism-code
+``` yaml
 mcp_servers:
   filesystem:
     command: "npx"
@@ -272,7 +272,7 @@ mcp_servers:
 
 Browser-based MCP servers (e.g. `@playwright/mcp`) keep a full Chromium resident after their first tool call — hundreds of MB that never get released. Opt in to automatic recycling and the server is torn down after the idle/lifetime limit, then restarted transparently the next time one of its tools is called (its tools stay registered the whole time):
 
-``` prism-code
+``` yaml
 mcp_servers:
   playwright:
     command: "npx"
@@ -283,7 +283,7 @@ mcp_servers:
 
 ### Minimal HTTP example
 
-``` prism-code
+``` yaml
 mcp_servers:
   company_api:
     url: "https://mcp.internal.example.com"
@@ -295,18 +295,18 @@ mcp_servers:
 
 For well-known MCP servers, `hermes mcp add` accepts a `--preset` flag that fills in the transport details so you don't have to look up the command and args. The preset only supplies defaults — anything else (env vars, headers, filtering) you pass on the same command line still wins.
 
-| Preset  | What it wires up                                                                              |
-|---------|-----------------------------------------------------------------------------------------------|
+| Preset | What it wires up |
+|----|----|
 | `codex` | The Codex CLI's MCP server (`codex mcp-server` over stdio). Requires the `codex` CLI on PATH. |
 
-``` prism-code
+``` bash
 # Add Codex CLI as an MCP server in one line
 hermes mcp add codex --preset codex
 ```
 
 That writes the equivalent of:
 
-``` prism-code
+``` yaml
 mcp_servers:
   codex:
     command: "codex"
@@ -319,7 +319,7 @@ You can pick any local name (`hermes mcp add my-codex --preset codex` is fine); 
 
 Hermes prefixes MCP tools so they do not collide with built-in names:
 
-``` prism-code
+``` text
 mcp_<server_name>_<tool_name>
 ```
 
@@ -362,7 +362,7 @@ You can control which tools each MCP server contributes to Hermes, allowing fine
 
 ### Disable a server entirely
 
-``` prism-code
+``` yaml
 mcp_servers:
   legacy:
     url: "https://mcp.legacy.internal"
@@ -373,7 +373,7 @@ If `enabled: false`, Hermes skips the server completely and does not even attemp
 
 ### Whitelist server tools
 
-``` prism-code
+``` yaml
 mcp_servers:
   github:
     command: "npx"
@@ -388,7 +388,7 @@ Only those MCP server tools are registered.
 
 ### Blacklist server tools
 
-``` prism-code
+``` yaml
 mcp_servers:
   stripe:
     url: "https://mcp.stripe.com"
@@ -402,7 +402,7 @@ All server tools are registered except the excluded ones.
 
 If both are present:
 
-``` prism-code
+``` yaml
 tools:
   include: [create_issue]
   exclude: [create_issue, delete_issue]
@@ -414,7 +414,7 @@ tools:
 
 You can also separately disable Hermes-added utility wrappers:
 
-``` prism-code
+``` yaml
 mcp_servers:
   docs:
     url: "https://mcp.docs.example.com"
@@ -430,7 +430,7 @@ That means:
 
 ### Full example
 
-``` prism-code
+``` yaml
 mcp_servers:
   github:
     command: "npx"
@@ -478,7 +478,7 @@ The refresh is lock-protected so rapid-fire notifications from the same server d
 
 If you change MCP config, use:
 
-``` prism-code
+``` text
 /reload-mcp
 ```
 
@@ -488,7 +488,7 @@ This reloads MCP servers from config and refreshes the available tool list. For 
 
 Each configured MCP server also creates a runtime toolset when it contributes at least one registered tool:
 
-``` prism-code
+``` text
 mcp-<server>
 ```
 
@@ -514,7 +514,7 @@ The new filtering support is also a security control:
 
 ### GitHub server with a minimal issue-management surface
 
-``` prism-code
+``` yaml
 mcp_servers:
   github:
     command: "npx"
@@ -529,13 +529,13 @@ mcp_servers:
 
 Use it like:
 
-``` prism-code
+``` text
 Show me open issues labeled bug, then draft a new issue for the flaky MCP reconnection behavior.
 ```
 
 ### Stripe server with dangerous actions removed
 
-``` prism-code
+``` yaml
 mcp_servers:
   stripe:
     url: "https://mcp.stripe.com"
@@ -547,13 +547,13 @@ mcp_servers:
 
 Use it like:
 
-``` prism-code
+``` text
 Look up the last 10 failed payments and summarize common failure reasons.
 ```
 
 ### Filesystem server for a single project root
 
-``` prism-code
+``` yaml
 mcp_servers:
   project_fs:
     command: "npx"
@@ -562,7 +562,7 @@ mcp_servers:
 
 Use it like:
 
-``` prism-code
+``` text
 Inspect the project root and explain the directory layout.
 ```
 
@@ -572,7 +572,7 @@ Inspect the project root and explain the directory layout.
 
 Check:
 
-``` prism-code
+``` bash
 # Verify MCP deps are installed (already included in standard install)
 cd ~/.hermes/hermes-agent && uv pip install -e ".[mcp]"
 
@@ -607,7 +607,7 @@ This is intentional and keeps the tool list honest.
 
 By default, MCP tools run sequentially — one at a time. If your MCP server exposes tools that are safe to run concurrently (e.g. read-only queries, independent API calls), you can opt-in to parallel execution:
 
-``` prism-code
+``` yaml
 mcp_servers:
   docs:
     command: "docs-server"
@@ -626,7 +626,7 @@ MCP servers can request LLM inference from Hermes via the `sampling/createMessag
 
 Sampling is **enabled by default** for all MCP servers (when the MCP SDK supports it). Configure it per-server under the `sampling` key:
 
-``` prism-code
+``` yaml
 mcp_servers:
   my_server:
     command: "my-mcp-server"
@@ -645,7 +645,7 @@ The sampling handler includes a sliding-window rate limiter, per-request timeout
 
 To disable sampling for a specific server:
 
-``` prism-code
+``` yaml
 mcp_servers:
   untrusted_server:
     url: "https://mcp.example.com"
@@ -665,7 +665,7 @@ In addition to connecting **to** MCP servers, Hermes can also **be** an MCP serv
 
 ### Quick start
 
-``` prism-code
+``` bash
 hermes mcp serve
 ```
 
@@ -675,7 +675,7 @@ This starts a stdio MCP server. The MCP client (not you) manages the process lif
 
 Add Hermes to your MCP client config. For example, in Claude Code's `~/.claude/claude_desktop_config.json`:
 
-``` prism-code
+``` json
 {
   "mcpServers": {
     "hermes": {
@@ -688,7 +688,7 @@ Add Hermes to your MCP client config. For example, in Claude Code's `~/.claude/c
 
 Or if you installed Hermes in a specific location:
 
-``` prism-code
+``` json
 {
   "mcpServers": {
     "hermes": {
@@ -703,24 +703,24 @@ Or if you installed Hermes in a specific location:
 
 The MCP server exposes 10 tools, matching OpenClaw's channel bridge surface plus a Hermes-specific channel browser:
 
-| Tool                    | Description                                                                     |
-|-------------------------|---------------------------------------------------------------------------------|
-| `conversations_list`    | List active messaging conversations. Filter by platform or search by name.      |
-| `conversation_get`      | Get detailed info about one conversation by session key.                        |
-| `messages_read`         | Read recent message history for a conversation.                                 |
-| `attachments_fetch`     | Extract non-text attachments (images, media) from a specific message.           |
-| `events_poll`           | Poll for new conversation events since a cursor position.                       |
-| `events_wait`           | Long-poll / block until the next event arrives (near-real-time).                |
-| `messages_send`         | Send a message through a platform (e.g. `telegram:123456`, `discord:#general`). |
-| `channels_list`         | List available messaging targets across all platforms.                          |
-| `permissions_list_open` | List pending approval requests observed during this bridge session.             |
-| `permissions_respond`   | Allow or deny a pending approval request.                                       |
+| Tool | Description |
+|----|----|
+| `conversations_list` | List active messaging conversations. Filter by platform or search by name. |
+| `conversation_get` | Get detailed info about one conversation by session key. |
+| `messages_read` | Read recent message history for a conversation. |
+| `attachments_fetch` | Extract non-text attachments (images, media) from a specific message. |
+| `events_poll` | Poll for new conversation events since a cursor position. |
+| `events_wait` | Long-poll / block until the next event arrives (near-real-time). |
+| `messages_send` | Send a message through a platform (e.g. `telegram:123456`, `discord:#general`). |
+| `channels_list` | List available messaging targets across all platforms. |
+| `permissions_list_open` | List pending approval requests observed during this bridge session. |
+| `permissions_respond` | Allow or deny a pending approval request. |
 
 ### Event system
 
 The MCP server includes a live event bridge that polls Hermes's session database for new messages. This gives MCP clients near-real-time awareness of incoming conversations:
 
-``` prism-code
+``` text
 # Poll for new events (non-blocking)
 events_poll(after_cursor=0)
 
@@ -734,7 +734,7 @@ The event queue is in-memory and starts when the bridge connects. Older messages
 
 ### Options
 
-``` prism-code
+``` bash
 hermes mcp serve              # Normal mode
 hermes mcp serve --verbose    # Debug logging on stderr
 ```
@@ -754,7 +754,7 @@ The gateway does NOT need to be running for read operations (listing conversatio
 
 ## Related docs
 
-- [Use MCP with Hermes](/docs/guides/use-mcp-with-hermes)
-- [CLI Commands](/docs/reference/cli-commands)
-- [Slash Commands](/docs/reference/slash-commands)
-- [FAQ](/docs/reference/faq)
+- [Use MCP with Hermes](../../guides/use-mcp-with-hermes.md)
+- [CLI Commands](../../reference/cli-commands.md)
+- [Slash Commands](../../reference/slash-commands.md)
+- [FAQ](../../reference/faq.md)

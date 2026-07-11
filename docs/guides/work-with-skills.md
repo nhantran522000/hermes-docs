@@ -8,7 +8,7 @@ last_crawled: 2026-07-11
 
 Skills are on-demand knowledge documents that teach Hermes how to handle specific tasks — from generating ASCII art to managing GitHub PRs. This guide walks you through using them day to day.
 
-For the full technical reference, see [Skills System](/docs/user-guide/features/skills).
+For the full technical reference, see [Skills System](../user-guide/features/skills.md).
 
 ------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ For the full technical reference, see [Skills System](/docs/user-guide/features/
 
 Every Hermes installation ships with bundled skills. See what's available:
 
-``` prism-code
+``` bash
 # In any chat session:
 /skills
 
@@ -26,7 +26,7 @@ hermes skills list
 
 This shows a compact list with names and descriptions:
 
-``` prism-code
+``` text
 ascii-art         Generate ASCII art using pyfiglet, cowsay, boxes...
 arxiv             Search and retrieve academic papers from arXiv...
 github-pr-workflow Full PR lifecycle — create branches, commit...
@@ -36,7 +36,7 @@ excalidraw        Create hand-drawn style diagrams using Excalidraw...
 
 ### Searching for a Skill
 
-``` prism-code
+``` bash
 # Search by keyword
 /skills search docker
 /skills search music
@@ -46,7 +46,7 @@ excalidraw        Create hand-drawn style diagrams using Excalidraw...
 
 Official optional skills (heavier or niche skills not active by default) are available via the Hub:
 
-``` prism-code
+``` bash
 # Browse official optional skills
 /skills browse
 
@@ -60,7 +60,7 @@ Official optional skills (heavier or niche skills not active by default) are ava
 
 Every installed skill is automatically a slash command. Just type its name:
 
-``` prism-code
+``` bash
 # Load a skill and give it a task
 /ascii-art Make a banner that says "HELLO WORLD"
 /plan Design a REST API for a todo app
@@ -88,7 +88,7 @@ This means skills don't cost tokens until they're actually used.
 
 Official optional skills ship with Hermes but aren't active by default. Install them explicitly:
 
-``` prism-code
+``` bash
 # Install an official optional skill
 hermes skills install official/research/arxiv
 
@@ -112,7 +112,7 @@ Installed skills take effect in new sessions. If you want it available in the cu
 
 ### Verifying Installation
 
-``` prism-code
+``` bash
 # Check it's there
 hermes skills list | grep arxiv
 
@@ -126,7 +126,7 @@ hermes skills list | grep arxiv
 
 Plugins can bundle their own skills using namespaced names (`plugin:skill`). This prevents name collisions with built-in skills.
 
-``` prism-code
+``` bash
 # Load a plugin skill by its qualified name
 skill_view("superpowers:writing-plans")
 
@@ -136,7 +136,7 @@ skill_view("writing-plans")
 
 Plugin skills are **not** listed in the system prompt and don't appear in `skills_list`. They're opt-in — load them explicitly when you know a plugin provides one. When loaded, the agent sees a banner listing sibling skills from the same plugin.
 
-For how to ship skills in your own plugin, see [Build a Hermes Plugin → Bundle skills](/docs/developer-guide/plugins#bundle-skills).
+For how to ship skills in your own plugin, see [Build a Hermes Plugin → Bundle skills](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins#bundle-skills).
 
 ------------------------------------------------------------------------
 
@@ -144,7 +144,7 @@ For how to ship skills in your own plugin, see [Build a Hermes Plugin → Bundle
 
 Some skills declare configuration they need in their frontmatter:
 
-``` prism-code
+``` yaml
 metadata:
   hermes:
     config:
@@ -158,7 +158,7 @@ When a skill with config is first loaded, Hermes prompts you for the values. The
 
 Manage skill config from the CLI:
 
-``` prism-code
+``` bash
 # Interactive config for a specific skill
 hermes skills config gif-search
 
@@ -174,7 +174,7 @@ Skills are just markdown files with YAML frontmatter. Creating one takes under f
 
 ### 1. Create the Directory
 
-``` prism-code
+``` bash
 mkdir -p ~/.hermes/skills/my-category/my-skill
 ```
 
@@ -182,7 +182,7 @@ mkdir -p ~/.hermes/skills/my-category/my-skill
 
 ~/.hermes/skills/my-category/my-skill/SKILL.md
 
-``` prism-code
+``` markdown
 ---
 name: my-skill
 description: Brief description of what this skill does
@@ -215,7 +215,7 @@ Run `check-command` to confirm the result is correct.
 
 Skills can include supporting files the agent loads on demand:
 
-``` prism-code
+``` text
 my-skill/
 ├── SKILL.md                    # Main skill document
 ├── references/
@@ -229,7 +229,7 @@ my-skill/
 
 Reference these in your SKILL.md:
 
-``` prism-code
+``` markdown
 For API details, load the reference: `skill_view("my-skill", "references/api-docs.md")`
 ```
 
@@ -237,7 +237,7 @@ For API details, load the reference: `skill_view("my-skill", "references/api-doc
 
 Start a new session and try your skill:
 
-``` prism-code
+``` bash
 hermes chat -q "/my-skill help me with the thing"
 ```
 
@@ -253,7 +253,7 @@ The agent can also create and update skills itself using `skill_manage`. After s
 
 Control which skills are available on which platforms:
 
-``` prism-code
+``` bash
 hermes skills
 ```
 
@@ -265,14 +265,14 @@ This opens an interactive TUI where you can enable or disable skills per platfor
 
 Both are persistent across sessions, but they serve different purposes:
 
-|                 | Skills                                  | Memory                                    |
-|-----------------|-----------------------------------------|-------------------------------------------|
-| **What**        | Procedural knowledge — how to do things | Factual knowledge — what things are       |
-| **When**        | Loaded on demand, only when relevant    | Injected into every session automatically |
-| **Size**        | Can be large (hundreds of lines)        | Should be compact (key facts only)        |
-| **Cost**        | Zero tokens until loaded                | Small but constant token cost             |
-| **Examples**    | "How to deploy to Kubernetes"           | "User prefers dark mode, lives in PST"    |
-| **Who creates** | You, the agent, or installed from Hub   | The agent, based on conversations         |
+|  | Skills | Memory |
+|----|----|----|
+| **What** | Procedural knowledge — how to do things | Factual knowledge — what things are |
+| **When** | Loaded on demand, only when relevant | Injected into every session automatically |
+| **Size** | Can be large (hundreds of lines) | Should be compact (key facts only) |
+| **Cost** | Zero tokens until loaded | Small but constant token cost |
+| **Examples** | "How to deploy to Kubernetes" | "User prefers dark mode, lives in PST" |
+| **Who creates** | You, the agent, or installed from Hub | The agent, based on conversations |
 
 **Rule of thumb:** If you'd put it in a reference document, it's a skill. If you'd put it on a sticky note, it's memory.
 
@@ -290,4 +290,4 @@ Both are persistent across sessions, but they serve different purposes:
 
 ------------------------------------------------------------------------
 
-*For the complete skills reference — frontmatter fields, conditional activation, external directories, and more — see [Skills System](/docs/user-guide/features/skills).*
+*For the complete skills reference — frontmatter fields, conditional activation, external directories, and more — see [Skills System](../user-guide/features/skills.md).*

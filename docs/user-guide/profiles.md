@@ -16,7 +16,7 @@ When you create a profile, it automatically becomes its own command. Create a pr
 
 ## Quick start
 
-``` bash
+``` prism-code
 hermes profile create coder       # creates profile + "coder" command alias
 coder setup                       # configure API keys and model
 coder chat                        # start chatting
@@ -32,7 +32,7 @@ Quickest setup: run `hermes setup --portal` inside the new profile to wire up mo
 
 ### Blank profile
 
-``` bash
+``` prism-code
 hermes profile create mybot
 ```
 
@@ -40,7 +40,7 @@ Creates a fresh profile with bundled skills seeded. Run `mybot setup` to configu
 
 If you plan to use this profile as a kanban worker (or want the kanban orchestrator to route work to it), pass `--description "<role>"` at create time so the orchestrator knows what it's good at:
 
-``` bash
+``` prism-code
 hermes profile create researcher --description "Reads source code and external docs, writes findings."
 ```
 
@@ -48,7 +48,7 @@ You can also set or auto-generate the description later with `hermes profile des
 
 ### Clone config only (`--clone`)
 
-``` bash
+``` prism-code
 hermes profile create work --clone
 ```
 
@@ -56,7 +56,7 @@ Copies your current profile's `config.yaml`, `.env`, `SOUL.md`, and skills into 
 
 ### Clone everything (`--clone-all`)
 
-``` bash
+``` prism-code
 hermes profile create backup --clone-all
 ```
 
@@ -64,13 +64,13 @@ Copies **everything** — config, API keys, personality, all memories, skills, c
 
 ### Clone from a specific profile
 
-``` bash
+``` prism-code
 hermes profile create work --clone-from coder
 ```
 
 `--clone-from <source>` selects the source profile directly and implies a config/skills/SOUL clone. Combine it with `--clone-all` when you want a full copy of that source profile:
 
-``` bash
+``` prism-code
 hermes profile create work-backup --clone-from coder --clone-all
 ```
 
@@ -84,7 +84,7 @@ When Honcho is enabled, clone operations automatically create a dedicated AI pee
 
 Every profile automatically gets a command alias at `~/.local/bin/<name>`:
 
-``` bash
+``` prism-code
 coder chat                    # chat with the coder agent
 coder setup                   # configure coder's settings
 coder gateway start           # start coder's gateway
@@ -99,7 +99,7 @@ The alias works with every hermes subcommand — it's just `hermes -p <name>` un
 
 You can also target a profile explicitly with any command:
 
-``` bash
+``` prism-code
 hermes -p coder chat
 hermes --profile=coder doctor
 hermes chat -p coder -q "hello"    # works in any position
@@ -107,7 +107,7 @@ hermes chat -p coder -q "hello"    # works in any position
 
 ### Sticky default (`hermes profile use`)
 
-``` bash
+``` prism-code
 hermes profile use coder
 hermes chat                   # now targets coder
 hermes tools                  # configures coder's tools
@@ -136,7 +136,7 @@ On the default `local` terminal backend, the agent still has the same filesystem
 
 If you want a profile to start in a specific project folder, set an explicit absolute `terminal.cwd` in that profile's `config.yaml`:
 
-``` yaml
+``` prism-code
 terminal:
   backend: local
   cwd: /absolute/path/to/project
@@ -154,7 +154,7 @@ Also note:
 
 Each profile runs its own gateway as a separate process with its own bot token:
 
-``` bash
+``` prism-code
 coder gateway start           # starts coder's gateway
 assistant gateway start       # starts assistant's gateway (separate process)
 ```
@@ -163,7 +163,7 @@ assistant gateway start       # starts assistant's gateway (separate process)
 
 Each profile has its own `.env` file. Configure a different Telegram/Discord/Slack bot token in each:
 
-``` bash
+``` prism-code
 # Edit coder's tokens
 nano ~/.hermes/profiles/coder/.env
 
@@ -177,7 +177,7 @@ If two profiles accidentally use the same bot token, the second gateway will be 
 
 ### Persistent services
 
-``` bash
+``` prism-code
 coder gateway install         # creates hermes-gateway-coder systemd/launchd service
 assistant gateway install     # creates hermes-gateway-assistant service
 ```
@@ -196,14 +196,14 @@ Each profile has its own:
 - **`.env`** — API keys, bot tokens
 - **`SOUL.md`** — personality and instructions
 
-``` bash
+``` prism-code
 coder config set model.default anthropic/claude-sonnet-4
 echo "You are a focused coding assistant." > ~/.hermes/profiles/coder/SOUL.md
 ```
 
 If you want this profile to work in a specific project by default, also set its own `terminal.cwd`:
 
-``` bash
+``` prism-code
 coder config set terminal.cwd /absolute/path/to/project
 ```
 
@@ -217,7 +217,7 @@ Note: "Set as active" on the dashboard's Profiles page is the sticky default for
 
 `hermes update` pulls code once (shared) and syncs new bundled skills to **all** profiles automatically:
 
-``` bash
+``` prism-code
 hermes update
 # → Code updated (12 commits)
 # → Skills synced: default (up to date), coder (+2 new), assistant (+2 new)
@@ -227,7 +227,7 @@ User-modified skills are never overwritten.
 
 ## Managing profiles
 
-``` bash
+``` prism-code
 hermes profile list           # show all profiles with status
 hermes profile show coder     # detailed info for one profile
 hermes profile rename coder dev-bot   # rename (updates alias + service)
@@ -237,7 +237,7 @@ hermes profile import coder.tar.gz   # import from archive
 
 ## Deleting a profile
 
-``` bash
+``` prism-code
 hermes profile delete coder
 ```
 
@@ -251,7 +251,7 @@ You cannot delete the default profile (`~/.hermes`). To remove everything, use `
 
 ## Tab completion
 
-``` bash
+``` prism-code
 # Bash
 eval "$(hermes completion bash)"
 
@@ -284,7 +284,7 @@ The default profile is simply `~/.hermes` itself. No migration needed — existi
 
 A profile you built on one machine can be packaged as a **git repository** and installed with one command on another machine — your own workstation, a teammate's laptop, or a community user's environment. The shared package includes the SOUL, config, skills, cron jobs, and MCP connections. Credentials, memories, and sessions stay per-machine.
 
-``` bash
+``` prism-code
 # Install a whole agent from a git repo
 hermes profile install github.com/you/research-bot --alias
 

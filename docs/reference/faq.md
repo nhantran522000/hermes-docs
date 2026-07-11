@@ -58,7 +58,7 @@ API calls go **only to the LLM provider you configure** (e.g., OpenRouter, your 
 
 Yes. Run `hermes model`, select **Custom endpoint**, and enter your server's URL:
 
-``` bash
+``` prism-code
 hermes model
 # Select: Custom endpoint (enter URL manually)
 # API base URL: http://localhost:11434/v1
@@ -69,7 +69,7 @@ hermes model
 
 Or configure it directly in `config.yaml`:
 
-``` yaml
+``` prism-code
 model:
   default: qwen3.5:27b
   provider: custom
@@ -107,7 +107,7 @@ Both persist across sessions. See [Memory](/docs/user-guide/features/memory) and
 
 Yes. Import the `AIAgent` class and use Hermes programmatically:
 
-``` python
+``` prism-code
 from run_agent import AIAgent
 
 agent = AIAgent(model="anthropic/claude-opus-4.7")
@@ -128,7 +128,7 @@ See the [Python Library guide](/docs/user-guide/features/code-execution) for ful
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Reload your shell profile
 source ~/.bashrc    # bash
 source ~/.zshrc     # zsh
@@ -138,7 +138,7 @@ source ~/.zshrc     # zsh
 
 If it still doesn't work, verify the install location:
 
-``` bash
+``` prism-code
 which hermes
 ls ~/.local/bin/hermes
 ```
@@ -153,7 +153,7 @@ The installer adds `~/.local/bin` to your PATH. If you use a non-standard shell 
 
 **Solution:**
 
-``` bash
+``` prism-code
 python3 --version   # Check current version
 
 # Install a newer Python
@@ -169,7 +169,7 @@ The installer handles this automatically — if you see this error during manual
 
 **Solution:** Hermes auto-sources `~/.bashrc` by default. If that's not enough — e.g. you're a zsh user whose PATH lives in `~/.zshrc`, or you init `nvm` from a standalone file — list the extra files to source in `~/.hermes/config.yaml`:
 
-``` yaml
+``` prism-code
 terminal:
   shell_init_files:
     - ~/.zshrc                     # zsh users: pulls zsh-managed PATH into the bash snapshot
@@ -185,7 +185,7 @@ Missing files are skipped silently. Sourcing happens in bash, so files that rely
 
 To disable the auto-source behaviour (strict login-shell semantics only):
 
-``` yaml
+``` prism-code
 terminal:
   auto_source_bashrc: false
 ```
@@ -196,7 +196,7 @@ terminal:
 
 **Solution:**
 
-``` bash
+``` prism-code
 curl -LsSf https://astral.sh/uv/install.sh | sh
 source ~/.bashrc
 ```
@@ -207,7 +207,7 @@ source ~/.bashrc
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Don't use sudo with the installer — it installs to ~/.local/bin
 # If you previously installed with sudo, clean up:
 sudo rm /usr/local/bin/hermes
@@ -225,7 +225,7 @@ curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 
 **Solution:** Exit your session and use `hermes model` from your terminal to add new providers:
 
-``` bash
+``` prism-code
 # Exit the Hermes chat session first (Ctrl+C or /quit)
 
 # Run the full provider setup wizard
@@ -238,11 +238,11 @@ After adding a new provider via `hermes model`, start a new chat session — `/m
 
 Quick reference
 
-| Want to... | Use |
-|----|----|
-| Add a new provider | `hermes model` (from terminal) |
-| Enter/change API keys | `hermes model` (from terminal) |
-| Switch model mid-session | `/model <name>` (inside session) |
+| Want to...                              | Use                                      |
+|-----------------------------------------|------------------------------------------|
+| Add a new provider                      | `hermes model` (from terminal)           |
+| Enter/change API keys                   | `hermes model` (from terminal)           |
+| Switch model mid-session                | `/model <name>` (inside session)         |
 | Switch to different configured provider | `/model provider:model` (inside session) |
 
 #### API key not working
@@ -251,7 +251,7 @@ Quick reference
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Check your configuration
 hermes config show
 
@@ -272,7 +272,7 @@ Make sure the key matches the provider. An OpenAI key won't work with OpenRouter
 
 **Solution:**
 
-``` bash
+``` prism-code
 # List available models for your provider
 hermes model
 
@@ -299,7 +299,7 @@ hermes chat --model openrouter/meta-llama/llama-3.1-70b-instruct
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Compress the current session
 /compress
 
@@ -316,7 +316,7 @@ Look at the CLI startup line — it shows the detected context length (e.g., `�
 
 To fix context detection, set it explicitly:
 
-``` yaml
+``` prism-code
 # In ~/.hermes/config.yaml
 model:
   default: your-model-name
@@ -325,7 +325,7 @@ model:
 
 Or for custom endpoints, add it per-model:
 
-``` yaml
+``` prism-code
 custom_providers:
   - name: "My Server"
     base_url: "http://localhost:11434/v1"
@@ -369,7 +369,7 @@ This is working as intended — Hermes never silently runs destructive commands.
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Check Docker is running
 docker info
 
@@ -391,7 +391,7 @@ docker run hello-world
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Check if the gateway is running
 hermes gateway status
 
@@ -432,7 +432,7 @@ Configure in `~/.hermes/config.yaml` under your gateway's settings. See the [Mes
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Install core messaging gateway dependencies
 cd ~/.hermes/hermes-agent && uv pip install -e ".[messaging]"  # Telegram, Discord, Slack, and shared gateway deps
 
@@ -449,7 +449,7 @@ hermes config show
 
 **Solution:** Use foreground mode instead of the systemd service:
 
-``` bash
+``` prism-code
 # Option 1: Direct foreground (simplest)
 hermes gateway run
 
@@ -465,7 +465,7 @@ If you want to try systemd anyway, make sure it's enabled:
 
 1.  Open `/etc/wsl.conf` (create it if it doesn't exist)
 2.  Add:
-    ``` ini
+    ``` prism-code
     [boot]
     systemd=true
     ```
@@ -486,14 +486,14 @@ For reliable auto-start, use Windows Task Scheduler to launch WSL + the gateway 
 
 **Solution:** The gateway captures your shell PATH when you run `hermes gateway install`. If you installed tools after setting up the gateway, re-run the install to capture the updated PATH:
 
-``` bash
+``` prism-code
 hermes gateway install    # Re-snapshots your current PATH
 hermes gateway start      # Detects the updated plist and reloads
 ```
 
 You can verify the plist has the correct PATH:
 
-``` bash
+``` prism-code
 /usr/libexec/PlistBuddy -c "Print :EnvironmentVariables:PATH" \
   ~/Library/LaunchAgents/ai.hermes.gateway.plist
 ```
@@ -519,7 +519,7 @@ You can verify the plist has the correct PATH:
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Compress the conversation to reduce tokens
 /compress
 
@@ -537,7 +537,7 @@ Use `/compress` regularly during long sessions. It summarizes the conversation h
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Compress current session (preserves key context)
 /compress
 
@@ -558,7 +558,7 @@ hermes chat --continue
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Ensure MCP dependencies are installed (already included in standard install)
 cd ~/.hermes/hermes-agent && uv pip install -e ".[mcp]"
 
@@ -572,7 +572,7 @@ npx -y @modelcontextprotocol/server-filesystem /tmp
 
 Verify your `~/.hermes/config.yaml` MCP configuration:
 
-``` yaml
+``` prism-code
 mcp_servers:
   filesystem:
     command: "npx"
@@ -591,7 +591,7 @@ mcp_servers:
 - Remember that resource/prompt utility tools are only registered when the session actually supports those capabilities
 - Use `/reload-mcp` after changing config
 
-``` bash
+``` prism-code
 # Verify MCP servers are configured
 hermes config show | grep -A 12 mcp_servers
 
@@ -653,7 +653,7 @@ There is no hard limit. Each profile is just a directory under `~/.hermes/profil
 
 **Solution: Delegation config.** Hermes can route subagents to a different model automatically. Set this in `~/.hermes/config.yaml`:
 
-``` yaml
+``` prism-code
 delegation:
   model: "google/gemini-3-flash-preview"   # subagents use this model
   provider: "openrouter"                    # provider for subagents
@@ -665,7 +665,7 @@ You can also be explicit in your prompt: *"Delegate a task to write social media
 
 For one-off model switches without delegation, use `/model` in the CLI:
 
-``` bash
+``` prism-code
 /model google/gemini-3-flash-preview    # switch for this session
 # ... write your content ...
 /model openai/gpt-5.4                   # switch back
@@ -701,7 +701,7 @@ See [Profiles](/docs/user-guide/profiles) and [WhatsApp setup](/docs/user-guide/
 
 **Solution:** The `display.tool_progress` setting in `config.yaml` controls how much tool activity is shown:
 
-``` yaml
+``` prism-code
 display:
   tool_progress: "off"   # options: off, new, all, verbose
 ```
@@ -715,7 +715,7 @@ For messaging platforms, `off` or `new` is usually what you want. After editing 
 
 You can also toggle this per-session with the `/verbose` command (if enabled):
 
-``` yaml
+``` prism-code
 display:
   tool_progress_command: true   # enables /verbose in the gateway
 ```
@@ -726,7 +726,7 @@ display:
 
 **Solution:** Use `hermes skills config` to disable skills per-platform. This writes to `config.yaml`:
 
-``` yaml
+``` prism-code
 skills:
   disabled: []                    # globally disabled skills
   platform_disabled:
@@ -761,13 +761,13 @@ Skills with very long descriptions are truncated to 40 characters in the Telegra
 
 1.  Install Hermes Agent on the new machine:
 
-    ``` bash
+    ``` prism-code
     curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
     ```
 
 2.  On the **source machine**, create a full backup:
 
-    ``` bash
+    ``` prism-code
     hermes backup
     ```
 
@@ -775,7 +775,7 @@ Skills with very long descriptions are truncated to 40 characters in the Telegra
 
 3.  Copy the zip to the new machine and import it:
 
-    ``` bash
+    ``` prism-code
     # On the source machine
     scp ~/hermes-backup-<timestamp>.zip newmachine:~/
 
@@ -789,7 +789,7 @@ Skills with very long descriptions are truncated to 40 characters in the Telegra
 
 **Scenario:** You want to move or share one specific profile — not your full installation.
 
-``` bash
+``` prism-code
 # On the source machine
 hermes profile export work ./work-backup.tar.gz
 
@@ -801,17 +801,17 @@ The imported profile will have all config, memories, sessions, and skills from t
 
 ### `hermes backup` vs `hermes profile export`
 
-| Feature | `hermes backup` | `hermes profile export` |
-|:---|:---|:---|
-| **Use Case** | **Full machine migration** | **Porting/sharing a specific profile** |
-| **Scope** | Global (entire `~/.hermes` directory) | Local (single profile directory) |
-| **Includes** | All profiles, global config, API keys, sessions | Single profile: SOUL.md, memories, sessions, skills |
-| **Credentials** | **Included** (`.env` and `auth.json`) | **Excluded** (stripped for safe sharing) |
-| **Format** | `.zip` | `.tar.gz` |
+| Feature         | `hermes backup`                                 | `hermes profile export`                             |
+|:----------------|:------------------------------------------------|:----------------------------------------------------|
+| **Use Case**    | **Full machine migration**                      | **Porting/sharing a specific profile**              |
+| **Scope**       | Global (entire `~/.hermes` directory)           | Local (single profile directory)                    |
+| **Includes**    | All profiles, global config, API keys, sessions | Single profile: SOUL.md, memories, sessions, skills |
+| **Credentials** | **Included** (`.env` and `auth.json`)           | **Excluded** (stripped for safe sharing)            |
+| **Format**      | `.zip`                                          | `.tar.gz`                                           |
 
 **Manual fallback (rsync):** If you prefer to copy files directly, exclude the code repo:
 
-``` bash
+``` prism-code
 rsync -av --exclude='hermes-agent' ~/.hermes/ newmachine:~/.hermes/
 ```
 
@@ -827,7 +827,7 @@ tip
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Check permissions
 ls -la ~/.zshrc
 
@@ -842,7 +842,7 @@ source ~/.zshrc
 
 If the installer added the PATH line but permissions are wrong, you can add it manually:
 
-``` bash
+``` prism-code
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 ```
 
@@ -854,7 +854,7 @@ echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 
 **Solution:**
 
-``` bash
+``` prism-code
 # Check what model and provider are configured
 hermes config show | head -20
 

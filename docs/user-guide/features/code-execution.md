@@ -16,7 +16,7 @@ The `execute_code` tool lets the agent write Python scripts that call Hermes too
 4.  The script runs in a child process — tool calls travel over the socket back to Hermes
 5.  Only the script's `print()` output is returned to the LLM; intermediate tool results never enter the context window
 
-``` python
+``` prism-code
 # The agent can write scripts like:
 from hermes_tools import web_search, web_extract
 
@@ -43,7 +43,7 @@ The key benefit: intermediate tool results never enter the context window — on
 
 ### Data Processing Pipeline
 
-``` python
+``` prism-code
 from hermes_tools import search_files, read_file
 import json
 
@@ -59,7 +59,7 @@ print(json.dumps(configs, indent=2))
 
 ### Multi-Step Web Research
 
-``` python
+``` prism-code
 from hermes_tools import web_search, web_extract
 import json
 
@@ -81,7 +81,7 @@ print(json.dumps(summaries, indent=2))
 
 ### Bulk File Refactoring
 
-``` python
+``` prism-code
 from hermes_tools import search_files, read_file, patch
 
 # Find all Python files using deprecated API and fix them
@@ -102,7 +102,7 @@ print(f"Fixed {fixed} files out of {len(matches.get('matches', []))} matches")
 
 ### Build and Test Pipeline
 
-``` python
+``` prism-code
 from hermes_tools import terminal, read_file
 import json
 
@@ -130,16 +130,16 @@ print(json.dumps(report, indent=2))
 
 `execute_code` has two execution modes controlled by `code_execution.mode` in `~/.hermes/config.yaml`:
 
-| Mode | Working directory | Python interpreter |
-|----|----|----|
-| **`project`** (default) | The session's working directory (same as `terminal()`) | Active `VIRTUAL_ENV` / `CONDA_PREFIX` python, falling back to Hermes's own python |
-| `strict` | A temp staging directory isolated from the user's project | `sys.executable` (Hermes's own python) |
+| Mode                    | Working directory                                         | Python interpreter                                                                |
+|-------------------------|-----------------------------------------------------------|-----------------------------------------------------------------------------------|
+| **`project`** (default) | The session's working directory (same as `terminal()`)    | Active `VIRTUAL_ENV` / `CONDA_PREFIX` python, falling back to Hermes's own python |
+| `strict`                | A temp staging directory isolated from the user's project | `sys.executable` (Hermes's own python)                                            |
 
 **When to leave it on `project`:** you want `import pandas`, `from my_project import foo`, or relative paths like `open(".env")` to work the same way they do in `terminal()`. This is almost always what you want.
 
 **When to flip to `strict`:** you need maximum reproducibility — you want the same interpreter every session regardless of which venv the user activated, and you want scripts quarantined from the project tree (no risk of accidentally reading project files through a relative path).
 
-``` yaml
+``` prism-code
 # ~/.hermes/config.yaml
 code_execution:
   mode: project   # or "strict"
@@ -157,16 +157,16 @@ Switching mode changes where scripts run and which interpreter runs them, not wh
 
 ## Resource Limits
 
-| Resource | Limit | Notes |
-|----|----|----|
-| **Timeout** | 5 minutes (300s) | Script is killed with SIGTERM, then SIGKILL after 5s grace |
-| **Stdout** | 50 KB | Output truncated with `[output truncated at 50KB]` notice |
-| **Stderr** | 10 KB | Included in output on non-zero exit for debugging |
-| **Tool calls** | 50 per execution | Error returned when limit reached |
+| Resource       | Limit            | Notes                                                      |
+|----------------|------------------|------------------------------------------------------------|
+| **Timeout**    | 5 minutes (300s) | Script is killed with SIGTERM, then SIGKILL after 5s grace |
+| **Stdout**     | 50 KB            | Output truncated with `[output truncated at 50KB]` notice  |
+| **Stderr**     | 10 KB            | Included in output on non-zero exit for debugging          |
+| **Tool calls** | 50 per execution | Error returned when limit reached                          |
 
 All limits are configurable via `config.yaml`:
 
-``` yaml
+``` prism-code
 # In ~/.hermes/config.yaml
 code_execution:
   mode: project      # project (default) | strict
@@ -210,7 +210,7 @@ When a skill declares `required_environment_variables` in its frontmatter, those
 
 For non-skill use cases, you can explicitly allowlist variables in `config.yaml`:
 
-``` yaml
+``` prism-code
 terminal:
   env_passthrough:
     - MY_CUSTOM_KEY
@@ -240,7 +240,7 @@ If an `execute_code` script — or a repo/plugin module it imports at import tim
 
 1.  **Per-machine, in `config.yaml`** — add the exact variable name to the passthrough allowlist:
 
-    ``` yaml
+    ``` prism-code
     terminal:
       env_passthrough:
         - HERMES_KANBAN_DB
@@ -249,7 +249,7 @@ If an `execute_code` script — or a repo/plugin module it imports at import tim
 
 2.  **Per-skill, in the skill's frontmatter** — declare it so it is registered automatically whenever that skill is loaded:
 
-    ``` yaml
+    ``` prism-code
     required_environment_variables:
       - HERMES_KANBAN_DB
     ```
@@ -260,15 +260,15 @@ Hermes always writes the script and the auto-generated `hermes_tools.py` RPC stu
 
 ## execute_code vs terminal
 
-| Use Case | execute_code | terminal |
-|----|----|----|
-| Multi-step workflows with tool calls between | ✅ | ❌ |
-| Simple shell command | ❌ | ✅ |
-| Filtering/processing large tool outputs | ✅ | ❌ |
-| Running a build or test suite | ❌ | ✅ |
-| Looping over search results | ✅ | ❌ |
-| Interactive/background processes | ❌ | ✅ |
-| Needs API keys in environment | ⚠️ Only via [passthrough](/docs/user-guide/security#environment-variable-passthrough) | ✅ (most pass through) |
+| Use Case                                     | execute_code                                                                          | terminal               |
+|----------------------------------------------|---------------------------------------------------------------------------------------|------------------------|
+| Multi-step workflows with tool calls between | ✅                                                                                    | ❌                     |
+| Simple shell command                         | ❌                                                                                    | ✅                     |
+| Filtering/processing large tool outputs      | ✅                                                                                    | ❌                     |
+| Running a build or test suite                | ❌                                                                                    | ✅                     |
+| Looping over search results                  | ✅                                                                                    | ❌                     |
+| Interactive/background processes             | ❌                                                                                    | ✅                     |
+| Needs API keys in environment                | ⚠️ Only via [passthrough](/docs/user-guide/security#environment-variable-passthrough) | ✅ (most pass through) |
 
 **Rule of thumb:** Use `execute_code` when you need to call Hermes tools programmatically with logic between calls. Use `terminal` for running shell commands, builds, and processes.
 

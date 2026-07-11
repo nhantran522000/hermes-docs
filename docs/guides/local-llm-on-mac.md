@@ -10,10 +10,10 @@ This guide walks you through running a local LLM server on macOS with an OpenAI-
 
 We cover two backends:
 
-| Backend | Install | Best at | Format |
-|----|----|----|----|
-| **llama.cpp** | `brew install llama.cpp` | Fastest time-to-first-token, quantized KV cache for low memory | GGUF |
-| **omlx** | [omlx.ai](https://omlx.ai) | Fastest token generation, native Metal optimization | MLX (safetensors) |
+| Backend       | Install                    | Best at                                                        | Format            |
+|---------------|----------------------------|----------------------------------------------------------------|-------------------|
+| **llama.cpp** | `brew install llama.cpp`   | Fastest time-to-first-token, quantized KV cache for low memory | GGUF              |
+| **omlx**      | [omlx.ai](https://omlx.ai) | Fastest token generation, native Metal optimization            | MLX (safetensors) |
 
 Both expose an OpenAI-compatible `/v1/chat/completions` endpoint. Hermes works with either one — just point it at `http://localhost:8080` or `http://localhost:8000`.
 
@@ -27,10 +27,10 @@ This guide targets Macs with Apple Silicon (M1 and later). Intel Macs will work 
 
 For getting started, we recommend **Qwen3.5-9B** — it's a strong reasoning model that fits comfortably in 8GB+ of unified memory with quantization.
 
-| Variant | Size on disk | RAM needed (128K context) | Backend |
-|----|----|----|----|
-| Qwen3.5-9B-Q4_K_M (GGUF) | 5.3 GB | ~10 GB with quantized KV cache | llama.cpp |
-| Qwen3.5-9B-mlx-lm-mxfp4 (MLX) | ~5 GB | ~12 GB | omlx |
+| Variant                       | Size on disk | RAM needed (128K context)      | Backend   |
+|-------------------------------|--------------|--------------------------------|-----------|
+| Qwen3.5-9B-Q4_K_M (GGUF)      | 5.3 GB       | ~10 GB with quantized KV cache | llama.cpp |
+| Qwen3.5-9B-mlx-lm-mxfp4 (MLX) | ~5 GB        | ~12 GB                         | omlx      |
 
 **Memory rule of thumb:** model size + KV cache. A 9B Q4 model is ~5 GB. The KV cache at 128K context with Q4 quantization adds ~4-5 GB. With default (f16) KV cache, that balloons to ~16 GB. The quantized KV cache flags in llama.cpp are the key trick for memory-constrained systems.
 
@@ -44,7 +44,7 @@ llama.cpp is the most portable local LLM runtime. On macOS it uses Metal for GPU
 
 ### Install
 
-``` bash
+``` prism-code
 brew install llama.cpp
 ```
 
@@ -54,13 +54,13 @@ This gives you the `llama-server` command globally.
 
 You need a GGUF-format model. The easiest source is Hugging Face via the `huggingface-cli`:
 
-``` bash
+``` prism-code
 brew install huggingface-cli
 ```
 
 Then download:
 
-``` bash
+``` prism-code
 huggingface-cli download unsloth/Qwen3.5-9B-GGUF Qwen3.5-9B-Q4_K_M.gguf --local-dir ~/models
 ```
 
@@ -70,7 +70,7 @@ Some models on Hugging Face require authentication. Run `huggingface-cli login` 
 
 ### Start the server
 
-``` bash
+``` prism-code
 llama-server -m ~/models/Qwen3.5-9B-Q4_K_M.gguf \
   -ngl 99 \
   -c 131072 \
@@ -83,19 +83,19 @@ llama-server -m ~/models/Qwen3.5-9B-Q4_K_M.gguf \
 
 Here's what each flag does:
 
-| Flag | Purpose |
-|----|----|
-| `-ngl 99` | Offload all layers to GPU (Metal). Use a high number to ensure nothing stays on CPU. |
-| `-c 131072` | Context window size (128K tokens). Reduce this if you're low on memory. |
-| `-np 1` | Number of parallel slots. Keep at 1 for single-user use — more slots split your memory budget. |
-| `-fa on` | Flash attention. Reduces memory usage and speeds up long-context inference. |
-| `--cache-type-k q4_0` | Quantize the key cache to 4-bit. **This is the big memory saver.** |
+| Flag                  | Purpose                                                                                               |
+|-----------------------|-------------------------------------------------------------------------------------------------------|
+| `-ngl 99`             | Offload all layers to GPU (Metal). Use a high number to ensure nothing stays on CPU.                  |
+| `-c 131072`           | Context window size (128K tokens). Reduce this if you're low on memory.                               |
+| `-np 1`               | Number of parallel slots. Keep at 1 for single-user use — more slots split your memory budget.        |
+| `-fa on`              | Flash attention. Reduces memory usage and speeds up long-context inference.                           |
+| `--cache-type-k q4_0` | Quantize the key cache to 4-bit. **This is the big memory saver.**                                    |
 | `--cache-type-v q4_0` | Quantize the value cache to 4-bit. Together with the above, this cuts KV cache memory by ~75% vs f16. |
-| `--host 0.0.0.0` | Listen on all interfaces. Use `127.0.0.1` if you don't need network access. |
+| `--host 0.0.0.0`      | Listen on all interfaces. Use `127.0.0.1` if you don't need network access.                           |
 
 The server is ready when you see:
 
-``` text
+``` prism-code
 main: server is listening on http://0.0.0.0:8080
 srv  update_slots: all slots are idle
 ```
@@ -116,7 +116,7 @@ If you're still running out of memory, reduce context only while staying at or a
 
 ### Test it
 
-``` bash
+``` prism-code
 curl -s http://localhost:8080/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
@@ -130,7 +130,7 @@ curl -s http://localhost:8080/v1/chat/completions \
 
 If you forget the model name, query the models endpoint:
 
-``` bash
+``` prism-code
 curl -s http://localhost:8080/v1/models | jq '.data[].id'
 ```
 
@@ -154,7 +154,7 @@ omlx serves models on `http://127.0.0.1:8000` by default. Start serving from the
 
 ### Test it
 
-``` bash
+``` prism-code
 curl -s http://127.0.0.1:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
@@ -168,7 +168,7 @@ curl -s http://127.0.0.1:8000/v1/chat/completions \
 
 omlx can serve multiple models simultaneously:
 
-``` bash
+``` prism-code
 curl -s http://127.0.0.1:8000/v1/models | jq '.data[].id'
 ```
 
@@ -180,13 +180,13 @@ Both backends tested on the same machine (Apple M5 Max, 128 GB unified memory) r
 
 ### Results
 
-| Metric | llama.cpp (Q4_K_M) | MLX (mxfp4) | Winner |
-|----|----|----|----|
-| **TTFT (avg)** | **67 ms** | 289 ms | llama.cpp (4.3x faster) |
-| **TTFT (p50)** | **66 ms** | 286 ms | llama.cpp (4.3x faster) |
-| **Generation (avg)** | 70 tok/s | **96 tok/s** | MLX (37% faster) |
-| **Generation (p50)** | 70 tok/s | **96 tok/s** | MLX (37% faster) |
-| **Total time (512 tokens)** | 7.3s | **5.5s** | MLX (25% faster) |
+| Metric                      | llama.cpp (Q4_K_M) | MLX (mxfp4)  | Winner                  |
+|-----------------------------|--------------------|--------------|-------------------------|
+| **TTFT (avg)**              | **67 ms**          | 289 ms       | llama.cpp (4.3x faster) |
+| **TTFT (p50)**              | **66 ms**          | 286 ms       | llama.cpp (4.3x faster) |
+| **Generation (avg)**        | 70 tok/s           | **96 tok/s** | MLX (37% faster)        |
+| **Generation (p50)**        | 70 tok/s           | **96 tok/s** | MLX (37% faster)        |
+| **Total time (512 tokens)** | 7.3s               | **5.5s**     | MLX (25% faster)        |
 
 ### What this means
 
@@ -198,13 +198,13 @@ Both backends tested on the same machine (Apple M5 Max, 128 GB unified memory) r
 
 ### Which one should you pick?
 
-| Use case | Recommendation |
-|----|----|
-| Interactive chat, low-latency tools | llama.cpp |
-| Long-form generation, bulk processing | MLX (omlx) |
-| Memory-constrained (8-16 GB) | llama.cpp (quantized KV cache is unmatched) |
-| Serving multiple models simultaneously | omlx (built-in multi-model support) |
-| Maximum compatibility (Linux too) | llama.cpp |
+| Use case                               | Recommendation                              |
+|----------------------------------------|---------------------------------------------|
+| Interactive chat, low-latency tools    | llama.cpp                                   |
+| Long-form generation, bulk processing  | MLX (omlx)                                  |
+| Memory-constrained (8-16 GB)           | llama.cpp (quantized KV cache is unmatched) |
+| Serving multiple models simultaneously | omlx (built-in multi-model support)         |
+| Maximum compatibility (Linux too)      | llama.cpp                                   |
 
 ------------------------------------------------------------------------
 
@@ -212,7 +212,7 @@ Both backends tested on the same machine (Apple M5 Max, 128 GB unified memory) r
 
 Once your local server is running:
 
-``` bash
+``` prism-code
 hermes model
 ```
 
@@ -226,15 +226,15 @@ Hermes automatically detects local endpoints (localhost, LAN IPs) and relaxes it
 
 If you still hit timeout errors (e.g. very large contexts on slow hardware), you can override the streaming read timeout:
 
-``` bash
+``` prism-code
 # In your .env — raise from the 120s default to 30 minutes
 HERMES_STREAM_READ_TIMEOUT=1800
 ```
 
-| Timeout | Default | Local auto-adjustment | Env var override |
-|----|----|----|----|
-| Stream read (socket-level) | 120s | Raised to 1800s | `HERMES_STREAM_READ_TIMEOUT` |
-| Stale stream detection | 180s | Disabled entirely | `HERMES_STREAM_STALE_TIMEOUT` |
-| API call (non-streaming) | 1800s | No change needed | `HERMES_API_TIMEOUT` |
+| Timeout                    | Default | Local auto-adjustment | Env var override              |
+|----------------------------|---------|-----------------------|-------------------------------|
+| Stream read (socket-level) | 120s    | Raised to 1800s       | `HERMES_STREAM_READ_TIMEOUT`  |
+| Stale stream detection     | 180s    | Disabled entirely     | `HERMES_STREAM_STALE_TIMEOUT` |
+| API call (non-streaming)   | 1800s   | No change needed      | `HERMES_API_TIMEOUT`          |
 
 The stream read timeout is the one most likely to cause issues — it's the socket-level deadline for receiving the next chunk of data. During prefill on large contexts, local models may produce no output for minutes while processing the prompt. The auto-detection handles this transparently.

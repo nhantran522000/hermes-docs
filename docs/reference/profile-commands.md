@@ -10,31 +10,31 @@ This page covers all commands related to [Hermes profiles](/docs/user-guide/prof
 
 ## `hermes profile`
 
-``` bash
+``` prism-code
 hermes profile <subcommand>
 ```
 
 Top-level command for managing profiles. Running `hermes profile` without a subcommand shows help.
 
-| Subcommand | Description |
-|----|----|
-| `list` | List all profiles. |
-| `use` | Set the active (default) profile. |
-| `create` | Create a new profile. |
-| `describe` | Read or set a profile's description (used by the kanban orchestrator for routing). |
-| `delete` | Delete a profile. |
-| `show` | Show details about a profile. |
-| `alias` | Regenerate the shell alias for a profile. |
-| `rename` | Rename a profile. |
-| `export` | Export a profile to a tar.gz archive. |
-| `import` | Import a profile from a tar.gz archive. |
-| `install` | Install a profile distribution from a git URL or local directory. See [Profile Distributions](/docs/user-guide/profile-distributions). |
-| `update` | Re-pull a distribution-managed profile and re-apply its bundle. |
-| `info` | Show distribution metadata for a profile (origin URL, commit, last update). |
+| Subcommand | Description                                                                                                                            |
+|------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| `list`     | List all profiles.                                                                                                                     |
+| `use`      | Set the active (default) profile.                                                                                                      |
+| `create`   | Create a new profile.                                                                                                                  |
+| `describe` | Read or set a profile's description (used by the kanban orchestrator for routing).                                                     |
+| `delete`   | Delete a profile.                                                                                                                      |
+| `show`     | Show details about a profile.                                                                                                          |
+| `alias`    | Regenerate the shell alias for a profile.                                                                                              |
+| `rename`   | Rename a profile.                                                                                                                      |
+| `export`   | Export a profile to a tar.gz archive.                                                                                                  |
+| `import`   | Import a profile from a tar.gz archive.                                                                                                |
+| `install`  | Install a profile distribution from a git URL or local directory. See [Profile Distributions](/docs/user-guide/profile-distributions). |
+| `update`   | Re-pull a distribution-managed profile and re-apply its bundle.                                                                        |
+| `info`     | Show distribution metadata for a profile (origin URL, commit, last update).                                                            |
 
 ## `hermes profile list`
 
-``` bash
+``` prism-code
 hermes profile list
 ```
 
@@ -42,7 +42,7 @@ Lists all profiles. The currently active profile is marked with `*`.
 
 **Example:**
 
-``` bash
+``` prism-code
 $ hermes profile list
   default
 * work
@@ -54,46 +54,46 @@ No options.
 
 ## `hermes profile use`
 
-``` bash
+``` prism-code
 hermes profile use <name>
 ```
 
 Sets `<name>` as the active profile. All subsequent `hermes` commands (without `-p`) will use this profile.
 
-| Argument | Description |
-|----|----|
+| Argument | Description                                                            |
+|----------|------------------------------------------------------------------------|
 | `<name>` | Profile name to activate. Use `default` to return to the base profile. |
 
 **Example:**
 
-``` bash
+``` prism-code
 hermes profile use work
 hermes profile use default
 ```
 
 ## `hermes profile create`
 
-``` bash
+``` prism-code
 hermes profile create <name> [options]
 ```
 
 Creates a new profile.
 
-| Argument / Option | Description |
-|----|----|
-| `<name>` | Name for the new profile. Must be a valid directory name (alphanumeric, hyphens, underscores). |
-| `--clone` | Copy `config.yaml`, `.env`, `SOUL.md`, and skills from the current profile. |
-| `--clone-all` | Copy everything (config, memories, skills, cron, plugins) from the current profile. Excludes per-profile history: sessions, `state.db`, backups, state-snapshots, checkpoints. |
-| `--clone-from <profile>` | Clone config/skills/SOUL from a specific profile instead of the current one. Implies `--clone` unless paired with `--clone-all`. |
-| `--no-alias` | Skip wrapper script creation. |
-| `--description "<text>"` | One- or two-sentence description of what this profile is good at. Used by the kanban orchestrator to route tasks based on role instead of profile name alone. Skip and add later via `hermes profile describe`. Persisted in `<profile_dir>/profile.yaml`. |
-| `--no-skills` | Create an **empty** profile with zero bundled skills enabled. Writes a `.no-bundled-skills` marker into the profile so future `hermes update` runs won't re-seed the bundled set, and refuses to combine with `--clone`, `--clone-from`, or `--clone-all` (which would copy skills in anyway). Useful for narrow orchestrator profiles or sandbox profiles that should not inherit the full skill catalog. To toggle this on an already-created profile (including the default `~/.hermes`), use `hermes skills opt-out` / `hermes skills opt-in`. |
+| Argument / Option        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `<name>`                 | Name for the new profile. Must be a valid directory name (alphanumeric, hyphens, underscores).                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `--clone`                | Copy `config.yaml`, `.env`, `SOUL.md`, and skills from the current profile.                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `--clone-all`            | Copy everything (config, memories, skills, cron, plugins) from the current profile. Excludes per-profile history: sessions, `state.db`, backups, state-snapshots, checkpoints.                                                                                                                                                                                                                                                                                                                                                                     |
+| `--clone-from <profile>` | Clone config/skills/SOUL from a specific profile instead of the current one. Implies `--clone` unless paired with `--clone-all`.                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `--no-alias`             | Skip wrapper script creation.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `--description "<text>"` | One- or two-sentence description of what this profile is good at. Used by the kanban orchestrator to route tasks based on role instead of profile name alone. Skip and add later via `hermes profile describe`. Persisted in `<profile_dir>/profile.yaml`.                                                                                                                                                                                                                                                                                         |
+| `--no-skills`            | Create an **empty** profile with zero bundled skills enabled. Writes a `.no-bundled-skills` marker into the profile so future `hermes update` runs won't re-seed the bundled set, and refuses to combine with `--clone`, `--clone-from`, or `--clone-all` (which would copy skills in anyway). Useful for narrow orchestrator profiles or sandbox profiles that should not inherit the full skill catalog. To toggle this on an already-created profile (including the default `~/.hermes`), use `hermes skills opt-out` / `hermes skills opt-in`. |
 
 Creating a profile does **not** make that profile directory the default project/workspace directory for terminal commands. If you want a profile to start in a specific project, set `terminal.cwd` in that profile's `config.yaml`.
 
 **Examples:**
 
-``` bash
+``` prism-code
 # Blank profile — needs full setup
 hermes profile create mybot
 
@@ -112,7 +112,7 @@ hermes profile create work2-backup --clone-from work --clone-all
 
 ## `hermes profile describe`
 
-``` bash
+``` prism-code
 hermes profile describe [<name>] [options]
 ```
 
@@ -120,17 +120,17 @@ Read or set a profile's description. The description is consumed by the kanban o
 
 With no flags, prints the current description (or `(no description set for '<name>')` if empty).
 
-| Argument / Option | Description |
-|----|----|
-| `<name>` | Profile to describe. Required unless `--all --auto` is used. |
-| `--text "<text>"` | Set the description to this exact text (user-authored). Overwrites any existing description. |
-| `--auto` | Auto-generate a 1-2 sentence description via the auxiliary LLM, based on the profile's installed skills, configured model, and name. Configure the model under `auxiliary.profile_describer` in `config.yaml`. Auto-generated descriptions are marked `description_auto: true` so the dashboard can flag them for review. |
-| `--overwrite` | With `--auto`, replace user-authored descriptions too (default: skip profiles whose description was set explicitly). |
-| `--all` | With `--auto`, sweep every profile missing a description. |
+| Argument / Option | Description                                                                                                                                                                                                                                                                                                               |
+|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `<name>`          | Profile to describe. Required unless `--all --auto` is used.                                                                                                                                                                                                                                                              |
+| `--text "<text>"` | Set the description to this exact text (user-authored). Overwrites any existing description.                                                                                                                                                                                                                              |
+| `--auto`          | Auto-generate a 1-2 sentence description via the auxiliary LLM, based on the profile's installed skills, configured model, and name. Configure the model under `auxiliary.profile_describer` in `config.yaml`. Auto-generated descriptions are marked `description_auto: true` so the dashboard can flag them for review. |
+| `--overwrite`     | With `--auto`, replace user-authored descriptions too (default: skip profiles whose description was set explicitly).                                                                                                                                                                                                      |
+| `--all`           | With `--auto`, sweep every profile missing a description.                                                                                                                                                                                                                                                                 |
 
 **Examples:**
 
-``` bash
+``` prism-code
 # Read the current description
 hermes profile describe researcher
 
@@ -146,7 +146,7 @@ hermes profile describe --all --auto
 
 ## `hermes profile delete`
 
-``` bash
+``` prism-code
 hermes profile delete <name> [options]
 ```
 
@@ -159,7 +159,7 @@ Deletes a profile and removes its shell alias.
 
 **Example:**
 
-``` bash
+``` prism-code
 hermes profile delete mybot
 hermes profile delete mybot --yes
 ```
@@ -170,7 +170,7 @@ This permanently deletes the profile's entire directory including all config, me
 
 ## `hermes profile show`
 
-``` bash
+``` prism-code
 hermes profile show <name>
 ```
 
@@ -184,7 +184,7 @@ This shows the profile's Hermes home directory, not the terminal working directo
 
 **Example:**
 
-``` bash
+``` prism-code
 $ hermes profile show work
 Profile: work
 Path:    ~/.hermes/profiles/work
@@ -198,7 +198,7 @@ Alias:   ~/.local/bin/work
 
 ## `hermes profile alias`
 
-``` bash
+``` prism-code
 hermes profile alias <name> [options]
 ```
 
@@ -212,7 +212,7 @@ Regenerates the shell alias script at `~/.local/bin/<name>`. Useful if the alias
 
 **Example:**
 
-``` bash
+``` prism-code
 hermes profile alias work
 # Creates/updates ~/.local/bin/work
 
@@ -225,7 +225,7 @@ hermes profile alias work --remove
 
 ## `hermes profile rename`
 
-``` bash
+``` prism-code
 hermes profile rename <old-name> <new-name>
 ```
 
@@ -238,7 +238,7 @@ Renames a profile. Updates the directory and shell alias.
 
 **Example:**
 
-``` bash
+``` prism-code
 hermes profile rename mybot assistant
 # ~/.hermes/profiles/mybot → ~/.hermes/profiles/assistant
 # ~/.local/bin/mybot → ~/.local/bin/assistant
@@ -246,7 +246,7 @@ hermes profile rename mybot assistant
 
 ## `hermes profile export`
 
-``` bash
+``` prism-code
 hermes profile export <name> [options]
 ```
 
@@ -259,7 +259,7 @@ Exports a profile as a compressed tar.gz archive.
 
 **Example:**
 
-``` bash
+``` prism-code
 hermes profile export work
 # Creates work.tar.gz in the current directory
 
@@ -268,20 +268,20 @@ hermes profile export work -o ./work-2026-03-29.tar.gz
 
 ## `hermes profile import`
 
-``` bash
+``` prism-code
 hermes profile import <archive> [options]
 ```
 
 Imports a profile from a tar.gz archive.
 
-| Argument / Option | Description |
-|----|----|
-| `<archive>` | Path to the tar.gz archive to import. |
-| `--name <name>` | Name for the imported profile (default: inferred from archive). |
+| Argument / Option | Description                                                     |
+|-------------------|-----------------------------------------------------------------|
+| `<archive>`       | Path to the tar.gz archive to import.                           |
+| `--name <name>`   | Name for the imported profile (default: inferred from archive). |
 
 **Example:**
 
-``` bash
+``` prism-code
 hermes profile import ./work-2026-03-29.tar.gz
 # Infers profile name from the archive
 
@@ -306,25 +306,25 @@ info
 
 ### `hermes profile install`
 
-``` bash
+``` prism-code
 hermes profile install <source> [--name <name>] [--alias] [--force] [--yes]
 ```
 
 Installs a profile distribution from a git URL or a local directory.
 
-| Option | Description |
-|----|----|
-| `<source>` | Git URL (`github.com/user/repo`, `https://...`, `git@...`, `ssh://`, `git://`) or a local directory containing `distribution.yaml` at its root. |
-| `--name NAME` | Override the profile name from the manifest. |
-| `--alias` | Also create a shell wrapper (e.g. `telemetry` → `hermes -p telemetry`). |
-| `--force` | Overwrite an existing profile of the same name. User data is still preserved. |
-| `-y`, `--yes` | Skip the manifest-preview confirmation prompt. |
+| Option        | Description                                                                                                                                     |
+|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `<source>`    | Git URL (`github.com/user/repo`, `https://...`, `git@...`, `ssh://`, `git://`) or a local directory containing `distribution.yaml` at its root. |
+| `--name NAME` | Override the profile name from the manifest.                                                                                                    |
+| `--alias`     | Also create a shell wrapper (e.g. `telemetry` → `hermes -p telemetry`).                                                                         |
+| `--force`     | Overwrite an existing profile of the same name. User data is still preserved.                                                                   |
+| `-y`, `--yes` | Skip the manifest-preview confirmation prompt.                                                                                                  |
 
 The installer shows the manifest, lists required env vars, and warns about cron jobs before asking for confirmation. Required env vars go into a `.env.EXAMPLE` file you copy to `.env` and fill in.
 
 **Examples:**
 
-``` bash
+``` prism-code
 # Install from a GitHub repo (shorthand)
 hermes profile install github.com/kyle/telemetry-distribution --alias
 
@@ -340,7 +340,7 @@ hermes profile install ./telemetry/
 
 ### `hermes profile update`
 
-``` bash
+``` prism-code
 hermes profile update <name> [--force-config] [--yes]
 ```
 
@@ -350,7 +350,7 @@ Re-clones the distribution from its recorded source and applies updates. Distrib
 
 ### `hermes profile info`
 
-``` bash
+``` prism-code
 hermes profile info <name>
 ```
 
@@ -362,7 +362,7 @@ Prints the profile's distribution manifest — name, version, required Hermes ve
 
 A private git repository works as a distribution source with no extra configuration — the install shells out to your normal `git` binary, so whatever authentication your shell is already set up for (SSH key, `git credential` helper, GitHub CLI's stored HTTPS credentials) applies transparently.
 
-``` bash
+``` prism-code
 # Uses your SSH key, the same as any other `git clone`
 hermes profile install git@github.com:your-org/internal-assistant.git
 
@@ -376,7 +376,7 @@ If a clone prompts for credentials interactively in your terminal during install
 
 Every distribution has a `distribution.yaml` at the root of its repository:
 
-``` yaml
+``` prism-code
 name: telemetry
 version: 0.1.0
 description: "Compliance monitoring harness"
@@ -414,7 +414,7 @@ Use git tags for versioned releases — recipients who clone `HEAD` get your lat
 
 ## `hermes -p` / `hermes --profile`
 
-``` bash
+``` prism-code
 hermes -p <name> <command> [options]
 hermes --profile <name> <command> [options]
 ```
@@ -427,7 +427,7 @@ Global flag to run any Hermes command under a specific profile without changing 
 
 **Examples:**
 
-``` bash
+``` prism-code
 hermes -p work chat -q "Check the server status"
 hermes --profile dev gateway start
 hermes -p personal skills list
@@ -436,7 +436,7 @@ hermes -p work config edit
 
 ## `hermes completion`
 
-``` bash
+``` prism-code
 hermes completion <shell>
 ```
 
@@ -448,7 +448,7 @@ Generates shell completion scripts. Includes completions for profile names and p
 
 **Examples:**
 
-``` bash
+``` prism-code
 # Install completions
 hermes completion bash >> ~/.bashrc
 hermes completion zsh >> ~/.zshrc

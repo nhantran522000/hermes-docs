@@ -23,7 +23,7 @@ Tasks where the agent does one turn and stops don't need `/goal`. Tasks where *y
 
 ## Quick start
 
-``` text
+``` prism-code
 /goal Fix every failing test in tests/hermes_cli/ and make sure scripts/run_tests.sh passes for that directory
 ```
 
@@ -37,17 +37,17 @@ What you'll see:
 
 ## Commands
 
-| Command | What it does |
-|----|----|
-| `/goal <text>` | Set (or replace) the standing goal. Kicks off the first turn immediately so you don't need to send a separate message. |
-| `/goal draft <text>` | Draft a structured completion contract from a plain-language objective, then set it. See [Completion contracts](#completion-contracts). |
-| `/goal show` | Print the active goal's completion contract. |
-| `/goal` or `/goal status` | Show the current goal, its status, and turns used. |
-| `/goal pause` | Stop the auto-continuation loop without clearing the goal. |
-| `/goal resume` | Resume the loop (resets the turn counter back to zero). |
-| `/goal clear` | Drop the goal entirely. |
+| Command                     | What it does                                                                                                                            |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `/goal <text>`              | Set (or replace) the standing goal. Kicks off the first turn immediately so you don't need to send a separate message.                  |
+| `/goal draft <text>`        | Draft a structured completion contract from a plain-language objective, then set it. See [Completion contracts](#completion-contracts). |
+| `/goal show`                | Print the active goal's completion contract.                                                                                            |
+| `/goal` or `/goal status`   | Show the current goal, its status, and turns used.                                                                                      |
+| `/goal pause`               | Stop the auto-continuation loop without clearing the goal.                                                                              |
+| `/goal resume`              | Resume the loop (resets the turn counter back to zero).                                                                                 |
+| `/goal clear`               | Drop the goal entirely.                                                                                                                 |
 | `/goal wait <pid> [reason]` | Park the loop on a background process — it stops re-poking the agent every turn while the process runs, and auto-resumes when it exits. |
-| `/goal unwait` | Drop the wait barrier and resume the loop immediately. |
+| `/goal unwait`              | Drop the wait barrier and resume the loop immediately.                                                                                  |
 
 Works identically on the CLI and every gateway platform (Telegram, Discord, Slack, Matrix, Signal, WhatsApp, SMS, iMessage, Webhook, API server, and the web dashboard).
 
@@ -57,13 +57,13 @@ A bare `/goal <text>` works fine, but a *vague* goal makes for vague judging —
 
 A contract has five fields, all optional:
 
-| Field | Meaning |
-|----|----|
-| `outcome` | The single end state that must be true when done. |
+| Field          | Meaning                                                           |
+|----------------|-------------------------------------------------------------------|
+| `outcome`      | The single end state that must be true when done.                 |
 | `verification` | The specific test / command / artifact that *proves* the outcome. |
-| `constraints` | What must not change or regress. |
-| `boundaries` | Which files, dirs, tools, or systems are in scope. |
-| `stop_when` | The condition under which Hermes should stop and ask for input. |
+| `constraints`  | What must not change or regress.                                  |
+| `boundaries`   | Which files, dirs, tools, or systems are in scope.                |
+| `stop_when`    | The condition under which Hermes should stop and ask for input.   |
 
 When a contract is set, both prompts change: the **continuation prompt** tells the agent to target the verification surface and respect the constraints, and the **judge prompt** decides `done` *only when the verification criterion is met with concrete evidence* (a command result, file excerpt, test output) — not a loose "looks done" claim. This directly tightens the most common `/goal` failure mode (premature completion or endless over-continuation on an underspecified objective).
 
@@ -71,7 +71,7 @@ When a contract is set, both prompts change: the **continuation prompt** tells t
 
 **1. Let Hermes draft it** (recommended — adapted from Codex's "let the agent draft the goal" tip):
 
-``` text
+``` prism-code
 /goal draft Migrate the auth service from session cookies to JWT
 ```
 
@@ -79,7 +79,7 @@ Hermes expands your one-liner into a full contract via the `goal_judge` auxiliar
 
 **2. Write it inline** with `field: value` lines:
 
-``` text
+``` prism-code
 /goal Migrate auth to JWT
 verify: pytest tests/auth passes
 constraints: keep the /login response shape unchanged
@@ -95,12 +95,12 @@ Use `/goal show` to review the active contract. Contracts persist in `SessionDB.
 
 While a goal is active you can append extra acceptance criteria with `/subgoal <text>` without resetting the loop. Each call adds one numbered item to the goal's subgoal list; the **continuation prompt** the agent sees on the next turn includes the original goal plus an "Additional criteria the user added mid-loop" block, and the **judge prompt** is rewritten so the verdict must consider every subgoal — the goal isn't marked done until the original objective **and** every subgoal are met.
 
-| Command | What it does |
-|----|----|
-| `/subgoal <text>` | Append a new criterion to the active goal. Requires an active `/goal`. |
-| `/subgoal` (no args) | Show the current numbered subgoal list. |
-| `/subgoal remove <N>` | Remove the Nth subgoal (1-based). |
-| `/subgoal clear` | Drop every subgoal but keep the original goal intact. |
+| Command               | What it does                                                           |
+|-----------------------|------------------------------------------------------------------------|
+| `/subgoal <text>`     | Append a new criterion to the active goal. Requires an active `/goal`. |
+| `/subgoal` (no args)  | Show the current numbered subgoal list.                                |
+| `/subgoal remove <N>` | Remove the Nth subgoal (1-based).                                      |
+| `/subgoal clear`      | Drop every subgoal but keep the original goal intact.                  |
 
 Subgoals are persisted alongside the goal in `SessionDB.state_meta`, so they survive `/resume`. Setting a new `/goal <text>` replaces the goal and clears the subgoal list; `/goal clear` does the same.
 
@@ -120,10 +120,10 @@ The judge picks the right kind of wait from the process's own signal:
 
 You don't type anything for this — it's the judge's decision, made from the process context the loop hands it. The manual commands exist as an override:
 
-| Command | What it does |
-|----|----|
-| `/goal wait <pid> [reason]` | Manually park the loop until the process with that PID exits. |
-| `/goal unwait` | Clear any wait barrier (judge- or manually-set) and resume immediately. |
+| Command                     | What it does                                                            |
+|-----------------------------|-------------------------------------------------------------------------|
+| `/goal wait <pid> [reason]` | Manually park the loop until the process with that PID exits.           |
+| `/goal unwait`              | Clear any wait barrier (judge- or manually-set) and resume immediately. |
 
 The barrier (pid- or time-based) is persisted with the goal in `SessionDB.state_meta`, so it survives `/resume`. `/goal pause`, `/goal resume`, and `/goal clear` all drop it. If the PID is already dead when the barrier is set (or dies while parked), or the time deadline passes, the barrier clears on the next check — a stale barrier can never wedge the loop.
 
@@ -149,7 +149,7 @@ If the judge errors (network blip, malformed response, unavailable aux client), 
 
 Default is 20 continuation turns (`goals.max_turns` in `config.yaml`). When the budget is hit, Hermes auto-pauses and tells you exactly how to proceed:
 
-``` text
+``` prism-code
 ⏸ Goal paused — 20/20 turns used. Use /goal resume to keep going, or /goal clear to stop.
 ```
 
@@ -175,7 +175,7 @@ The continuation prompt is a plain user-role message appended to history. It doe
 
 Add to `~/.hermes/config.yaml`:
 
-``` yaml
+``` prism-code
 goals:
   # Max continuation turns before Hermes auto-pauses and asks you to
   # /goal resume. Default 20. Lower this if you want tighter loops;
@@ -187,7 +187,7 @@ goals:
 
 The judge uses the `goal_judge` auxiliary task. By default it resolves to your main model (see [Auxiliary Models](/docs/user-guide/configuration#auxiliary-models)). If you want to route the judge to a cheap fast model to keep costs down, add an override:
 
-``` yaml
+``` prism-code
 auxiliary:
   goal_judge:
     provider: openrouter
@@ -198,7 +198,7 @@ The judge call is small (~200 output tokens) and runs once per turn, so a cheap 
 
 ## Example walkthrough
 
-``` text
+``` prism-code
 You: /goal Create four files /tmp/note_{1..4}.txt, one per turn, each containing its number as text
 
   ⊙ Goal set (20-turn budget): Create four files /tmp/note_{1..4}.txt, one per turn, each containing its number as text

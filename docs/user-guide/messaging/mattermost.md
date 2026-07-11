@@ -14,11 +14,11 @@ Before setup, here's the part most people want to know: how Hermes behaves once 
 
 ## How Hermes Behaves
 
-| Context | Behavior |
-|----|----|
-| **DMs** | Hermes responds to every message. No `@mention` needed. Each DM has its own session. |
-| **Public/private channels** | Hermes responds when you `@mention` it. Without a mention, Hermes ignores the message. |
-| **Threads** | If `MATTERMOST_REPLY_MODE=thread`, Hermes replies in a thread under your message. Thread context stays isolated from the parent channel. |
+| Context                                 | Behavior                                                                                                                                                                        |
+|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **DMs**                                 | Hermes responds to every message. No `@mention` needed. Each DM has its own session.                                                                                            |
+| **Public/private channels**             | Hermes responds when you `@mention` it. Without a mention, Hermes ignores the message.                                                                                          |
+| **Threads**                             | If `MATTERMOST_REPLY_MODE=thread`, Hermes replies in a thread under your message. Thread context stays isolated from the parent channel.                                        |
 | **Shared channels with multiple users** | By default, Hermes isolates session history per user inside the channel. Two people talking in the same channel do not share one transcript unless you explicitly disable that. |
 
 tip
@@ -35,13 +35,13 @@ By default:
 
 This is controlled by `config.yaml`:
 
-``` yaml
+``` prism-code
 group_sessions_per_user: true
 ```
 
 Set it to `false` only if you explicitly want one shared conversation for the entire channel:
 
-``` yaml
+``` prism-code
 group_sessions_per_user: false
 ```
 
@@ -113,7 +113,7 @@ Your User ID is **not** your username. The username is what appears after `@` (e
 
 **Alternative**: You can also get your User ID via the API:
 
-``` bash
+``` prism-code
 curl -H "Authorization: Bearer YOUR_TOKEN" \
   https://your-mattermost-server/api/v4/users/me | jq .id
 ```
@@ -128,7 +128,7 @@ To get a **Channel ID**: click the channel name → **View Info**. The Channel I
 
 Run the guided setup command:
 
-``` bash
+``` prism-code
 hermes gateway setup
 ```
 
@@ -138,7 +138,7 @@ Select **Mattermost** when prompted, then paste your server URL, bot token, and 
 
 Add the following to your `~/.hermes/.env` file:
 
-``` bash
+``` prism-code
 # Required
 MATTERMOST_URL=https://mm.example.com
 MATTERMOST_TOKEN=***
@@ -159,7 +159,7 @@ MATTERMOST_ALLOWED_USERS=3uo8dkh1p7g1mfk49ear5fzs5c
 
 Optional behavior settings in `~/.hermes/config.yaml`:
 
-``` yaml
+``` prism-code
 group_sessions_per_user: true
 ```
 
@@ -169,7 +169,7 @@ group_sessions_per_user: true
 
 Once configured, start the Mattermost gateway:
 
-``` bash
+``` prism-code
 hermes gateway
 ```
 
@@ -191,7 +191,7 @@ Type `/sethome` in any Mattermost channel where the bot is present. That channel
 
 Add this to your `~/.hermes/.env`:
 
-``` bash
+``` prism-code
 MATTERMOST_HOME_CHANNEL=abc123def456ghi789jkl012mn
 ```
 
@@ -201,14 +201,14 @@ Replace the ID with the actual channel ID (click the channel name → View Info 
 
 The `MATTERMOST_REPLY_MODE` setting controls how Hermes posts responses:
 
-| Mode | Behavior |
-|----|----|
-| `off` (default) | Hermes posts flat messages in the channel, like a normal user. |
-| `thread` | Hermes replies in a thread under your original message. Keeps channels clean when there's lots of back-and-forth. |
+| Mode            | Behavior                                                                                                          |
+|-----------------|-------------------------------------------------------------------------------------------------------------------|
+| `off` (default) | Hermes posts flat messages in the channel, like a normal user.                                                    |
+| `thread`        | Hermes replies in a thread under your original message. Keeps channels clean when there's lots of back-and-forth. |
 
 Set it in your `~/.hermes/.env`:
 
-``` bash
+``` prism-code
 MATTERMOST_REPLY_MODE=thread
 ```
 
@@ -216,9 +216,9 @@ MATTERMOST_REPLY_MODE=thread
 
 By default, the bot only responds in channels when `@mentioned`. You can change this:
 
-| Variable | Default | Description |
-|----|----|----|
-| `MATTERMOST_REQUIRE_MENTION` | `true` | Set to `false` to respond to all messages in channels (DMs always work). |
+| Variable                            | Default  | Description                                                                                               |
+|-------------------------------------|----------|-----------------------------------------------------------------------------------------------------------|
+| `MATTERMOST_REQUIRE_MENTION`        | `true`   | Set to `false` to respond to all messages in channels (DMs always work).                                  |
 | `MATTERMOST_FREE_RESPONSE_CHANNELS` | *(none)* | Comma-separated channel IDs where the bot responds without `@mention`, even when require_mention is true. |
 
 To find a channel ID in Mattermost: open the channel, click the channel name header, and look for the ID in the URL or channel details.
@@ -231,7 +231,7 @@ Restrict the bot to a fixed set of Mattermost channels. When set, the bot **only
 
 **DMs are exempt** from this filter, so authorized users can always reach the bot in a direct message.
 
-``` yaml
+``` prism-code
 mattermost:
   allowed_channels:
     - "abc123def456ghi789jkl012mno"   # #ops
@@ -240,7 +240,7 @@ mattermost:
 
 Or via env var (comma-separated):
 
-``` bash
+``` prism-code
 MATTERMOST_ALLOWED_CHANNELS="abc123def456ghi789jkl012mno,xyz987uvw654rst321opq098nml"
 ```
 
@@ -274,7 +274,7 @@ See also: [admin/user slash command split](/docs/reference/slash-commands#permis
 
 For nginx, ensure your config includes:
 
-``` nginx
+``` prism-code
 location /api/v4/websocket {
     proxy_pass http://mattermost-backend;
     proxy_set_header Upgrade $http_upgrade;
@@ -289,7 +289,7 @@ location /api/v4/websocket {
 
 **Fix**: Verify `MATTERMOST_URL` points to your Mattermost server (include `https://`, no trailing slash). Check that `MATTERMOST_TOKEN` is valid — try it with curl:
 
-``` bash
+``` prism-code
 curl -H "Authorization: Bearer YOUR_TOKEN" \
   https://your-server/api/v4/users/me
 ```
@@ -312,7 +312,7 @@ If this returns your bot's user info, the token is valid. If it returns an error
 
 Assign ephemeral system prompts to specific Mattermost channels. The prompt is injected at runtime on every turn — never persisted to transcript history — so changes take effect immediately.
 
-``` yaml
+``` prism-code
 mattermost:
   channel_prompts:
     "channel_id_abc123": |

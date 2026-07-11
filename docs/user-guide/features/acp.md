@@ -35,7 +35,7 @@ It intentionally excludes things that do not fit typical editor UX, such as mess
 
 Install Hermes normally, then add the ACP extra:
 
-``` bash
+``` prism-code
 pip install -e '.[acp]'
 ```
 
@@ -47,7 +47,7 @@ This installs the `agent-client-protocol` dependency and enables:
 
 For Zed registry installs, Zed launches Hermes through the official ACP Registry entry. That entry uses a `uvx` distribution that runs:
 
-``` bash
+``` prism-code
 uvx --from 'hermes-agent[acp]==<version>' hermes-acp
 ```
 
@@ -57,15 +57,15 @@ Make sure `uv` is available on `PATH` before using the registry install path.
 
 Any of the following starts Hermes in ACP mode:
 
-``` bash
+``` prism-code
 hermes acp
 ```
 
-``` bash
+``` prism-code
 hermes-acp
 ```
 
-``` bash
+``` prism-code
 python -m acp_adapter
 ```
 
@@ -73,7 +73,7 @@ Hermes logs to stderr so stdout remains reserved for ACP JSON-RPC traffic.
 
 For non-interactive checks:
 
-``` bash
+``` prism-code
 hermes acp --version
 hermes acp --check
 ```
@@ -82,7 +82,7 @@ hermes acp --check
 
 Browser tools (`browser_navigate`, `browser_click`, etc.) depend on the `agent-browser` npm package and Chromium, which aren't part of the Python wheel. Install them with:
 
-``` bash
+``` prism-code
 hermes acp --setup-browser           # interactive (prompts before ~400 MB download)
 hermes acp --setup-browser --yes     # accept the download non-interactively
 ```
@@ -111,7 +111,7 @@ To connect:
 
 If you want to define Hermes manually, add it through VS Code settings under `acp.agents`:
 
-``` json
+``` prism-code
 {
   "acp.agents": {
     "Hermes Agent": {
@@ -138,7 +138,7 @@ Prerequisites:
 
 For local development before the registry entry is available, use a custom agent server in Zed settings:
 
-``` json
+``` prism-code
 {
   "agent_servers": {
     "hermes-agent": {
@@ -154,7 +154,7 @@ For local development before the registry entry is available, use a custom agent
 
 Use an ACP-compatible plugin and point it at:
 
-``` text
+``` prism-code
 /path/to/hermes-agent/acp_registry
 ```
 
@@ -162,7 +162,7 @@ Use an ACP-compatible plugin and point it at:
 
 The source copy of Hermes' official ACP Registry metadata lives at:
 
-``` text
+``` prism-code
 acp_registry/agent.json
 acp_registry/icon.svg
 ```
@@ -171,7 +171,7 @@ The upstream registry PR copies those files into the top-level `hermes-agent/` d
 
 The registry entry uses a `uvx` distribution that points directly at the `hermes-agent` PyPI release:
 
-``` text
+``` prism-code
 uvx --from 'hermes-agent[acp]==<version>' hermes-acp
 ```
 
@@ -220,12 +220,12 @@ On timeout or error, the approval bridge denies the request.
 
 ACP exposes a third tier between *allow once* and *allow always*: **Allow for session**. Picking it from the editor's permission prompt records the approval inside the current ACP session only — every subsequent matching command in that session goes through without prompting, but a new ACP session (or restarting the editor) resets the slate and re-prompts the first time.
 
-| Option | Editor label | Scope | Persisted across restarts |
-|----|----|----|----|
-| `allow_once` | Allow once | This one tool call | No |
-| `allow_session` | Allow for session | All matching calls in this ACP session | No — cleared when the session ends |
-| `allow_always` | Allow always | All future sessions | Yes (written to the Hermes permanent allowlist) |
-| `deny` | Deny | This one tool call | No |
+| Option          | Editor label      | Scope                                  | Persisted across restarts                       |
+|-----------------|-------------------|----------------------------------------|-------------------------------------------------|
+| `allow_once`    | Allow once        | This one tool call                     | No                                              |
+| `allow_session` | Allow for session | All matching calls in this ACP session | No — cleared when the session ends              |
+| `allow_always`  | Allow always      | All future sessions                    | Yes (written to the Hermes permanent allowlist) |
+| `deny`          | Deny              | This one tool call                     | No                                              |
 
 `allow_session` is the right default for an editor workflow where you trust an agent for the duration of a task but don't want to grant a long-lived allowlist entry. The safety trade-off is straightforward: the broader the scope, the less the editor will interrupt you, and the more damage a misbehaving agent (or prompt injection) can do before you notice. Start with `allow_once` for unfamiliar commands; promote to `allow_session` once you've seen the agent run the same pattern correctly a few times; reserve `allow_always` for truly idempotent commands you trust forever (e.g. `git status`).
 
@@ -247,7 +247,7 @@ Check:
 
 Try these checks:
 
-``` bash
+``` prism-code
 hermes acp --version
 hermes acp --check
 hermes doctor
@@ -258,7 +258,7 @@ hermes status
 
 ACP mode uses Hermes' existing provider setup. Configure credentials with:
 
-``` bash
+``` prism-code
 hermes model
 ```
 

@@ -32,7 +32,7 @@ Before starting, make sure you have:
 
 - **Hermes Agent installed** — see the [Installation guide](/docs/getting-started/installation)
 - **Gateway running** — the gateway daemon handles cron execution:
-  ``` bash
+  ``` prism-code
   hermes gateway install   # Install as a user service
   sudo hermes gateway install --system   # Linux servers: boot-time system service
   # or
@@ -49,20 +49,20 @@ You can still follow this tutorial using `deliver: "local"`. Briefings will be s
 
 Before automating anything, let's make sure the briefing works. Start a chat session:
 
-``` bash
+``` prism-code
 hermes
 ```
 
 Then enter this prompt:
 
-``` text
+``` prism-code
 Search for the latest news about AI agents and open source LLMs.
 Summarize the top 3 stories in a concise briefing format with links.
 ```
 
 Hermes will search the web, read through results, and produce something like:
 
-``` text
+``` prism-code
 ☀️ Your AI Briefing — March 8, 2026
 
 1. Qwen 3 Released with 235B Parameters
@@ -100,7 +100,7 @@ Before creating cron jobs, ensure Hermes has a default model and provider config
 
 Just tell Hermes what you want:
 
-``` text
+``` prism-code
 Every morning at 8am, search the web for the latest news about AI agents
 and open source LLMs. Summarize the top 3 stories in a concise briefing
 with links. Use a friendly, professional tone. Deliver to telegram.
@@ -112,7 +112,7 @@ Hermes will create the cron job for you using the unified `cronjob` tool.
 
 Use the `/cron` command for more control:
 
-``` text
+``` prism-code
 /cron add "0 8 * * *" "Search the web for the latest news about AI agents and open source LLMs. Find at least 5 recent articles from the past 24 hours. Summarize the top 3 most important stories in a concise daily briefing format. For each story include: a clear headline, a 2-sentence summary, and the source URL. Use a friendly, professional tone. Format with emoji bullet points and end with a total story count."
 ```
 
@@ -124,13 +124,13 @@ Cron jobs run in a **completely fresh session** — no memory of your previous c
 
 **Bad prompt:**
 
-``` text
+``` prism-code
 Do my usual morning briefing.
 ```
 
 **Good prompt:**
 
-``` text
+``` prism-code
 Search the web for the latest news about AI agents and open source LLMs.
 Find at least 5 recent articles from the past 24 hours. Summarize the
 top 3 most important stories in a concise daily briefing format. For each
@@ -148,7 +148,7 @@ Once the basic briefing works, you can get creative.
 
 Cover several areas in one briefing:
 
-``` text
+``` prism-code
 /cron add "0 8 * * *" "Create a morning briefing covering three topics. For each topic, search the web for recent news from the past 24 hours and summarize the top 2 stories with links.
 
 Topics:
@@ -163,7 +163,7 @@ Format as a clean briefing with section headers and emoji. End with today's date
 
 For faster briefings, tell Hermes to delegate each topic to a sub-agent:
 
-``` text
+``` prism-code
 /cron add "0 8 * * *" "Create a morning briefing by delegating research to sub-agents. Delegate three parallel tasks:
 
 1. Delegate: Search for the top 2 AI/ML news stories from the past 24 hours with links
@@ -179,7 +179,7 @@ Each sub-agent searches independently and in parallel, then the main agent combi
 
 Don't need briefings on weekends? Use a cron expression that targets Monday–Friday:
 
-``` text
+``` prism-code
 /cron add "0 8 * * 1-5" "Search for the latest AI and tech news..."
 ```
 
@@ -187,7 +187,7 @@ Don't need briefings on weekends? Use a cron expression that targets Monday–Fr
 
 Get a morning overview and an evening recap:
 
-``` text
+``` prism-code
 /cron add "0 8 * * *" "Morning briefing: search for AI news from the past 12 hours..."
 /cron add "0 18 * * *" "Evening recap: search for AI news from the past 12 hours..."
 ```
@@ -196,7 +196,7 @@ Get a morning overview and an evening recap:
 
 If you have [memory](/docs/user-guide/features/memory) enabled, you can store preferences that persist across sessions. But remember — cron jobs run in fresh sessions without conversational memory. To add personal context, bake it directly into the prompt:
 
-``` text
+``` prism-code
 /cron add "0 8 * * *" "You are creating a briefing for a senior ML engineer who cares about: PyTorch ecosystem, transformer architectures, open-weight models, and AI regulation in the EU. Skip stories about product launches or funding rounds unless they involve open source.
 
 Search for the latest news on these topics. Summarize the top 3 stories with links. Be concise and technical — this reader doesn't need basic explanations."
@@ -212,19 +212,19 @@ Including details about who the briefing is *for* dramatically improves relevanc
 
 In chat:
 
-``` text
+``` prism-code
 /cron list
 ```
 
 Or from the terminal:
 
-``` bash
+``` prism-code
 hermes cron list
 ```
 
 You'll see output like:
 
-``` text
+``` prism-code
 ID          | Name              | Schedule    | Next Run           | Deliver
 ------------|-------------------|-------------|--------------------|--------
 a1b2c3d4    | Morning Briefing  | 0 8 * * *   | 2026-03-09 08:00   | telegram
@@ -235,13 +235,13 @@ e5f6g7h8    | Evening Recap     | 0 18 * * *  | 2026-03-08 18:00   | telegram
 
 In chat:
 
-``` text
+``` prism-code
 /cron remove a1b2c3d4
 ```
 
 Or ask conversationally:
 
-``` text
+``` prism-code
 Remove my morning briefing cron job.
 ```
 
@@ -251,13 +251,13 @@ Hermes will use `cronjob(action="list")` to find it and `cronjob(action="remove"
 
 Make sure the scheduler is actually running:
 
-``` bash
+``` prism-code
 hermes cron status
 ```
 
 If the gateway isn't running, your jobs won't execute. Install it as a background service for reliability:
 
-``` bash
+``` prism-code
 hermes gateway install
 # or on Linux servers
 sudo hermes gateway install --system

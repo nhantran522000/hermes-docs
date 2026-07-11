@@ -12,7 +12,7 @@ It's the recommended way to run Hermes interactively.
 
 ## Launch
 
-``` bash
+``` prism-code
 # Launch the TUI
 hermes --tui
 
@@ -30,7 +30,7 @@ hermes --tui --dev
 
 You can also enable it via env var:
 
-``` bash
+``` prism-code
 export HERMES_TUI=1
 hermes          # now uses the TUI
 hermes chat     # same
@@ -38,7 +38,7 @@ hermes chat     # same
 
 Or make it the persistent default in `~/.hermes/config.yaml`:
 
-``` yaml
+``` prism-code
 display:
   interface: tui   # "cli" (default) or "tui"
 ```
@@ -83,7 +83,7 @@ On first launch Hermes installs the TUI's Node dependencies into `ui-tui/node_mo
 
 Distributions that ship a prebuilt bundle (Nix, system packages) can point Hermes at it:
 
-``` bash
+``` prism-code
 export HERMES_TUI_DIR=/path/to/prebuilt/ui-tui
 hermes --tui
 ```
@@ -105,16 +105,16 @@ Keybindings match the [Classic CLI](/docs/user-guide/cli#keybindings) exactly. T
 
 All slash commands work unchanged. A few are TUI-owned — they produce richer output or render as overlays rather than inline panels:
 
-| Command | TUI behavior |
-|----|----|
-| `/help` | Overlay with categorized commands, arrow-key navigable |
-| `/sessions` (alias `/switch`) | Live session switcher — list open TUI sessions, switch between them, close them, or start another one |
-| `/model` | Modal model picker grouped by provider, with cost hints |
-| `/skin` | Live preview — theme change applies as you browse |
-| `/details` | Toggle verbose tool-call details (global or per-section) |
-| `/usage` | Rich token / cost / context panel |
-| `/agents` (alias `/tasks`) | Observability overlay — live subagent tree with kill/pause controls, per-branch cost / token / file rollups, turn-by-turn history |
-| `/reload` | Re-reads `~/.hermes/.env` into the running TUI process so newly added API keys take effect without a restart |
+| Command                                    | TUI behavior                                                                                                                                                                                                                                                                                                               |
+|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `/help`                                    | Overlay with categorized commands, arrow-key navigable                                                                                                                                                                                                                                                                     |
+| `/sessions` (alias `/switch`)              | Live session switcher — list open TUI sessions, switch between them, close them, or start another one                                                                                                                                                                                                                      |
+| `/model`                                   | Modal model picker grouped by provider, with cost hints                                                                                                                                                                                                                                                                    |
+| `/skin`                                    | Live preview — theme change applies as you browse                                                                                                                                                                                                                                                                          |
+| `/details`                                 | Toggle verbose tool-call details (global or per-section)                                                                                                                                                                                                                                                                   |
+| `/usage`                                   | Rich token / cost / context panel                                                                                                                                                                                                                                                                                          |
+| `/agents` (alias `/tasks`)                 | Observability overlay — live subagent tree with kill/pause controls, per-branch cost / token / file rollups, turn-by-turn history                                                                                                                                                                                          |
+| `/reload`                                  | Re-reads `~/.hermes/.env` into the running TUI process so newly added API keys take effect without a restart                                                                                                                                                                                                               |
 | `/mouse [on|off|toggle|wheel|buttons|all]` | Pick a mouse tracking preset at runtime (also persists to `display.mouse_tracking` in `config.yaml`). `wheel` (1000+1006) keeps scroll-wheel scrolling without the hover events that make tmux spam "No image in clipboard" over the prompt row; `buttons` adds drag-to-select; `all` is the default with hover-driven UI. |
 
 Every other slash command (including installed skills, quick commands, and personality toggles) works identically to the classic CLI. See [Slash Commands Reference](/docs/reference/slash-commands).
@@ -158,7 +158,7 @@ The TUI auto-detects light terminals and swaps to the light theme accordingly. D
 
 If you want the light theme permanently regardless of terminal:
 
-``` bash
+``` prism-code
 export HERMES_TUI_THEME=light
 ```
 
@@ -166,7 +166,7 @@ export HERMES_TUI_THEME=light
 
 The status-bar busy indicator is pluggable — the default rotates Hermes' kawaii face palette every 2.5 seconds during agent work. Pick a different style via config or the `/indicator` slash command:
 
-``` yaml
+``` prism-code
 display:
   tui_status_indicator: kaomoji   # kaomoji | emoji | unicode | ascii
 ```
@@ -177,7 +177,7 @@ Or in-session: `/indicator emoji` (etc.). Styles ship with matched glyph widths 
 
 By default, `hermes --tui` starts a fresh session each launch. To re-attach to the most recent TUI session automatically (useful when your terminal or SSH connection drops unexpectedly), opt in:
 
-``` bash
+``` prism-code
 export HERMES_TUI_RESUME=1          # most-recent TUI session
 # or:
 export HERMES_TUI_RESUME=<session-id>   # specific session
@@ -189,13 +189,13 @@ Unset the variable or pass `--resume <id>` explicitly to override on a per-launc
 
 The TUI's status line tracks agent state in real time:
 
-| Status | Meaning |
-|----|----|
-| `starting agent…` | Session ID is live; tools and skills still coming online. You can type — messages queue and send when ready. |
-| `ready` | Agent is idle, accepting input. |
-| `thinking…` / `running…` | Agent is reasoning or running a tool. |
-| `interrupted` | Current turn was cancelled; press Enter to send again. |
-| `forging session…` / `resuming…` | Initial connect or `--resume` handshake. |
+| Status                           | Meaning                                                                                                      |
+|----------------------------------|--------------------------------------------------------------------------------------------------------------|
+| `starting agent…`                | Session ID is live; tools and skills still coming online. You can type — messages queue and send when ready. |
+| `ready`                          | Agent is idle, accepting input.                                                                              |
+| `thinking…` / `running…`         | Agent is reasoning or running a tool.                                                                        |
+| `interrupted`                    | Current turn was cancelled; press Enter to send again.                                                       |
+| `forging session…` / `resuming…` | Initial connect or `--resume` handshake.                                                                     |
 
 The per-skin status-bar colors and thresholds are shared with the classic CLI — see [Skins](/docs/user-guide/features/skins) for customization.
 
@@ -213,7 +213,7 @@ The TUI respects all standard Hermes config: `~/.hermes/config.yaml`, profiles, 
 
 A handful of keys tune the TUI surface specifically:
 
-``` yaml
+``` prism-code
 display:
   skin: default              # any built-in or custom skin
   personality: helpful

@@ -41,7 +41,7 @@ The `web_search` and `web_extract` tools support eight backend providers, config
 
 Quick setup example:
 
-``` yaml
+``` prism-code
 web:
   backend: firecrawl    # firecrawl | searxng | brave-free | ddgs | tavily | exa | parallel | xai
 ```

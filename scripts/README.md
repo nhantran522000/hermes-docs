@@ -1,8 +1,11 @@
 # Hermes docs crawler
 
-Crawls every documentation page listed in [`../llms.txt`](../llms.txt) and saves it as
-Markdown under [`../docs/`](../docs/), mirroring the URL paths. Re-running overwrites
-existing files in place, so it is safe to run on a schedule.
+Fetches a fresh [`../llms.txt`](../llms.txt) from the live docs site, crawls every page
+it lists, and saves each as Markdown under [`../docs/`](../docs/), mirroring the URL
+paths. Re-running overwrites existing files in place, so it is safe to run on a schedule.
+
+The weekly job (`sync-docs.sh`) does the whole loop: **fetch `llms.txt` → crawl → commit
+→ push to GitHub**.
 
 ## Requirements
 
@@ -13,12 +16,25 @@ existing files in place, so it is safe to run on a schedule.
 ## Run manually
 
 ```bash
-scripts/crawl-docs.sh                 # crawl everything in llms.txt
+scripts/sync-docs.sh                  # full weekly job: fetch llms.txt -> crawl -> commit -> push
+scripts/crawl-docs.sh                 # crawl only, using the current local llms.txt
+scripts/crawl-docs.sh --refresh-llms  # fetch a fresh llms.txt first, then crawl (no git)
 scripts/crawl-docs.sh --only cli      # only URLs containing "cli" (for testing)
 scripts/crawl-docs.sh --workers 4     # fewer concurrent fetches
 ```
 
+`sync-docs.sh` commits only `llms.txt` + `docs/`, and only when something actually
+changed (a same-day re-run with no doc changes is a clean no-op). If a few pages fail to
+crawl, their previous versions stay in place and the rest are still committed.
+
 Logs are written to `.crawl-logs/` (last 12 kept). Both the venv and logs are gitignored.
+
+## Git / push
+
+`sync-docs.sh` pushes to `origin` on the current branch using your normal git
+credentials. On macOS these come from the `osxkeychain` credential helper, which works
+non-interactively while you are logged in — no token is stored in this repo. If a push
+ever fails with an auth error, run `git push` once by hand to re-cache the credential.
 
 ## Weekly schedule (macOS launchd)
 
@@ -43,7 +59,10 @@ just because the machine was asleep at 18:00.
 
 ## How it works
 
-For each doc URL, `crawl_docs.py`:
+`crawl_docs.py --refresh-llms` first downloads `llms.txt` from
+`https://hermes-agent.nousresearch.com/docs/llms.txt`, validates it, and writes it
+atomically (a transient download failure falls back to the existing file). Then, for
+each doc URL it:
 
 1. Fetches the rendered HTML (retrying transient failures).
    - Category pages listed as `.../index` are served at `...`, so it falls back to the

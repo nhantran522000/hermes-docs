@@ -1,0 +1,65 @@
+name: Sync Hermes docs
+
+# Fetches a fresh llms.txt from the live docs site, crawls every page it lists
+# into docs/, and commits + pushes any changes — all on GitHub's runners, so it
+# runs whether or not your own machine is on.
+
+on:
+  schedule:
+    # 18:00 UTC every Sunday. GitHub cron is always UTC (no DST), so in the UK
+    # this is 18:00 GMT in winter / 19:00 BST in summer. Adjust the numbers to
+    # taste — format is: minute hour day-of-month month day-of-week (0 = Sunday).
+    - cron: '0 18 * * 0'
+  workflow_dispatch: {}   # lets you run it on demand from the Actions tab / gh CLI
+
+# Allow the built-in token to push commits back to the repo.
+permissions:
+  contents: write
+
+# Never let two syncs run at once.
+concurrency:
+  group: sync-docs
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Fetch llms.txt and crawl docs
+        id: crawl
+        continue-on-error: true   # a few failed pages shouldn't discard the rest
+        run: python3 scripts/crawl_docs.py --refresh-llms
+
+      - name: Commit and push changes
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- llms.txt docs
+          if git diff --cached --quiet; then
+            echo "No documentation changes to commit."
+            exit 0
+          fi
+          git commit -m "docs: sync Hermes docs $(date -u +'%Y-%m-%d %H:%M UTC')" \
+                     -m "Automated via GitHub Actions: fetched llms.txt and re-crawled all pages."
+          git push
+          echo "Pushed documentation updates."
+
+      - name: Fail the run if the crawl had errors
+        if: steps.crawl.outcome == 'failure'
+        run: |
+          echo "::error::The crawl step reported failures — see the 'Fetch llms.txt and crawl docs' step log."
+          exit 1

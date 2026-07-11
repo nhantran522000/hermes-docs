@@ -34,14 +34,29 @@ SITE = f"https://{DOMAIN}"
 LLMS_URL = f"{SITE}{DOCS_PREFIX}llms.txt"
 
 TIMEOUT = 30
-RETRIES = 3
+RETRIES = 4
+# Statuses worth retrying with backoff: the docs host has bot protection that can
+# briefly 403/429 under load.
+RETRYABLE_STATUS = {403, 429, 503}
 USER_AGENT = "hermes-docs-crawler/1.0 (+local archival)"
+# Force English so output is identical regardless of where the crawl runs (the site
+# otherwise localizes by IP, which would make local vs CI crawls churn).
+ACCEPT_LANGUAGE = "en-US,en;q=0.9"
 
 # Markdown link: [label](url)
 LINK_RE = re.compile(r"\[[^\]]*\]\((https?://[^\s)]+)\)")
 # <meta http-equiv="refresh" content="0; url=/some/path">
 META_REFRESH_RE = re.compile(
     r"http-equiv=[\"']refresh[\"'][^>]*content=[\"'][^\"']*url=([^\"'>]+)", re.I
+)
+# SSR fallback a few client-only embeds (video tutorials) leave behind: an
+# "An error occurred / Unable to execute JavaScript" block, optionally followed by a
+# horizontal rule. Localized by the host, so cover the locales we've observed.
+ERROR_BOUNDARY_RE = re.compile(
+    r"^#{1,6}[ \t]*(?:An error occurred|Đã xảy ra lỗi)\.?[ \t]*\n+"
+    r"(?:Unable to execute JavaScript|Không thể chạy JavaScript)\.?[ \t]*\n+"
+    r"(?:-{3,}[ \t]*\n+)?",
+    re.M,
 )
 
 _thread_local = threading.local()
@@ -51,7 +66,7 @@ def session() -> requests.Session:
     s = getattr(_thread_local, "session", None)
     if s is None:
         s = requests.Session()
-        s.headers.update({"User-Agent": USER_AGENT})
+        s.headers.update({"User-Agent": USER_AGENT, "Accept-Language": ACCEPT_LANGUAGE})
         _thread_local.session = s
     return s
 
@@ -190,8 +205,8 @@ def generate_index(llms_text: str, outdir: Path, known: set[str], when: str) -> 
 
 
 def _get(url: str) -> str:
-    """GET with retries. Client errors (4xx) raise immediately; only transient
-    failures (network, timeout, 5xx) are retried."""
+    """GET with retries. Rate-limit/bot statuses (403/429/503) and transient network
+    failures are retried with growing backoff; other 4xx raise immediately."""
     last: Exception | None = None
     for attempt in range(RETRIES):
         try:
@@ -199,12 +214,13 @@ def _get(url: str) -> str:
             r.raise_for_status()
             return r.text
         except requests.HTTPError as e:
-            if e.response is not None and 400 <= e.response.status_code < 500:
+            sc = e.response.status_code if e.response is not None else None
+            if sc is not None and 400 <= sc < 500 and sc not in RETRYABLE_STATUS:
                 raise
             last = e
         except requests.RequestException as e:
             last = e
-        time.sleep(1.5 * (attempt + 1))
+        time.sleep(2.0 * (attempt + 1))
     raise RuntimeError(f"failed after {RETRIES} attempts: {last}")
 
 
@@ -275,6 +291,8 @@ def html_to_markdown(html: str) -> tuple[str, str]:
     md = proc.stdout
     # Safety net: drop any base64 data-URI images pandoc still emitted.
     md = re.sub(r"!\[[^\]]*\]\(data:[^)]*\)", "", md)
+    # Drop client-only-embed SSR error fallbacks.
+    md = ERROR_BOUNDARY_RE.sub("", md)
     md = re.sub(r"\n{3,}", "\n\n", md).strip()
     m = re.search(r"^#\s+(.+)$", md, re.M)
     title = m.group(1).strip() if m else ""
@@ -308,7 +326,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Crawl Hermes docs from llms.txt into Markdown.")
     ap.add_argument("--llms", type=Path, default=DEFAULT_LLMS, help="Path to llms.txt")
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT, help="Output docs directory")
-    ap.add_argument("--workers", type=int, default=8, help="Concurrent fetches")
+    ap.add_argument("--workers", type=int, default=6, help="Concurrent fetches")
     ap.add_argument("--only", default=None, help="Only crawl URLs containing this substring (for testing)")
     ap.add_argument("--refresh-llms", action="store_true",
                     help="Fetch a fresh llms.txt from --llms-url and save it to --llms before crawling")

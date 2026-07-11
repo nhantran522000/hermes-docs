@@ -86,10 +86,15 @@ just because the machine was asleep at 18:00.
 atomically (a transient download failure falls back to the existing file). Then, for
 each doc URL it:
 
-1. Fetches the rendered HTML (retrying transient failures).
+1. Fetches the rendered HTML, sending `Accept-Language: en` so output is identical
+   wherever the crawl runs (the host otherwise localizes by IP).
    - Category pages listed as `.../index` are served at `...`, so it falls back to the
      suffix-stripped path on a 404.
    - Client-side redirect stubs (`<meta refresh>`) are followed to the real page.
+   - The host (Vercel) has bot protection that can briefly 403/429 under load, so those
+     statuses are retried with backoff; a page that never recovers is reported as a
+     failure rather than saved. If you hit persistent 403s locally you've tripped the
+     checkpoint — wait a few minutes or lower `--workers`.
 2. Extracts the `<div class="theme-doc-markdown">` article body, stripping Docusaurus
    heading anchors, decorative inline SVG/`data:` icons, and copy buttons.
 3. Converts to GitHub-Flavored Markdown with `pandoc`.

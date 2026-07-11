@@ -937,10 +937,6 @@ Select a task, pick a provider (OAuth flows open a browser; API-key providers pr
 
 ### Video Tutorial
 
-# An error occurred.
-
-Unable to execute JavaScript.
-
 ### The universal config pattern
 
 Every model slot in Hermes — auxiliary tasks, compression, fallback — uses the same three knobs:

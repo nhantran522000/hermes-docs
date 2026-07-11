@@ -12,12 +12,6 @@ The agent processes the event and can respond by posting comments on PRs, sendin
 
 ## Video Tutorial
 
-# An error occurred.
-
-Unable to execute JavaScript.
-
-------------------------------------------------------------------------
-
 ## Quick Start
 
 1.  Enable via `hermes gateway setup` or environment variables

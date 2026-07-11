@@ -8,11 +8,11 @@ last_crawled: 2026-07-11
 
 Hermes has three hook systems that run custom code at key lifecycle points:
 
-| System | Registered via | Runs in | Use case |
-|----|----|----|----|
-| **[Gateway hooks](#gateway-event-hooks)** | `HOOK.yaml` + `handler.py` in `~/.hermes/hooks/` | Gateway only | Logging, alerts, webhooks |
-| **[Plugin hooks](#plugin-hooks)** | `ctx.register_hook()` in a [plugin](plugins.md) | CLI + Gateway | Tool interception, metrics, guardrails |
-| **[Shell hooks](#shell-hooks)** | `hooks:` block in `~/.hermes/config.yaml` pointing at shell scripts | CLI + Gateway | Drop-in scripts for blocking, auto-formatting, context injection |
+| System                                    | Registered via                                                         | Runs in       | Use case                                                         |
+|-------------------------------------------|------------------------------------------------------------------------|---------------|------------------------------------------------------------------|
+| **[Gateway hooks](#gateway-event-hooks)** | `HOOK.yaml` + `handler.py` in `~/.hermes/hooks/`                       | Gateway only  | Logging, alerts, webhooks                                        |
+| **[Plugin hooks](#plugin-hooks)**         | `ctx.register_hook()` in a [plugin](plugins.md) | CLI + Gateway | Tool interception, metrics, guardrails                           |
+| **[Shell hooks](#shell-hooks)**           | `hooks:` block in `~/.hermes/config.yaml` pointing at shell scripts    | CLI + Gateway | Drop-in scripts for blocking, auto-formatting, context injection |
 
 All three systems are non-blocking — errors in any hook are caught and logged, never crashing the agent.
 
@@ -24,7 +24,7 @@ Gateway hooks fire automatically during gateway operation (Telegram, Discord, Sl
 
 Each hook is a directory under `~/.hermes/hooks/` containing two files:
 
-``` text
+``` prism-code
 ~/.hermes/hooks/
 └── my-hook/
     ├── HOOK.yaml      # Declares which events to listen for
@@ -33,7 +33,7 @@ Each hook is a directory under `~/.hermes/hooks/` containing two files:
 
 #### HOOK.yaml
 
-``` yaml
+``` prism-code
 name: my-hook
 description: Log all agent activity to a file
 events:
@@ -46,7 +46,7 @@ The `events` list determines which events trigger your handler. You can subscrib
 
 #### handler.py
 
-``` python
+``` prism-code
 import json
 from datetime import datetime
 from pathlib import Path
@@ -73,16 +73,16 @@ async def handle(event_type: str, context: dict):
 
 ### Available Events
 
-| Event | When it fires | Context keys |
-|----|----|----|
-| `gateway:startup` | Gateway process starts | `platforms` (list of active platform names) |
-| `session:start` | New messaging session created | `platform`, `user_id`, `session_id`, `session_key` |
-| `session:end` | Session ended (before reset) | `platform`, `user_id`, `session_key` |
-| `session:reset` | User ran `/new` or `/reset` | `platform`, `user_id`, `session_key` |
-| `agent:start` | Agent begins processing a message | `platform`, `user_id`, `session_id`, `message` |
-| `agent:step` | Each iteration of the tool-calling loop | `platform`, `user_id`, `session_id`, `iteration`, `tool_names` |
-| `agent:end` | Agent finishes processing | `platform`, `user_id`, `session_id`, `message`, `response` |
-| `command:*` | Any slash command executed | `platform`, `user_id`, `command`, `args` |
+| Event             | When it fires                           | Context keys                                                   |
+|-------------------|-----------------------------------------|----------------------------------------------------------------|
+| `gateway:startup` | Gateway process starts                  | `platforms` (list of active platform names)                    |
+| `session:start`   | New messaging session created           | `platform`, `user_id`, `session_id`, `session_key`             |
+| `session:end`     | Session ended (before reset)            | `platform`, `user_id`, `session_key`                           |
+| `session:reset`   | User ran `/new` or `/reset`             | `platform`, `user_id`, `session_key`                           |
+| `agent:start`     | Agent begins processing a message       | `platform`, `user_id`, `session_id`, `message`                 |
+| `agent:step`      | Each iteration of the tool-calling loop | `platform`, `user_id`, `session_id`, `iteration`, `tool_names` |
+| `agent:end`       | Agent finishes processing               | `platform`, `user_id`, `session_id`, `message`, `response`     |
+| `command:*`       | Any slash command executed              | `platform`, `user_id`, `command`, `args`                       |
 
 #### Wildcard Matching
 
@@ -94,7 +94,7 @@ Handlers registered for `command:*` fire for any `command:` event (`command:mode
 
 Send yourself a message when the agent takes more than 10 steps:
 
-``` yaml
+``` prism-code
 # ~/.hermes/hooks/long-task-alert/HOOK.yaml
 name: long-task-alert
 description: Alert when agent is taking many steps
@@ -102,7 +102,7 @@ events:
   - agent:step
 ```
 
-``` python
+``` prism-code
 # ~/.hermes/hooks/long-task-alert/handler.py
 import os
 import httpx
@@ -127,7 +127,7 @@ async def handle(event_type: str, context: dict):
 
 Track which slash commands are used:
 
-``` yaml
+``` prism-code
 # ~/.hermes/hooks/command-logger/HOOK.yaml
 name: command-logger
 description: Log slash command usage
@@ -135,7 +135,7 @@ events:
   - command:*
 ```
 
-``` python
+``` prism-code
 # ~/.hermes/hooks/command-logger/handler.py
 import json
 from datetime import datetime
@@ -160,7 +160,7 @@ def handle(event_type: str, context: dict):
 
 POST to an external service on new sessions:
 
-``` yaml
+``` prism-code
 # ~/.hermes/hooks/session-webhook/HOOK.yaml
 name: session-webhook
 description: Notify external service on new sessions
@@ -169,7 +169,7 @@ events:
   - session:reset
 ```
 
-``` python
+``` prism-code
 # ~/.hermes/hooks/session-webhook/handler.py
 import httpx
 
@@ -199,7 +199,7 @@ This tutorial shows how to build it yourself as a user-defined hook. Hermes does
 
 Create `~/.hermes/BOOT.md`. Write it as if you were giving instructions to a human assistant:
 
-``` markdown
+``` prism-code
 # Startup Checklist
 
 1. Run `hermes cron list` and check if any scheduled jobs failed overnight.
@@ -212,7 +212,7 @@ The agent sees this as part of its prompt, so anything you can describe in plain
 
 #### Step 2: Create the hook
 
-``` text
+``` prism-code
 ~/.hermes/hooks/boot-md/
 ├── HOOK.yaml
 └── handler.py
@@ -220,7 +220,7 @@ The agent sees this as part of its prompt, so anything you can describe in plain
 
 **`~/.hermes/hooks/boot-md/HOOK.yaml`**
 
-``` yaml
+``` prism-code
 name: boot-md
 description: Run ~/.hermes/BOOT.md on gateway startup
 events:
@@ -229,7 +229,7 @@ events:
 
 **`~/.hermes/hooks/boot-md/handler.py`**
 
-``` python
+``` prism-code
 """Run ~/.hermes/BOOT.md on every gateway startup."""
 
 import logging
@@ -312,13 +312,13 @@ Without these, a bare `AIAgent()` falls back to built-in defaults and will 401 a
 
 Restart the gateway:
 
-``` bash
+``` prism-code
 hermes gateway restart
 ```
 
 Watch the logs:
 
-``` bash
+``` prism-code
 hermes logs --follow --level INFO | grep boot-md
 ```
 
@@ -354,7 +354,7 @@ Gateway hooks only fire in the **gateway** (Telegram, Discord, Slack, WhatsApp, 
 
 For plugin packaging and registration details, see the [Plugins guide](plugins.md).
 
-``` python
+``` prism-code
 def register(ctx):
     ctx.register_hook("pre_tool_call", my_tool_observer)
     ctx.register_hook("post_tool_call", my_tool_logger)
@@ -373,25 +373,25 @@ def register(ctx):
 
 ### Quick reference
 
-| Hook | Fires when | Returns |
-|----|----|----|
-| [`pre_tool_call`](#pre_tool_call) | Before any tool executes | `{"action": "block", "message": str}` to veto the call |
-| [`post_tool_call`](#post_tool_call) | After any tool returns | ignored |
-| [`pre_llm_call`](#pre_llm_call) | Once per turn, before the tool-calling loop | `{"context": str}` to prepend context to the user message |
-| [`post_llm_call`](#post_llm_call) | Once per turn, after the tool-calling loop | ignored |
-| [`pre_verify`](#pre_verify) | Once per turn when the agent edited code, before it verifies/finishes | `{"action": "continue", "message": str}` to keep going |
-| [`on_session_start`](#on_session_start) | New session created (first turn only) | ignored |
-| [`on_session_end`](#on_session_end) | Session ends | ignored |
-| [`on_session_finalize`](#on_session_finalize) | CLI/gateway tears down an active session (flush, save, stats) | ignored |
-| [`on_session_reset`](#on_session_reset) | Gateway swaps in a fresh session key (e.g. `/new`, `/reset`) | ignored |
-| [`subagent_start`](#subagent_start) | A `delegate_task` child has been constructed and is about to run | ignored |
-| [`subagent_stop`](#subagent_stop) | A `delegate_task` child has exited | ignored |
-| [`pre_gateway_dispatch`](#pre_gateway_dispatch) | Gateway received a user message, before auth + dispatch | `{"action": "skip" | "rewrite" | "allow", ...}` to influence flow |
-| [`pre_approval_request`](#pre_approval_request) | Dangerous command needs user approval, before the prompt/notification is sent | ignored |
-| [`post_approval_response`](#post_approval_response) | User responded to an approval prompt (or it timed out) | ignored |
-| [`transform_tool_result`](#transform_tool_result) | After any tool returns, before the result is handed back to the model | `str` to replace the result, `None` to leave unchanged |
-| [`transform_terminal_output`](#transform_terminal_output) | Inside the `terminal` tool, before truncation/ANSI-strip/redact | `str` to replace the raw output, `None` to leave unchanged |
-| [`transform_llm_output`](#transform_llm_output) | After the tool-calling loop completes, before the final response is delivered | `str` to replace the response text, `None`/empty to leave unchanged |
+| Hook                                                      | Fires when                                                                    | Returns                                                             |
+|-----------------------------------------------------------|-------------------------------------------------------------------------------|---------------------------------------------------------------------|
+| [`pre_tool_call`](#pre_tool_call)                         | Before any tool executes                                                      | `{"action": "block", "message": str}` to veto the call              |
+| [`post_tool_call`](#post_tool_call)                       | After any tool returns                                                        | ignored                                                             |
+| [`pre_llm_call`](#pre_llm_call)                           | Once per turn, before the tool-calling loop                                   | `{"context": str}` to prepend context to the user message           |
+| [`post_llm_call`](#post_llm_call)                         | Once per turn, after the tool-calling loop                                    | ignored                                                             |
+| [`pre_verify`](#pre_verify)                               | Once per turn when the agent edited code, before it verifies/finishes         | `{"action": "continue", "message": str}` to keep going              |
+| [`on_session_start`](#on_session_start)                   | New session created (first turn only)                                         | ignored                                                             |
+| [`on_session_end`](#on_session_end)                       | Session ends                                                                  | ignored                                                             |
+| [`on_session_finalize`](#on_session_finalize)             | CLI/gateway tears down an active session (flush, save, stats)                 | ignored                                                             |
+| [`on_session_reset`](#on_session_reset)                   | Gateway swaps in a fresh session key (e.g. `/new`, `/reset`)                  | ignored                                                             |
+| [`subagent_start`](#subagent_start)                       | A `delegate_task` child has been constructed and is about to run              | ignored                                                             |
+| [`subagent_stop`](#subagent_stop)                         | A `delegate_task` child has exited                                            | ignored                                                             |
+| [`pre_gateway_dispatch`](#pre_gateway_dispatch)           | Gateway received a user message, before auth + dispatch                       | `{"action": "skip" | "rewrite" | "allow", ...}` to influence flow   |
+| [`pre_approval_request`](#pre_approval_request)           | Dangerous command needs user approval, before the prompt/notification is sent | ignored                                                             |
+| [`post_approval_response`](#post_approval_response)       | User responded to an approval prompt (or it timed out)                        | ignored                                                             |
+| [`transform_tool_result`](#transform_tool_result)         | After any tool returns, before the result is handed back to the model         | `str` to replace the result, `None` to leave unchanged              |
+| [`transform_terminal_output`](#transform_terminal_output) | Inside the `terminal` tool, before truncation/ANSI-strip/redact               | `str` to replace the raw output, `None` to leave unchanged          |
+| [`transform_llm_output`](#transform_llm_output)           | After the tool-calling loop completes, before the final response is delivered | `str` to replace the response text, `None`/empty to leave unchanged |
 
 ------------------------------------------------------------------------
 
@@ -401,21 +401,21 @@ Fires **immediately before** every tool execution — built-in tools and plugin 
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(tool_name: str, args: dict, task_id: str, **kwargs):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `tool_name` | `str` | Name of the tool about to execute (e.g. `"terminal"`, `"web_search"`, `"read_file"`) |
-| `args` | `dict` | The arguments the model passed to the tool |
-| `task_id` | `str` | Session/task identifier. Empty string if not set. |
+| Parameter   | Type   | Description                                                                          |
+|-------------|--------|--------------------------------------------------------------------------------------|
+| `tool_name` | `str`  | Name of the tool about to execute (e.g. `"terminal"`, `"web_search"`, `"read_file"`) |
+| `args`      | `dict` | The arguments the model passed to the tool                                           |
+| `task_id`   | `str`  | Session/task identifier. Empty string if not set.                                    |
 
 **Fires:** In `model_tools.py`, inside `handle_function_call()`, before the tool's handler runs. Fires once per tool call — if the model calls 3 tools in parallel, this fires 3 times.
 
 **Return value — veto the call:**
 
-``` python
+``` prism-code
 return {"action": "block", "message": "Reason the tool call was blocked"}
 ```
 
@@ -425,7 +425,7 @@ The agent short-circuits the tool with `message` as the error returned to the mo
 
 **Example — tool call audit log:**
 
-``` python
+``` prism-code
 import json, logging
 from datetime import datetime
 
@@ -441,7 +441,7 @@ def register(ctx):
 
 **Example — warn on dangerous tools:**
 
-``` python
+``` prism-code
 DANGEROUS = {"terminal", "write_file", "patch"}
 
 def warn_dangerous(tool_name, **kwargs):
@@ -460,18 +460,18 @@ Fires **immediately after** every tool execution returns.
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(tool_name: str, args: dict, result: str, task_id: str,
                 duration_ms: int, **kwargs):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `tool_name` | `str` | Name of the tool that just executed |
-| `args` | `dict` | The arguments the model passed to the tool |
-| `result` | `str` | The tool's return value (always a JSON string) |
-| `task_id` | `str` | Session/task identifier. Empty string if not set. |
-| `duration_ms` | `int` | How long the tool's dispatch took, in milliseconds (measured with `time.monotonic()` around `registry.dispatch()`). |
+| Parameter     | Type   | Description                                                                                                         |
+|---------------|--------|---------------------------------------------------------------------------------------------------------------------|
+| `tool_name`   | `str`  | Name of the tool that just executed                                                                                 |
+| `args`        | `dict` | The arguments the model passed to the tool                                                                          |
+| `result`      | `str`  | The tool's return value (always a JSON string)                                                                      |
+| `task_id`     | `str`  | Session/task identifier. Empty string if not set.                                                                   |
+| `duration_ms` | `int`  | How long the tool's dispatch took, in milliseconds (measured with `time.monotonic()` around `registry.dispatch()`). |
 
 **Fires:** In `model_tools.py`, inside `handle_function_call()`, after the tool's handler returns. Fires once per tool call. Does **not** fire if the tool raised an unhandled exception (the error is caught and returned as an error JSON string instead, and `post_tool_call` fires with that error string as `result`).
 
@@ -481,7 +481,7 @@ def my_callback(tool_name: str, args: dict, result: str, task_id: str,
 
 **Example — track tool usage metrics:**
 
-``` python
+``` prism-code
 from collections import Counter, defaultdict
 import json
 
@@ -511,25 +511,25 @@ Fires **once per turn**, before the tool-calling loop begins. This is the **only
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(session_id: str, user_message: str, conversation_history: list,
                 is_first_turn: bool, model: str, platform: str, **kwargs):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `session_id` | `str` | Unique identifier for the current session |
-| `user_message` | `str` | The user's original message for this turn (before any skill injection) |
+| Parameter              | Type   | Description                                                                           |
+|------------------------|--------|---------------------------------------------------------------------------------------|
+| `session_id`           | `str`  | Unique identifier for the current session                                             |
+| `user_message`         | `str`  | The user's original message for this turn (before any skill injection)                |
 | `conversation_history` | `list` | Copy of the full message list (OpenAI format: `[{"role": "user", "content": "..."}]`) |
-| `is_first_turn` | `bool` | `True` if this is the first turn of a new session, `False` on subsequent turns |
-| `model` | `str` | The model identifier (e.g. `"anthropic/claude-sonnet-4.6"`) |
-| `platform` | `str` | Where the session is running: `"cli"`, `"telegram"`, `"discord"`, etc. |
+| `is_first_turn`        | `bool` | `True` if this is the first turn of a new session, `False` on subsequent turns        |
+| `model`                | `str`  | The model identifier (e.g. `"anthropic/claude-sonnet-4.6"`)                           |
+| `platform`             | `str`  | Where the session is running: `"cli"`, `"telegram"`, `"discord"`, etc.                |
 
 **Fires:** In `run_agent.py`, inside `run_conversation()`, after context compression but before the main `while` loop. Fires once per `run_conversation()` call (i.e. once per user turn), not once per API call within the tool loop.
 
 **Return value:** If the callback returns a dict with a `"context"` key, or a plain non-empty string, the text is appended to the current turn's user message. Return `None` for no injection.
 
-``` python
+``` prism-code
 # Inject context
 return {"context": "Recalled memories:\n- User likes Python\n- Working on hermes-agent"}
 
@@ -550,7 +550,7 @@ When **multiple plugins** return context, their outputs are joined with double n
 
 **Example — memory recall:**
 
-``` python
+``` prism-code
 import httpx
 
 MEMORY_API = "https://your-memory-api.example.com"
@@ -575,7 +575,7 @@ def register(ctx):
 
 **Example — guardrails:**
 
-``` python
+``` prism-code
 POLICY = "Never execute commands that delete files without explicit user confirmation."
 
 def guardrails(**kwargs):
@@ -593,19 +593,19 @@ Fires **once per turn**, after the tool-calling loop completes and the agent has
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(session_id: str, user_message: str, assistant_response: str,
                 conversation_history: list, model: str, platform: str, **kwargs):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `session_id` | `str` | Unique identifier for the current session |
-| `user_message` | `str` | The user's original message for this turn |
-| `assistant_response` | `str` | The agent's final text response for this turn |
+| Parameter              | Type   | Description                                            |
+|------------------------|--------|--------------------------------------------------------|
+| `session_id`           | `str`  | Unique identifier for the current session              |
+| `user_message`         | `str`  | The user's original message for this turn              |
+| `assistant_response`   | `str`  | The agent's final text response for this turn          |
 | `conversation_history` | `list` | Copy of the full message list after the turn completed |
-| `model` | `str` | The model identifier |
-| `platform` | `str` | Where the session is running |
+| `model`                | `str`  | The model identifier                                   |
+| `platform`             | `str`  | Where the session is running                           |
 
 **Fires:** In `run_agent.py`, inside `run_conversation()`, after the tool loop exits with a final response. Guarded by `if final_response and not interrupted` — so it does **not** fire when the user interrupts mid-turn or the agent hits the iteration limit without producing a response.
 
@@ -615,7 +615,7 @@ def my_callback(session_id: str, user_message: str, assistant_response: str,
 
 **Example — sync to external memory:**
 
-``` python
+``` prism-code
 import httpx
 
 MEMORY_API = "https://your-memory-api.example.com"
@@ -636,7 +636,7 @@ def register(ctx):
 
 **Example — track response lengths:**
 
-``` python
+``` prism-code
 import logging
 logger = logging.getLogger(__name__)
 
@@ -658,20 +658,20 @@ Hermes' shipped verification guidance is not a default `pre_verify` hook. It is 
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(session_id: str, platform: str, model: str, coding: bool,
                 attempt: int, final_response: str, changed_paths: list, **kwargs):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `session_id` | `str` | Unique identifier for the current session |
-| `platform` | `str` | Where the session is running (`"cli"`, `"telegram"`, …) |
-| `model` | `str` | The model identifier |
-| `coding` | `bool` | Whether the turn is in the coding posture (in a code workspace) — scope your hook on this |
-| `attempt` | `int` | How many times this turn has already been nudged (0 on the first) — self-throttle on this |
-| `final_response` | `str` | The answer the agent is about to deliver |
-| `changed_paths` | `list` | Files the agent edited this turn (sorted, always non-empty here) |
+| Parameter        | Type   | Description                                                                               |
+|------------------|--------|-------------------------------------------------------------------------------------------|
+| `session_id`     | `str`  | Unique identifier for the current session                                                 |
+| `platform`       | `str`  | Where the session is running (`"cli"`, `"telegram"`, …)                                   |
+| `model`          | `str`  | The model identifier                                                                      |
+| `coding`         | `bool` | Whether the turn is in the coding posture (in a code workspace) — scope your hook on this |
+| `attempt`        | `int`  | How many times this turn has already been nudged (0 on the first) — self-throttle on this |
+| `final_response` | `str`  | The answer the agent is about to deliver                                                  |
+| `changed_paths`  | `list` | Files the agent edited this turn (sorted, always non-empty here)                          |
 
 Scope a hook to the coding context by checking `coding` and make it one-shot with `attempt` (shell hooks read both from `.extra`), the same way a `pre_tool_call` hook scopes on `tool_name` — so you can register several `pre_verify` hooks, each firing only where it should.
 
@@ -679,7 +679,7 @@ Scope a hook to the coding context by checking `coding` and make it one-shot wit
 
 **Return value — keep the agent going:**
 
-``` python
+``` prism-code
 return {"action": "continue", "message": "Run the formatter on your changes, then finish."}
 ```
 
@@ -693,7 +693,7 @@ The `message` is appended as a synthetic user turn and the loop runs again. The 
 
 **Example — defer checks on creative UI work, scoped + one-shot:**
 
-``` python
+``` prism-code
 UI = (".tsx", ".jsx", ".css", ".scss")
 
 def defer_ui_checks(coding, attempt, changed_paths, **kwargs):
@@ -721,7 +721,7 @@ Fires **once** when a brand-new session is created. Does **not** fire on session
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(session_id: str, model: str, platform: str, **kwargs):
 ```
 
@@ -739,7 +739,7 @@ def my_callback(session_id: str, model: str, platform: str, **kwargs):
 
 **Example — initialize a session cache:**
 
-``` python
+``` prism-code
 _session_caches = {}
 
 def init_session(session_id, model, platform, **kwargs):
@@ -762,18 +762,18 @@ Fires at the **very end** of every `run_conversation()` call, regardless of outc
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(session_id: str, completed: bool, interrupted: bool,
                 model: str, platform: str, **kwargs):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `session_id` | `str` | Unique identifier for the session |
-| `completed` | `bool` | `True` if the agent produced a final response, `False` otherwise |
+| Parameter     | Type   | Description                                                                  |
+|---------------|--------|------------------------------------------------------------------------------|
+| `session_id`  | `str`  | Unique identifier for the session                                            |
+| `completed`   | `bool` | `True` if the agent produced a final response, `False` otherwise             |
 | `interrupted` | `bool` | `True` if the turn was interrupted (user sent new message, `/stop`, or quit) |
-| `model` | `str` | The model identifier |
-| `platform` | `str` | Where the session is running |
+| `model`       | `str`  | The model identifier                                                         |
+| `platform`    | `str`  | Where the session is running                                                 |
 
 **Fires:** In two places:
 
@@ -786,7 +786,7 @@ def my_callback(session_id: str, completed: bool, interrupted: bool,
 
 **Example — flush and cleanup:**
 
-``` python
+``` prism-code
 _session_caches = {}
 
 def cleanup_session(session_id, completed, interrupted, **kwargs):
@@ -802,7 +802,7 @@ def register(ctx):
 
 **Example — session duration tracking:**
 
-``` python
+``` prism-code
 import time, logging
 logger = logging.getLogger(__name__)
 
@@ -831,14 +831,14 @@ Fires when the CLI or gateway **tears down** an active session — for example, 
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(session_id: str | None, platform: str, **kwargs):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `session_id` | `str` or `None` | The outgoing session ID. May be `None` if no active session existed. |
-| `platform` | `str` | `"cli"` or the messaging platform name (`"telegram"`, `"discord"`, etc.). |
+| Parameter    | Type            | Description                                                               |
+|--------------|-----------------|---------------------------------------------------------------------------|
+| `session_id` | `str` or `None` | The outgoing session ID. May be `None` if no active session existed.      |
+| `platform`   | `str`           | `"cli"` or the messaging platform name (`"telegram"`, `"discord"`, etc.). |
 
 **Fires:** In `cli.py` (on `/new` / CLI exit) and `gateway/run.py` (when a session is reset or GC'd). Always paired with `on_session_reset` on the gateway side.
 
@@ -854,14 +854,14 @@ Fires when the gateway **swaps in a new session key** for an active chat — the
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(session_id: str, platform: str, **kwargs):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
+| Parameter    | Type  | Description                                                |
+|--------------|-------|------------------------------------------------------------|
 | `session_id` | `str` | The new session's ID (already rotated to the fresh value). |
-| `platform` | `str` | The messaging platform name. |
+| `platform`   | `str` | The messaging platform name.                               |
 
 **Fires:** In `gateway/run.py`, immediately after the new session key is allocated but before the next inbound message is processed. On the gateway, the order is: `on_session_finalize(old_id)` → swap → `on_session_reset(new_id)` → `on_session_start(new_id)` on the first inbound turn.
 
@@ -883,7 +883,7 @@ This hook is specific to delegation/subagent lifecycle. It is not a universal "b
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(parent_session_id: str | None,
                 parent_turn_id: str,
                 parent_subagent_id: str | None,
@@ -894,15 +894,15 @@ def my_callback(parent_session_id: str | None,
                 **kwargs):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `parent_session_id` | `str | None` | Session ID of the delegating parent agent. |
-| `parent_turn_id` | `str` | Turn ID of the parent agent turn that requested delegation, if available. |
+| Parameter            | Type         | Description                                                                                             |
+|----------------------|--------------|---------------------------------------------------------------------------------------------------------|
+| `parent_session_id`  | `str | None` | Session ID of the delegating parent agent.                                                              |
+| `parent_turn_id`     | `str`        | Turn ID of the parent agent turn that requested delegation, if available.                               |
 | `parent_subagent_id` | `str | None` | Parent subagent ID when this child was spawned by another subagent; `None` for top-level parent agents. |
-| `child_session_id` | `str | None` | Session ID allocated for the child agent. |
-| `child_subagent_id` | `str` | Stable subagent ID used by delegation observability and controls. |
-| `child_role` | `str` | Effective child role after delegation policy is applied, for example `"leaf"` or `"orchestrator"`. |
-| `child_goal` | `str` | Delegated goal/prompt that the child agent will execute. |
+| `child_session_id`   | `str | None` | Session ID allocated for the child agent.                                                               |
+| `child_subagent_id`  | `str`        | Stable subagent ID used by delegation observability and controls.                                       |
+| `child_role`         | `str`        | Effective child role after delegation policy is applied, for example `"leaf"` or `"orchestrator"`.      |
+| `child_goal`         | `str`        | Delegated goal/prompt that the child agent will execute.                                                |
 
 **Fires:** In `tools/delegate_tool.py`, inside `_build_child_agent()`, after the child `AIAgent` has been constructed and annotated with subagent identity metadata, and before `_run_single_child()` runs the child.
 
@@ -912,7 +912,7 @@ def my_callback(parent_session_id: str | None,
 
 **Example — log subagent creation:**
 
-``` python
+``` prism-code
 import logging
 
 logger = logging.getLogger(__name__)
@@ -952,19 +952,19 @@ Fires **once per child agent** after `delegate_task` finishes. Whether you deleg
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(parent_session_id: str, child_role: str | None,
                 child_summary: str | None, child_status: str,
                 duration_ms: int, **kwargs):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `parent_session_id` | `str` | Session ID of the delegating parent agent |
-| `child_role` | `str | None` | Orchestrator role tag set on the child (`None` if the feature isn't enabled) |
-| `child_summary` | `str | None` | The final response the child returned to the parent |
-| `child_status` | `str` | `"completed"`, `"failed"`, `"interrupted"`, or `"error"` |
-| `duration_ms` | `int` | Wall-clock time spent running the child, in milliseconds |
+| Parameter           | Type         | Description                                                                  |
+|---------------------|--------------|------------------------------------------------------------------------------|
+| `parent_session_id` | `str`        | Session ID of the delegating parent agent                                    |
+| `child_role`        | `str | None` | Orchestrator role tag set on the child (`None` if the feature isn't enabled) |
+| `child_summary`     | `str | None` | The final response the child returned to the parent                          |
+| `child_status`      | `str`        | `"completed"`, `"failed"`, `"interrupted"`, or `"error"`                     |
+| `duration_ms`       | `int`        | Wall-clock time spent running the child, in milliseconds                     |
 
 **Fires:** In `tools/delegate_tool.py`, after `ThreadPoolExecutor.as_completed()` drains all child futures. Firing is marshalled to the parent thread so hook authors don't have to reason about concurrent callback execution.
 
@@ -974,7 +974,7 @@ def my_callback(parent_session_id: str, child_role: str | None,
 
 **Example — log orchestrator activity:**
 
-``` python
+``` prism-code
 import logging
 logger = logging.getLogger(__name__)
 
@@ -1000,31 +1000,31 @@ Fires **once per incoming `MessageEvent`** in the gateway, after the internal-ev
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(event, gateway, session_store, **kwargs):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `event` | `MessageEvent` | The normalized inbound message (has `.text`, `.source`, `.message_id`, `.internal`, etc.). |
-| `gateway` | `GatewayRunner` | The active gateway runner, so plugins can call `gateway.adapters[platform].send(...)` for side-channel replies (owner notifications, etc.). |
-| `session_store` | `SessionStore` | For silent transcript ingestion via `session_store.append_to_transcript(...)`. |
+| Parameter       | Type            | Description                                                                                                                                 |
+|-----------------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `event`         | `MessageEvent`  | The normalized inbound message (has `.text`, `.source`, `.message_id`, `.internal`, etc.).                                                  |
+| `gateway`       | `GatewayRunner` | The active gateway runner, so plugins can call `gateway.adapters[platform].send(...)` for side-channel replies (owner notifications, etc.). |
+| `session_store` | `SessionStore`  | For silent transcript ingestion via `session_store.append_to_transcript(...)`.                                                              |
 
 **Fires:** In `gateway/run.py`, inside `GatewayRunner._handle_message()`, immediately after `is_internal` is computed. **Internal events skip the hook entirely** (they are system-generated — background-process completions, etc. — and must not be gate-kept by user-facing policy).
 
 **Return value:** `None` or a dict. The first recognized action dict wins; remaining plugin results are ignored. Exceptions in plugin callbacks are caught and logged; the gateway always falls through to normal dispatch on error.
 
-| Return | Effect |
-|----|----|
-| `{"action": "skip", "reason": "..."}` | Drop the message — no agent reply, no pairing flow, no auth. Plugin is assumed to have handled it (e.g. silent-ingested into the transcript). |
+| Return                                      | Effect                                                                                                                                             |
+|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `{"action": "skip", "reason": "..."}`       | Drop the message — no agent reply, no pairing flow, no auth. Plugin is assumed to have handled it (e.g. silent-ingested into the transcript).      |
 | `{"action": "rewrite", "text": "new text"}` | Replace `event.text`, then continue normal dispatch with the modified event. Useful for collapsing buffered ambient messages into a single prompt. |
-| `{"action": "allow"}` / `None` | Normal dispatch — runs the full auth / pairing / agent-loop chain. |
+| `{"action": "allow"}` / `None`              | Normal dispatch — runs the full auth / pairing / agent-loop chain.                                                                                 |
 
 **Use cases:** Listen-only group chats (only respond when tagged; buffer ambient messages into context); human handover (silent-ingest customer messages while owner handles the chat manually); per-profile rate limiting; policy-driven routing.
 
 **Example — drop unauthorized DMs silently without triggering the pairing code:**
 
-``` python
+``` prism-code
 def deny_unauthorized_dms(event, **kwargs):
     src = event.source
     if src.chat_type == "dm" and not _is_approved_user(src.user_id):
@@ -1037,7 +1037,7 @@ def register(ctx):
 
 **Example — rewrite an ambient-message buffer into a single prompt on mention:**
 
-``` python
+``` prism-code
 _buffers = {}
 
 def buffer_or_rewrite(event, **kwargs):
@@ -1064,7 +1064,7 @@ This is the right place to wire a custom notifier — for example, a macOS menu-
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(
     command: str,
     description: str,
@@ -1076,14 +1076,14 @@ def my_callback(
 ):
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `command` | `str` | The shell command awaiting approval |
-| `description` | `str` | Human-readable reason(s) the command is flagged (combined when multiple patterns match) |
-| `pattern_key` | `str` | Primary pattern key that triggered the approval (e.g. `"rm_rf"`, `"sudo"`) |
-| `pattern_keys` | `list[str]` | All pattern keys that matched |
-| `session_key` | `str` | Session identifier, useful for scoping notifications per-chat |
-| `surface` | `str` | `"cli"` for interactive CLI/TUI prompts, `"gateway"` for async platform approvals |
+| Parameter      | Type        | Description                                                                             |
+|----------------|-------------|-----------------------------------------------------------------------------------------|
+| `command`      | `str`       | The shell command awaiting approval                                                     |
+| `description`  | `str`       | Human-readable reason(s) the command is flagged (combined when multiple patterns match) |
+| `pattern_key`  | `str`       | Primary pattern key that triggered the approval (e.g. `"rm_rf"`, `"sudo"`)              |
+| `pattern_keys` | `list[str]` | All pattern keys that matched                                                           |
+| `session_key`  | `str`       | Session identifier, useful for scoping notifications per-chat                           |
+| `surface`      | `str`       | `"cli"` for interactive CLI/TUI prompts, `"gateway"` for async platform approvals       |
 
 **Return value:** ignored. Hooks here are observer-only; they cannot veto or pre-answer the approval. Use [`pre_tool_call`](#pre_tool_call) to block a tool before it reaches the approval system.
 
@@ -1091,7 +1091,7 @@ def my_callback(
 
 **Example — desktop notification on macOS:**
 
-``` python
+``` prism-code
 import subprocess
 
 def notify_approval(command, description, session_key, **kwargs):
@@ -1114,7 +1114,7 @@ Fires **after** the user responds to an approval prompt (or the prompt times out
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(
     command: str,
     description: str,
@@ -1129,15 +1129,15 @@ def my_callback(
 
 Same kwargs as `pre_approval_request`, plus:
 
-| Parameter | Type | Description |
-|----|----|----|
-| `choice` | `str` | One of `"once"`, `"session"`, `"always"`, `"deny"`, or `"timeout"` |
+| Parameter | Type  | Description                                                        |
+|-----------|-------|--------------------------------------------------------------------|
+| `choice`  | `str` | One of `"once"`, `"session"`, `"always"`, `"deny"`, or `"timeout"` |
 
 **Return value:** ignored.
 
 **Use cases:** Close the matching desktop notification, record the final decision in an audit log, update metrics, roll forward a rate limiter.
 
-``` python
+``` prism-code
 def log_decision(command, choice, session_key, **kwargs):
     logger.info("approval %s: %s for session %s", choice, command[:60], session_key)
 
@@ -1153,7 +1153,7 @@ Fires **after** a tool returns and **before** the result is appended to the conv
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(
     tool_name: str,
     arguments: dict,
@@ -1163,18 +1163,18 @@ def my_callback(
 ) -> str | None:
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `tool_name` | `str` | Tool that produced the result (`read_file`, `web_extract`, `delegate_task`, …). |
-| `arguments` | `dict` | Arguments the model called the tool with. |
-| `result` | `str` | The tool's raw result string, post-truncation and post-ANSI-strip. |
-| `task_id` | `str | None` | Task/session ID when running inside RL/benchmark environments. |
+| Parameter   | Type         | Description                                                                     |
+|-------------|--------------|---------------------------------------------------------------------------------|
+| `tool_name` | `str`        | Tool that produced the result (`read_file`, `web_extract`, `delegate_task`, …). |
+| `arguments` | `dict`       | Arguments the model called the tool with.                                       |
+| `result`    | `str`        | The tool's raw result string, post-truncation and post-ANSI-strip.              |
+| `task_id`   | `str | None` | Task/session ID when running inside RL/benchmark environments.                  |
 
 **Return value:** `str` to replace the result (the returned string is what the model sees), `None` to leave it unchanged.
 
 **Use cases:** Redact organization-specific PII from `web_extract` output, wrap long JSON tool responses in a summary header, inject retrieval-augmented hints into `read_file` results, rewrite `delegate_task` subagent reports into a project-specific schema.
 
-``` python
+``` prism-code
 import re
 SECRET = re.compile(r"sk-[A-Za-z0-9]{32,}")
 
@@ -1197,7 +1197,7 @@ Fires inside the `terminal` tool's foreground-output pipeline, **before** the de
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(
     command: str,
     output: str,
@@ -1208,18 +1208,18 @@ def my_callback(
 ) -> str | None:
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `command` | `str` | The shell command that produced the output. |
-| `output` | `str` | Raw combined stdout/stderr (may be very large — truncation happens after the hook). |
-| `exit_code` | `int` | Process exit code. |
-| `cwd` | `str` | Working directory the command ran in. |
+| Parameter   | Type  | Description                                                                         |
+|-------------|-------|-------------------------------------------------------------------------------------|
+| `command`   | `str` | The shell command that produced the output.                                         |
+| `output`    | `str` | Raw combined stdout/stderr (may be very large — truncation happens after the hook). |
+| `exit_code` | `int` | Process exit code.                                                                  |
+| `cwd`       | `str` | Working directory the command ran in.                                               |
 
 **Return value:** `str` to replace the output, `None` to leave it unchanged.
 
 **Use cases:** Inject summaries for commands that produce massive output (`du -ah`, `find`, `tree`), tag output with a project-specific marker so downstream hooks know how to handle it, strip timing noise that flaps between runs and defeats prompt caching.
 
-``` python
+``` prism-code
 def summarize_find(command, output, **kwargs):
     if command.startswith("find ") and len(output) > 50_000:
         lines = output.count("\n")
@@ -1241,7 +1241,7 @@ Fires **once per turn** after the tool-calling loop completes and the model has 
 
 **Callback signature:**
 
-``` python
+``` prism-code
 def my_callback(
     response_text: str,
     session_id: str,
@@ -1251,18 +1251,18 @@ def my_callback(
 ) -> str | None:
 ```
 
-| Parameter | Type | Description |
-|----|----|----|
-| `response_text` | `str` | The assistant's final response text for this turn. |
-| `session_id` | `str` | Session ID for this conversation (may be empty for one-shot runs). |
-| `model` | `str` | Model name that produced the response (e.g. `anthropic/claude-sonnet-4.6`). |
-| `platform` | `str` | Delivery platform (`cli`, `telegram`, `discord`, …; empty when unset). |
+| Parameter       | Type  | Description                                                                 |
+|-----------------|-------|-----------------------------------------------------------------------------|
+| `response_text` | `str` | The assistant's final response text for this turn.                          |
+| `session_id`    | `str` | Session ID for this conversation (may be empty for one-shot runs).          |
+| `model`         | `str` | Model name that produced the response (e.g. `anthropic/claude-sonnet-4.6`). |
+| `platform`      | `str` | Delivery platform (`cli`, `telegram`, `discord`, …; empty when unset).      |
 
 **Return value:** Non-empty `str` to replace the response text, `None` or empty string to leave it unchanged. **First non-empty string wins** when multiple plugins register — mirroring `transform_tool_result`.
 
 **Use cases:** Apply a personality/vocabulary transform (pirate-speak, Spongebob), redact user-specific identifiers from the final text, append a project-specific signature footer, enforce a house style guide without burning tokens on SOUL instructions.
 
-``` python
+``` prism-code
 import os, re
 
 def spongebob(response_text, **kwargs):
@@ -1293,21 +1293,21 @@ Shell hooks are registered by calling `agent.shell_hooks.register_from_config(cf
 
 ### Comparison at a glance
 
-| Dimension | Shell hooks | [Plugin hooks](#plugin-hooks) | [Gateway hooks](#gateway-event-hooks) |
-|----|----|----|----|
-| Declared in | `hooks:` block in `~/.hermes/config.yaml` | `register()` in a `plugin.yaml` plugin | `HOOK.yaml` + `handler.py` directory |
-| Lives under | `~/.hermes/agent-hooks/` (by convention) | `~/.hermes/plugins/<name>/` | `~/.hermes/hooks/<name>/` |
-| Language | Any (Bash, Python, Go binary, …) | Python only | Python only |
-| Runs in | CLI + Gateway | CLI + Gateway | Gateway only |
-| Events | `VALID_HOOKS` (incl. `subagent_stop`) | `VALID_HOOKS` | Gateway lifecycle (`gateway:startup`, `agent:*`, `command:*`) |
-| Can block a tool call | Yes (`pre_tool_call`) | Yes (`pre_tool_call`) | No |
-| Can inject LLM context | Yes (`pre_llm_call`) | Yes (`pre_llm_call`) | No |
-| Consent | First-use prompt per `(event, command)` pair | Implicit (Python plugin trust) | Implicit (dir trust) |
-| Inter-process isolation | Yes (subprocess) | No (in-process) | No (in-process) |
+| Dimension               | Shell hooks                                  | [Plugin hooks](#plugin-hooks)          | [Gateway hooks](#gateway-event-hooks)                         |
+|-------------------------|----------------------------------------------|----------------------------------------|---------------------------------------------------------------|
+| Declared in             | `hooks:` block in `~/.hermes/config.yaml`    | `register()` in a `plugin.yaml` plugin | `HOOK.yaml` + `handler.py` directory                          |
+| Lives under             | `~/.hermes/agent-hooks/` (by convention)     | `~/.hermes/plugins/<name>/`            | `~/.hermes/hooks/<name>/`                                     |
+| Language                | Any (Bash, Python, Go binary, …)             | Python only                            | Python only                                                   |
+| Runs in                 | CLI + Gateway                                | CLI + Gateway                          | Gateway only                                                  |
+| Events                  | `VALID_HOOKS` (incl. `subagent_stop`)        | `VALID_HOOKS`                          | Gateway lifecycle (`gateway:startup`, `agent:*`, `command:*`) |
+| Can block a tool call   | Yes (`pre_tool_call`)                        | Yes (`pre_tool_call`)                  | No                                                            |
+| Can inject LLM context  | Yes (`pre_llm_call`)                         | Yes (`pre_llm_call`)                   | No                                                            |
+| Consent                 | First-use prompt per `(event, command)` pair | Implicit (Python plugin trust)         | Implicit (dir trust)                                          |
+| Inter-process isolation | Yes (subprocess)                             | No (in-process)                        | No (in-process)                                               |
 
 ### Configuration schema
 
-``` yaml
+``` prism-code
 hooks:
   <event_name>:                  # Must be in VALID_HOOKS
     - matcher: "<regex>"         # Optional; used for pre/post_tool_call only
@@ -1325,7 +1325,7 @@ Each time the event fires, Hermes spawns a subprocess for every matching hook (m
 
 **stdin — payload the script receives:**
 
-``` json
+``` prism-code
 {
   "hook_event_name": "pre_tool_call",
   "tool_name":       "terminal",
@@ -1340,7 +1340,7 @@ Each time the event fires, Hermes spawns a subprocess for every matching hook (m
 
 **stdout — optional response:**
 
-``` jsonc
+``` prism-code
 // Block a pre_tool_call (both shapes accepted; normalised internally):
 {"decision": "block", "reason":  "Forbidden: rm -rf"}   // Claude-Code style
 {"action":   "block", "message": "Forbidden: rm -rf"}   // Hermes-canonical
@@ -1361,7 +1361,7 @@ Malformed JSON, non-zero exit codes, and timeouts log a warning but never abort 
 
 #### 1. Auto-format Python files after every write
 
-``` yaml
+``` prism-code
 # ~/.hermes/config.yaml
 hooks:
   post_tool_call:
@@ -1369,7 +1369,7 @@ hooks:
       command: "~/.hermes/agent-hooks/auto-format.sh"
 ```
 
-``` bash
+``` prism-code
 #!/usr/bin/env bash
 # ~/.hermes/agent-hooks/auto-format.sh
 payload="$(cat -)"
@@ -1382,7 +1382,7 @@ The agent's in-context view of the file is **not** re-read automatically — the
 
 #### 2. Block destructive `terminal` commands
 
-``` yaml
+``` prism-code
 hooks:
   pre_tool_call:
     - matcher: "terminal"
@@ -1390,7 +1390,7 @@ hooks:
       timeout: 5
 ```
 
-``` bash
+``` prism-code
 #!/usr/bin/env bash
 # ~/.hermes/agent-hooks/block-rm-rf.sh
 payload="$(cat -)"
@@ -1404,13 +1404,13 @@ fi
 
 #### 3. Inject `git status` into every turn (Claude-Code `UserPromptSubmit` equivalent)
 
-``` yaml
+``` prism-code
 hooks:
   pre_llm_call:
     - command: "~/.hermes/agent-hooks/inject-cwd-context.sh"
 ```
 
-``` bash
+``` prism-code
 #!/usr/bin/env bash
 # ~/.hermes/agent-hooks/inject-cwd-context.sh
 cat - >/dev/null   # discard stdin payload
@@ -1426,13 +1426,13 @@ Claude Code's `UserPromptSubmit` event is intentionally not a separate Hermes ev
 
 #### 4. Log every subagent completion
 
-``` yaml
+``` prism-code
 hooks:
   subagent_stop:
     - command: "~/.hermes/agent-hooks/log-orchestration.sh"
 ```
 
-``` bash
+``` prism-code
 #!/usr/bin/env bash
 # ~/.hermes/agent-hooks/log-orchestration.sh
 log=~/.hermes/logs/orchestration.log
@@ -1458,7 +1458,7 @@ Non-TTY runs (gateway, cron, CI) need one of these three — otherwise any newly
 
 Manual allowlisting is useful for non-TTY or service-account deployments where an operator cannot answer the first-use prompt interactively. The allowlist file is `~/.hermes/shell-hooks-allowlist.json`, and the expected format is an `approvals` array. Each approval records the hook `event` and the exact `command` string:
 
-``` json
+``` prism-code
 {
   "approvals": [
     {
@@ -1473,12 +1473,12 @@ The command string must match the configured hook command exactly. A path-keyed 
 
 ### The `hermes hooks` CLI
 
-| Command | What it does |
-|----|----|
-| `hermes hooks list` | Dump configured hooks with matcher, timeout, and consent status |
-| `hermes hooks test <event> [--for-tool X] [--payload-file F]` | Fire every matching hook against a synthetic payload and print the parsed response |
-| `hermes hooks revoke <command>` | Remove every allowlist entry matching `<command>` (takes effect on next restart) |
-| `hermes hooks doctor` | For every configured hook: check exec bit, allowlist status, mtime drift, JSON output validity, and rough execution time |
+| Command                                                       | What it does                                                                                                             |
+|---------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `hermes hooks list`                                           | Dump configured hooks with matcher, timeout, and consent status                                                          |
+| `hermes hooks test <event> [--for-tool X] [--payload-file F]` | Fire every matching hook against a synthetic payload and print the parsed response                                       |
+| `hermes hooks revoke <command>`                               | Remove every allowlist entry matching `<command>` (takes effect on next restart)                                         |
+| `hermes hooks doctor`                                         | For every configured hook: check exec bit, allowlist status, mtime drift, JSON output validity, and rough execution time |
 
 ### Security
 

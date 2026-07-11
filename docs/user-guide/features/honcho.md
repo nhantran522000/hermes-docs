@@ -14,15 +14,15 @@ Honcho is integrated into the [Memory Providers](memory-providers.md) system. Al
 
 ## What Honcho Adds
 
-| Capability | Built-in Memory | Honcho |
-|----|----|----|
-| Cross-session persistence | ✔ File-based MEMORY.md/USER.md | ✔ Server-side with API |
-| User profile | ✔ Manual agent curation | ✔ Automatic dialectic reasoning |
-| Session summary | — | ✔ Session-scoped context injection |
-| Multi-agent isolation | — | ✔ Per-peer profile separation |
-| Observation modes | — | ✔ Unified or directional observation |
-| Conclusions (derived insights) | — | ✔ Server-side reasoning about patterns |
-| Search across history | ✔ FTS5 session search | ✔ Semantic search over conclusions |
+| Capability                     | Built-in Memory                | Honcho                                 |
+|--------------------------------|--------------------------------|----------------------------------------|
+| Cross-session persistence      | ✔ File-based MEMORY.md/USER.md | ✔ Server-side with API                 |
+| User profile                   | ✔ Manual agent curation        | ✔ Automatic dialectic reasoning        |
+| Session summary                | —                              | ✔ Session-scoped context injection     |
+| Multi-agent isolation          | —                              | ✔ Per-peer profile separation          |
+| Observation modes              | —                              | ✔ Unified or directional observation   |
+| Conclusions (derived insights) | —                              | ✔ Server-side reasoning about patterns |
+| Search across history          | ✔ FTS5 session search          | ✔ Semantic search over conclusions     |
 
 **Dialectic reasoning**: After each conversation turn (gated by `dialecticCadence`), Honcho analyzes the exchange and derives insights about the user's preferences, habits, and goals. These accumulate over time, giving the agent a deepening understanding that goes beyond what the user explicitly stated. The dialectic supports multi-pass depth (1–3 passes) with automatic cold/warm prompt selection — cold start queries focus on general user facts while warm queries prioritize session-scoped context.
 
@@ -32,19 +32,19 @@ Honcho is integrated into the [Memory Providers](memory-providers.md) system. Al
 
 ## Setup
 
-``` bash
+``` prism-code
 hermes memory setup    # select "honcho" from the provider list
 ```
 
 Or configure manually:
 
-``` yaml
+``` prism-code
 # ~/.hermes/config.yaml
 memory:
   provider: honcho
 ```
 
-``` bash
+``` prism-code
 echo 'HONCHO_API_KEY=***' >> ~/.hermes/.env
 ```
 
@@ -74,11 +74,11 @@ This happens automatically based on whether base context has been populated.
 
 Cost and depth are controlled by three independent knobs:
 
-| Knob | Controls | Default |
-|----|----|----|
-| `contextCadence` | Turns between `context()` API calls (base layer refresh) | `1` |
+| Knob               | Controls                                                        | Default               |
+|--------------------|-----------------------------------------------------------------|-----------------------|
+| `contextCadence`   | Turns between `context()` API calls (base layer refresh)        | `1`                   |
 | `dialecticCadence` | Turns between `peer.chat()` LLM calls (dialectic layer refresh) | `2` (recommended 1–5) |
-| `dialecticDepth` | Number of `.chat()` passes per dialectic invocation (1–3) | `1` |
+| `dialecticDepth`   | Number of `.chat()` passes per dialectic invocation (1–3)       | `1`                   |
 
 These are orthogonal — you can have frequent context refreshes with infrequent dialectic, or deep multi-pass dialectic at low frequency. Example: `contextCadence: 1, dialecticCadence: 5, dialecticDepth: 2` refreshes base context every turn, runs dialectic every 5 turns, and each dialectic run makes 2 passes.
 
@@ -112,26 +112,26 @@ When pointing Hermes at a self-hosted Honcho server, `hermes honcho setup` (and 
 
 ### Full Config Reference
 
-| Key | Default | Description |
-|----|----|----|
-| `contextTokens` | `null` (uncapped) | Token budget for auto-injected context per turn. Set to an integer (e.g. 1200) to cap. Truncates at word boundaries |
-| `contextCadence` | `1` | Minimum turns between `context()` API calls (base layer refresh) |
-| `dialecticCadence` | `2` | Minimum turns between `peer.chat()` LLM calls (dialectic layer). Recommended 1–5. In `tools` mode, irrelevant — model calls explicitly |
-| `dialecticDepth` | `1` | Number of `.chat()` passes per dialectic invocation. Clamped to 1–3 |
-| `dialecticDepthLevels` | `null` | Optional array of reasoning levels per pass, e.g. `["minimal", "low", "medium"]`. Overrides proportional defaults |
-| `dialecticReasoningLevel` | `'low'` | Base reasoning level: `minimal`, `low`, `medium`, `high`, `max` |
-| `dialecticDynamic` | `true` | When `true`, model can override reasoning level per-call via tool param |
-| `dialecticMaxChars` | `600` | Max chars of dialectic result injected into system prompt |
-| `recallMode` | `'hybrid'` | `hybrid` (auto-inject + tools), `context` (inject only), `tools` (tools only) |
-| `writeFrequency` | `'async'` | When to flush messages: `async` (background thread), `turn` (sync), `session` (batch on end), or integer N |
-| `saveMessages` | `true` | Whether to persist messages to Honcho API |
-| `observationMode` | `'directional'` | `directional` (all on) or `unified` (shared pool). Override with `observation` object for granular control |
-| `messageMaxChars` | `25000` | Max chars per message sent via `add_messages()`. Chunked if exceeded |
-| `dialecticMaxInputChars` | `10000` | Max chars for dialectic query input to `peer.chat()` |
-| `sessionStrategy` | `'per-directory'` | `per-directory`, `per-repo`, `per-session`, or `global` |
-| `pinUserPeer` | `false` | Gateway only. When `true`, every platform user collapses to `peerName` |
-| `userPeerAliases` | `{}` | Gateway only. Map of runtime IDs to peers (`{"7654321": "alice"}`). Many-to-one |
-| `runtimePeerPrefix` | `""` | Gateway only. Namespaces unknown runtime IDs (`telegram_7654321`) when no alias matches |
+| Key                       | Default           | Description                                                                                                                            |
+|---------------------------|-------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| `contextTokens`           | `null` (uncapped) | Token budget for auto-injected context per turn. Set to an integer (e.g. 1200) to cap. Truncates at word boundaries                    |
+| `contextCadence`          | `1`               | Minimum turns between `context()` API calls (base layer refresh)                                                                       |
+| `dialecticCadence`        | `2`               | Minimum turns between `peer.chat()` LLM calls (dialectic layer). Recommended 1–5. In `tools` mode, irrelevant — model calls explicitly |
+| `dialecticDepth`          | `1`               | Number of `.chat()` passes per dialectic invocation. Clamped to 1–3                                                                    |
+| `dialecticDepthLevels`    | `null`            | Optional array of reasoning levels per pass, e.g. `["minimal", "low", "medium"]`. Overrides proportional defaults                      |
+| `dialecticReasoningLevel` | `'low'`           | Base reasoning level: `minimal`, `low`, `medium`, `high`, `max`                                                                        |
+| `dialecticDynamic`        | `true`            | When `true`, model can override reasoning level per-call via tool param                                                                |
+| `dialecticMaxChars`       | `600`             | Max chars of dialectic result injected into system prompt                                                                              |
+| `recallMode`              | `'hybrid'`        | `hybrid` (auto-inject + tools), `context` (inject only), `tools` (tools only)                                                          |
+| `writeFrequency`          | `'async'`         | When to flush messages: `async` (background thread), `turn` (sync), `session` (batch on end), or integer N                             |
+| `saveMessages`            | `true`            | Whether to persist messages to Honcho API                                                                                              |
+| `observationMode`         | `'directional'`   | `directional` (all on) or `unified` (shared pool). Override with `observation` object for granular control                             |
+| `messageMaxChars`         | `25000`           | Max chars per message sent via `add_messages()`. Chunked if exceeded                                                                   |
+| `dialecticMaxInputChars`  | `10000`           | Max chars for dialectic query input to `peer.chat()`                                                                                   |
+| `sessionStrategy`         | `'per-directory'` | `per-directory`, `per-repo`, `per-session`, or `global`                                                                                |
+| `pinUserPeer`             | `false`           | Gateway only. When `true`, every platform user collapses to `peerName`                                                                 |
+| `userPeerAliases`         | `{}`              | Gateway only. Map of runtime IDs to peers (`{"7654321": "alice"}`). Many-to-one                                                        |
+| `runtimePeerPrefix`       | `""`              | Gateway only. Namespaces unknown runtime IDs (`telegram_7654321`) when no alias matches                                                |
 
 **Session strategy** controls how Honcho sessions map to your work:
 
@@ -148,14 +148,14 @@ When pointing Hermes at a self-hosted Honcho server, `hermes honcho setup` (and 
 
 **Settings per recall mode:**
 
-| Setting | `hybrid` | `context` | `tools` |
-|----|----|----|----|
-| `writeFrequency` | flushes messages | flushes messages | flushes messages |
-| `contextCadence` | gates base context refresh | gates base context refresh | irrelevant — no injection |
-| `dialecticCadence` | gates auto LLM calls | gates auto LLM calls | irrelevant — model calls explicitly |
-| `dialecticDepth` | multi-pass per invocation | multi-pass per invocation | irrelevant — model calls explicitly |
-| `contextTokens` | caps injection | caps injection | irrelevant — no injection |
-| `dialecticDynamic` | gates model override | N/A (no tools) | gates model override |
+| Setting            | `hybrid`                   | `context`                  | `tools`                             |
+|--------------------|----------------------------|----------------------------|-------------------------------------|
+| `writeFrequency`   | flushes messages           | flushes messages           | flushes messages                    |
+| `contextCadence`   | gates base context refresh | gates base context refresh | irrelevant — no injection           |
+| `dialecticCadence` | gates auto LLM calls       | gates auto LLM calls       | irrelevant — model calls explicitly |
+| `dialecticDepth`   | multi-pass per invocation  | multi-pass per invocation  | irrelevant — model calls explicitly |
+| `contextTokens`    | caps injection             | caps injection             | irrelevant — no injection           |
+| `dialecticDynamic` | gates model override       | N/A (no tools)             | gates model override                |
 
 In `tools` mode, the model is fully in control — it calls `honcho_reasoning` when it wants, at whatever `reasoning_level` it picks. Cadence and budget settings only apply to modes with auto-injection (`hybrid` and `context`).
 
@@ -165,11 +165,11 @@ These settings only matter when you run the [Hermes gateway](../../developer-gui
 
 The setup wizard detects whether a gateway platform is connected and skips this step entirely if not. When it runs, it asks one question — *who talks to this gateway?* — and derives the keys:
 
-| Answer | Result |
-|----|----|
-| **just me** | `pinUserPeer: true` — every non-agent gateway user collapses to your peer. Pin overrides all aliases, so pick this only when no user-side identity needs its own peer. If separate agents reach the gateway and each needs a distinct peer, do **not** pin — leave `pinUserPeer: false` and map them via `userPeerAliases` (the `[e]` editor) instead |
-| **me + other people** (pooled) | `pinUserPeer: false` + `userPeerAliases` mapping your runtime IDs to `peerName` — you stay on your shared history, others get their own peers |
-| **only other people** | `pinUserPeer: false`, optional `runtimePeerPrefix` — each user gets their own peer |
+| Answer                         | Result                                                                                                                                                                                                                                                                                                                                                |
+|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **just me**                    | `pinUserPeer: true` — every non-agent gateway user collapses to your peer. Pin overrides all aliases, so pick this only when no user-side identity needs its own peer. If separate agents reach the gateway and each needs a distinct peer, do **not** pin — leave `pinUserPeer: false` and map them via `userPeerAliases` (the `[e]` editor) instead |
+| **me + other people** (pooled) | `pinUserPeer: false` + `userPeerAliases` mapping your runtime IDs to `peerName` — you stay on your shared history, others get their own peers                                                                                                                                                                                                         |
+| **only other people**          | `pinUserPeer: false`, optional `runtimePeerPrefix` — each user gets their own peer                                                                                                                                                                                                                                                                    |
 
 Pick `[e]` at the prompt to set the three keys directly instead.
 
@@ -187,21 +187,21 @@ Deprecated key
 
 Honcho models a conversation as peers exchanging messages. Each peer has two observation toggles that map 1:1 to Honcho's `SessionPeerConfig`:
 
-| Toggle | Effect |
-|----|----|
-| `observeMe` | Honcho builds a representation of this peer from its own messages |
+| Toggle          | Effect                                                                    |
+|-----------------|---------------------------------------------------------------------------|
+| `observeMe`     | Honcho builds a representation of this peer from its own messages         |
 | `observeOthers` | This peer observes the other peer's messages (feeds cross-peer reasoning) |
 
 Two peers × two toggles = four flags. `observationMode` is a shorthand preset:
 
-| Preset | User flags | AI flags | Semantics |
-|----|----|----|----|
-| `"directional"` (default) | me: on, others: on | me: on, others: on | Full mutual observation. Enables cross-peer dialectic — "what does the AI know about the user, based on what the user said and the AI replied." |
-| `"unified"` | me: on, others: off | me: off, others: on | Shared-pool semantics — the AI observes the user's messages only, the user peer only self-models. Single-observer pool. |
+| Preset                    | User flags          | AI flags            | Semantics                                                                                                                                       |
+|---------------------------|---------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `"directional"` (default) | me: on, others: on  | me: on, others: on  | Full mutual observation. Enables cross-peer dialectic — "what does the AI know about the user, based on what the user said and the AI replied." |
+| `"unified"`               | me: on, others: off | me: off, others: on | Shared-pool semantics — the AI observes the user's messages only, the user peer only self-models. Single-observer pool.                         |
 
 Override the preset with an explicit `observation` block for per-peer control:
 
-``` json
+``` prism-code
 "observation": {
   "user": { "observeMe": true,  "observeOthers": true },
   "ai":   { "observeMe": true,  "observeOthers": false }
@@ -210,10 +210,10 @@ Override the preset with an explicit `observation` block for per-peer control:
 
 Common patterns:
 
-| Intent | Config |
-|----|----|
-| Full observation (most users) | `"observationMode": "directional"` |
-| AI shouldn't re-model the user from its own replies | `"ai": {"observeMe": true, "observeOthers": false}` |
+| Intent                                                            | Config                                              |
+|-------------------------------------------------------------------|-----------------------------------------------------|
+| Full observation (most users)                                     | `"observationMode": "directional"`                  |
+| AI shouldn't re-model the user from its own replies               | `"ai": {"observeMe": true, "observeOthers": false}` |
 | Strong persona the AI peer shouldn't update from self-observation | `"ai": {"observeMe": false, "observeOthers": true}` |
 
 Server-side toggles set via the [Honcho dashboard](https://app.honcho.dev) win over local defaults — Hermes syncs them back at session init.
@@ -222,19 +222,19 @@ Server-side toggles set via the [Honcho dashboard](https://app.honcho.dev) win o
 
 When Honcho is active as the memory provider, five tools become available:
 
-| Tool | Purpose |
-|----|----|
-| `honcho_profile` | Read or update peer card — pass `card` (list of facts) to update, omit to read |
-| `honcho_search` | Semantic search over context — raw excerpts, no LLM synthesis |
-| `honcho_context` | Full session context — summary, representation, card, recent messages |
+| Tool               | Purpose                                                                                                      |
+|--------------------|--------------------------------------------------------------------------------------------------------------|
+| `honcho_profile`   | Read or update peer card — pass `card` (list of facts) to update, omit to read                               |
+| `honcho_search`    | Semantic search over context — raw excerpts, no LLM synthesis                                                |
+| `honcho_context`   | Full session context — summary, representation, card, recent messages                                        |
 | `honcho_reasoning` | Synthesized answer from Honcho's LLM — pass `reasoning_level` (minimal/low/medium/high/max) to control depth |
-| `honcho_conclude` | Create or delete conclusions — pass `conclusion` to create, `delete_id` to remove (PII only) |
+| `honcho_conclude`  | Create or delete conclusions — pass `conclusion` to create, `delete_id` to remove (PII only)                 |
 
 ## CLI Commands
 
 The `hermes honcho` subcommand is **only registered when Honcho is the active memory provider** (`memory.provider: honcho` in `config.yaml`). On a fresh install, configure Honcho directly with `hermes memory setup honcho` (or run `hermes memory setup` and pick it from the list); the `hermes honcho` subcommand then appears on the next invocation.
 
-``` bash
+``` prism-code
 hermes memory setup honcho    # Configure Honcho directly (works before activation)
 hermes honcho status          # Connection status, config, and key settings
 hermes honcho setup           # Redirects to `hermes memory setup` (post-activation alias)

@@ -27,13 +27,13 @@ On name collision, later sources win — a user plugin named `disk-cleanup` woul
 
 Bundled plugins ship disabled. Discovery finds them (they appear in `hermes plugins list` and the interactive `hermes plugins` UI), but none load until you explicitly enable them:
 
-``` bash
+``` prism-code
 hermes plugins enable disk-cleanup
 ```
 
 Or via `~/.hermes/config.yaml`:
 
-``` yaml
+``` prism-code
 plugins:
   enabled:
     - disk-cleanup
@@ -43,7 +43,7 @@ This is the same mechanism user-installed plugins use. Bundled plugins are never
 
 To turn a bundled plugin off again:
 
-``` bash
+``` prism-code
 hermes plugins disable disk-cleanup
 # or: remove it from plugins.enabled in config.yaml
 ```
@@ -52,20 +52,20 @@ hermes plugins disable disk-cleanup
 
 The repo ships these bundled plugins under `plugins/`. All are opt-in — enable them via `hermes plugins enable <name>`.
 
-| Plugin | Kind | Purpose |
-|----|----|----|
-| `disk-cleanup` | hooks + slash command | Auto-track ephemeral files and clean them on session end |
-| `security-guidance` | hooks | Pattern-match dangerous code on `write_file`/`patch` and append a security warning (or block) — 25 rules (Apache-2.0 fork of Anthropic's `claude-plugins-official` patterns) |
-| `observability/langfuse` | hooks | Trace turns / LLM calls / tools to [Langfuse](https://langfuse.com) |
-| `observability/nemo_relay` | hooks | Relay observability events (turns / LLM calls / tools) to an NVIDIA NeMo endpoint |
-| `teams_pipeline` | standalone | Microsoft Teams meeting pipeline — Graph-backed, transcript-first meeting summaries |
-| `spotify` | backend (7 tools) | Native Spotify playback, queue, search, playlists, albums, library |
-| `google_meet` | standalone | Join Meet calls, live-caption transcription, optional realtime duplex audio |
-| `image_gen/openai` | image backend | OpenAI `gpt-image-2` image generation backend (alternative to FAL) |
-| `image_gen/openai-codex` | image backend | OpenAI image generation via Codex OAuth |
-| `image_gen/xai` | image backend | xAI `grok-2-image` backend |
-| `hermes-achievements` | dashboard tab | Steam-style collectible badges generated from your real Hermes session history |
-| `kanban/dashboard` | dashboard tab | Kanban board UI for the multi-agent dispatcher — tasks, comments, fan-out, board switching. See [Kanban Multi-Agent](kanban.md). |
+| Plugin                     | Kind                  | Purpose                                                                                                                                                                      |
+|----------------------------|-----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `disk-cleanup`             | hooks + slash command | Auto-track ephemeral files and clean them on session end                                                                                                                     |
+| `security-guidance`        | hooks                 | Pattern-match dangerous code on `write_file`/`patch` and append a security warning (or block) — 25 rules (Apache-2.0 fork of Anthropic's `claude-plugins-official` patterns) |
+| `observability/langfuse`   | hooks                 | Trace turns / LLM calls / tools to [Langfuse](https://langfuse.com)                                                                                                          |
+| `observability/nemo_relay` | hooks                 | Relay observability events (turns / LLM calls / tools) to an NVIDIA NeMo endpoint                                                                                            |
+| `teams_pipeline`           | standalone            | Microsoft Teams meeting pipeline — Graph-backed, transcript-first meeting summaries                                                                                          |
+| `spotify`                  | backend (7 tools)     | Native Spotify playback, queue, search, playlists, albums, library                                                                                                           |
+| `google_meet`              | standalone            | Join Meet calls, live-caption transcription, optional realtime duplex audio                                                                                                  |
+| `image_gen/openai`         | image backend         | OpenAI `gpt-image-2` image generation backend (alternative to FAL)                                                                                                           |
+| `image_gen/openai-codex`   | image backend         | OpenAI image generation via Codex OAuth                                                                                                                                      |
+| `image_gen/xai`            | image backend         | xAI `grok-2-image` backend                                                                                                                                                   |
+| `hermes-achievements`      | dashboard tab         | Steam-style collectible badges generated from your real Hermes session history                                                                                               |
+| `kanban/dashboard`         | dashboard tab         | Kanban board UI for the multi-agent dispatcher — tasks, comments, fan-out, board switching. See [Kanban Multi-Agent](kanban.md).                      |
 
 Memory providers (`plugins/memory/*`) and context engines (`plugins/context_engine/*`) are listed separately on [Memory Providers](memory-providers.md) — they're managed through `hermes memory` and `hermes plugins` respectively. The full per-plugin detail for the two long-running hooks-based plugins follows.
 
@@ -75,26 +75,26 @@ Auto-tracks and removes ephemeral files created during sessions — test scripts
 
 **How it works:**
 
-| Hook | Behaviour |
-|----|----|
+| Hook             | Behaviour                                                                                                                                                                                        |
+|------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `post_tool_call` | When `write_file` / `terminal` / `patch` creates a file matching `test_*`, `tmp_*`, or `*.test.*` inside `HERMES_HOME` or `/tmp/hermes-*`, track it silently as `test` / `temp` / `cron-output`. |
-| `on_session_end` | If any test files were auto-tracked during the turn, run the safe `quick` cleanup and log a one-line summary. Stays silent otherwise. |
+| `on_session_end` | If any test files were auto-tracked during the turn, run the safe `quick` cleanup and log a one-line summary. Stays silent otherwise.                                                            |
 
 **Deletion rules:**
 
-| Category | Threshold | Confirmation |
-|----|----|----|
-| `test` | every session end | Never |
-| `temp` | \>7 days since tracked | Never |
-| `cron-output` | \>14 days since tracked | Never |
-| empty dirs under HERMES_HOME | always | Never |
-| `research` | \>30 days, beyond 10 newest | Always (deep only) |
-| `chrome-profile` | \>14 days since tracked | Always (deep only) |
-| files \>500 MB | never auto | Always (deep only) |
+| Category                     | Threshold                   | Confirmation       |
+|------------------------------|-----------------------------|--------------------|
+| `test`                       | every session end           | Never              |
+| `temp`                       | \>7 days since tracked      | Never              |
+| `cron-output`                | \>14 days since tracked     | Never              |
+| empty dirs under HERMES_HOME | always                      | Never              |
+| `research`                   | \>30 days, beyond 10 newest | Always (deep only) |
+| `chrome-profile`             | \>14 days since tracked     | Always (deep only) |
+| files \>500 MB               | never auto                  | Always (deep only) |
 
 **Slash command** — `/disk-cleanup` available in both CLI and gateway sessions:
 
-``` text
+``` prism-code
 /disk-cleanup status                     # breakdown + top-10 largest
 /disk-cleanup dry-run                    # preview without deleting
 /disk-cleanup quick                      # run safe cleanup now
@@ -105,11 +105,11 @@ Auto-tracks and removes ephemeral files created during sessions — test scripts
 
 **State** — everything lives at `$HERMES_HOME/disk-cleanup/`:
 
-| File | Contents |
-|----|----|
-| `tracked.json` | Tracked paths with category, size, and timestamp |
-| `tracked.json.bak` | Atomic-write backup of the above |
-| `cleanup.log` | Append-only audit trail of every track / skip / reject / delete |
+| File               | Contents                                                        |
+|--------------------|-----------------------------------------------------------------|
+| `tracked.json`     | Tracked paths with category, size, and timestamp                |
+| `tracked.json.bak` | Atomic-write backup of the above                                |
+| `cleanup.log`      | Append-only audit trail of every track / skip / reject / delete |
 
 **Safety** — cleanup only ever touches paths under `HERMES_HOME` or `/tmp/hermes-*`. Windows mounts (`/mnt/c/...`) are rejected. Well-known top-level state dirs (`logs/`, `memories/`, `sessions/`, `cron/`, `cache/`, `skills/`, `plugins/`, `disk-cleanup/` itself) are never removed even when empty — a fresh install does not get gutted on first session end.
 
@@ -127,11 +127,11 @@ The file is still written. The model reads the warning in the next turn's tool m
 
 **Modes:**
 
-| Env var | Effect |
-|----|----|
-| (unset) | **warn mode** (default) — file is written, warning appended to result |
-| `SECURITY_GUIDANCE_BLOCK=1` | **block mode** — write refused, warning returned as the block reason |
-| `SECURITY_GUIDANCE_DISABLE=1` | kill switch — plugin loads but does nothing |
+| Env var                       | Effect                                                                |
+|-------------------------------|-----------------------------------------------------------------------|
+| (unset)                       | **warn mode** (default) — file is written, warning appended to result |
+| `SECURITY_GUIDANCE_BLOCK=1`   | **block mode** — write refused, warning returned as the block reason  |
+| `SECURITY_GUIDANCE_DISABLE=1` | kill switch — plugin loads but does nothing                           |
 
 **Enabling:** `hermes plugins enable security-guidance` (or check the box in `hermes plugins`).
 
@@ -147,7 +147,7 @@ The plugin is fail-open: no SDK installed, no credentials, or a transient Langfu
 
 **Setup (interactive — recommended):**
 
-``` bash
+``` prism-code
 hermes tools          # → Langfuse Observability → Cloud or Self-Hosted
 ```
 
@@ -155,14 +155,14 @@ The wizard collects your keys, `pip install`s the `langfuse` SDK, and adds `obse
 
 **Setup (manual):**
 
-``` bash
+``` prism-code
 pip install langfuse
 hermes plugins enable observability/langfuse
 ```
 
 Then put the credentials in `~/.hermes/.env`:
 
-``` bash
+``` prism-code
 HERMES_LANGFUSE_PUBLIC_KEY=pk-lf-...
 HERMES_LANGFUSE_SECRET_KEY=sk-lf-...
 HERMES_LANGFUSE_BASE_URL=https://cloud.langfuse.com   # or your self-hosted URL
@@ -170,31 +170,31 @@ HERMES_LANGFUSE_BASE_URL=https://cloud.langfuse.com   # or your self-hosted URL
 
 **How it works:**
 
-| Hook | Behaviour |
-|----|----|
-| `pre_api_request` / `pre_llm_call` | Open (or reuse) a per-turn root span "Hermes turn". Start a `generation` child observation for this API call with serialized recent messages as input. |
-| `post_api_request` / `post_llm_call` | Close the generation, attach `usage_details`, `cost_details`, `finish_reason`, assistant output + tool calls. If no tool calls and non-empty content, close the turn. |
-| `pre_tool_call` | Start a `tool` child observation with sanitized `args`. |
-| `post_tool_call` | Close the tool observation with sanitized `result`. `read_file` payloads get summarized (head + tail + omitted-line count) so a huge file read stays under `HERMES_LANGFUSE_MAX_CHARS`. |
+| Hook                                 | Behaviour                                                                                                                                                                               |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `pre_api_request` / `pre_llm_call`   | Open (or reuse) a per-turn root span "Hermes turn". Start a `generation` child observation for this API call with serialized recent messages as input.                                  |
+| `post_api_request` / `post_llm_call` | Close the generation, attach `usage_details`, `cost_details`, `finish_reason`, assistant output + tool calls. If no tool calls and non-empty content, close the turn.                   |
+| `pre_tool_call`                      | Start a `tool` child observation with sanitized `args`.                                                                                                                                 |
+| `post_tool_call`                     | Close the tool observation with sanitized `result`. `read_file` payloads get summarized (head + tail + omitted-line count) so a huge file read stays under `HERMES_LANGFUSE_MAX_CHARS`. |
 
 Session grouping keys off the Hermes session ID (or task ID for sub-agents) via `langfuse.propagate_attributes`, so everything in a single `hermes chat` session lives under one Langfuse session.
 
 **Verify:**
 
-``` bash
+``` prism-code
 hermes plugins list                 # observability/langfuse should show "enabled"
 hermes chat -q "hello"              # check the Langfuse UI for a "Hermes turn" trace
 ```
 
 **Optional tuning** (in `.env`):
 
-| Variable | Default | Purpose |
-|----|----|----|
-| `HERMES_LANGFUSE_ENV` | — | Environment tag on traces (`production`, `staging`, …) |
-| `HERMES_LANGFUSE_RELEASE` | — | Release/version tag |
-| `HERMES_LANGFUSE_SAMPLE_RATE` | `1.0` | Sampling rate passed to the SDK (0.0–1.0) |
-| `HERMES_LANGFUSE_MAX_CHARS` | `12000` | Per-field truncation for message content / tool args / tool results |
-| `HERMES_LANGFUSE_DEBUG` | `false` | Verbose plugin logging to `agent.log` |
+| Variable                      | Default | Purpose                                                             |
+|-------------------------------|---------|---------------------------------------------------------------------|
+| `HERMES_LANGFUSE_ENV`         | —       | Environment tag on traces (`production`, `staging`, …)              |
+| `HERMES_LANGFUSE_RELEASE`     | —       | Release/version tag                                                 |
+| `HERMES_LANGFUSE_SAMPLE_RATE` | `1.0`   | Sampling rate passed to the SDK (0.0–1.0)                           |
+| `HERMES_LANGFUSE_MAX_CHARS`   | `12000` | Per-field truncation for message content / tool args / tool results |
+| `HERMES_LANGFUSE_DEBUG`       | `false` | Verbose plugin logging to `agent.log`                               |
 
 Hermes-prefixed and standard SDK env vars (`LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, `LANGFUSE_BASE_URL`) are both accepted — Hermes-prefixed wins when both are set.
 
@@ -215,7 +215,7 @@ Lets the agent **join, transcribe, and participate in Google Meet calls** — ta
 
 **Setup:**
 
-``` bash
+``` prism-code
 hermes plugins enable google_meet
 # Prompts you to sign in via the plugin's OAuth flow on first use —
 # needs a Google account with Meet access. Host approval may be required
@@ -247,30 +247,30 @@ Adds a **Steam-style achievements tab to the dashboard** — 60+ collectible, ti
 
 **Achievement states:**
 
-| State | Meaning |
-|----|----|
-| Unlocked | At least one tier achieved |
-| Discovered | Known achievement, progress visible, not yet earned |
-| Secret | Hidden until Hermes detects the first related signal in your history |
+| State      | Meaning                                                              |
+|------------|----------------------------------------------------------------------|
+| Unlocked   | At least one tier achieved                                           |
+| Discovered | Known achievement, progress visible, not yet earned                  |
+| Secret     | Hidden until Hermes detects the first related signal in your history |
 
 **API** — routes mount under `/api/plugins/hermes-achievements/`:
 
-| Endpoint | Purpose |
-|----|----|
-| `GET /achievements` | Full catalog with per-badge unlock state (returns a pending placeholder while the first cold scan is running) |
-| `GET /scan-status` | State of the background scanner: `idle` / `running` / `failed`, last duration, run count |
-| `GET /recent-unlocks` | Twenty most recently unlocked badges, newest first |
-| `GET /sessions/{id}/badges` | Badges earned primarily in one specific session |
-| `POST /rescan` | Manual synchronous rescan (blocks; use when the user clicks the rescan button) |
-| `POST /reset-state` | Clear unlock history and cached snapshot |
+| Endpoint                    | Purpose                                                                                                       |
+|-----------------------------|---------------------------------------------------------------------------------------------------------------|
+| `GET /achievements`         | Full catalog with per-badge unlock state (returns a pending placeholder while the first cold scan is running) |
+| `GET /scan-status`          | State of the background scanner: `idle` / `running` / `failed`, last duration, run count                      |
+| `GET /recent-unlocks`       | Twenty most recently unlocked badges, newest first                                                            |
+| `GET /sessions/{id}/badges` | Badges earned primarily in one specific session                                                               |
+| `POST /rescan`              | Manual synchronous rescan (blocks; use when the user clicks the rescan button)                                |
+| `POST /reset-state`         | Clear unlock history and cached snapshot                                                                      |
 
 **State files** — live under `$HERMES_HOME/plugins/hermes-achievements/`:
 
-| File | Contents |
-|----|----|
-| `state.json` | Unlock history: which badges you've earned and when. Stable across Hermes updates. |
-| `scan_snapshot.json` | Last completed scan payload (served immediately on dashboard load) |
-| `scan_checkpoint.json` | Per-session stats cache keyed by fingerprint (makes warm rescans fast) |
+| File                   | Contents                                                                           |
+|------------------------|------------------------------------------------------------------------------------|
+| `state.json`           | Unlock history: which badges you've earned and when. Stable across Hermes updates. |
+| `scan_snapshot.json`   | Last completed scan payload (served immediately on dashboard load)                 |
+| `scan_checkpoint.json` | Per-session stats cache keyed by fingerprint (makes warm rescans fast)             |
 
 **Performance notes:**
 

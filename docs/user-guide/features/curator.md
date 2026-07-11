@@ -44,7 +44,7 @@ Pinned skills are off-limits to both the curator's auto-transitions and the agen
 
 All settings live in `config.yaml` under `curator:` (not `.env` — this isn't a secret). Defaults:
 
-``` yaml
+``` prism-code
 curator:
   enabled: true
   interval_hours: 168          # 7 days
@@ -63,7 +63,7 @@ The curator's LLM review pass is a regular auxiliary task slot — `auxiliary.cu
 
 **Easiest — `hermes model`:**
 
-``` bash
+``` prism-code
 hermes model                   # → "Auxiliary models — side-task routing"
                                # → pick "Curator" → pick provider → pick model
 ```
@@ -72,7 +72,7 @@ The same picker is available in the web dashboard under the **Models** tab.
 
 **Direct config.yaml (equivalent):**
 
-``` yaml
+``` prism-code
 auxiliary:
   curator:
     provider: openrouter
@@ -88,7 +88,7 @@ Earlier releases used a one-off `curator.auxiliary.{provider,model}` block. That
 
 ## CLI
 
-``` bash
+``` prism-code
 hermes curator status         # last run, counts, pinned list, LRU top 5
 hermes curator run            # trigger a run now (blocks until done). Prune-only unless curator.consolidate: true
 hermes curator run --consolidate # force the LLM consolidation pass on for this run, overriding the config default
@@ -113,7 +113,7 @@ hermes curator prune [--days N] # bulk-archive agent-created skills idle >= N da
 
 Before every real curator pass, Hermes takes a tar.gz snapshot of `~/.hermes/skills/` at `~/.hermes/skills/.curator_backups/<utc-iso>/skills.tar.gz`. If a pass archives or consolidates something you didn't want touched, you can undo the whole run with one command:
 
-``` bash
+``` prism-code
 hermes curator rollback        # restore newest snapshot (with confirmation)
 hermes curator rollback -y     # skip the prompt
 hermes curator rollback --list # see all snapshots with reason + size
@@ -125,7 +125,7 @@ You can also take manual snapshots at any time with `hermes curator backup --rea
 
 Snapshots are pruned to `curator.backup.keep` (default 5) to keep disk usage bounded:
 
-``` yaml
+``` prism-code
 curator:
   backup:
     enabled: true
@@ -173,7 +173,7 @@ Pinning protects a skill from deletion — both the curator's automated archive 
 
 Pin and unpin with:
 
-``` bash
+``` prism-code
 hermes curator pin <skill>
 hermes curator unpin <skill>
 ```
@@ -190,7 +190,7 @@ If you want a stronger guarantee than "no deletion" — for instance, freezing a
 
 The curator maintains a sidecar at `~/.hermes/skills/.usage.json` with one entry per skill:
 
-``` json
+``` prism-code
 {
   "my-skill": {
     "use_count": 12,
@@ -219,7 +219,7 @@ Bundled and hub-installed skills are explicitly excluded from telemetry writes.
 
 Every curator run writes a timestamped directory under `~/.hermes/logs/curator/`:
 
-``` text
+``` prism-code
 ~/.hermes/logs/curator/
 └── 20260429-111512/
     ├── run.json      # machine-readable: full fidelity, stats, LLM output
@@ -240,7 +240,7 @@ If a run consolidated multiple skills under an umbrella (or merged near-duplicat
 
 If the curator archived something you still want:
 
-``` bash
+``` prism-code
 hermes curator restore <skill-name>
 ```
 

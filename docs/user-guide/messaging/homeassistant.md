@@ -23,7 +23,7 @@ Hermes Agent integrates with [Home Assistant](https://www.home-assistant.io/) in
 
 ### 2. Configure Environment Variables
 
-``` bash
+``` prism-code
 # Add to ~/.hermes/.env
 
 # Required: your Long-Lived Access Token
@@ -39,7 +39,7 @@ The `homeassistant` toolset is automatically enabled when `HASS_TOKEN` is set. B
 
 ### 3. Start the Gateway
 
-``` bash
+``` prism-code
 hermes gateway
 ```
 
@@ -60,7 +60,7 @@ List Home Assistant entities, optionally filtered by domain or area.
 
 **Example:**
 
-``` text
+``` prism-code
 List all lights in the living room
 ```
 
@@ -76,7 +76,7 @@ Get detailed state of a single entity, including all attributes (brightness, col
 
 **Example:**
 
-``` text
+``` prism-code
 What's the current state of climate.thermostat?
 ```
 
@@ -92,7 +92,7 @@ List available services (actions) for device control. Shows what actions can be 
 
 **Example:**
 
-``` text
+``` prism-code
 What services are available for climate devices?
 ```
 
@@ -109,18 +109,18 @@ Call a Home Assistant service to control a device.
 
 **Examples:**
 
-``` text
+``` prism-code
 Turn on the living room lights
 → ha_call_service(domain="light", service="turn_on", entity_id="light.living_room")
 ```
 
-``` text
+``` prism-code
 Set the thermostat to 22 degrees in heat mode
 → ha_call_service(domain="climate", service="set_temperature",
     entity_id="climate.thermostat", data={"temperature": 22, "hvac_mode": "heat"})
 ```
 
-``` text
+``` prism-code
 Set living room lights to blue at 50% brightness
 → ha_call_service(domain="light", service="turn_on",
     entity_id="light.living_room", data={"brightness": 128, "color_name": "blue"})
@@ -138,7 +138,7 @@ By default, **no events are forwarded**. You must configure at least one of `wat
 
 Configure which events the agent sees in `~/.hermes/config.yaml` under the Home Assistant platform's `extra` section:
 
-``` yaml
+``` prism-code
 platforms:
   homeassistant:
     enabled: true
@@ -157,13 +157,13 @@ platforms:
       cooldown_seconds: 30
 ```
 
-| Setting | Default | Description |
-|----|----|----|
-| `watch_domains` | *(none)* | Only watch these entity domains (e.g., `climate`, `light`, `binary_sensor`) |
-| `watch_entities` | *(none)* | Only watch these specific entity IDs |
-| `watch_all` | `false` | Set to `true` to receive **all** state changes (not recommended for most setups) |
-| `ignore_entities` | *(none)* | Always ignore these entities (applied before domain/entity filters) |
-| `cooldown_seconds` | `30` | Minimum seconds between events for the same entity |
+| Setting            | Default  | Description                                                                      |
+|--------------------|----------|----------------------------------------------------------------------------------|
+| `watch_domains`    | *(none)* | Only watch these entity domains (e.g., `climate`, `light`, `binary_sensor`)      |
+| `watch_entities`   | *(none)* | Only watch these specific entity IDs                                             |
+| `watch_all`        | `false`  | Set to `true` to receive **all** state changes (not recommended for most setups) |
+| `ignore_entities`  | *(none)* | Always ignore these entities (applied before domain/entity filters)              |
+| `cooldown_seconds` | `30`     | Minimum seconds between events for the same entity                               |
 
 tip
 
@@ -173,14 +173,14 @@ Start with a focused set of domains — `climate`, `binary_sensor`, and `alarm_c
 
 State changes are formatted as human-readable messages based on domain:
 
-| Domain | Format |
-|----|----|
-| `climate` | "HVAC mode changed from 'off' to 'heat' (current: 21, target: 23)" |
-| `sensor` | "changed from 21°C to 22°C" |
-| `binary_sensor` | "triggered" / "cleared" |
-| `light`, `switch`, `fan` | "turned on" / "turned off" |
-| `alarm_control_panel` | "alarm state changed from 'armed_away' to 'triggered'" |
-| *(other)* | "changed from 'old' to 'new'" |
+| Domain                   | Format                                                             |
+|--------------------------|--------------------------------------------------------------------|
+| `climate`                | "HVAC mode changed from 'off' to 'heat' (current: 21, target: 23)" |
+| `sensor`                 | "changed from 21°C to 22°C"                                        |
+| `binary_sensor`          | "triggered" / "cleared"                                            |
+| `light`, `switch`, `fan` | "turned on" / "turned off"                                         |
+| `alarm_control_panel`    | "alarm state changed from 'armed_away' to 'triggered'"             |
+| *(other)*                | "changed from 'old' to 'new'"                                      |
 
 ### Agent Responses
 
@@ -216,7 +216,7 @@ Entity IDs are validated against the pattern `^[a-z_][a-z0-9_]*\.[a-z0-9_]+$` to
 
 ### Morning Routine
 
-``` text
+``` prism-code
 User: Start my morning routine
 
 Agent:
@@ -230,7 +230,7 @@ Agent:
 
 ### Security Check
 
-``` text
+``` prism-code
 User: Is the house secure?
 
 Agent:
@@ -247,7 +247,7 @@ Agent:
 
 When connected as a gateway platform, the agent can react to events:
 
-``` text
+``` prism-code
 [Home Assistant] Front Door: triggered (was cleared)
 
 Agent automatically:

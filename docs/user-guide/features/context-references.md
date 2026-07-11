@@ -10,19 +10,19 @@ Type `@` followed by a reference to inject content directly into your message. H
 
 ## Supported References
 
-| Syntax | Description |
-|----|----|
-| `@file:path/to/file.py` | Inject file contents |
+| Syntax                        | Description                                       |
+|-------------------------------|---------------------------------------------------|
+| `@file:path/to/file.py`       | Inject file contents                              |
 | `@file:path/to/file.py:10-25` | Inject specific line range (1-indexed, inclusive) |
-| `@folder:path/to/dir` | Inject directory tree listing with file metadata |
-| `@diff` | Inject `git diff` (unstaged working tree changes) |
-| `@staged` | Inject `git diff --staged` (staged changes) |
-| `@git:5` | Inject last N commits with patches (max 10) |
-| `@url:https://example.com` | Fetch and inject web page content |
+| `@folder:path/to/dir`         | Inject directory tree listing with file metadata  |
+| `@diff`                       | Inject `git diff` (unstaged working tree changes) |
+| `@staged`                     | Inject `git diff --staged` (staged changes)       |
+| `@git:5`                      | Inject last N commits with patches (max 10)       |
+| `@url:https://example.com`    | Fetch and inject web page content                 |
 
 ## Usage Examples
 
-``` text
+``` prism-code
 Review @file:src/main.py and suggest improvements
 
 What changed? @diff
@@ -36,7 +36,7 @@ Summarize this article @url:https://arxiv.org/abs/2301.00001
 
 Multiple references work in a single message:
 
-``` text
+``` prism-code
 Check @file:main.py, and also @file:test.py.
 ```
 
@@ -54,7 +54,7 @@ In the interactive CLI, typing `@` triggers autocomplete:
 
 The `@file:` reference supports line ranges for precise content injection:
 
-``` text
+``` prism-code
 @file:src/main.py:42        # Single line 42
 @file:src/main.py:10-25     # Lines 10 through 25 (inclusive)
 ```
@@ -65,12 +65,12 @@ Lines are 1-indexed. Invalid ranges are silently ignored (full file is returned)
 
 Context references are bounded to prevent overwhelming the model's context window:
 
-| Threshold | Value | Behavior |
-|----|----|----|
-| Soft limit | 25% of context length | Warning appended, expansion proceeds |
-| Hard limit | 50% of context length | Expansion refused, original message returned unchanged |
-| Folder entries | 200 files max | Excess entries replaced with `- ...` |
-| Git commits | 10 max | `@git:N` clamped to range \[1, 10\] |
+| Threshold      | Value                 | Behavior                                               |
+|----------------|-----------------------|--------------------------------------------------------|
+| Soft limit     | 25% of context length | Warning appended, expansion proceeds                   |
+| Hard limit     | 50% of context length | Expansion refused, original message returned unchanged |
+| Folder entries | 200 files max         | Excess entries replaced with `- ...`                   |
+| Git commits    | 10 max                | `@git:N` clamped to range \[1, 10\]                    |
 
 ## Security
 
@@ -111,7 +111,7 @@ When conversation context is compressed, the expanded reference content is inclu
 
 ## Common Patterns
 
-``` text
+``` prism-code
 # Code review workflow
 Review @diff and check for security issues
 

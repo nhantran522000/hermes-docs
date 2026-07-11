@@ -32,10 +32,10 @@ WhatsApp periodically updates their Web protocol, which can temporarily break co
 
 ## Two Modes
 
-| Mode | How it works | Best for |
-|----|----|----|
+| Mode                                  | How it works                                                             | Best for                                 |
+|---------------------------------------|--------------------------------------------------------------------------|------------------------------------------|
 | **Separate bot number** (recommended) | Dedicate a phone number to the bot. People message that number directly. | Clean UX, multiple users, lower ban risk |
-| **Personal self-chat** | Use your own WhatsApp. You message yourself to talk to the agent. | Quick setup, single user, testing |
+| **Personal self-chat**                | Use your own WhatsApp. You message yourself to talk to the agent.        | Quick setup, single user, testing        |
 
 ------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ Unlike older browser-driven bridges, the current Baileys-based bridge does **not
 
 ## Step 1: Run the Setup Wizard
 
-``` bash
+``` prism-code
 hermes whatsapp
 ```
 
@@ -80,11 +80,11 @@ If the QR code looks garbled, make sure your terminal is at least 60 columns wid
 
 For bot mode, you need a phone number that isn't already registered with WhatsApp. Three options:
 
-| Option | Cost | Notes |
-|----|----|----|
-| **Google Voice** | Free | US only. Get a number at [voice.google.com](https://voice.google.com). Verify WhatsApp via SMS through the Google Voice app. |
-| **Prepaid SIM** | \$5–15 one-time | Any carrier. Activate, verify WhatsApp, then the SIM can sit in a drawer. Number must stay active (make a call every 90 days). |
-| **VoIP services** | Free–\$5/month | TextNow, TextFree, or similar. Some VoIP numbers are blocked by WhatsApp — try a few if the first doesn't work. |
+| Option            | Cost            | Notes                                                                                                                          |
+|-------------------|-----------------|--------------------------------------------------------------------------------------------------------------------------------|
+| **Google Voice**  | Free            | US only. Get a number at [voice.google.com](https://voice.google.com). Verify WhatsApp via SMS through the Google Voice app.   |
+| **Prepaid SIM**   | \$5–15 one-time | Any carrier. Activate, verify WhatsApp, then the SIM can sit in a drawer. Number must stay active (make a call every 90 days). |
+| **VoIP services** | Free–\$5/month  | TextNow, TextFree, or similar. Some VoIP numbers are blocked by WhatsApp — try a few if the first doesn't work.                |
 
 After getting the number:
 
@@ -98,7 +98,7 @@ After getting the number:
 
 Add the following to your `~/.hermes/.env` file:
 
-``` bash
+``` prism-code
 # Required
 WHATSAPP_ENABLED=true
 WHATSAPP_MODE=bot                          # "bot" or "self-chat"
@@ -115,7 +115,7 @@ Setting `WHATSAPP_ALLOWED_USERS=*` allows **all** senders (equivalent to `WHATSA
 
 Optional behavior settings in `~/.hermes/config.yaml`:
 
-``` yaml
+``` prism-code
 unauthorized_dm_behavior: pair
 
 whatsapp:
@@ -127,7 +127,7 @@ whatsapp:
 
 Then start the gateway:
 
-``` bash
+``` prism-code
 hermes gateway              # Foreground
 hermes gateway install      # Install as a user service
 sudo hermes gateway install --system   # Linux only: boot-time system service
@@ -151,7 +151,7 @@ The Baileys bridge saves its session under `~/.hermes/platforms/whatsapp/session
 
 If the session breaks (phone reset, WhatsApp update, manually unlinked), you'll see connection errors in the gateway logs. To fix it:
 
-``` bash
+``` prism-code
 hermes whatsapp
 ```
 
@@ -167,7 +167,7 @@ Hermes supports voice on WhatsApp:
 - **Outgoing:** TTS responses are sent as MP3 audio file attachments
 - Agent responses are prefixed with "⚕ **Hermes Agent**" by default. You can customize or disable this in `config.yaml`:
 
-``` yaml
+``` prism-code
 # ~/.hermes/config.yaml
 whatsapp:
   reply_prefix: ""                          # Empty string disables the header
@@ -205,7 +205,7 @@ When the agent calls tools (web search, file operations, etc.), WhatsApp display
 
 WhatsApp delivers each message individually, so a rapid burst (forwarded batches, paste-splits, multi-line text) would otherwise trigger a separate agent invocation per fragment — wasting tokens and producing several disjointed replies. The adapter buffers successive text messages from the same chat and dispatches them as one combined request after a short quiet period (default **5s**, extended to **10s** for very long fragments). Tune via `config.yaml`:
 
-``` yaml
+``` prism-code
 # ~/.hermes/config.yaml
 gateway:
   platforms:
@@ -221,17 +221,17 @@ Set `text_batch_delay_seconds: 0` to dispatch each message immediately (disables
 
 ## Troubleshooting
 
-| Problem | Solution |
-|----|----|
-| **QR code not scanning** | Ensure terminal is wide enough (60+ columns). Try a different terminal. Make sure you're scanning from the correct WhatsApp account (bot number, not personal). |
-| **QR code expires** | QR codes refresh every ~20 seconds. If it times out, restart `hermes whatsapp`. |
-| **Session not persisting** | Check that `~/.hermes/platforms/whatsapp/session` exists and is writable. If containerized, mount it as a persistent volume. |
-| **Logged out unexpectedly** | WhatsApp unlinks devices after long inactivity. Keep the phone on and connected to the network, then re-pair with `hermes whatsapp` if needed. |
-| **Bridge crashes or reconnect loops** | Restart the gateway, update Hermes, and re-pair if the session was invalidated by a WhatsApp protocol change. |
-| **Bot stops working after WhatsApp update** | Update Hermes to get the latest bridge version, then re-pair. |
+| Problem                                                       | Solution                                                                                                                                                                                                                                          |
+|---------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **QR code not scanning**                                      | Ensure terminal is wide enough (60+ columns). Try a different terminal. Make sure you're scanning from the correct WhatsApp account (bot number, not personal).                                                                                   |
+| **QR code expires**                                           | QR codes refresh every ~20 seconds. If it times out, restart `hermes whatsapp`.                                                                                                                                                                   |
+| **Session not persisting**                                    | Check that `~/.hermes/platforms/whatsapp/session` exists and is writable. If containerized, mount it as a persistent volume.                                                                                                                      |
+| **Logged out unexpectedly**                                   | WhatsApp unlinks devices after long inactivity. Keep the phone on and connected to the network, then re-pair with `hermes whatsapp` if needed.                                                                                                    |
+| **Bridge crashes or reconnect loops**                         | Restart the gateway, update Hermes, and re-pair if the session was invalidated by a WhatsApp protocol change.                                                                                                                                     |
+| **Bot stops working after WhatsApp update**                   | Update Hermes to get the latest bridge version, then re-pair.                                                                                                                                                                                     |
 | **macOS: "Node.js not installed" but node works in terminal** | launchd services don't inherit your shell PATH. Run `hermes gateway install` to re-snapshot your current PATH into the plist, then `hermes gateway start`. See the [Gateway Service docs](index.md#macos-launchd) for details. |
-| **Messages not being received** | Verify `WHATSAPP_ALLOWED_USERS` includes the sender's number (with country code, no `+` or spaces), or set it to `*` to allow everyone. Set `WHATSAPP_DEBUG=true` in `.env` and restart the gateway to see raw message events in `bridge.log`. |
-| **Bot replies to strangers with a pairing code** | Set `whatsapp.unauthorized_dm_behavior: ignore` in `~/.hermes/config.yaml` if you want unauthorized DMs to be silently ignored instead. |
+| **Messages not being received**                               | Verify `WHATSAPP_ALLOWED_USERS` includes the sender's number (with country code, no `+` or spaces), or set it to `*` to allow everyone. Set `WHATSAPP_DEBUG=true` in `.env` and restart the gateway to see raw message events in `bridge.log`.    |
+| **Bot replies to strangers with a pairing code**              | Set `whatsapp.unauthorized_dm_behavior: ignore` in `~/.hermes/config.yaml` if you want unauthorized DMs to be silently ignored instead.                                                                                                           |
 
 ------------------------------------------------------------------------
 
@@ -243,7 +243,7 @@ warning
 
 By default, unauthorized DMs still receive a pairing code reply. If you want a private WhatsApp number to stay completely silent to strangers, set:
 
-``` yaml
+``` prism-code
 whatsapp:
   unauthorized_dm_behavior: ignore
 ```

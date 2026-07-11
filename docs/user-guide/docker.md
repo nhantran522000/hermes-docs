@@ -23,7 +23,7 @@ Some VPS providers (Hetzner Cloud, and several others) offer a browser-based con
 
 **Connect over SSH instead** (`ssh root@<host>`) for copy-paste-safe command entry. If you must use the browser console, type the commands manually instead of pasting, and double-check every `:`, `@`, `=`, and `/` in the result before hitting Enter.
 
-``` sh
+``` prism-code
 mkdir -p ~/.hermes
 docker run -it --rm \
   -v ~/.hermes:/opt/data \
@@ -40,7 +40,7 @@ Inside the container, run `hermes setup --portal` once — the refresh token per
 
 Once configured, run the container in the background as a persistent gateway (Telegram, Discord, Slack, WhatsApp, etc.):
 
-``` sh
+``` prism-code
 docker run -d \
   --name hermes \
   --restart unless-stopped \
@@ -67,7 +67,7 @@ Tool-loop hard stops for unattended gateways
 
 The `tool_loop_guardrails.hard_stop_enabled` setting defaults to `false`, which is reasonable for interactive CLI and TUI sessions where a person can see repeated tool-call warnings. In unattended gateway or server deployments, warnings alone may not stop an agent that gets stuck in a repeated tool-call loop. Operators who want circuit-breaker behavior should explicitly enable hard stops in the profile's `config.yaml`:
 
-``` yaml
+``` prism-code
 tool_loop_guardrails:
   hard_stop_enabled: true
   hard_stop_after:
@@ -77,7 +77,7 @@ tool_loop_guardrails:
 
 Note: the API server is gated on `API_SERVER_ENABLED=true`. To expose it beyond `127.0.0.1` inside the container, also set `API_SERVER_HOST=0.0.0.0` and an `API_SERVER_KEY` (minimum 8 characters — generate one with `openssl rand -hex 32`). Example:
 
-``` sh
+``` prism-code
 docker run -d \
   --name hermes \
   --restart unless-stopped \
@@ -96,7 +96,7 @@ Opening any port on an internet facing machine is a security risk. You should no
 
 The built-in web dashboard runs as a supervised s6-rc service alongside the gateway in the same container. Set `HERMES_DASHBOARD=1` to bring it up:
 
-``` sh
+``` prism-code
 docker run -d \
   --name hermes \
   --restart unless-stopped \
@@ -109,12 +109,12 @@ docker run -d \
 
 The dashboard is supervised by s6 — if it crashes, `s6-supervise` restarts it automatically after a short backoff. Dashboard stdout/stderr is forwarded to `docker logs <container>` (no prefix; the gateway's own output now lives in a per-profile s6-log file — see [Where the logs go](#where-the-logs-go) below — so the two streams don't clash).
 
-| Environment variable | Description | Default |
-|----|----|----|
-| `HERMES_DASHBOARD` | Set to `1` (or `true` / `yes`) to enable the supervised dashboard service | *(unset — service is registered but stays down)* |
-| `HERMES_DASHBOARD_HOST` | Bind address for the dashboard HTTP server | `0.0.0.0` |
-| `HERMES_DASHBOARD_PORT` | Port for the dashboard HTTP server | `9119` |
-| `HERMES_DASHBOARD_INSECURE` | **Deprecated / no-op.** Formerly bypassed the auth gate; as of the June 2026 hardening it no longer disables authentication. A non-loopback bind always requires an auth provider | *(ignored — configure a provider instead)* |
+| Environment variable        | Description                                                                                                                                                                       | Default                                          |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| `HERMES_DASHBOARD`          | Set to `1` (or `true` / `yes`) to enable the supervised dashboard service                                                                                                         | *(unset — service is registered but stays down)* |
+| `HERMES_DASHBOARD_HOST`     | Bind address for the dashboard HTTP server                                                                                                                                        | `0.0.0.0`                                        |
+| `HERMES_DASHBOARD_PORT`     | Port for the dashboard HTTP server                                                                                                                                                | `9119`                                           |
+| `HERMES_DASHBOARD_INSECURE` | **Deprecated / no-op.** Formerly bypassed the auth gate; as of the June 2026 hardening it no longer disables authentication. A non-loopback bind always requires an auth provider | *(ignored — configure a provider instead)*       |
 
 The dashboard inside the container defaults to binding `0.0.0.0` — without it, the published `-p 9119:9119` port would not be reachable from the host. To restrict the bind to container loopback (for sidecar / reverse-proxy setups), set `HERMES_DASHBOARD_HOST=127.0.0.1`.
 
@@ -143,7 +143,7 @@ Running the dashboard as a separate container **is** supported when that contain
 
 To open an interactive chat session against a running data directory:
 
-``` sh
+``` prism-code
 docker run -it --rm \
   -v ~/.hermes:/opt/data \
   nousresearch/hermes-agent
@@ -151,7 +151,7 @@ docker run -it --rm \
 
 Or if you have already opened a terminal in your running container (via Docker Desktop for instance), just run:
 
-``` sh
+``` prism-code
 /opt/hermes/.venv/bin/hermes
 ```
 
@@ -159,19 +159,19 @@ Or if you have already opened a terminal in your running container (via Docker D
 
 The `/opt/data` volume is the single source of truth for all Hermes state. It maps to your host's `~/.hermes/` directory and contains:
 
-| Path | Contents |
-|----|----|
-| `.env` | API keys and secrets |
-| `config.yaml` | All Hermes configuration |
-| `SOUL.md` | Agent personality/identity |
-| `sessions/` | Conversation history |
-| `memories/` | Persistent memory store |
-| `skills/` | Installed skills |
-| `home/` | Per-profile HOME for Hermes tool subprocesses (`git`, `ssh`, `gh`, `npm`, and skill CLIs) |
-| `cron/` | Scheduled job definitions |
-| `hooks/` | Event hooks |
-| `logs/` | Runtime logs |
-| `skins/` | Custom CLI skins |
+| Path          | Contents                                                                                  |
+|---------------|-------------------------------------------------------------------------------------------|
+| `.env`        | API keys and secrets                                                                      |
+| `config.yaml` | All Hermes configuration                                                                  |
+| `SOUL.md`     | Agent personality/identity                                                                |
+| `sessions/`   | Conversation history                                                                      |
+| `memories/`   | Persistent memory store                                                                   |
+| `skills/`     | Installed skills                                                                          |
+| `home/`       | Per-profile HOME for Hermes tool subprocesses (`git`, `ssh`, `gh`, `npm`, and skill CLIs) |
+| `cron/`       | Scheduled job definitions                                                                 |
+| `hooks/`      | Event hooks                                                                               |
+| `logs/`       | Runtime logs                                                                              |
+| `skins/`      | Custom CLI skins                                                                          |
 
 ### Immutable install tree
 
@@ -202,7 +202,7 @@ Each profile created with `hermes profile create <name>` gets:
 
 The lifecycle commands you'd run on the host work the same way from inside the container:
 
-``` sh
+``` prism-code
 # Create a profile — registers the gateway-<name> s6 slot.
 docker exec hermes hermes profile create coder
 
@@ -228,7 +228,7 @@ Two different surfaces reach a profile's gateway from outside, and they behave d
 
 **OpenAI-compatible API clients (Open WebUI, LobeChat, `/v1/...`).** These talk to each profile's **API server**, which binds **port 8642 for every profile** (resolved from `API_SERVER_PORT` / `platforms.api_server.extra.port` — there is no auto-allocation and no `config.yaml`/`gateway.port` key). If you want a client to reach a *specific* second profile, give that profile a distinct `API_SERVER_PORT` in **its own** `.env`, otherwise its gateway tries to bind 8642 too and conflicts with the default profile:
 
-``` sh
+``` prism-code
 # Create the profile (registers its gateway-<name> s6 slot)
 docker exec hermes hermes profile create work
 
@@ -247,14 +247,14 @@ Keep `API_SERVER_PORT` in each profile's **own** `.env`, never in the container-
 
 Before the s6 migration, "one container per profile" was the recommended pattern because there was no in-container supervisor to manage multiple gateways. With s6 as PID 1, that's no longer necessary, and the single-container layout is simpler in almost every dimension:
 
-|  | One container, many profiles | One container per profile |
-|----|----|----|
-| Disk overhead | One image, one bundled venv, one Playwright cache | N images / N caches |
-| Memory overhead | Shared Python interpreter cache, shared node_modules | Duplicated per container |
-| Profile creation | `docker exec ... hermes profile create <name>` (seconds) | New `docker run` invocation + port allocation + bind-mount config |
-| Per-profile crash recovery | `s6-supervise` auto-restart | Docker's `--restart unless-stopped` (slower, kills sibling work) |
-| Logs | Per-profile rotated file via `s6-log`, plus container-boot audit log | `docker logs <name>` per container — no built-in rotation |
-| Backup | One `~/.hermes` directory | N directories to coordinate |
+|                            | One container, many profiles                                         | One container per profile                                         |
+|----------------------------|----------------------------------------------------------------------|-------------------------------------------------------------------|
+| Disk overhead              | One image, one bundled venv, one Playwright cache                    | N images / N caches                                               |
+| Memory overhead            | Shared Python interpreter cache, shared node_modules                 | Duplicated per container                                          |
+| Profile creation           | `docker exec ... hermes profile create <name>` (seconds)             | New `docker run` invocation + port allocation + bind-mount config |
+| Per-profile crash recovery | `s6-supervise` auto-restart                                          | Docker's `--restart unless-stopped` (slower, kills sibling work)  |
+| Logs                       | Per-profile rotated file via `s6-log`, plus container-boot audit log | `docker logs <name>` per container — no built-in rotation         |
+| Backup                     | One `~/.hermes` directory                                            | N directories to coordinate                                       |
 
 The default profile (`default`) is always registered on first boot, so a fresh container ships with one supervised gateway out of the box. Additional profiles are pure runtime adds.
 
@@ -269,7 +269,7 @@ Profile-in-container is the default. Run a separate container per profile only w
 
 In those cases, declare one service per profile with distinct `container_name`, `volumes`, and `ports`:
 
-``` yaml
+``` prism-code
 services:
   hermes-work:
     image: nousresearch/hermes-agent:latest
@@ -298,12 +298,12 @@ The warning from [Persistent volumes](#persistent-volumes) still applies: never 
 
 The s6 container has four distinct log surfaces, and "why isn't my gateway showing anything in `docker logs`" is a common surprise. Cheatsheet:
 
-| Source | Where it lands | How to read it |
-|----|----|----|
-| **Per-profile gateway** (`hermes gateway run` and per-profile gateways under s6) | Tee'd to two places: `docker logs <container>` (real time, no extra prefix) **and** `${HERMES_HOME}/logs/gateways/<profile>/current` (rotated, ISO-8601 timestamped, 10 archives × 1 MB each) | `docker logs -f hermes` or `tail -F ~/.hermes/logs/gateways/default/current` on the host |
-| **Dashboard** (when `HERMES_DASHBOARD=1`) | `docker logs <container>` (no prefix) | `docker logs -f hermes` — interleaved with gateway lines |
-| **Boot reconciler** (records which profile gateways were restored on each container start) | `${HERMES_HOME}/logs/container-boot.log` (append-only audit log) | `tail -F ~/.hermes/logs/container-boot.log` |
-| **Generic Hermes logs** (`agent.log`, `errors.log`) | `${HERMES_HOME}/logs/` (profile-aware) | `docker exec hermes hermes logs --follow [--level WARNING] [--session <id>]` |
+| Source                                                                                     | Where it lands                                                                                                                                                                                | How to read it                                                                           |
+|--------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| **Per-profile gateway** (`hermes gateway run` and per-profile gateways under s6)           | Tee'd to two places: `docker logs <container>` (real time, no extra prefix) **and** `${HERMES_HOME}/logs/gateways/<profile>/current` (rotated, ISO-8601 timestamped, 10 archives × 1 MB each) | `docker logs -f hermes` or `tail -F ~/.hermes/logs/gateways/default/current` on the host |
+| **Dashboard** (when `HERMES_DASHBOARD=1`)                                                  | `docker logs <container>` (no prefix)                                                                                                                                                         | `docker logs -f hermes` — interleaved with gateway lines                                 |
+| **Boot reconciler** (records which profile gateways were restored on each container start) | `${HERMES_HOME}/logs/container-boot.log` (append-only audit log)                                                                                                                              | `tail -F ~/.hermes/logs/container-boot.log`                                              |
+| **Generic Hermes logs** (`agent.log`, `errors.log`)                                        | `${HERMES_HOME}/logs/` (profile-aware)                                                                                                                                                        | `docker exec hermes hermes logs --follow [--level WARNING] [--session <id>]`             |
 
 Two practical consequences worth knowing:
 
@@ -314,7 +314,7 @@ Two practical consequences worth knowing:
 
 API keys are read from `/opt/data/.env` inside the container. You can also pass environment variables directly:
 
-``` sh
+``` prism-code
 docker run -it --rm \
   -v ~/.hermes:/opt/data \
   -e ANTHROPIC_API_KEY="sk-ant-..." \
@@ -332,7 +332,7 @@ This page covers running Hermes itself inside Docker. If you want Hermes to exec
 
 For persistent deployment with both the gateway and dashboard, a `docker-compose.yaml` is convenient:
 
-``` yaml
+``` prism-code
 services:
   hermes:
     image: nousresearch/hermes-agent:latest
@@ -371,7 +371,7 @@ First, create an ALSA config next to your Compose file:
 
 asound.conf
 
-``` conf
+``` prism-code
 pcm.!default {
     type pulse
     hint {
@@ -393,7 +393,7 @@ Then build a small derived image with the ALSA PulseAudio plugin installed:
 
 Dockerfile.audio
 
-``` dockerfile
+``` prism-code
 FROM nousresearch/hermes-agent:latest
 
 USER root
@@ -404,7 +404,7 @@ RUN apt-get update \
 
 Use that image in Compose and pass through the host user's PulseAudio socket and cookie:
 
-``` yaml
+``` prism-code
 services:
   hermes:
     build:
@@ -429,7 +429,7 @@ services:
 
 Start it with your host UID/GID so the container process can access the per-user audio socket:
 
-``` sh
+``` prism-code
 export HERMES_UID="$(id -u)"
 export HERMES_GID="$(id -g)"
 docker compose up -d --build
@@ -437,7 +437,7 @@ docker compose up -d --build
 
 To verify what PortAudio sees inside the container:
 
-``` sh
+``` prism-code
 docker exec hermes /opt/hermes/.venv/bin/python -c "import sounddevice as sd; print(sd.query_devices())"
 ```
 
@@ -455,7 +455,7 @@ Browser automation (Playwright/Chromium) is the most memory-hungry feature. If y
 
 Set limits in Docker:
 
-``` sh
+``` prism-code
 docker run -d \
   --name hermes \
   --restart unless-stopped \
@@ -503,7 +503,7 @@ Do not override the image entrypoint unless you keep `/init` (or, equivalently, 
 
 If you specifically need a `docker exec` that retains root semantics (diagnostic sessions, inspecting root-only state, files outside `/opt/data` that root happens to own), opt out per invocation:
 
-``` sh
+``` prism-code
 docker exec -e HERMES_DOCKER_EXEC_AS_ROOT=1 hermes <cmd>
 ```
 
@@ -526,7 +526,7 @@ Each profile created with `hermes profile create <name>` automatically gets an s
 
 Pull the latest image and recreate the container. Your data directory is preserved, and the container runs non-interactive config-schema migrations against the mounted `$HERMES_HOME/config.yaml` before starting the gateway. When a migration is needed, Hermes writes timestamped backups next to `config.yaml` and `.env` first.
 
-``` sh
+``` prism-code
 docker pull nousresearch/hermes-agent:latest
 docker rm -f hermes
 docker run -d \
@@ -538,7 +538,7 @@ docker run -d \
 
 Or with Docker Compose:
 
-``` sh
+``` prism-code
 docker compose pull
 docker compose up -d
 ```
@@ -571,7 +571,7 @@ This is a good fit for tools that are quick to install and used occasionally. Fo
 
 When a tool must be available immediately on every container start with no re-install delay, build a new image that inherits from `nousresearch/hermes-agent` and installs the tool in a layer:
 
-``` dockerfile
+``` prism-code
 FROM nousresearch/hermes-agent:latest
 
 USER root
@@ -583,7 +583,7 @@ USER hermes
 
 Build it and use it in place of the official image:
 
-``` sh
+``` prism-code
 docker build -t my-hermes:latest .
 docker run -d \
   --name hermes \
@@ -599,7 +599,7 @@ The entrypoint script and `/opt/data` semantics are inherited unchanged, so the 
 
 For tools that bring their own service (a database, a web server, a queue, a headless browser farm) or that are too heavy to live inside the Hermes container, run them as a separate container on a shared Docker network. Hermes reaches the sidecar by container name, the same way it reaches a local inference server (see [Connecting to local inference servers](#connecting-to-local-inference-servers-vllm-ollama-etc)).
 
-``` yaml
+``` prism-code
 services:
   hermes:
     image: nousresearch/hermes-agent:latest
@@ -639,7 +639,7 @@ When running Hermes in Docker and your inference server (vLLM, Ollama, text-gene
 
 Put both services on the same Docker network. This is the most reliable approach:
 
-``` yaml
+``` prism-code
 services:
   vllm:
     image: vllm/vllm-openai:latest
@@ -678,7 +678,7 @@ networks:
 
 Then in your `~/.hermes/config.yaml`, use the **container name** as the hostname:
 
-``` yaml
+``` prism-code
 model:
   provider: custom
   model: my-model
@@ -699,7 +699,7 @@ If your inference server runs directly on the host (not in Docker), use `host.do
 
 **macOS / Windows:**
 
-``` sh
+``` prism-code
 docker run -d \
   --name hermes \
   -v ~/.hermes:/opt/data \
@@ -707,7 +707,7 @@ docker run -d \
   nousresearch/hermes-agent gateway run
 ```
 
-``` yaml
+``` prism-code
 # config.yaml
 model:
   provider: custom
@@ -718,7 +718,7 @@ model:
 
 **Linux (host networking):**
 
-``` sh
+``` prism-code
 docker run -d \
   --name hermes \
   --network host \
@@ -726,7 +726,7 @@ docker run -d \
   nousresearch/hermes-agent gateway run
 ```
 
-``` yaml
+``` prism-code
 # config.yaml
 model:
   provider: custom
@@ -741,7 +741,7 @@ With `--network host`, the `-p` flag is ignored — all container ports are dire
 
 From inside the Hermes container, confirm the inference server is reachable:
 
-``` sh
+``` prism-code
 docker exec hermes curl -s http://vllm:8000/v1/models
 ```
 
@@ -755,7 +755,7 @@ You should see a JSON response listing your served model. If this fails, check:
 
 Ollama works the same way. If Ollama runs on the host, use `host.docker.internal:11434` (macOS/Windows) or `127.0.0.1:11434` (Linux with `--network host`). If Ollama runs in its own container on the same Docker network:
 
-``` yaml
+``` prism-code
 model:
   provider: custom
   model: llama3
@@ -776,13 +776,13 @@ Check logs: `docker logs hermes`. Common causes:
 
 The container's stage2 hook drops privileges to the non-root `hermes` user (UID 10000) via `s6-setuidgid` inside each supervised service. If your host `~/.hermes/` is owned by a different UID, set `HERMES_UID`/`HERMES_GID` — or their `PUID`/`PGID` aliases, for parity with LinuxServer.io and NAS images — to match your host user, or ensure the data directory is writable:
 
-``` sh
+``` prism-code
 chmod -R 755 ~/.hermes
 ```
 
 On a NAS (UGOS, Synology, unRAID) the data directory is typically a **bind mount** owned by a host UID the container cannot `chown`. Set `PUID`/`PGID` (or `HERMES_UID`/`HERMES_GID`) to that host user so the runtime runs as the owner of the mount rather than UID 10000:
 
-``` sh
+``` prism-code
 docker run -d \
   --name hermes \
   -e PUID=1000 -e PGID=10 \
@@ -796,7 +796,7 @@ docker run -d \
 
 Playwright needs shared memory. Add `--shm-size=1g` to your Docker run command:
 
-``` sh
+``` prism-code
 docker run -d \
   --name hermes \
   --shm-size=1g \
@@ -808,13 +808,13 @@ docker run -d \
 
 The `--restart unless-stopped` flag handles most transient failures. If the gateway is stuck, restart the container:
 
-``` sh
+``` prism-code
 docker restart hermes
 ```
 
 ### Checking container health
 
-``` sh
+``` prism-code
 docker logs --tail 50 hermes          # Recent logs
 docker run -it --rm nousresearch/hermes-agent:latest version     # Verify version
 docker stats hermes                    # Resource usage

@@ -17,13 +17,13 @@ If you want to change who Hermes is — or replace it with an entirely different
 
 Hermes now seeds a default `SOUL.md` automatically in:
 
-``` text
+``` prism-code
 ~/.hermes/SOUL.md
 ```
 
 More precisely, it uses the current instance's `HERMES_HOME`, so if you run Hermes with a custom home directory, it will use:
 
-``` text
+``` prism-code
 $HERMES_HOME/SOUL.md
 ```
 
@@ -54,13 +54,13 @@ That also makes it easier to teach users:
 
 For most users:
 
-``` bash
+``` prism-code
 ~/.hermes/SOUL.md
 ```
 
 If you use a custom home:
 
-``` bash
+``` prism-code
 $HERMES_HOME/SOUL.md
 ```
 
@@ -95,7 +95,7 @@ A good SOUL file is:
 
 ### Example
 
-``` markdown
+``` prism-code
 # Personality
 
 You are a pragmatic senior engineer with strong taste.
@@ -207,7 +207,7 @@ Hermes ships with built-in personalities you can switch to with `/personality`.
 
 ### CLI
 
-``` text
+``` prism-code
 /personality
 /personality concise
 /personality technical
@@ -215,7 +215,7 @@ Hermes ships with built-in personalities you can switch to with `/personality`.
 
 ### Messaging platforms
 
-``` text
+``` prism-code
 /personality teacher
 ```
 
@@ -225,7 +225,7 @@ These are convenient overlays, but your global `SOUL.md` still gives Hermes its 
 
 You can also define named custom personalities in `~/.hermes/config.yaml` under `agent.personalities`.
 
-``` yaml
+``` prism-code
 agent:
   personalities:
     codereviewer: >
@@ -235,7 +235,7 @@ agent:
 
 Then switch to it with:
 
-``` text
+``` prism-code
 /personality codereviewer
 ```
 

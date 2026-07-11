@@ -12,7 +12,7 @@ Source file: `hermes_state.py`
 
 ## Architecture Overview
 
-``` text
+``` prism-code
 ~/.hermes/state.db (SQLite, WAL mode)
 ├── sessions              — Session metadata, token counts, billing
 ├── messages              — Full message history per session
@@ -34,7 +34,7 @@ Key design decisions:
 
 ### Sessions Table
 
-``` sql
+``` prism-code
 CREATE TABLE IF NOT EXISTS sessions (
     id TEXT PRIMARY KEY,
     source TEXT NOT NULL,
@@ -75,7 +75,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_title_unique
 
 ### Messages Table
 
-``` sql
+``` prism-code
 CREATE TABLE IF NOT EXISTS messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     session_id TEXT NOT NULL REFERENCES sessions(id),
@@ -106,7 +106,7 @@ Notes:
 
 ### FTS5 Full-Text Search
 
-``` sql
+``` prism-code
 CREATE VIRTUAL TABLE IF NOT EXISTS messages_fts USING fts5(
     content,
     content=messages,
@@ -116,7 +116,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS messages_fts USING fts5(
 
 The FTS5 table is kept in sync via three triggers that fire on INSERT, UPDATE, and DELETE of the `messages` table:
 
-``` sql
+``` prism-code
 CREATE TRIGGER IF NOT EXISTS messages_fts_insert AFTER INSERT ON messages BEGIN
     INSERT INTO messages_fts(rowid, content) VALUES (new.id, new.content);
 END;
@@ -139,19 +139,19 @@ Current schema version: **11**
 
 The `schema_version` table stores a single integer. Simple column additions are handled declaratively by `_reconcile_columns()` (which diffs live columns against `SCHEMA_SQL` and ADDs any missing ones). The version-gated chain is reserved for data migrations and index/FTS changes that can't be expressed declaratively:
 
-| Version | Change |
-|----|----|
-| 1 | Initial schema (sessions, messages, FTS5) |
-| 2 | Add `finish_reason` column to messages |
-| 3 | Add `title` column to sessions |
-| 4 | Add unique index on `title` (NULLs allowed, non-NULL must be unique) |
-| 5 | Add billing columns: `cache_read_tokens`, `cache_write_tokens`, `reasoning_tokens`, `billing_provider`, `billing_base_url`, `billing_mode`, `estimated_cost_usd`, `actual_cost_usd`, `cost_status`, `cost_source`, `pricing_version` |
-| 6 | Add reasoning columns to messages: `reasoning`, `reasoning_details`, `codex_reasoning_items` |
-| 7 | Add `reasoning_content` column to messages |
-| 8 | Add `api_call_count` column to sessions |
-| 9 | Add `codex_message_items` column to messages for Codex Responses message id/phase replay |
-| 10 | Add `messages_fts_trigram` virtual table (trigram tokenizer for CJK / substring search) and backfill existing rows |
-| 11 | Re-index `messages_fts` and `messages_fts_trigram` to cover `tool_name` + `tool_calls` and switch from external-content to inline mode; drop old triggers and backfill every message row |
+| Version | Change                                                                                                                                                                                                                               |
+|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1       | Initial schema (sessions, messages, FTS5)                                                                                                                                                                                            |
+| 2       | Add `finish_reason` column to messages                                                                                                                                                                                               |
+| 3       | Add `title` column to sessions                                                                                                                                                                                                       |
+| 4       | Add unique index on `title` (NULLs allowed, non-NULL must be unique)                                                                                                                                                                 |
+| 5       | Add billing columns: `cache_read_tokens`, `cache_write_tokens`, `reasoning_tokens`, `billing_provider`, `billing_base_url`, `billing_mode`, `estimated_cost_usd`, `actual_cost_usd`, `cost_status`, `cost_source`, `pricing_version` |
+| 6       | Add reasoning columns to messages: `reasoning`, `reasoning_details`, `codex_reasoning_items`                                                                                                                                         |
+| 7       | Add `reasoning_content` column to messages                                                                                                                                                                                           |
+| 8       | Add `api_call_count` column to sessions                                                                                                                                                                                              |
+| 9       | Add `codex_message_items` column to messages for Codex Responses message id/phase replay                                                                                                                                             |
+| 10      | Add `messages_fts_trigram` virtual table (trigram tokenizer for CJK / substring search) and backfill existing rows                                                                                                                   |
+| 11      | Re-index `messages_fts` and `messages_fts_trigram` to cover `tool_name` + `tool_calls` and switch from external-content to inline mode; drop old triggers and backfill every message row                                             |
 
 Declarative column adds use `ALTER TABLE ADD COLUMN` wrapped in try/except to handle the column-already-exists case (idempotent). The version number is bumped after each successful migration block.
 
@@ -166,7 +166,7 @@ Multiple hermes processes (gateway + CLI sessions + worktree agents) share one `
 
 This avoids the "convoy effect" where SQLite's deterministic internal backoff causes all competing writers to retry at the same intervals.
 
-``` text
+``` prism-code
 _WRITE_MAX_RETRIES = 15
 _WRITE_RETRY_MIN_S = 0.020   # 20ms
 _WRITE_RETRY_MAX_S = 0.150   # 150ms
@@ -177,7 +177,7 @@ _CHECKPOINT_EVERY_N_WRITES = 50
 
 ### Initialize
 
-``` python
+``` prism-code
 from hermes_state import SessionDB
 
 db = SessionDB()                           # Default: ~/.hermes/state.db
@@ -186,7 +186,7 @@ db = SessionDB(db_path=Path("/tmp/test.db"))  # Custom path
 
 ### Create and Manage Sessions
 
-``` python
+``` prism-code
 # Create a new session
 db.create_session(
     session_id="sess_abc123",
@@ -205,7 +205,7 @@ db.reopen_session("sess_abc123")
 
 ### Store Messages
 
-``` python
+``` prism-code
 msg_id = db.append_message(
     session_id="sess_abc123",
     role="assistant",
@@ -219,7 +219,7 @@ msg_id = db.append_message(
 
 ### Retrieve Messages
 
-``` python
+``` prism-code
 # Raw messages with all metadata
 messages = db.get_messages("sess_abc123")
 
@@ -230,7 +230,7 @@ conversation = db.get_messages_as_conversation("sess_abc123")
 
 ### Session Titles
 
-``` python
+``` prism-code
 # Set a title (must be unique among non-NULL titles)
 db.set_session_title("sess_abc123", "Fix Docker Build")
 
@@ -248,7 +248,7 @@ The `search_messages()` method supports FTS5 query syntax with automatic sanitiz
 
 ### Basic Search
 
-``` python
+``` prism-code
 results = db.search_messages("docker deployment")
 ```
 
@@ -264,7 +264,7 @@ results = db.search_messages("docker deployment")
 
 ### Filtered Search
 
-``` python
+``` prism-code
 # Search only CLI sessions
 results = db.search_messages("error", source_filter=["cli"])
 
@@ -296,7 +296,7 @@ Sessions can form chains via `parent_session_id`. This happens when context comp
 
 ### Query: Find Session Lineage
 
-``` sql
+``` prism-code
 -- Find all ancestors of a session
 WITH RECURSIVE lineage AS (
     SELECT * FROM sessions WHERE id = ?
@@ -318,7 +318,7 @@ SELECT id, title, started_at FROM descendants;
 
 ### Query: Recent Sessions with Preview
 
-``` sql
+``` prism-code
 SELECT s.*,
     COALESCE(
         (SELECT SUBSTR(m.content, 1, 63)
@@ -338,7 +338,7 @@ LIMIT 20;
 
 ### Query: Token Usage Statistics
 
-``` sql
+``` prism-code
 -- Total tokens by model
 SELECT model,
        COUNT(*) as session_count,
@@ -360,7 +360,7 @@ LIMIT 10;
 
 ## Export and Cleanup
 
-``` python
+``` prism-code
 # Export a single session with messages
 data = db.export_session("sess_abc123")
 

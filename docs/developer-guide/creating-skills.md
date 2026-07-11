@@ -28,7 +28,7 @@ Make it a **Tool** when:
 
 Bundled skills live in `skills/` organized by category. Official optional skills use the same structure in `optional-skills/`:
 
-``` text
+``` prism-code
 skills/
 ├── research/
 │   └── arxiv/
@@ -45,7 +45,7 @@ skills/
 
 ## SKILL.md Format
 
-``` markdown
+``` prism-code
 ---
 name: my-skill
 description: Brief description (shown in skill search results)
@@ -104,7 +104,7 @@ How the agent confirms it worked.
 
 Skills can restrict themselves to specific operating systems using the `platforms` field:
 
-``` yaml
+``` prism-code
 platforms: [macos]            # macOS only (e.g., iMessage, Apple Reminders)
 platforms: [macos, linux]     # macOS and Linux
 platforms: [windows]          # Windows only
@@ -116,7 +116,7 @@ When set, the skill is automatically hidden from the system prompt, `skills_list
 
 Skills can declare dependencies on specific tools or toolsets. This controls whether the skill appears in the system prompt for a given session.
 
-``` yaml
+``` prism-code
 metadata:
   hermes:
     requires_toolsets: [web]           # Hide if the web toolset is NOT active
@@ -125,12 +125,12 @@ metadata:
     fallback_for_tools: [browser_navigate]  # Hide if browser_navigate IS available
 ```
 
-| Field | Behavior |
-|----|----|
-| `requires_toolsets` | Skill is **hidden** when ANY listed toolset is **not** available |
-| `requires_tools` | Skill is **hidden** when ANY listed tool is **not** available |
-| `fallback_for_toolsets` | Skill is **hidden** when ANY listed toolset **is** available |
-| `fallback_for_tools` | Skill is **hidden** when ANY listed tool **is** available |
+| Field                   | Behavior                                                         |
+|-------------------------|------------------------------------------------------------------|
+| `requires_toolsets`     | Skill is **hidden** when ANY listed toolset is **not** available |
+| `requires_tools`        | Skill is **hidden** when ANY listed tool is **not** available    |
+| `fallback_for_toolsets` | Skill is **hidden** when ANY listed toolset **is** available     |
+| `fallback_for_tools`    | Skill is **hidden** when ANY listed tool **is** available        |
 
 **Use case for `fallback_for_*`:** Create a skill that serves as a workaround when a primary tool isn't available. For example, a `duckduckgo-search` skill with `fallback_for_tools: [web_search]` only shows when the web search tool (which requires an API key) is not configured.
 
@@ -140,7 +140,7 @@ metadata:
 
 Skills can declare environment variables they need. When a skill is loaded via `skill_view`, its required vars are automatically registered for passthrough into sandboxed execution environments (terminal, execute_code).
 
-``` yaml
+``` prism-code
 required_environment_variables:
   - name: TENOR_API_KEY
     prompt: "Tenor API key"               # Shown when prompting user
@@ -157,7 +157,7 @@ Each entry supports:
 
 Users can also manually configure passthrough variables in `config.yaml`:
 
-``` yaml
+``` prism-code
 terminal:
   env_passthrough:
     - MY_CUSTOM_VAR
@@ -170,7 +170,7 @@ See `skills/apple/` for examples of macOS-only skills.
 
 Use `required_environment_variables` when a skill needs an API key or token. Missing values do **not** hide the skill from discovery. Instead, Hermes prompts for them securely when the skill is loaded in the local CLI.
 
-``` yaml
+``` prism-code
 required_environment_variables:
   - name: TENOR_API_KEY
     prompt: Tenor API key
@@ -190,7 +190,7 @@ Legacy `prerequisites.env_vars` remains supported as a backward-compatible alias
 
 Skills can declare non-secret settings that are stored in `config.yaml` under the `skills.config` namespace. Unlike environment variables (which are secrets stored in `.env`), config settings are for paths, preferences, and other non-sensitive values.
 
-``` yaml
+``` prism-code
 metadata:
   hermes:
     config:
@@ -215,7 +215,7 @@ Each entry supports:
 
 1.  **Storage:** Values are written to `config.yaml` under `skills.config.<key>`:
 
-    ``` yaml
+    ``` prism-code
     skills:
       config:
         myplugin:
@@ -226,7 +226,7 @@ Each entry supports:
 
 3.  **Runtime injection:** When a skill loads, its config values are resolved and appended to the skill message:
 
-    ``` text
+    ``` prism-code
     [Skill config (from ~/.hermes/config.yaml):
       myplugin.path = /home/user/my-data
     ]
@@ -236,7 +236,7 @@ Each entry supports:
 
 4.  **Manual setup:** Users can also set values directly:
 
-    ``` bash
+    ``` prism-code
     hermes config set skills.config.myplugin.path ~/my-data
     ```
 
@@ -248,7 +248,7 @@ Use `required_environment_variables` for API keys, tokens, and other **secrets**
 
 Skills that use OAuth or file-based credentials can declare files that need to be mounted into remote sandboxes. This is for credentials stored as **files** (not env vars) — typically OAuth token files produced by a setup script.
 
-``` yaml
+``` prism-code
 required_credential_files:
   - path: google_token.json
     description: Google OAuth2 token (created by setup script)
@@ -295,14 +295,14 @@ If your skill produces a high-resolution screenshot, chart, or any image where l
 
 When a skill is loaded, the activation message exposes the absolute skill directory as `[Skill directory: /abs/path]` and also substitutes two template tokens anywhere in the SKILL.md body:
 
-| Token | Replaced with |
-|----|----|
-| `${HERMES_SKILL_DIR}` | Absolute path to the skill's directory |
+| Token                  | Replaced with                                                |
+|------------------------|--------------------------------------------------------------|
+| `${HERMES_SKILL_DIR}`  | Absolute path to the skill's directory                       |
 | `${HERMES_SESSION_ID}` | The active session id (left in place if there is no session) |
 
 So a SKILL.md can tell the agent to run a bundled script directly with:
 
-``` markdown
+``` prism-code
 To analyse the input, run:
 
     node ${HERMES_SKILL_DIR}/scripts/analyse.js <input>
@@ -314,14 +314,14 @@ The agent sees the substituted absolute path and invokes the `terminal` tool wit
 
 Skills can also embed inline shell snippets written as `` !`cmd` `` in the SKILL.md body. When enabled, each snippet's stdout is inlined into the message before the agent reads it, so skills can inject dynamic context:
 
-``` markdown
+``` prism-code
 Current date: !`date -u +%Y-%m-%d`
 Git branch: !`git -C ${HERMES_SKILL_DIR} rev-parse --abbrev-ref HEAD`
 ```
 
 This is **off by default** — any snippet in a SKILL.md runs on the host without approval, so only enable it for skill sources you trust:
 
-``` yaml
+``` prism-code
 # config.yaml
 skills:
   inline_shell: true
@@ -334,7 +334,7 @@ Snippets run with the skill directory as their working directory, and output is 
 
 Run the skill and verify the agent follows the instructions correctly:
 
-``` bash
+``` prism-code
 hermes chat --toolsets skills -q "Use the X skill to do Y"
 ```
 
@@ -353,7 +353,7 @@ If your skill is specialized, community-contributed, or niche, it's better suite
 
 A **blueprint** is an ordinary skill that additionally declares a schedule in its frontmatter. Add a `metadata.hermes.blueprint` block and the skill becomes a shareable, runnable automation:
 
-``` yaml
+``` prism-code
 metadata:
   hermes:
     tags: [blueprint, email]
@@ -368,7 +368,7 @@ Because a blueprint **is** a skill, it flows through the entire skills pipeline 
 
 **Installing a blueprint.** When you install a skill that carries a `blueprint:` block, Hermes registers it as a **suggested cron job** rather than scheduling it. Scheduling is **opt-in** — installing never silently creates a recurring job. You review and accept it via `/suggestions`:
 
-``` bash
+``` prism-code
 hermes skills install owner/morning-brief
 # → Blueprint: 'morning-brief' is an automation (schedule 0 8 * * *).
 #   Added to your suggestions — run /suggestions to schedule or dismiss it.
@@ -389,14 +389,14 @@ The blueprint layer adds no new object type, store, or transport — the bluepri
 
 Hermes can *propose* automations and let you accept them with one tap, instead of making you assemble cron jobs by hand. Every proposal flows through one surface — the `/suggestions` command — regardless of where it came from:
 
-| Source | Trigger |
-|----|----|
-| `catalog` | Curated starter automations (`/suggestions catalog`) — daily briefing, important-mail monitor, weekly review, workday-start reminder |
-| `blueprint` | You installed a skill carrying a `blueprint:` block |
-| `usage` | The background review noticed a recurring ask a schedule would serve |
-| `integration` | You connected an account (Gmail, GitHub, ...) and the obvious automations are offered |
+| Source        | Trigger                                                                                                                              |
+|---------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| `catalog`     | Curated starter automations (`/suggestions catalog`) — daily briefing, important-mail monitor, weekly review, workday-start reminder |
+| `blueprint`   | You installed a skill carrying a `blueprint:` block                                                                                  |
+| `usage`       | The background review noticed a recurring ask a schedule would serve                                                                 |
+| `integration` | You connected an account (Gmail, GitHub, ...) and the obvious automations are offered                                                |
 
-``` bash
+``` prism-code
 /suggestions             # list pending
 /suggestions accept N    # schedule suggestion N (creates the cron job)
 /suggestions dismiss N   # dismiss it — latched, never re-offered
@@ -411,7 +411,7 @@ The **important-mail monitor** catalog entry is the poll→classify→surface pa
 
 ### To the Skills Hub
 
-``` bash
+``` prism-code
 hermes skills publish skills/my-skill --to github --repo owner/repo
 ```
 
@@ -419,7 +419,7 @@ hermes skills publish skills/my-skill --to github --repo owner/repo
 
 Add your repo as a tap:
 
-``` bash
+``` prism-code
 hermes skills tap add owner/repo
 ```
 

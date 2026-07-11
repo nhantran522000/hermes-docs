@@ -67,19 +67,19 @@ Every auxiliary task defaults to `auto` — meaning Hermes tries your main model
 
 ### Common override patterns
 
-| Task | When to override |
-|----|----|
-| **Title Gen** | Almost always. A \$0.10/M flash model writes session titles as well as Opus. Default config sets this to `google/gemini-3-flash-preview` on OpenRouter. |
-| **Vision** | When your main model lacks vision support. Point it at `google/gemini-2.5-flash` or `gpt-4o-mini`. |
-| **Compression** | When you're burning reasoning tokens on Opus/M2.7 just to summarize context. A fast chat model does the job at 1/50th the cost. |
-| **Approval** | For `approval_mode: smart` — a fast/cheap model (haiku, flash, gpt-5-mini) decides whether to auto-approve low-risk commands. Expensive models here are waste. |
-| **Web Extract** | When you use `web_extract` heavily. Same logic as compression — summarization doesn't need reasoning. |
-| **Skills Hub** | `hermes skills search` uses this. Usually fine at `auto`. |
-| **MCP** | MCP tool routing. Usually fine at `auto`. |
-| **Triage Specifier** | Routes the Kanban triage specifier (`hermes kanban specify`) that expands a rough one-liner into a concrete spec. A cheap, capable model works well. |
-| **Kanban Decomposer** | Routes Kanban task decomposition — splits a triage task into a graph of child tasks for specialist profiles. |
-| **Profile Describer** | Routes profile-description generation (`hermes profile describe --auto` / the dashboard auto-generate button). Short, cheap call. |
-| **Curator** | Routes the curator skill-usage review pass. Can run for minutes on reasoning models, so a cheaper aux model is often worthwhile. |
+| Task                  | When to override                                                                                                                                               |
+|-----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Title Gen**         | Almost always. A \$0.10/M flash model writes session titles as well as Opus. Default config sets this to `google/gemini-3-flash-preview` on OpenRouter.        |
+| **Vision**            | When your main model lacks vision support. Point it at `google/gemini-2.5-flash` or `gpt-4o-mini`.                                                             |
+| **Compression**       | When you're burning reasoning tokens on Opus/M2.7 just to summarize context. A fast chat model does the job at 1/50th the cost.                                |
+| **Approval**          | For `approval_mode: smart` — a fast/cheap model (haiku, flash, gpt-5-mini) decides whether to auto-approve low-risk commands. Expensive models here are waste. |
+| **Web Extract**       | When you use `web_extract` heavily. Same logic as compression — summarization doesn't need reasoning.                                                          |
+| **Skills Hub**        | `hermes skills search` uses this. Usually fine at `auto`.                                                                                                      |
+| **MCP**               | MCP tool routing. Usually fine at `auto`.                                                                                                                      |
+| **Triage Specifier**  | Routes the Kanban triage specifier (`hermes kanban specify`) that expands a rough one-liner into a concrete spec. A cheap, capable model works well.           |
+| **Kanban Decomposer** | Routes Kanban task decomposition — splits a triage task into a graph of child tasks for specialist profiles.                                                   |
+| **Profile Describer** | Routes profile-description generation (`hermes profile describe --auto` / the dashboard auto-generate button). Short, cheap call.                              |
+| **Curator**           | Routes the curator skill-usage review pass. Can run for minutes on reasoning models, so a cheaper aux model is often worthwhile.                               |
 
 ### Per-task override
 
@@ -109,7 +109,7 @@ When you save via the dashboard, Hermes writes to `~/.hermes/config.yaml`:
 
 **Main model:**
 
-``` yaml
+``` prism-code
 model:
   provider: openrouter
   default: anthropic/claude-opus-4.7
@@ -119,7 +119,7 @@ model:
 
 **Auxiliary override (example — vision on gemini-flash):**
 
-``` yaml
+``` prism-code
 auxiliary:
   vision:
     provider: openrouter
@@ -133,7 +133,7 @@ auxiliary:
 
 **Auxiliary on auto (default):**
 
-``` yaml
+``` prism-code
 auxiliary:
   compression:
     provider: auto
@@ -146,7 +146,7 @@ auxiliary:
 
 Optional task-specific fallback chains live under the same auxiliary task:
 
-``` yaml
+``` prism-code
 auxiliary:
   title_generation:
     provider: auto
@@ -194,7 +194,7 @@ On OpenRouter (or any aggregator), bare model names resolve *within* the aggrega
 
 Inside any `hermes chat` session:
 
-``` text
+``` prism-code
 /model gpt-5.4 --provider openrouter             # session-only
 /model gpt-5.4 --provider openrouter --global    # also persists to config.yaml
 ```
@@ -207,7 +207,7 @@ Define your own short names for models you reach for often, then use `/model <al
 
 **Canonical (top-level `model_aliases:`)** — full control over provider + base_url:
 
-``` yaml
+``` prism-code
 # ~/.hermes/config.yaml
 model_aliases:
   fav:
@@ -220,7 +220,7 @@ model_aliases:
 
 **Short string form (`model.aliases.<name>: provider/model`)** — convenient from the shell because `hermes config set` only writes scalar values, but it can't carry a custom `base_url`:
 
-``` bash
+``` prism-code
 hermes config set model.aliases.fav anthropic/claude-opus-4.6
 hermes config set model.aliases.grok x-ai/grok-4
 ```
@@ -231,7 +231,7 @@ Then `/model fav` or `/model grok` in chat. User aliases shadow built-in short n
 
 ### `hermes model` subcommand
 
-``` bash
+``` prism-code
 hermes model            # Interactive provider + model picker (the canonical way to switch defaults)
 ```
 
@@ -247,7 +247,7 @@ Edit `~/.hermes/config.yaml` and restart whatever reads it. See the [Configurati
 
 The dashboard uses three endpoints. Useful for scripting:
 
-``` bash
+``` prism-code
 # List authenticated providers + curated model lists
 curl -H "X-Hermes-Session-Token: $TOKEN" http://localhost:PORT/api/model/options
 

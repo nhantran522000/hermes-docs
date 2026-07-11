@@ -28,7 +28,7 @@ The tested Termux bundle installs:
 
 Concretely, it maps to:
 
-``` bash
+``` prism-code
 python -m pip install -e '.[termux]' -c constraints-termux.txt
 ```
 
@@ -50,7 +50,7 @@ That does not stop Hermes from working well as a phone-native CLI agent — it j
 
 Hermes now ships a Termux-aware installer path:
 
-``` bash
+``` prism-code
 curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 ```
 
@@ -70,7 +70,7 @@ If you want the explicit commands or need to debug a failed install, use the man
 
 ### 1. Update Termux and install system packages
 
-``` bash
+``` prism-code
 pkg update
 pkg install -y git python clang rust make pkg-config libffi openssl nodejs ripgrep ffmpeg
 ```
@@ -86,14 +86,14 @@ Why these packages?
 
 ### 2. Clone Hermes
 
-``` bash
+``` prism-code
 git clone https://github.com/NousResearch/hermes-agent.git
 cd hermes-agent
 ```
 
 ### 3. Create a virtual environment
 
-``` bash
+``` prism-code
 python -m venv venv
 source venv/bin/activate
 export ANDROID_API_LEVEL="$(getprop ro.build.version.sdk)"
@@ -104,19 +104,19 @@ python -m pip install --upgrade pip setuptools wheel
 
 ### 4. Install the tested Termux bundle
 
-``` bash
+``` prism-code
 python -m pip install -e '.[termux]' -c constraints-termux.txt
 ```
 
 If you only want the minimal core agent, this also works:
 
-``` bash
+``` prism-code
 python -m pip install -e '.' -c constraints-termux.txt
 ```
 
 ### 5. Put `hermes` on your Termux PATH
 
-``` bash
+``` prism-code
 ln -sf "$PWD/venv/bin/hermes" "$PREFIX/bin/hermes"
 ```
 
@@ -124,14 +124,14 @@ ln -sf "$PWD/venv/bin/hermes" "$PREFIX/bin/hermes"
 
 ### 6. Verify the install
 
-``` bash
+``` prism-code
 hermes version
 hermes doctor
 ```
 
 ### 7. Start Hermes
 
-``` bash
+``` prism-code
 hermes
 ```
 
@@ -141,7 +141,7 @@ hermes
 
 ### Configure a model
 
-``` bash
+``` prism-code
 hermes model
 ```
 
@@ -149,7 +149,7 @@ Or set keys directly in `~/.hermes/.env`.
 
 ### Re-run the full interactive setup wizard later
 
-``` bash
+``` prism-code
 hermes setup
 ```
 
@@ -157,7 +157,7 @@ hermes setup
 
 The tested Termux path skips Node/browser bootstrap on purpose. If you want to experiment with browser tooling later:
 
-``` bash
+``` prism-code
 pkg install nodejs-lts
 npm install
 ```
@@ -174,7 +174,7 @@ Treat browser / WhatsApp tooling on Android as experimental until documented oth
 
 Use the tested Termux bundle instead:
 
-``` bash
+``` prism-code
 python -m pip install -e '.[termux]' -c constraints-termux.txt
 ```
 
@@ -188,7 +188,7 @@ The blocker is currently the `voice` extra:
 
 Use the Termux path with the stdlib venv + `pip` instead:
 
-``` bash
+``` prism-code
 python -m venv venv
 source venv/bin/activate
 export ANDROID_API_LEVEL="$(getprop ro.build.version.sdk)"
@@ -200,7 +200,7 @@ python -m pip install -e '.[termux]' -c constraints-termux.txt
 
 Set the API level explicitly before installing:
 
-``` bash
+``` prism-code
 export ANDROID_API_LEVEL="$(getprop ro.build.version.sdk)"
 python -m pip install -e '.[termux]' -c constraints-termux.txt
 ```
@@ -209,7 +209,7 @@ python -m pip install -e '.[termux]' -c constraints-termux.txt
 
 Install them with Termux packages:
 
-``` bash
+``` prism-code
 pkg install ripgrep nodejs
 ```
 
@@ -217,13 +217,13 @@ pkg install ripgrep nodejs
 
 Make sure the build toolchain is installed:
 
-``` bash
+``` prism-code
 pkg install clang rust make pkg-config libffi openssl
 ```
 
 Then retry:
 
-``` bash
+``` prism-code
 python -m pip install -e '.[termux]' -c constraints-termux.txt
 ```
 

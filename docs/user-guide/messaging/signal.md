@@ -24,7 +24,7 @@ The Signal adapter uses `httpx` (already a core Hermes dependency) for all commu
 
 ### Installing signal-cli
 
-``` bash
+``` prism-code
 # macOS
 brew install signal-cli
 
@@ -46,7 +46,7 @@ signal-cli is **not** in apt or snap repositories. The Linux install above downl
 
 Signal-cli works as a **linked device** — like WhatsApp Web, but for Signal. Your phone stays the primary device.
 
-``` bash
+``` prism-code
 # Generate a linking URI (displays a QR code or link)
 signal-cli link -n "HermesAgent"
 ```
@@ -60,7 +60,7 @@ signal-cli link -n "HermesAgent"
 
 ## Step 2: Start the signal-cli Daemon
 
-``` bash
+``` prism-code
 # Replace +1234567890 with your Signal phone number (E.164 format)
 signal-cli --account +1234567890 daemon --http 127.0.0.1:8080
 ```
@@ -71,7 +71,7 @@ Keep this running in the background. You can use `systemd`, `tmux`, `screen`, or
 
 Verify it's running:
 
-``` bash
+``` prism-code
 curl http://127.0.0.1:8080/api/v1/check
 # Should return: {"versions":{"signal-cli":...}}
 ```
@@ -82,7 +82,7 @@ curl http://127.0.0.1:8080/api/v1/check
 
 The easiest way:
 
-``` bash
+``` prism-code
 hermes gateway setup
 ```
 
@@ -98,7 +98,7 @@ Select **Signal** from the platform menu. The wizard will:
 
 Add to `~/.hermes/.env`:
 
-``` bash
+``` prism-code
 # Required
 SIGNAL_HTTP_URL=http://127.0.0.1:8080
 SIGNAL_ACCOUNT=+1234567890
@@ -113,7 +113,7 @@ SIGNAL_HOME_CHANNEL=+1234567890                  # Default delivery target for c
 
 Then start the gateway:
 
-``` bash
+``` prism-code
 hermes gateway              # Foreground
 hermes gateway install      # Install as a user service
 sudo hermes gateway install --system   # Linux only: boot-time system service
@@ -135,11 +135,11 @@ DM access follows the same pattern as all other Hermes platforms:
 
 Group access is controlled by the `SIGNAL_GROUP_ALLOWED_USERS` env var:
 
-| Configuration | Behavior |
-|----|----|
-| Not set (default) | All group messages are ignored. The bot only responds to DMs. |
+| Configuration      | Behavior                                                      |
+|--------------------|---------------------------------------------------------------|
+| Not set (default)  | All group messages are ignored. The bot only responds to DMs. |
 | Set with group IDs | Only listed groups are monitored (e.g., `groupId1,groupId2`). |
-| Set to `*` | The bot responds in any group it's a member of. |
+| Set to `*`         | The bot responds in any group it's a member of.               |
 
 ------------------------------------------------------------------------
 
@@ -224,15 +224,15 @@ The adapter monitors the SSE connection and automatically reconnects if:
 
 ## Troubleshooting
 
-| Problem | Solution |
-|----|----|
-| **"Cannot reach signal-cli"** during setup | Ensure signal-cli daemon is running: `signal-cli --account +YOUR_NUMBER daemon --http 127.0.0.1:8080` |
-| **Messages not received** | Check that `SIGNAL_ALLOWED_USERS` includes the sender's number in E.164 format (with `+` prefix) |
-| **"signal-cli not found on PATH"** | Install signal-cli and ensure it's in your PATH, or use Docker |
-| **Connection keeps dropping** | Check signal-cli logs for errors. Ensure Java 17+ is installed. |
-| **Group messages ignored** | Configure `SIGNAL_GROUP_ALLOWED_USERS` with specific group IDs, or `*` to allow all groups. |
-| **Bot responds to no one** | Configure `SIGNAL_ALLOWED_USERS`, use DM pairing, or explicitly allow all users through gateway policy if you want broader access. |
-| **Duplicate messages** | Ensure only one signal-cli instance is listening on your phone number |
+| Problem                                    | Solution                                                                                                                           |
+|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| **"Cannot reach signal-cli"** during setup | Ensure signal-cli daemon is running: `signal-cli --account +YOUR_NUMBER daemon --http 127.0.0.1:8080`                              |
+| **Messages not received**                  | Check that `SIGNAL_ALLOWED_USERS` includes the sender's number in E.164 format (with `+` prefix)                                   |
+| **"signal-cli not found on PATH"**         | Install signal-cli and ensure it's in your PATH, or use Docker                                                                     |
+| **Connection keeps dropping**              | Check signal-cli logs for errors. Ensure Java 17+ is installed.                                                                    |
+| **Group messages ignored**                 | Configure `SIGNAL_GROUP_ALLOWED_USERS` with specific group IDs, or `*` to allow all groups.                                        |
+| **Bot responds to no one**                 | Configure `SIGNAL_ALLOWED_USERS`, use DM pairing, or explicitly allow all users through gateway policy if you want broader access. |
+| **Duplicate messages**                     | Ensure only one signal-cli instance is listening on your phone number                                                              |
 
 ------------------------------------------------------------------------
 
@@ -252,11 +252,11 @@ warning
 
 ## Environment Variables Reference
 
-| Variable | Required | Default | Description |
-|----|----|----|----|
-| `SIGNAL_HTTP_URL` | Yes | — | signal-cli HTTP endpoint |
-| `SIGNAL_ACCOUNT` | Yes | — | Bot phone number (E.164) |
-| `SIGNAL_ALLOWED_USERS` | No | — | Comma-separated phone numbers/UUIDs |
-| `SIGNAL_GROUP_ALLOWED_USERS` | No | — | Group IDs to monitor, or `*` for all (omit to disable groups) |
-| `SIGNAL_ALLOW_ALL_USERS` | No | `false` | Allow any user to interact (skip allowlist) |
-| `SIGNAL_HOME_CHANNEL` | No | — | Default delivery target for cron jobs |
+| Variable                     | Required | Default | Description                                                   |
+|------------------------------|----------|---------|---------------------------------------------------------------|
+| `SIGNAL_HTTP_URL`            | Yes      | —       | signal-cli HTTP endpoint                                      |
+| `SIGNAL_ACCOUNT`             | Yes      | —       | Bot phone number (E.164)                                      |
+| `SIGNAL_ALLOWED_USERS`       | No       | —       | Comma-separated phone numbers/UUIDs                           |
+| `SIGNAL_GROUP_ALLOWED_USERS` | No       | —       | Group IDs to monitor, or `*` for all (omit to disable groups) |
+| `SIGNAL_ALLOW_ALL_USERS`     | No       | `false` | Allow any user to interact (skip allowlist)                   |
+| `SIGNAL_HOME_CHANNEL`        | No       | —       | Default delivery target for cron jobs                         |

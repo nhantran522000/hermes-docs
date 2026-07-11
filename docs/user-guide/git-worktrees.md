@@ -38,7 +38,7 @@ See also: [Checkpoints and /rollback](checkpoints-and-rollback.md).
 
 From your main repository (containing `.git/`), create a new worktree for a feature branch:
 
-``` bash
+``` prism-code
 # From the main repo root
 cd /path/to/your/repo
 
@@ -53,7 +53,7 @@ This creates:
 
 Now you can `cd` into the new worktree and run Hermes there:
 
-``` bash
+``` prism-code
 cd ../repo-feature
 
 # Start Hermes in the worktree
@@ -70,7 +70,7 @@ Hermes will:
 
 You can create multiple worktrees, each with its own branch:
 
-``` bash
+``` prism-code
 cd /path/to/your/repo
 
 git worktree add ../repo-experiment-a feature/hermes-a
@@ -79,7 +79,7 @@ git worktree add ../repo-experiment-b feature/hermes-b
 
 In separate terminals:
 
-``` bash
+``` prism-code
 # Terminal 1
 cd ../repo-experiment-a
 hermes
@@ -110,7 +110,7 @@ When you are done with an experiment:
     - Merge the branch into your main branch as usual.
 3.  Remove the worktree:
 
-``` bash
+``` prism-code
 cd /path/to/your/repo
 
 # Remove the worktree directory and its reference
@@ -140,7 +140,7 @@ Notes:
 
 Hermes has a built‑in `-w` flag that **automatically creates a disposable git worktree** with its own branch. You don't need to set up worktrees manually — just `cd` into your repo and run:
 
-``` bash
+``` prism-code
 cd /path/to/your/repo
 hermes -w
 ```
@@ -153,7 +153,7 @@ Hermes will:
 
 This is the easiest way to get worktree isolation. You can also combine it with a single query:
 
-``` bash
+``` prism-code
 hermes -w -z "Fix issue #123"
 ```
 

@@ -40,7 +40,7 @@ If you have a paid [Nous Portal](https://portal.nousresearch.com) subscription, 
 
 To use Browserbase-managed cloud browsers, add:
 
-``` bash
+``` prism-code
 # Add to ~/.hermes/.env
 BROWSERBASE_API_KEY=***
 BROWSERBASE_PROJECT_ID=your-project-id-here
@@ -52,7 +52,7 @@ Get your credentials at [browserbase.com](https://browserbase.com).
 
 To use Browser Use as your cloud browser provider, add:
 
-``` bash
+``` prism-code
 # Add to ~/.hermes/.env
 BROWSER_USE_API_KEY=***
 ```
@@ -63,21 +63,21 @@ Get your API key at [browser-use.com](https://browser-use.com). Browser Use prov
 
 To use Firecrawl as your cloud browser provider, add:
 
-``` bash
+``` prism-code
 # Add to ~/.hermes/.env
 FIRECRAWL_API_KEY=fc-***
 ```
 
 Get your API key at [firecrawl.dev](https://firecrawl.dev). Then select Firecrawl as your browser provider:
 
-``` bash
+``` prism-code
 hermes setup tools
 # → Browser Automation → Firecrawl
 ```
 
 Optional settings:
 
-``` bash
+``` prism-code
 # Self-hosted Firecrawl instance (default: https://api.firecrawl.dev)
 FIRECRAWL_API_URL=http://localhost:3002
 
@@ -93,7 +93,7 @@ This solves the common "I'm developing locally but using Browserbase" workflow �
 
 The feature is **on by default**. To disable it (all URLs go to the configured cloud provider, as before):
 
-``` yaml
+``` prism-code
 # ~/.hermes/config.yaml
 browser:
   cloud_provider: browserbase
@@ -108,7 +108,7 @@ Requirements: the local sidecar uses the same `agent-browser` CLI as pure local 
 
 [Camofox](https://github.com/jo-inc/camofox-browser) is a self-hosted Node.js server wrapping Camoufox (a Firefox fork with C++ fingerprint spoofing). It provides local anti-detection browsing without cloud dependencies.
 
-``` bash
+``` prism-code
 # Clone the Camofox browser server first
 git clone https://github.com/jo-inc/camofox-browser
 cd camofox-browser
@@ -133,7 +133,7 @@ make up VERSION=135.0.1 RELEASE=beta.24
 
 `make up` starts the default container immediately. If you want custom runtime settings such as a larger Node heap, VNC, or a persistent profile directory, build the image first and then run it yourself:
 
-``` bash
+``` prism-code
 # Build the image without starting the default container
 make build
 
@@ -158,20 +158,20 @@ With VNC enabled, the browser runs in headed mode and can be watched live in you
 
 If you already ran `make up`, stop and remove that default container before starting the custom one:
 
-``` bash
+``` prism-code
 make down
 # then run the custom docker run command above
 ```
 
 Then set in `~/.hermes/.env`:
 
-``` bash
+``` prism-code
 CAMOFOX_URL=http://localhost:9377
 ```
 
 If Camofox is running in Docker and you want it to open web apps served from the host machine, enable loopback rewriting. `CAMOFOX_URL` should still point at the host-published control API, but page URLs such as `http://127.0.0.1:3000` must be opened from inside the container as `http://host.docker.internal:3000`:
 
-``` yaml
+``` prism-code
 # ~/.hermes/config.yaml
 browser:
   camofox:
@@ -181,7 +181,7 @@ browser:
 
 Equivalent env vars:
 
-``` bash
+``` prism-code
 CAMOFOX_REWRITE_LOOPBACK_URLS=true
 CAMOFOX_LOOPBACK_HOST_ALIAS=host.docker.internal
 ```
@@ -196,7 +196,7 @@ When `CAMOFOX_URL` is set, all browser tools automatically route through Camofox
 
 By default, each Camofox session gets a random identity — cookies and logins don't survive across agent restarts. To enable persistent browser sessions, add the following to `~/.hermes/config.yaml`:
 
-``` yaml
+``` prism-code
 browser:
   camofox:
     managed_persistence: true
@@ -208,7 +208,7 @@ Nested path matters
 
 Hermes reads `browser.camofox.managed_persistence`, **not** a top-level `managed_persistence`. A common mistake is writing:
 
-``` yaml
+``` prism-code
 # ❌ Wrong — Hermes ignores this
 managed_persistence: true
 ```
@@ -246,15 +246,15 @@ When another app drives the visible Camofox browser (a desktop assistant, a cust
 
 Three knobs control the behavior:
 
-| Setting | Env var | Effect |
-|----|----|----|
-| `browser.camofox.user_id` | `CAMOFOX_USER_ID` | Camofox `userId` Hermes uses when creating tabs. Setting this opts the session into "externally managed" mode. |
-| `browser.camofox.session_key` | `CAMOFOX_SESSION_KEY` | `sessionKey` (a.k.a. `listItemId`) sent on tab creation. Used to match an existing tab during adoption. Defaults to a per-task value if unset. |
-| `browser.camofox.adopt_existing_tab` | `CAMOFOX_ADOPT_EXISTING_TAB` | When true, Hermes calls `GET /tabs?userId=<user_id>` on first use and reuses an existing tab before creating a new one. |
+| Setting                              | Env var                      | Effect                                                                                                                                         |
+|--------------------------------------|------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| `browser.camofox.user_id`            | `CAMOFOX_USER_ID`            | Camofox `userId` Hermes uses when creating tabs. Setting this opts the session into "externally managed" mode.                                 |
+| `browser.camofox.session_key`        | `CAMOFOX_SESSION_KEY`        | `sessionKey` (a.k.a. `listItemId`) sent on tab creation. Used to match an existing tab during adoption. Defaults to a per-task value if unset. |
+| `browser.camofox.adopt_existing_tab` | `CAMOFOX_ADOPT_EXISTING_TAB` | When true, Hermes calls `GET /tabs?userId=<user_id>` on first use and reuses an existing tab before creating a new one.                        |
 
 Env vars take precedence over `config.yaml`. Either form works:
 
-``` yaml
+``` prism-code
 browser:
   camofox:
     user_id: shared-camofox
@@ -262,7 +262,7 @@ browser:
     adopt_existing_tab: true
 ```
 
-``` bash
+``` prism-code
 CAMOFOX_USER_ID=shared-camofox
 CAMOFOX_SESSION_KEY=visible-tab
 CAMOFOX_ADOPT_EXISTING_TAB=true
@@ -300,7 +300,7 @@ note
 
 In the CLI, use:
 
-``` text
+``` prism-code
 /browser connect                 # Auto-launch/connect to a local Chromium-family browser at http://127.0.0.1:9222
 /browser connect ws://host:port  # Connect to a specific CDP endpoint
 /browser status                  # Check current connection
@@ -313,7 +313,7 @@ tip
 
 To start a Chromium-family browser manually with CDP enabled, use a dedicated user-data-dir so the debug port actually comes up even if the browser is already running with your normal profile:
 
-``` bash
+``` prism-code
 # Linux — Brave
 brave-browser \
   --remote-debugging-port=9222 \
@@ -371,7 +371,7 @@ If you do **not** set any cloud credentials and don't use `/browser connect`, He
 
 ### Optional Environment Variables
 
-``` bash
+``` prism-code
 # Residential proxies for better CAPTCHA solving (default: "true")
 BROWSERBASE_PROXIES=true
 
@@ -398,7 +398,7 @@ AGENT_BROWSER_ARGS=--no-sandbox
 
 ### Install agent-browser CLI
 
-``` bash
+``` prism-code
 npm install -g agent-browser
 # Or install locally in the repo:
 npm install
@@ -414,7 +414,7 @@ The `browser` toolset must be included in your config's `toolsets` list or enabl
 
 Navigate to a URL. Must be called before any other browser tool. Initializes the Browserbase session.
 
-``` text
+``` prism-code
 Navigate to https://github.com/NousResearch
 ```
 
@@ -435,7 +435,7 @@ Snapshots over 8000 characters are automatically summarized by an LLM.
 
 Click an element identified by its ref ID from the snapshot.
 
-``` text
+``` prism-code
 Click @e5 to press the "Sign In" button
 ```
 
@@ -443,7 +443,7 @@ Click @e5 to press the "Sign In" button
 
 Type text into an input field. Clears the field first, then types the new text.
 
-``` text
+``` prism-code
 Type "hermes agent" into the search field @e3
 ```
 
@@ -451,7 +451,7 @@ Type "hermes agent" into the search field @e3
 
 Scroll the page up or down to reveal more content.
 
-``` text
+``` prism-code
 Scroll down to see more results
 ```
 
@@ -459,7 +459,7 @@ Scroll down to see more results
 
 Press a keyboard key. Useful for submitting forms or navigation.
 
-``` text
+``` prism-code
 Press Enter to submit the form
 ```
 
@@ -479,7 +479,7 @@ Take a screenshot and analyze it with vision AI. Use this when text snapshots do
 
 The screenshot is saved persistently and the file path is returned alongside the AI analysis. On messaging platforms (Telegram, Discord, Slack, WhatsApp), you can ask the agent to share the screenshot — it will be sent as a native photo attachment via the `MEDIA:` mechanism.
 
-``` text
+``` prism-code
 What does the chart on this page show?
 ```
 
@@ -489,7 +489,7 @@ Screenshots are stored in `~/.hermes/cache/screenshots/` and automatically clean
 
 Get browser console output (log/warn/error messages) and uncaught JavaScript exceptions from the current page. Essential for detecting silent JS errors that don't appear in the accessibility tree.
 
-``` text
+``` prism-code
 Check the browser console for any JavaScript errors
 ```
 
@@ -497,7 +497,7 @@ Use `clear=True` to clear the console after reading, so subsequent calls only sh
 
 `browser_console` also evaluates JavaScript when called with an `expression` argument — same shape as DevTools console, the result comes back parsed (JSON-serialized objects become dicts; primitive values stay primitive).
 
-``` text
+``` prism-code
 browser_console(expression="document.querySelector('h1').textContent")
 browser_console(expression="JSON.stringify(performance.timing)")
 ```
@@ -514,7 +514,7 @@ Raw Chrome DevTools Protocol passthrough — the escape hatch for browser operat
 
 Common patterns:
 
-``` text
+``` prism-code
 # List tabs (browser-level, no target_id)
 browser_cdp(method="Target.getTargets")
 
@@ -536,7 +536,7 @@ Browser-level methods (`Target.*`, `Browser.*`, `Storage.*`) omit `target_id`. P
 
 **Cross-origin iframes:** pass `frame_id` (from `browser_snapshot.frame_tree.children[]` where `is_oopif=true`) to route the CDP call through the supervisor's live session for that iframe. This is how `Runtime.evaluate` inside a cross-origin iframe works on Browserbase, where stateless CDP connections would hit signed-URL expiry. Example:
 
-``` text
+``` prism-code
 browser_cdp(
   method="Runtime.evaluate",
   params={"expression": "document.title", "returnByValue": True},
@@ -560,21 +560,21 @@ Responds to a native JS dialog (`alert` / `confirm` / `prompt` / `beforeunload`)
 
 **Availability matrix:**
 
-| Backend | Detection via `pending_dialogs` | Response (`browser_dialog` tool) |
-|----|----|----|
-| Local Chrome via `/browser connect` or `browser.cdp_url` | ✓ | ✓ full workflow |
-| Browserbase | ✓ | ✓ full workflow (via injected XHR bridge) |
-| Camofox / default local agent-browser | ✗ | ✗ (no CDP endpoint) |
+| Backend                                                  | Detection via `pending_dialogs` | Response (`browser_dialog` tool)          |
+|----------------------------------------------------------|---------------------------------|-------------------------------------------|
+| Local Chrome via `/browser connect` or `browser.cdp_url` | ✓                               | ✓ full workflow                           |
+| Browserbase                                              | ✓                               | ✓ full workflow (via injected XHR bridge) |
+| Camofox / default local agent-browser                    | ✗                               | ✗ (no CDP endpoint)                       |
 
 **How it works on Browserbase.** Browserbase's CDP proxy auto-dismisses real native dialogs server-side within ~10ms, so we can't use `Page.handleJavaScriptDialog`. The supervisor injects a small script via `Page.addScriptToEvaluateOnNewDocument` that overrides `window.alert`/`confirm`/`prompt` with a synchronous XHR. We intercept those XHRs via `Fetch.enable` — the page's JS thread stays blocked on the XHR until we call `Fetch.fulfillRequest` with the agent's response. `prompt()` return values round-trip back into page JS unchanged.
 
 **Dialog policy** is configured in `config.yaml` under `browser.dialog_policy`:
 
-| Policy | Behavior |
-|----|----|
+| Policy                   | Behavior                                                                                                                                                                           |
+|--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `must_respond` (default) | Capture, surface in snapshot, wait for explicit `browser_dialog()` call. Safety auto-dismiss after `browser.dialog_timeout_s` (default 300s) so a buggy agent can't stall forever. |
-| `auto_dismiss` | Capture, dismiss immediately. Agent still sees the dialog in `browser_state` history but doesn't have to act. |
-| `auto_accept` | Capture, accept immediately. Useful when navigating pages with aggressive `beforeunload` prompts. |
+| `auto_dismiss`           | Capture, dismiss immediately. Agent still sees the dialog in `browser_state` history but doesn't have to act.                                                                      |
+| `auto_accept`            | Capture, accept immediately. Useful when navigating pages with aggressive `beforeunload` prompts.                                                                                  |
 
 **Frame tree** inside `browser_snapshot.frame_tree` is capped to 30 frames and OOPIF depth 2 to keep payloads bounded on ad-heavy pages. A `truncated: true` flag surfaces when limits were hit; agents needing the full tree can use `browser_cdp` with `Page.getFrameTree`.
 
@@ -582,7 +582,7 @@ Responds to a native JS dialog (`alert` / `confirm` / `prompt` / `beforeunload`)
 
 ### Filling Out a Web Form
 
-``` text
+``` prism-code
 User: Sign up for an account on example.com with my email john@example.com
 
 Agent workflow:
@@ -596,7 +596,7 @@ Agent workflow:
 
 ### Researching Dynamic Content
 
-``` text
+``` prism-code
 User: What are the top trending repos on GitHub right now?
 
 Agent workflow:
@@ -609,7 +609,7 @@ Agent workflow:
 
 Automatically record browser sessions as WebM video files:
 
-``` yaml
+``` prism-code
 browser:
   record_sessions: true  # default: false
 ```
@@ -620,12 +620,12 @@ When enabled, recording starts automatically on the first `browser_navigate` and
 
 Browserbase provides automatic stealth capabilities:
 
-| Feature | Default | Notes |
-|----|----|----|
-| Basic Stealth | Always on | Random fingerprints, viewport randomization, CAPTCHA solving |
-| Residential Proxies | On | Routes through residential IPs for better access |
-| Advanced Stealth | Off | Custom Chromium build, requires Scale Plan |
-| Keep Alive | On | Session reconnection after network hiccups |
+| Feature             | Default   | Notes                                                        |
+|---------------------|-----------|--------------------------------------------------------------|
+| Basic Stealth       | Always on | Random fingerprints, viewport randomization, CAPTCHA solving |
+| Residential Proxies | On        | Routes through residential IPs for better access             |
+| Advanced Stealth    | Off       | Custom Chromium build, requires Scale Plan                   |
+| Keep Alive          | On        | Session reconnection after network hiccups                   |
 
 note
 

@@ -10,7 +10,7 @@ The `delegate_task` tool spawns child AIAgent instances with isolated context, r
 
 ## Single Task
 
-``` python
+``` prism-code
 delegate_task(
     goal="Debug why tests fail",
     context="Error: assertion in test_foo.py line 42",
@@ -22,7 +22,7 @@ delegate_task(
 
 Up to 3 concurrent subagents by default (configurable, no hard ceiling):
 
-``` python
+``` prism-code
 delegate_task(tasks=[
     {"goal": "Research topic A", "toolsets": ["web"]},
     {"goal": "Research topic B", "toolsets": ["web"]},
@@ -38,7 +38,7 @@ Subagents start with a **completely fresh conversation**. They have zero knowled
 
 This means the parent agent must pass **everything** the subagent needs in the call:
 
-``` python
+``` prism-code
 # BAD - subagent has no idea what "the error" is
 delegate_task(goal="Fix the error")
 
@@ -61,7 +61,7 @@ The subagent receives a focused system prompt built from your goal and context, 
 
 Research multiple topics simultaneously and collect summaries:
 
-``` python
+``` prism-code
 delegate_task(tasks=[
     {
         "goal": "Research the current state of WebAssembly in 2025",
@@ -85,7 +85,7 @@ delegate_task(tasks=[
 
 Delegate a review-and-fix workflow to a fresh context:
 
-``` python
+``` prism-code
 delegate_task(
     goal="Review the authentication module for security issues and fix any found",
     context="""Project at /home/user/webapp.
@@ -101,7 +101,7 @@ delegate_task(
 
 Delegate a large refactoring task that would flood the parent's context:
 
-``` python
+``` prism-code
 delegate_task(
     goal="Refactor all Python files in src/ to replace print() with proper logging",
     context="""Project at /home/user/myproject.
@@ -133,7 +133,7 @@ Single-task delegation runs directly without thread pool overhead.
 
 You can configure a different model for subagents via `config.yaml` — useful for delegating simple tasks to cheaper/faster models:
 
-``` yaml
+``` prism-code
 # In ~/.hermes/config.yaml
 delegation:
   model: "google/gemini-flash-2.0"    # Cheaper model for subagents
@@ -146,13 +146,13 @@ If omitted, subagents use the same model as the parent.
 
 The `toolsets` parameter controls what tools the subagent has access to. Choose based on the task:
 
-| Toolset Pattern | Use Case |
-|----|----|
-| `["terminal", "file"]` | Code work, debugging, file editing, builds |
-| `["web"]` | Research, fact-checking, documentation lookup |
-| `["terminal", "file", "web"]` | Full-stack tasks (default) |
-| `["file"]` | Read-only analysis, code review without execution |
-| `["terminal"]` | System administration, process management |
+| Toolset Pattern               | Use Case                                          |
+|-------------------------------|---------------------------------------------------|
+| `["terminal", "file"]`        | Code work, debugging, file editing, builds        |
+| `["web"]`                     | Research, fact-checking, documentation lookup     |
+| `["terminal", "file", "web"]` | Full-stack tasks (default)                        |
+| `["file"]`                    | Read-only analysis, code review without execution |
+| `["terminal"]`                | System administration, process management         |
 
 Certain toolsets are blocked for subagents regardless of what you specify:
 
@@ -165,7 +165,7 @@ Certain toolsets are blocked for subagents regardless of what you specify:
 
 Each subagent has an iteration limit (default: 50) that controls how many tool-calling turns it can take:
 
-``` python
+``` prism-code
 delegate_task(
     goal="Quick file check",
     context="Check if /etc/nginx/nginx.conf exists and print its first 10 lines",
@@ -181,7 +181,7 @@ Genuinely stuck children are still detected: the heartbeat staleness monitor sto
 
 If you want a hard cap anyway (e.g. cost control on unattended cron-driven delegation), opt in per-install:
 
-``` yaml
+``` prism-code
 delegation:
   child_timeout_seconds: 0     # default: 0 = no timeout
   # child_timeout_seconds: 1800  # opt-in hard cap (floor 30s)
@@ -210,7 +210,7 @@ By default, delegation is **flat**: a parent (depth 0) spawns children (depth 1)
 
 For multi-stage workflows (research → synthesis, or parallel orchestration over sub-problems), a parent can spawn **orchestrator** children that *can* delegate their own workers:
 
-``` python
+``` prism-code
 delegate_task(
     goal="Survey three code review approaches and recommend one",
     role="orchestrator",  # Allows this child to spawn its own workers
@@ -250,21 +250,21 @@ For **durable long-running work** that must survive interrupts or outlive the cu
 
 ## Delegation vs execute_code
 
-| Factor | delegate_task | execute_code |
-|----|----|----|
-| **Reasoning** | Full LLM reasoning loop | Just Python code execution |
-| **Context** | Fresh isolated conversation | No conversation, just script |
-| **Tool access** | All non-blocked tools with reasoning | 7 tools via RPC, no reasoning |
-| **Parallelism** | 3 concurrent subagents by default (configurable) | Single script |
-| **Best for** | Complex tasks needing judgment | Mechanical multi-step pipelines |
-| **Token cost** | Higher (full LLM loop) | Lower (only stdout returned) |
-| **User interaction** | None (subagents can't clarify) | None |
+| Factor               | delegate_task                                    | execute_code                    |
+|----------------------|--------------------------------------------------|---------------------------------|
+| **Reasoning**        | Full LLM reasoning loop                          | Just Python code execution      |
+| **Context**          | Fresh isolated conversation                      | No conversation, just script    |
+| **Tool access**      | All non-blocked tools with reasoning             | 7 tools via RPC, no reasoning   |
+| **Parallelism**      | 3 concurrent subagents by default (configurable) | Single script                   |
+| **Best for**         | Complex tasks needing judgment                   | Mechanical multi-step pipelines |
+| **Token cost**       | Higher (full LLM loop)                           | Lower (only stdout returned)    |
+| **User interaction** | None (subagents can't clarify)                   | None                            |
 
 **Rule of thumb:** Use `delegate_task` when the subtask requires reasoning, judgment, or multi-step problem solving. Use `execute_code` when you need mechanical data processing or scripted workflows.
 
 ## Configuration
 
-``` yaml
+``` prism-code
 # In ~/.hermes/config.yaml
 delegation:
   max_iterations: 50                        # Max turns per child (default: 50)

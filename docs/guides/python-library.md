@@ -14,19 +14,19 @@ Hermes isn't just a CLI tool. You can import `AIAgent` directly and use it progr
 
 Install Hermes directly from the repository:
 
-``` bash
+``` prism-code
 pip install git+https://github.com/NousResearch/hermes-agent.git
 ```
 
 Or with [uv](https://docs.astral.sh/uv/):
 
-``` bash
+``` prism-code
 uv pip install git+https://github.com/NousResearch/hermes-agent.git
 ```
 
 You can also pin it in your `requirements.txt`:
 
-``` text
+``` prism-code
 hermes-agent @ git+https://github.com/NousResearch/hermes-agent.git
 ```
 
@@ -40,7 +40,7 @@ The same environment variables used by the CLI are required when using Hermes as
 
 The simplest way to use Hermes is the `chat()` method — pass a message, get a string back:
 
-``` python
+``` prism-code
 from run_agent import AIAgent
 
 agent = AIAgent(
@@ -63,7 +63,7 @@ Always set `quiet_mode=True` when embedding Hermes in your own code. Without it,
 
 For more control over the conversation, use `run_conversation()` directly. It returns a dictionary with the full response, message history, and metadata:
 
-``` python
+``` prism-code
 agent = AIAgent(
     model="anthropic/claude-sonnet-4.6",
     quiet_mode=True,
@@ -87,7 +87,7 @@ The returned dictionary contains:
 
 You can also pass a custom system message that overrides the ephemeral system prompt for that call:
 
-``` python
+``` prism-code
 result = agent.run_conversation(
     user_message="Explain quicksort",
     system_message="You are a computer science tutor. Use simple analogies.",
@@ -100,7 +100,7 @@ result = agent.run_conversation(
 
 Control which toolsets the agent has access to using `enabled_toolsets` or `disabled_toolsets`:
 
-``` python
+``` prism-code
 # Only enable web tools (browsing, search)
 agent = AIAgent(
     model="anthropic/claude-sonnet-4.6",
@@ -126,7 +126,7 @@ Use `enabled_toolsets` when you want a minimal, locked-down agent (e.g., only we
 
 Maintain conversation state across multiple turns by passing the message history back in:
 
-``` python
+``` prism-code
 agent = AIAgent(
     model="anthropic/claude-sonnet-4.6",
     quiet_mode=True,
@@ -152,7 +152,7 @@ The `conversation_history` parameter accepts the `messages` list from a previous
 
 Enable trajectory saving to capture conversations in ShareGPT format — useful for generating training data or debugging:
 
-``` python
+``` prism-code
 agent = AIAgent(
     model="anthropic/claude-sonnet-4.6",
     save_trajectories=True,
@@ -171,7 +171,7 @@ Each conversation is appended as a single JSONL line, making it easy to collect 
 
 Use `ephemeral_system_prompt` to set a custom system prompt that guides the agent's behavior but is **not** saved to trajectory files (keeping your training data clean):
 
-``` python
+``` prism-code
 agent = AIAgent(
     model="anthropic/claude-sonnet-4",
     ephemeral_system_prompt="You are a SQL expert. Only answer database questions.",
@@ -190,13 +190,13 @@ This is ideal for building specialized agents — a code reviewer, a documentati
 
 For running many prompts in parallel, Hermes includes `batch_runner.py`. It manages concurrent `AIAgent` instances with proper resource isolation:
 
-``` bash
+``` prism-code
 python batch_runner.py --input prompts.jsonl --output results.jsonl
 ```
 
 Each prompt gets its own `task_id` and isolated environment. If you need custom batch logic, you can build your own using `AIAgent` directly:
 
-``` python
+``` prism-code
 import concurrent.futures
 from run_agent import AIAgent
 
@@ -232,7 +232,7 @@ Always create a **new `AIAgent` instance per thread or task**. The agent maintai
 
 ### FastAPI Endpoint
 
-``` python
+``` prism-code
 from fastapi import FastAPI
 from pydantic import BaseModel
 from run_agent import AIAgent
@@ -257,7 +257,7 @@ async def chat(request: ChatRequest):
 
 ### Discord Bot
 
-``` python
+``` prism-code
 import discord
 from run_agent import AIAgent
 
@@ -284,7 +284,7 @@ client.run("YOUR_DISCORD_TOKEN")
 
 ### CI/CD Pipeline Step
 
-``` python
+``` prism-code
 #!/usr/bin/env python3
 """CI step: auto-review a PR diff."""
 import subprocess
@@ -310,20 +310,20 @@ print(review)
 
 ## Key Constructor Parameters
 
-| Parameter | Type | Default | Description |
-|----|----|----|----|
-| `model` | `str` | `""` | Model in OpenRouter format (defaults to empty; resolved from your hermes config at runtime) |
-| `quiet_mode` | `bool` | `False` | Suppress CLI output |
-| `enabled_toolsets` | `List[str]` | `None` | Whitelist specific toolsets |
-| `disabled_toolsets` | `List[str]` | `None` | Blacklist specific toolsets |
-| `save_trajectories` | `bool` | `False` | Save conversations to JSONL |
-| `ephemeral_system_prompt` | `str` | `None` | Custom system prompt (not saved to trajectories) |
-| `max_iterations` | `int` | `90` | Max tool-calling iterations per conversation |
-| `skip_context_files` | `bool` | `False` | Skip loading AGENTS.md files |
-| `skip_memory` | `bool` | `False` | Disable persistent memory read/write |
-| `api_key` | `str` | `None` | API key (falls back to env vars) |
-| `base_url` | `str` | `None` | Custom API endpoint URL |
-| `platform` | `str` | `None` | Platform hint (`"discord"`, `"telegram"`, etc.) |
+| Parameter                 | Type        | Default | Description                                                                                 |
+|---------------------------|-------------|---------|---------------------------------------------------------------------------------------------|
+| `model`                   | `str`       | `""`    | Model in OpenRouter format (defaults to empty; resolved from your hermes config at runtime) |
+| `quiet_mode`              | `bool`      | `False` | Suppress CLI output                                                                         |
+| `enabled_toolsets`        | `List[str]` | `None`  | Whitelist specific toolsets                                                                 |
+| `disabled_toolsets`       | `List[str]` | `None`  | Blacklist specific toolsets                                                                 |
+| `save_trajectories`       | `bool`      | `False` | Save conversations to JSONL                                                                 |
+| `ephemeral_system_prompt` | `str`       | `None`  | Custom system prompt (not saved to trajectories)                                            |
+| `max_iterations`          | `int`       | `90`    | Max tool-calling iterations per conversation                                                |
+| `skip_context_files`      | `bool`      | `False` | Skip loading AGENTS.md files                                                                |
+| `skip_memory`             | `bool`      | `False` | Disable persistent memory read/write                                                        |
+| `api_key`                 | `str`       | `None`  | API key (falls back to env vars)                                                            |
+| `base_url`                | `str`       | `None`  | Custom API endpoint URL                                                                     |
+| `platform`                | `str`       | `None`  | Platform hint (`"discord"`, `"telegram"`, etc.)                                             |
 
 ------------------------------------------------------------------------
 

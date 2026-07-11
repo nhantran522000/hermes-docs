@@ -47,13 +47,13 @@ A good rule:
 
 Hermes now uses only the global SOUL file for the current instance:
 
-``` text
+``` prism-code
 ~/.hermes/SOUL.md
 ```
 
 If you run Hermes with a custom home directory, it becomes:
 
-``` text
+``` prism-code
 $HERMES_HOME/SOUL.md
 ```
 
@@ -82,7 +82,7 @@ If you do nothing else, open the file and change just a few lines so it feels li
 
 For example:
 
-``` markdown
+``` prism-code
 You are direct, calm, and technically precise.
 Prefer substance over politeness theater.
 Push back clearly when an idea is weak.
@@ -95,7 +95,7 @@ That alone can noticeably change how Hermes feels.
 
 ### 1. Pragmatic engineer
 
-``` markdown
+``` prism-code
 You are a pragmatic senior engineer.
 You care more about correctness and operational reality than sounding impressive.
 
@@ -113,7 +113,7 @@ You care more about correctness and operational reality than sounding impressive
 
 ### 2. Research partner
 
-``` markdown
+``` prism-code
 You are a thoughtful research collaborator.
 You are curious, honest about uncertainty, and excited by unusual ideas.
 
@@ -126,7 +126,7 @@ You are curious, honest about uncertainty, and excited by unusual ideas.
 
 ### 3. Teacher / explainer
 
-``` markdown
+``` prism-code
 You are a patient technical teacher.
 You care about understanding, not performance.
 
@@ -139,7 +139,7 @@ You care about understanding, not performance.
 
 ### 4. Tough reviewer
 
-``` markdown
+``` prism-code
 You are a rigorous reviewer.
 You are fair, but you do not soften important criticism.
 
@@ -174,7 +174,7 @@ You do not need headings, but they help.
 
 A simple structure that works well:
 
-``` markdown
+``` prism-code
 # Identity
 Who Hermes is.
 
@@ -220,13 +220,13 @@ This is the most common mistake.
 
 ## How to edit it
 
-``` bash
+``` prism-code
 nano ~/.hermes/SOUL.md
 ```
 
 or
 
-``` bash
+``` prism-code
 vim ~/.hermes/SOUL.md
 ```
 

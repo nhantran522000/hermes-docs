@@ -18,7 +18,7 @@ Traffic routed through Nous Portal respects the same provider preferences — an
 
 Add a `provider_routing` section to your `~/.hermes/config.yaml`:
 
-``` yaml
+``` prism-code
 provider_routing:
   sort: "price"           # How to rank providers
   only: []                # Whitelist: only use these providers
@@ -44,7 +44,7 @@ Controls how OpenRouter ranks available providers for your request.
 | `"throughput"` | Fastest tokens-per-second first  |
 | `"latency"`    | Lowest time-to-first-token first |
 
-``` yaml
+``` prism-code
 provider_routing:
   sort: "price"
 ```
@@ -53,7 +53,7 @@ provider_routing:
 
 Whitelist of provider slugs. When set, **only** these providers will be used. All others are excluded. Use the lowercase slug shown by OpenRouter for each provider.
 
-``` yaml
+``` prism-code
 provider_routing:
   only:
     - "anthropic"
@@ -64,7 +64,7 @@ provider_routing:
 
 Blacklist of provider names. These providers will **never** be used, even if they offer the cheapest or fastest option.
 
-``` yaml
+``` prism-code
 provider_routing:
   ignore:
     - "together"
@@ -75,7 +75,7 @@ provider_routing:
 
 Explicit priority order. Providers listed first are preferred. Unlisted providers are used as fallbacks.
 
-``` yaml
+``` prism-code
 provider_routing:
   order:
     - "anthropic"
@@ -87,7 +87,7 @@ provider_routing:
 
 When `true`, OpenRouter will only route to providers that support **all** parameters in your request (like `temperature`, `top_p`, `tools`, etc.). This avoids silent parameter drops.
 
-``` yaml
+``` prism-code
 provider_routing:
   require_parameters: true
 ```
@@ -96,7 +96,7 @@ provider_routing:
 
 Controls whether providers can use your prompts for training. Options are `"allow"` or `"deny"`.
 
-``` yaml
+``` prism-code
 provider_routing:
   data_collection: "deny"
 ```
@@ -107,7 +107,7 @@ provider_routing:
 
 Route to the cheapest available provider. Good for high-volume usage and development:
 
-``` yaml
+``` prism-code
 provider_routing:
   sort: "price"
 ```
@@ -116,7 +116,7 @@ provider_routing:
 
 Prioritize low-latency providers for interactive use:
 
-``` yaml
+``` prism-code
 provider_routing:
   sort: "latency"
 ```
@@ -125,7 +125,7 @@ provider_routing:
 
 Best for long-form generation where tokens-per-second matters:
 
-``` yaml
+``` prism-code
 provider_routing:
   sort: "throughput"
 ```
@@ -134,7 +134,7 @@ provider_routing:
 
 Ensure all requests go through a specific provider for consistency:
 
-``` yaml
+``` prism-code
 provider_routing:
   only:
     - "anthropic"
@@ -144,7 +144,7 @@ provider_routing:
 
 Exclude providers you don't want to use (e.g., for data privacy):
 
-``` yaml
+``` prism-code
 provider_routing:
   ignore:
     - "together"
@@ -156,7 +156,7 @@ provider_routing:
 
 Try your preferred providers first, fall back to others if unavailable:
 
-``` yaml
+``` prism-code
 provider_routing:
   order:
     - "anthropic"
@@ -173,7 +173,7 @@ Provider routing preferences are passed to OpenRouter or Nous Portal on agent ch
 
 The routing config is read from `config.yaml` and passed as parameters when creating the `AIAgent`:
 
-``` text
+``` prism-code
 providers_allowed  ← from provider_routing.only
 providers_ignored  ← from provider_routing.ignore
 providers_order    ← from provider_routing.order
@@ -186,7 +186,7 @@ tip
 
 You can combine multiple options. For example, sort by price but exclude certain providers and require parameter support:
 
-``` yaml
+``` prism-code
 provider_routing:
   sort: "price"
   ignore: ["together"]

@@ -32,7 +32,7 @@ How you attach an image depends on your terminal environment. Not all methods wo
 
 **The most reliable explicit image-attach fallback.**
 
-``` text
+``` prism-code
 /paste
 ```
 
@@ -56,7 +56,7 @@ If your clipboard has **only an image** (no text), terminals still cannot send b
 
 If you run the TUI inside a local VS Code-family integrated terminal on macOS, Hermes can install the recommended `workbench.action.terminal.sendSequence` bindings for better multiline and undo/redo parity:
 
-``` text
+``` prism-code
 /terminal-setup
 ```
 
@@ -64,16 +64,16 @@ This is especially useful when `Cmd+Enter`, `Cmd+Z`, or `Shift+Cmd+Z` are being 
 
 ## Platform Compatibility
 
-| Environment | `/paste` | Cmd/Ctrl+V | `/terminal-setup` | Notes |
-|----|:--:|:--:|:--:|----|
-| **macOS Terminal / iTerm2** | ✅ | ✅ | n/a | Best experience — native clipboard + screenshot-path recovery |
-| **Apple Terminal** | ✅ | ✅ | n/a | If Cmd+←/→/⌫ gets rewritten, use Ctrl+A / Ctrl+E / Ctrl+U fallbacks |
-| **Linux X11 desktop** | ✅ | ✅ | n/a | Requires `xclip` (`apt install xclip`) |
-| **Linux Wayland desktop** | ✅ | ✅ | n/a | Requires `wl-paste` (`apt install wl-clipboard`) |
-| **WSL2 (Windows Terminal)** | ✅ | ✅ | n/a | Uses `powershell.exe` — no extra install needed |
-| **VS Code / Cursor / Windsurf (local)** | ✅ | ✅ | ✅ | Recommended for better Cmd+Enter / undo / redo parity |
-| **VS Code / Cursor / Windsurf (SSH)** | ❌² | ❌² | ❌³ | Run `/terminal-setup` on the local machine instead |
-| **SSH terminal (any)** | ❌² | ❌² | n/a | Remote clipboard not accessible |
+| Environment                             | `/paste` | Cmd/Ctrl+V | `/terminal-setup` | Notes                                                               |
+|-----------------------------------------|:--------:|:----------:|:-----------------:|---------------------------------------------------------------------|
+| **macOS Terminal / iTerm2**             |    ✅    |     ✅     |        n/a        | Best experience — native clipboard + screenshot-path recovery       |
+| **Apple Terminal**                      |    ✅    |     ✅     |        n/a        | If Cmd+←/→/⌫ gets rewritten, use Ctrl+A / Ctrl+E / Ctrl+U fallbacks |
+| **Linux X11 desktop**                   |    ✅    |     ✅     |        n/a        | Requires `xclip` (`apt install xclip`)                              |
+| **Linux Wayland desktop**               |    ✅    |     ✅     |        n/a        | Requires `wl-paste` (`apt install wl-clipboard`)                    |
+| **WSL2 (Windows Terminal)**             |    ✅    |     ✅     |        n/a        | Uses `powershell.exe` — no extra install needed                     |
+| **VS Code / Cursor / Windsurf (local)** |    ✅    |     ✅     |        ✅         | Recommended for better Cmd+Enter / undo / redo parity               |
+| **VS Code / Cursor / Windsurf (SSH)**   |   ❌²    |    ❌²     |        ❌³        | Run `/terminal-setup` on the local machine instead                  |
+| **SSH terminal (any)**                  |   ❌²    |    ❌²     |        n/a        | Remote clipboard not accessible                                     |
 
 ² See [SSH & Remote Sessions](#ssh--remote-sessions) below ³ The command writes local IDE keybindings and should not be run from the remote host
 
@@ -83,7 +83,7 @@ This is especially useful when `Cmd+Enter`, `Cmd+Z`, or `Shift+Cmd+Z` are being 
 
 **No setup required.** Hermes uses `osascript` (built into macOS) to read the clipboard. For faster performance, optionally install `pngpaste`:
 
-``` bash
+``` prism-code
 brew install pngpaste
 ```
 
@@ -91,7 +91,7 @@ brew install pngpaste
 
 Install `xclip`:
 
-``` bash
+``` prism-code
 # Ubuntu/Debian
 sudo apt install xclip
 
@@ -106,7 +106,7 @@ sudo pacman -S xclip
 
 Modern Linux desktops (Ubuntu 22.04+, Fedora 34+) often use Wayland by default. Install `wl-clipboard`:
 
-``` bash
+``` prism-code
 # Ubuntu/Debian
 sudo apt install wl-clipboard
 
@@ -119,7 +119,7 @@ sudo pacman -S wl-clipboard
 
 How to check if you're on Wayland
 
-``` bash
+``` prism-code
 echo $XDG_SESSION_TYPE
 # "wayland" = Wayland, "x11" = X11, "tty" = no display server
 ```
@@ -136,7 +136,7 @@ If you're running WSLg (WSL2 with GUI support), Hermes tries the PowerShell path
 
 #### Verify WSL2 clipboard access
 
-``` bash
+``` prism-code
 # 1. Check WSL detection
 grep -i microsoft /proc/version
 
@@ -182,7 +182,7 @@ This is why Hermes uses a separate clipboard check — instead of receiving imag
 
 Image paste works with any vision-capable model. The image is sent as a base64-encoded data URL in the OpenAI vision content format:
 
-``` json
+``` prism-code
 {
   "type": "image_url",
   "image_url": {
@@ -197,9 +197,9 @@ Most modern models support this format, including GPT-4 Vision, Claude (with vis
 
 When a user attaches an image — from the CLI clipboard, the gateway (Telegram/Discord photo), or any other entry point — Hermes routes it based on whether your current model actually supports vision:
 
-| Your model | What happens to the image |
-|----|----|
-| **Vision-capable** (GPT-4V, Claude with vision, Gemini, Qwen-VL, MiMo-VL, etc.) | Sent as **real pixels** using the provider's native image content format above. No text summary layer. |
+| Your model                                                                         | What happens to the image                                                                                                                                       |
+|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Vision-capable** (GPT-4V, Claude with vision, Gemini, Qwen-VL, MiMo-VL, etc.)    | Sent as **real pixels** using the provider's native image content format above. No text summary layer.                                                          |
 | **Text-only** (DeepSeek V3, smaller open-source models, older chat-only endpoints) | Routed through the `vision_analyze` auxiliary tool — an auxiliary vision model describes the image, and the text description is injected into the conversation. |
 
 You don't configure this — Hermes looks up your current model's capability in the provider metadata and picks the right path automatically. The practical effect: you can switch between vision and non-vision models mid-session and image handling "just works" without changing your workflow. Text-only models get coherent context about the image rather than a broken multimodal payload they'd have to reject.

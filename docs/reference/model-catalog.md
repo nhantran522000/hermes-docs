@@ -12,7 +12,7 @@ When the manifest is unreachable (offline, network blocked, hosting failure), He
 
 ## Live manifest URL
 
-``` text
+``` prism-code
 https://hermes-agent.nousresearch.com/docs/api/model-catalog.json
 ```
 
@@ -20,7 +20,7 @@ Published on every merge to `main` via the existing `deploy-site.yml` GitHub Pag
 
 ## Schema
 
-``` json
+``` prism-code
 {
   "version": 1,
   "updated_at": "2026-04-25T22:00:00Z",
@@ -53,19 +53,19 @@ Field notes:
 
 ## Fetch behavior
 
-| When | What happens |
-|----|----|
-| `/model` or `hermes model` | Fetches if disk cache is stale, else uses cache |
-| Disk cache fresh (\< TTL) | No network hit |
-| Network failure with cache | Silent fallback to cache, one log line |
-| Network failure, no cache | Silent fallback to in-repo snapshot |
-| Manifest fails schema validation | Treated as unreachable |
+| When                             | What happens                                    |
+|----------------------------------|-------------------------------------------------|
+| `/model` or `hermes model`       | Fetches if disk cache is stale, else uses cache |
+| Disk cache fresh (\< TTL)        | No network hit                                  |
+| Network failure with cache       | Silent fallback to cache, one log line          |
+| Network failure, no cache        | Silent fallback to in-repo snapshot             |
+| Manifest fails schema validation | Treated as unreachable                          |
 
 Cache location: `~/.hermes/cache/model_catalog.json`.
 
 ## Config
 
-``` yaml
+``` prism-code
 model_catalog:
   enabled: true
   url: https://hermes-agent.nousresearch.com/docs/api/model-catalog.json
@@ -79,7 +79,7 @@ Set `enabled: false` to disable remote fetch entirely and always use the in-repo
 
 Third parties can self-host their own curation list using the same schema. Point a provider at a custom URL:
 
-``` yaml
+``` prism-code
 model_catalog:
   providers:
     openrouter:
@@ -92,7 +92,7 @@ The overriding manifest only needs to populate the provider block(s) it cares ab
 
 Maintainers:
 
-``` bash
+``` prism-code
 # Re-generate from the in-repo hardcoded lists (keeps manifest in sync after
 # editing OPENROUTER_MODELS or _PROVIDER_MODELS["nous"] in hermes_cli/models.py).
 python scripts/build_model_catalog.py

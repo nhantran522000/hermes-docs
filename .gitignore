@@ -1,0 +1,3 @@
+# crawler runtime artifacts
+.venv-crawler/
+.crawl-logs/

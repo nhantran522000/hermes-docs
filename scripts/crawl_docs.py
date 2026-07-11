@@ -1,0 +1,278 @@
+#!/usr/bin/env python3
+"""Crawl the Hermes Agent documentation listed in llms.txt into local Markdown.
+
+For every doc URL found in llms.txt this fetches the rendered page, extracts the
+main article content, converts it to GitHub-Flavored Markdown with pandoc, and
+writes it to docs/<mirrored path>.md. Re-running overwrites existing files, so it
+is safe to schedule weekly.
+
+Requires: requests, beautifulsoup4 (see requirements.txt) and the `pandoc` binary.
+"""
+from __future__ import annotations
+
+import argparse
+import concurrent.futures as cf
+import datetime
+import re
+import subprocess
+import sys
+import threading
+import time
+from pathlib import Path
+from urllib.parse import urljoin, urlparse
+
+import requests
+from bs4 import BeautifulSoup
+
+ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_LLMS = ROOT / "llms.txt"
+DEFAULT_OUT = ROOT / "docs"
+DOMAIN = "hermes-agent.nousresearch.com"
+DOCS_PREFIX = "/docs/"
+LLMS_URL = "https://hermes-agent.nousresearch.com/docs/llms.txt"
+
+TIMEOUT = 30
+RETRIES = 3
+USER_AGENT = "hermes-docs-crawler/1.0 (+local archival)"
+
+# Markdown link: [label](url)
+LINK_RE = re.compile(r"\[[^\]]*\]\((https?://[^\s)]+)\)")
+# <meta http-equiv="refresh" content="0; url=/some/path">
+META_REFRESH_RE = re.compile(
+    r"http-equiv=[\"']refresh[\"'][^>]*content=[\"'][^\"']*url=([^\"'>]+)", re.I
+)
+
+_thread_local = threading.local()
+
+
+def session() -> requests.Session:
+    s = getattr(_thread_local, "session", None)
+    if s is None:
+        s = requests.Session()
+        s.headers.update({"User-Agent": USER_AGENT})
+        _thread_local.session = s
+    return s
+
+
+def refresh_llms(url: str, dest: Path) -> bool:
+    """Fetch a fresh llms.txt and write it to `dest` (atomically, after validation).
+
+    Returns True if `dest` holds a usable llms.txt afterwards. A transient fetch
+    failure is non-fatal when a previous llms.txt already exists (we keep it and
+    warn); it is fatal only when there is nothing to fall back to.
+    """
+    try:
+        text = _get(url)
+    except Exception as e:  # noqa: BLE001
+        if dest.exists():
+            print(f"WARNING: could not refresh llms.txt ({e}); using existing {dest}.", file=sys.stderr)
+            return True
+        print(f"ERROR: could not fetch llms.txt from {url}: {e}", file=sys.stderr)
+        return False
+
+    if len(text) < 200 or f"{DOMAIN}{DOCS_PREFIX}" not in text:
+        print(f"ERROR: fetched llms.txt from {url} looks invalid (len={len(text)}); aborting.", file=sys.stderr)
+        return False
+
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    tmp = dest.with_suffix(dest.suffix + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    tmp.replace(dest)
+    print(f"Refreshed {dest} from {url} ({len(text)} bytes)")
+    return True
+
+
+def extract_urls(text: str) -> list[str]:
+    """Return de-duplicated doc URLs (under the docs domain) in first-seen order."""
+    seen: set[str] = set()
+    urls: list[str] = []
+    for m in LINK_RE.finditer(text):
+        u = m.group(1).split("#")[0].rstrip("/")
+        p = urlparse(u)
+        if p.netloc == DOMAIN and p.path.startswith(DOCS_PREFIX):
+            if u not in seen:
+                seen.add(u)
+                urls.append(u)
+    return urls
+
+
+def url_to_path(url: str, outdir: Path) -> Path:
+    """Map a doc URL to docs/<mirrored path>.md."""
+    path = urlparse(url).path
+    rel = path[len(DOCS_PREFIX):] if path.startswith(DOCS_PREFIX) else path.lstrip("/")
+    rel = rel.strip("/") or "index"
+    return outdir / (rel + ".md")
+
+
+def _get(url: str) -> str:
+    """GET with retries. Client errors (4xx) raise immediately; only transient
+    failures (network, timeout, 5xx) are retried."""
+    last: Exception | None = None
+    for attempt in range(RETRIES):
+        try:
+            r = session().get(url, timeout=TIMEOUT)
+            r.raise_for_status()
+            return r.text
+        except requests.HTTPError as e:
+            if e.response is not None and 400 <= e.response.status_code < 500:
+                raise
+            last = e
+        except requests.RequestException as e:
+            last = e
+        time.sleep(1.5 * (attempt + 1))
+    raise RuntimeError(f"failed after {RETRIES} attempts: {last}")
+
+
+def fetch(url: str) -> tuple[str, str]:
+    """Return (resolved_url, html).
+
+    Handles two Docusaurus quirks:
+      * category pages listed as `.../index` are actually served at `...` (the
+        `/index` variant 404s), so fall back to the suffix-stripped path;
+      * some guide slugs are client-side redirect stubs (<meta refresh>), which
+        we follow to the real page (up to 3 hops).
+    """
+    candidates = [url]
+    if url.endswith("/index"):
+        candidates.append(url[: -len("/index")])
+
+    html: str | None = None
+    resolved = url
+    last: Exception | None = None
+    for cand in candidates:
+        try:
+            html = _get(cand)
+            resolved = cand
+            break
+        except requests.HTTPError as e:
+            last = e  # try next candidate (e.g. drop /index)
+    if html is None:
+        raise RuntimeError(f"failed after {RETRIES} attempts: {last}")
+
+    for _ in range(3):
+        m = META_REFRESH_RE.search(html)
+        if not m:
+            break
+        resolved = urljoin(resolved, m.group(1).strip())
+        html = _get(resolved)
+    return resolved, html
+
+
+def html_to_markdown(html: str) -> tuple[str, str]:
+    """Extract the article body and return (title, markdown)."""
+    soup = BeautifulSoup(html, "html.parser")
+    node = soup.select_one("div.theme-doc-markdown") or soup.find("article")
+    if node is None:
+        raise ValueError("could not locate article content container")
+
+    # Strip Docusaurus "Direct link to heading" anchors.
+    for a in node.select("a.hash-link"):
+        a.decompose()
+    # Drop decorative icons: inline <svg> (pandoc would base64-encode these as
+    # data-URI images) and any <img> with a data: source, plus UI buttons.
+    for svg in node.find_all("svg"):
+        svg.decompose()
+    for img in node.find_all("img"):
+        if (img.get("src") or "").startswith("data:"):
+            img.decompose()
+    for btn in node.find_all("button"):
+        btn.decompose()
+
+    proc = subprocess.run(
+        ["pandoc", "-f", "html", "-t", "gfm-raw_html", "--wrap=none"],
+        input=str(node),
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"pandoc failed: {proc.stderr.strip()}")
+
+    md = proc.stdout
+    # Safety net: drop any base64 data-URI images pandoc still emitted.
+    md = re.sub(r"!\[[^\]]*\]\(data:[^)]*\)", "", md)
+    md = re.sub(r"\n{3,}", "\n\n", md).strip()
+    m = re.search(r"^#\s+(.+)$", md, re.M)
+    title = m.group(1).strip() if m else ""
+    return title, md
+
+
+def front_matter(url: str, title: str, when: str) -> str:
+    safe_title = title.replace('"', "'")
+    return (
+        "---\n"
+        f'source: "{url}"\n'
+        f'title: "{safe_title}"\n'
+        f"last_crawled: {when}\n"
+        "---\n\n"
+    )
+
+
+def process(url: str, outdir: Path, when: str) -> Path:
+    resolved, html = fetch(url)
+    title, md = html_to_markdown(html)
+    if not title:
+        title = urlparse(url).path.rstrip("/").rsplit("/", 1)[-1]
+    out = url_to_path(url, outdir)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(front_matter(resolved, title, when) + md + "\n", encoding="utf-8")
+    return out
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="Crawl Hermes docs from llms.txt into Markdown.")
+    ap.add_argument("--llms", type=Path, default=DEFAULT_LLMS, help="Path to llms.txt")
+    ap.add_argument("--out", type=Path, default=DEFAULT_OUT, help="Output docs directory")
+    ap.add_argument("--workers", type=int, default=8, help="Concurrent fetches")
+    ap.add_argument("--only", default=None, help="Only crawl URLs containing this substring (for testing)")
+    ap.add_argument("--refresh-llms", action="store_true",
+                    help="Fetch a fresh llms.txt from --llms-url and save it to --llms before crawling")
+    ap.add_argument("--llms-url", default=LLMS_URL, help="URL to fetch llms.txt from")
+    args = ap.parse_args()
+
+    if subprocess.run(["pandoc", "--version"], capture_output=True).returncode != 0:
+        print("ERROR: pandoc is required but not runnable.", file=sys.stderr)
+        return 2
+
+    if args.refresh_llms:
+        if not refresh_llms(args.llms_url, args.llms):
+            return 2
+
+    if not args.llms.exists():
+        print(f"ERROR: {args.llms} not found.", file=sys.stderr)
+        return 2
+
+    urls = extract_urls(args.llms.read_text(encoding="utf-8"))
+    if args.only:
+        urls = [u for u in urls if args.only in u]
+    if not urls:
+        print("No doc URLs found to crawl.", file=sys.stderr)
+        return 1
+
+    when = datetime.date.today().isoformat()
+    print(f"Crawling {len(urls)} pages -> {args.out} (workers={args.workers})")
+
+    ok: list[Path] = []
+    failed: list[tuple[str, str]] = []
+    with cf.ThreadPoolExecutor(max_workers=args.workers) as ex:
+        futures = {ex.submit(process, u, args.out, when): u for u in urls}
+        for fut in cf.as_completed(futures):
+            u = futures[fut]
+            try:
+                path = fut.result()
+                ok.append(path)
+                print(f"  ok   {path.relative_to(ROOT)}")
+            except Exception as e:  # noqa: BLE001
+                failed.append((u, str(e)))
+                print(f"  FAIL {u}\n         {e}", file=sys.stderr)
+
+    print(f"\nDone: {len(ok)} saved, {len(failed)} failed.")
+    if failed:
+        print("Failures:", file=sys.stderr)
+        for u, e in failed:
+            print(f"  {u} :: {e}", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp"
 title: "MCP (Model Context Protocol)"
-last_crawled: 2026-07-11
+last_crawled: 2026-07-12
 ---
 
 # MCP (Model Context Protocol)

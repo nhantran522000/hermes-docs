@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/work-with-skills"
 title: "Working with Skills"
-last_crawled: 2026-07-11
+last_crawled: 2026-07-12
 ---
 
 # Working with Skills
@@ -95,7 +95,7 @@ hermes skills install official/research/arxiv
 # Install from the hub in a chat session
 /skills install official/creative/songwriting-and-ai-music
 
-# Install a single-file SKILL.md directly from any HTTP(S) URL
+# Install SKILL.md and its referenced support files from an HTTP(S) URL
 hermes skills install https://sharethis.chat/SKILL.md
 /skills install https://example.com/SKILL.md --name my-skill
 ```

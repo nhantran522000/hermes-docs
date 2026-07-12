@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/code-execution"
 title: "Code Execution (Programmatic Tool Calling)"
-last_crawled: 2026-07-11
+last_crawled: 2026-07-12
 ---
 
 # Code Execution (Programmatic Tool Calling)

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/batch-processing"
 title: "Batch Processing"
-last_crawled: 2026-07-11
+last_crawled: 2026-07-12
 ---
 
 # Batch Processing
@@ -84,7 +84,7 @@ Entries can optionally include:
 
 | Parameter | Description |
 |----|----|
-| `--reasoning_effort` | Effort level: `none`, `minimal`, `low`, `medium`, `high`, `xhigh` |
+| `--reasoning_effort` | Reasoning effort: `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
 | `--reasoning_disabled` | Completely disable reasoning/thinking tokens |
 
 ### Advanced Options

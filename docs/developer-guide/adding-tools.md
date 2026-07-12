@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/adding-tools"
 title: "Adding Tools"
-last_crawled: 2026-07-11
+last_crawled: 2026-07-12
 ---
 
 # Adding Tools

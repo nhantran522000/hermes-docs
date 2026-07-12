@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/voice-mode"
 title: "Voice Mode"
-last_crawled: 2026-07-11
+last_crawled: 2026-07-12
 ---
 
 # Voice Mode

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/installation"
 title: "Installation"
-last_crawled: 2026-07-11
+last_crawled: 2026-07-12
 ---
 
 # Installation

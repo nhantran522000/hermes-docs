@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/daily-briefing-bot"
 title: "Tutorial: Build a Daily Briefing Bot"
-last_crawled: 2026-07-11
+last_crawled: 2026-07-12
 ---
 
 # Tutorial: Build a Daily Briefing Bot

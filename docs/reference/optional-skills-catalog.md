@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/optional-skills-catalog"
 title: "Optional Skills Catalog"
-last_crawled: 2026-07-11
+last_crawled: 2026-07-12
 ---
 
 # Optional Skills Catalog

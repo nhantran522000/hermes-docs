@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/adding-providers"
 title: "Adding Providers"
-last_crawled: 2026-07-11
+last_crawled: 2026-07-12
 ---
 
 # Adding Providers

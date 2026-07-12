@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins"
 title: "Plugins"
-last_crawled: 2026-07-11
+last_crawled: 2026-07-12
 ---
 
 # Plugins

@@ -1,3 +1,8 @@
 # crawler runtime artifacts
 .venv-crawler/
 .crawl-logs/
+
+# Claude Code / skills tooling (local — not part of the docs mirror)
+.claude/
+.agents/
+skills-lock.json

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/personality"
 title: "Personality & SOUL.md"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Personality & SOUL.md
@@ -282,4 +282,4 @@ Conversational personality and CLI appearance are separate:
 - `SOUL.md`, `agent.system_prompt`, and `/personality` affect how Hermes speaks
 - `display.skin` and `/skin` affect how Hermes looks in the terminal
 
-For terminal appearance, see [Skins & Themes](https://hermes-agent.nousresearch.com/docs/user-guide/features/skins).
+For terminal appearance, see [Skins & Themes](skins.md).

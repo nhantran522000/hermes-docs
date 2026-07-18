@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/kanban-tutorial"
 title: "Kanban tutorial"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Kanban tutorial

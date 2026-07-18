@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/checkpoints-and-rollback"
 title: "Checkpoints and `/rollback`"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Checkpoints and `/rollback`

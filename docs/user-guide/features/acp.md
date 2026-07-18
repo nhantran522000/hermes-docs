@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/acp"
 title: "ACP Editor Integration"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # ACP Editor Integration
@@ -270,6 +270,6 @@ Install `uv` from the official uv installation docs, then retry the Hermes Agent
 
 ## See also
 
-- [ACP Internals](https://hermes-agent.nousresearch.com/docs/developer-guide/acp-internals)
+- [ACP Internals](../../developer-guide/acp-internals.md)
 - [Provider Runtime Resolution](../../developer-guide/provider-runtime.md)
-- [Tools Runtime](https://hermes-agent.nousresearch.com/docs/developer-guide/tools-runtime)
+- [Tools Runtime](../../developer-guide/tools-runtime.md)

@@ -1,14 +1,14 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/nix-setup"
 title: "Nix & NixOS Setup"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Nix & NixOS Setup
 
 Tier 2 platform
 
-Nix and NixOS are [Tier 2 platforms](https://hermes-agent.nousresearch.com/docs/getting-started/platform-support#tier-2). The flake and NixOS module documented here are maintained on a best-effort basis only. Commits to `main` may break these packages at any point in time.
+Nix and NixOS are [Tier 2 platforms](platform-support.md#tier-2). The flake and NixOS module documented here are maintained on a best-effort basis only. Commits to `main` may break these packages at any point in time.
 
 For a supported setup, use one of the standard [installation](installation.md) paths - either Docker or an FHS environment.
 

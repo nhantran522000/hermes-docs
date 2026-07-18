@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/whatsapp"
 title: "WhatsApp Setup"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # WhatsApp Setup
@@ -14,7 +14,7 @@ Two WhatsApp integrations
 
 This page is for the **Baileys bridge** — quick to set up, personal accounts, no public URL needed, ban risk.
 
-If you're running a real business bot and want stability, see the **[WhatsApp Business Cloud API guide](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/whatsapp-cloud)** instead. It's the official Meta-supported path: no account ban risk, but requires a Meta Business account and a public webhook URL.
+If you're running a real business bot and want stability, see the **[WhatsApp Business Cloud API guide](whatsapp-cloud.md)** instead. It's the official Meta-supported path: no account ban risk, but requires a Meta Business account and a public webhook URL.
 
 The two adapters can also run in parallel against different phone numbers if you have a reason to.
 

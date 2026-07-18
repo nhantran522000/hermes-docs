@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/vision"
 title: "Vision & Image Paste"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Vision & Image Paste
@@ -10,7 +10,7 @@ Hermes Agent supports **multimodal vision** — you can paste images from your c
 
 tip
 
-Portal subscribers get vision-capable models (Claude, GPT-5, Gemini) in the same catalog — no extra credentials needed. See [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal).
+Portal subscribers get vision-capable models (Claude, GPT-5, Gemini) in the same catalog — no extra credentials needed. See [Nous Portal](../../integrations/nous-portal.md).
 
 ## How It Works
 

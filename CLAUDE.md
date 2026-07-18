@@ -12,7 +12,9 @@ of truth when answering questions about Hermes Agent.
 - `docs/INDEX.md` — generated table of contents: every page's title + one-line
   description, linked to its local file, grouped by section. **Start here** to map a
   topic to a file.
-- `llms.txt` — the upstream page list the crawl is driven from.
+- `llms.txt` — the hand-maintained, checked-in page list the crawl is driven from (a set
+  of `- [Title](url)` links grouped under `##` sections). It is **not** generated or fetched
+  from the site; edit it by hand to add/remove pages from the crawl.
 - `scripts/` — the crawler and automation; see `scripts/README.md`.
 
 ## Answering questions about Hermes
@@ -29,5 +31,6 @@ to pages not in `llms.txt` remain full `https://…` site URLs.
 - Everything under `docs/` (including `docs/INDEX.md`) is **generated** — do not edit it
   by hand. It is overwritten on every sync: weekly via GitHub Actions
   (`.github/workflows/sync-docs.yml`), or on demand with `scripts/sync-docs.sh`.
-- To refresh manually: `scripts/sync-docs.sh` (fetch llms.txt → crawl → commit → push) or
-  `scripts/crawl-docs.sh` (crawl only, no git).
+- To refresh manually: `scripts/sync-docs.sh` (crawl → commit → push) or
+  `scripts/crawl-docs.sh` (crawl only, no git). `llms.txt` itself is edited by hand, not
+  refreshed by these scripts.

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/gateway-internals"
 title: "Gateway Internals"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Gateway Internals
@@ -265,7 +265,7 @@ The gateway runs as a long-lived process, managed via:
 ## Related Docs
 
 - [Session Storage](session-storage.md)
-- [Cron Internals](https://hermes-agent.nousresearch.com/docs/developer-guide/cron-internals)
-- [ACP Internals](https://hermes-agent.nousresearch.com/docs/developer-guide/acp-internals)
+- [Cron Internals](cron-internals.md)
+- [ACP Internals](acp-internals.md)
 - [Agent Loop Internals](agent-loop.md)
 - [Messaging Gateway (User Guide)](../user-guide/messaging/index.md)

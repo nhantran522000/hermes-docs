@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/github-pr-review-agent"
 title: "Tutorial: Build a GitHub PR Review Agent"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Tutorial: Build a GitHub PR Review Agent
@@ -28,7 +28,7 @@ This guide uses **cron jobs** to poll for PRs on a schedule — no server or pub
 
 Want real-time reviews instead?
 
-If you have a public endpoint available, check out [Automated GitHub PR Comments with Webhooks](https://hermes-agent.nousresearch.com/docs/guides/webhook-github-pr-review) — GitHub pushes events to Hermes instantly when PRs are opened or updated.
+If you have a public endpoint available, check out [Automated GitHub PR Comments with Webhooks](webhook-github-pr-review.md) — GitHub pushes events to Hermes instantly when PRs are opened or updated.
 
 ------------------------------------------------------------------------
 
@@ -301,8 +301,8 @@ GitHub allows 5,000 API requests/hour for authenticated users. Each PR review us
 
 ## What's Next?
 
-- **[Webhook-Based PR Reviews](https://hermes-agent.nousresearch.com/docs/guides/webhook-github-pr-review)** — get instant reviews when PRs are opened (requires a public endpoint)
+- **[Webhook-Based PR Reviews](webhook-github-pr-review.md)** — get instant reviews when PRs are opened (requires a public endpoint)
 - **[Daily Briefing Bot](daily-briefing-bot.md)** — combine PR reviews with your morning news digest
-- **[Build a Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)** — wrap the review logic into a shareable plugin
+- **[Build a Plugin](../developer-guide/plugins.md)** — wrap the review logic into a shareable plugin
 - **[Profiles](../user-guide/profiles.md)** — run a dedicated reviewer profile with its own memory and config
 - **[Fallback Providers](../user-guide/features/fallback-providers.md)** — ensure reviews run even when one provider is down

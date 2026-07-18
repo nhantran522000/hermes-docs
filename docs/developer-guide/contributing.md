@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/contributing"
 title: "Contributing"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Contributing
@@ -22,7 +22,7 @@ We value contributions in this order:
 
 ## Common contribution paths
 
-- Building a custom/local tool without modifying Hermes core? Start with [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
+- Building a custom/local tool without modifying Hermes core? Start with [Build a Hermes Plugin](plugins.md)
 - Building a new built-in core tool for Hermes itself? Start with [Adding Tools](adding-tools.md)
 - Building a new skill? Start with [Creating Skills](creating-skills.md)
 - Building a new inference provider? Start with [Adding Providers](adding-providers.md)
@@ -131,7 +131,7 @@ scripts/run_tests.sh
 
 ## Cross-Platform Compatibility
 
-See **[Platform Support](https://hermes-agent.nousresearch.com/docs/getting-started/platform-support)**. Native Windows uses Git Bash (from [Git for Windows](https://git-scm.com/download/win)) for shell commands. A few features require POSIX kernel primitives and are gated: the dashboard's embedded PTY terminal pane (`/chat` tab) needs a POSIX PTY (Linux, macOS, or WSL2). If you're doing Windows-heavy dev, run the Windows-footgun lint (`scripts/check-windows-footguns.py`) before pushing.
+See **[Platform Support](../getting-started/platform-support.md)**. Native Windows uses Git Bash (from [Git for Windows](https://git-scm.com/download/win)) for shell commands. A few features require POSIX kernel primitives and are gated: the dashboard's embedded PTY terminal pane (`/chat` tab) needs a POSIX PTY (Linux, macOS, or WSL2). If you're doing Windows-heavy dev, run the Windows-footgun lint (`scripts/check-windows-footguns.py`) before pushing.
 
 When contributing code, keep these rules in mind:
 

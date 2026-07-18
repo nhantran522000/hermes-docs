@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/use-voice-mode-with-hermes"
 title: "Use Voice Mode with Hermes"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Use Voice Mode with Hermes
@@ -12,7 +12,7 @@ If the feature page explains what voice mode can do, this guide shows how to act
 
 tip
 
-[Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal) bundles both the LLM and TTS through one OAuth — voice mode works end-to-end with no extra credentials.
+[Nous Portal](../integrations/nous-portal.md) bundles both the LLM and TTS through one OAuth — voice mode works end-to-end with no extra credentials.
 
 ## What voice mode is good for
 

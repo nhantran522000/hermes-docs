@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/voice-mode"
 title: "Voice Mode"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Voice Mode
@@ -24,7 +24,7 @@ The `~/.hermes/` directory and default `config.yaml` are created automatically t
 
 Nous Portal covers both
 
-A paid [Nous Portal](https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-gateway) subscription supplies the LLM (step 2) **and** OpenAI TTS via the Tool Gateway — no separate OpenAI key needed. On a fresh install, `hermes setup --portal` wires both up at once.
+A paid [Nous Portal](tool-gateway.md) subscription supplies the LLM (step 2) **and** OpenAI TTS via the Tool Gateway — no separate OpenAI key needed. On a fresh install, `hermes setup --portal` wires both up at once.
 
 ## Overview
 

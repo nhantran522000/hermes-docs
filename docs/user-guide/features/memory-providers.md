@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers"
 title: "Memory Providers"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Memory Providers
@@ -636,4 +636,4 @@ Each provider's data is isolated per [profile](../profiles.md):
 
 ## Building a Memory Provider
 
-See the [Developer Guide: Memory Provider Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/memory-provider-plugin) for how to create your own.
+See the [Developer Guide: Memory Provider Plugins](../../developer-guide/memory-provider-plugin.md) for how to create your own.

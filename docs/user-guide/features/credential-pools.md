@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/credential-pools"
 title: "Credential Pools"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Credential Pools
@@ -16,7 +16,7 @@ Provider-side prompt caches (Anthropic, OpenAI, OpenRouter) are scoped to the ac
 
 tip
 
-Credential pools are mainly for API-key providers (OpenRouter, Anthropic). A single [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal) OAuth covers 300+ models, so most users don't need a pool when on Portal.
+Credential pools are mainly for API-key providers (OpenRouter, Anthropic). A single [Nous Portal](../../integrations/nous-portal.md) OAuth covers 300+ models, so most users don't need a pool when on Portal.
 
 ## How It Works
 

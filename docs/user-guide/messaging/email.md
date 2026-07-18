@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/email"
 title: "Email Setup"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Email Setup
@@ -12,7 +12,7 @@ Gateway adapter only: no external dependencies
 
 This page covers the Email gateway adapter, which uses Python's built-in `imaplib`, `smtplib`, and `email` modules. No additional packages or external services are required for this gateway path.
 
-This is separate from the bundled [Himalaya email skill](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/email/email-himalaya), which lets the agent manage email through terminal commands and requires the external `himalaya` CLI plus a Himalaya config file.
+This is separate from the bundled [Himalaya email skill](../skills/bundled/email/email-himalaya.md), which lets the agent manage email through terminal commands and requires the external `himalaya` CLI plus a Himalaya config file.
 
 | Use case | What to configure | External dependency |
 |----|----|----|

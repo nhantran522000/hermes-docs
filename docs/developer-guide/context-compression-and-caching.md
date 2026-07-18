@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/context-compression-and-caching"
 title: "Context Compression and Caching"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Context Compression and Caching
@@ -37,7 +37,7 @@ Plugin engines are **never auto-activated** — the user must explicitly set `co
 
 Configure via `hermes plugins` → Provider Plugins → Context Engine, or edit `config.yaml` directly.
 
-For building a context engine plugin, see [Context Engine Plugins](https://hermes-agent.nousresearch.com/docs/developer-guide/context-engine-plugin).
+For building a context engine plugin, see [Context Engine Plugins](context-engine-plugin.md).
 
 ## Dual Compression System
 

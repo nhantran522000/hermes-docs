@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/tips"
 title: "Tips & Best Practices"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Tips & Best Practices
@@ -10,7 +10,7 @@ A quick-wins collection of practical tips that make you immediately more effecti
 
 Confused which model to pick?
 
-Run `hermes setup --portal` — you get 300+ models including Claude, GPT-5, and Gemini under one subscription. See [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal).
+Run `hermes setup --portal` — you get 300+ models including Claude, GPT-5, and Gemini under one subscription. See [Nous Portal](../integrations/nous-portal.md).
 
 ------------------------------------------------------------------------
 
@@ -181,11 +181,11 @@ By default, messaging sessions never auto-reset — context lives until you `/re
 
 ### Use Docker for Untrusted Code
 
-When working with untrusted repositories or running unfamiliar code, use Docker or Daytona as your terminal backend. Set `TERMINAL_BACKEND=docker` in your `.env`. Destructive commands inside a container can't harm your host system.
+When working with untrusted repositories or running unfamiliar code, use Docker or Daytona as your terminal backend. Set `TERMINAL_ENV=docker` in your `.env`. Destructive commands inside a container can't harm your host system.
 
 ``` bash
 # In your .env:
-TERMINAL_BACKEND=docker
+TERMINAL_ENV=docker
 TERMINAL_DOCKER_IMAGE=hermes-sandbox:latest
 ```
 

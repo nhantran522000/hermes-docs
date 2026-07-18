@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging"
 title: "Messaging Gateway"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Messaging Gateway
@@ -12,7 +12,7 @@ For the full voice feature set — including CLI microphone mode, spoken replies
 
 tip
 
-Bots need both a model provider and tool providers (TTS, web). A [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal) subscription bundles all of them.
+Bots need both a model provider and tool providers (TTS, web). A [Nous Portal](../../integrations/nous-portal.md) subscription bundles all of them.
 
 ## Platform Comparison
 
@@ -113,7 +113,7 @@ hermes gateway status --system         # Linux only: inspect the system service 
 | `/compress` | Manually compress conversation context |
 | `/title [name]` | Set or show the session title |
 | `/resume [name]` | Resume a previously named session |
-| `/usage` | Show token usage for this session |
+| `/usage` | Show token usage for this session (`/usage reset [--force]` redeems a banked Codex limit reset) |
 | `/insights [days]` | Show usage insights and analytics |
 | `/reasoning [level|show|hide]` | Change reasoning effort or toggle reasoning display |
 | `/voice [on|off|tts|join|leave|status]` | Control messaging voice replies and Discord voice-channel behavior |
@@ -586,26 +586,26 @@ Defaults to `false`. Only platforms whose adapter implements `delete_message` ho
 - [Telegram Setup](telegram.md)
 - [Discord Setup](discord.md)
 - [Slack Setup](slack.md)
-- [Google Chat Setup](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/google_chat)
+- [Google Chat Setup](google_chat.md)
 - [WhatsApp Setup](whatsapp.md)
-- [WhatsApp Business Cloud API Setup](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/whatsapp-cloud)
+- [WhatsApp Business Cloud API Setup](whatsapp-cloud.md)
 - [Signal Setup](signal.md)
 - [SMS Setup (Twilio)](sms.md)
 - [Email Setup](email.md)
 - [Home Assistant Integration](homeassistant.md)
 - [Mattermost Setup](mattermost.md)
 - [Matrix Setup](matrix.md)
-- [DingTalk Setup](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/dingtalk)
-- [Feishu/Lark Setup](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/feishu)
-- [WeCom Setup](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/wecom)
-- [WeCom Callback Setup](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/wecom-callback)
-- [Weixin Setup (WeChat)](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/weixin)
-- [BlueBubbles Setup (iMessage)](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/bluebubbles)
-- [QQBot Setup](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/qqbot)
-- [Yuanbao Setup](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/yuanbao)
-- [Microsoft Teams Setup](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/teams)
-- [Teams Meetings Pipeline](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/teams-meetings)
-- [Open WebUI + API Server](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/open-webui)
+- [DingTalk Setup](dingtalk.md)
+- [Feishu/Lark Setup](feishu.md)
+- [WeCom Setup](wecom.md)
+- [WeCom Callback Setup](wecom-callback.md)
+- [Weixin Setup (WeChat)](weixin.md)
+- [BlueBubbles Setup (iMessage)](bluebubbles.md)
+- [QQBot Setup](qqbot.md)
+- [Yuanbao Setup](yuanbao.md)
+- [Microsoft Teams Setup](teams.md)
+- [Teams Meetings Pipeline](teams-meetings.md)
+- [Open WebUI + API Server](open-webui.md)
 - [Raft Setup](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/raft)
-- [IRC Setup](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/irc)
+- [IRC Setup](irc.md)
 - [Webhooks](webhooks.md)

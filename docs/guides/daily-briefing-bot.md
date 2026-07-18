@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/daily-briefing-bot"
 title: "Tutorial: Build a Daily Briefing Bot"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Tutorial: Build a Daily Briefing Bot
@@ -12,7 +12,7 @@ By the end, you'll have a fully automated workflow combining **web search**, **c
 
 tip
 
-This recipe hits web search, summarization, and optional TTS — all bundled in a Portal subscription. The fastest setup is `hermes setup --portal`. See [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal).
+This recipe hits web search, summarization, and optional TTS — all bundled in a Portal subscription. The fastest setup is `hermes setup --portal`. See [Nous Portal](../integrations/nous-portal.md).
 
 ## What We're Building
 

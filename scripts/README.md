@@ -1,11 +1,15 @@
 # Hermes docs crawler
 
-Fetches a fresh [`../llms.txt`](../llms.txt) from the live docs site, crawls every page
-it lists, and saves each as Markdown under [`../docs/`](../docs/), mirroring the URL
-paths. Re-running overwrites existing files in place, so it is safe to run on a schedule.
+Crawls every page listed in [`../llms.txt`](../llms.txt) and saves each as Markdown under
+[`../docs/`](../docs/), mirroring the URL paths. Re-running overwrites existing files in
+place, so it is safe to run on a schedule.
 
-The weekly job (`sync-docs.sh`) does the whole loop: **fetch `llms.txt` → crawl → commit
-→ push to GitHub**.
+`llms.txt` is a **hand-maintained, checked-in list** of pages to crawl — it is no longer
+fetched from the docs site. To change what gets crawled, edit it by hand: add or remove a
+`- [Title](https://…/docs/…)` line under the appropriate `##` section.
+
+The weekly job (`sync-docs.sh`) does the whole loop: **crawl `llms.txt` → commit → push
+to GitHub**.
 
 ## Requirements
 
@@ -19,16 +23,16 @@ The weekly job (`sync-docs.sh`) does the whole loop: **fetch `llms.txt` → craw
 ## Run manually
 
 ```bash
-scripts/sync-docs.sh                  # full weekly job: fetch llms.txt -> crawl -> commit -> push
-scripts/crawl-docs.sh                 # crawl only, using the current local llms.txt
-scripts/crawl-docs.sh --refresh-llms  # fetch a fresh llms.txt first, then crawl (no git)
+scripts/sync-docs.sh                  # full weekly job: crawl -> commit -> push
+scripts/crawl-docs.sh                 # crawl every page in the local llms.txt (no git)
 scripts/crawl-docs.sh --only cli      # only URLs containing "cli" (for testing)
 scripts/crawl-docs.sh --workers 4     # fewer concurrent fetches
 ```
 
-`sync-docs.sh` commits only `llms.txt` + `docs/`, and only when something actually
-changed (a same-day re-run with no doc changes is a clean no-op). If a few pages fail to
-crawl, their previous versions stay in place and the rest are still committed.
+`sync-docs.sh` commits only `docs/`, and only when something actually changed (a same-day
+re-run with no doc changes is a clean no-op). If a few pages fail to crawl, their previous
+versions stay in place and the rest are still committed. (`llms.txt` is hand-edited, so it
+lands in your own commits, not the sync's.)
 
 Logs are written to `.crawl-logs/` (last 12 kept). Both the venv and logs are gitignored.
 
@@ -43,7 +47,7 @@ ever fails with an auth error, run `git push` once by hand to re-cache the crede
 
 The scheduled run lives in [`../.github/workflows/sync-docs.yml`](../.github/workflows/sync-docs.yml)
 and runs on GitHub's servers **every Sunday at 18:00 UTC** — no local machine needed. It
-does the same fetch → crawl → commit → push loop and pushes as `github-actions[bot]`.
+does the same crawl → commit → push loop and pushes as `github-actions[bot]`.
 
 ```bash
 gh workflow run "Sync Hermes docs"        # run it now
@@ -81,10 +85,9 @@ just because the machine was asleep at 18:00.
 
 ## How it works
 
-`crawl_docs.py --refresh-llms` first downloads `llms.txt` from
-`https://hermes-agent.nousresearch.com/docs/llms.txt`, validates it, and writes it
-atomically (a transient download failure falls back to the existing file). Then, for
-each doc URL it:
+`crawl_docs.py` reads the checked-in `llms.txt` — a list of `- [Title](url)` links grouped
+under `##` sections — to decide which pages to crawl. Nothing is fetched from the site to
+build that list; it is edited by hand. Then, for each doc URL it:
 
 1. Fetches the rendered HTML, sending `Accept-Language: en` so output is identical
    wherever the crawl runs (the host otherwise localizes by IP).

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/learning-path"
 title: "Learning Path"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Learning Path
@@ -14,7 +14,7 @@ If you haven't installed Hermes Agent yet, begin with the [Installation guide](i
 
 First-time provider setup
 
-First-time users almost always want `hermes setup --portal` — one OAuth covers a model plus the four Tool Gateway tools (search/image/TTS/browser). See [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal).
+First-time users almost always want `hermes setup --portal` — one OAuth covers a model plus the four Tool Gateway tools (search/image/TTS/browser). See [Nous Portal](../integrations/nous-portal.md).
 
 ## How to Use This Page
 
@@ -86,7 +86,7 @@ Cron jobs let Hermes Agent run tasks on a schedule — daily summaries, periodic
 Extend Hermes Agent with your own tools and reusable skill packages.
 
 1.  [Plugins](../user-guide/features/plugins.md)
-2.  [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
+2.  [Build a Hermes Plugin](../developer-guide/plugins.md)
 3.  [Tools Overview](../user-guide/features/tools.md)
 4.  [Skills Overview](../user-guide/features/skills.md)
 5.  [MCP (Model Context Protocol)](../user-guide/features/mcp.md)

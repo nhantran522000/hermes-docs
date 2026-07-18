@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/provider-routing"
 title: "Provider Routing"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Provider Routing
 
-When using [OpenRouter](https://openrouter.ai) or [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal) as your LLM provider, Hermes Agent supports **provider routing** — fine-grained control over which underlying AI providers handle your requests and how they're prioritized.
+When using [OpenRouter](https://openrouter.ai) or [Nous Portal](../../integrations/nous-portal.md) as your LLM provider, Hermes Agent supports **provider routing** — fine-grained control over which underlying AI providers handle your requests and how they're prioritized.
 
 OpenRouter routes requests to many providers (e.g., Anthropic, Google, AWS Bedrock, Together AI). Provider routing lets you optimize for cost, speed, quality, or enforce specific provider requirements.
 

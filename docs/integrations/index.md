@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/integrations"
 title: "Integrations"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Integrations
@@ -10,13 +10,13 @@ Hermes Agent connects to external systems for AI inference, tool servers, IDE wo
 
 Start here
 
-If you only have time to set up one integration, set up [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal) — a single OAuth login covers 300+ models plus the four Tool Gateway tools (web search, image generation, TTS, and browser automation).
+If you only have time to set up one integration, set up [Nous Portal](nous-portal.md) — a single OAuth login covers 300+ models plus the four Tool Gateway tools (web search, image generation, TTS, and browser automation).
 
 ## AI Providers & Routing
 
 Hermes supports multiple AI inference providers out of the box. Use `hermes model` to configure interactively, or set them in `config.yaml`.
 
-- **[AI Providers](../user-guide/features/provider-routing.md)** — OpenRouter, Anthropic, OpenAI, Google, and any OpenAI-compatible endpoint. Hermes auto-detects capabilities like vision, streaming, and tool use per provider.
+- **[AI Providers](providers.md)** — OpenRouter, Anthropic, OpenAI, Google, and any OpenAI-compatible endpoint. Hermes auto-detects capabilities like vision, streaming, and tool use per provider.
 - **[Provider Routing](../user-guide/features/provider-routing.md)** — Fine-grained control over which underlying providers handle your OpenRouter requests. Optimize for cost, speed, or quality with sorting, whitelists, blacklists, and explicit priority ordering.
 - **[Fallback Providers](../user-guide/features/fallback-providers.md)** — Automatic failover to backup LLM providers when your primary model encounters errors. Includes primary model fallback and independent auxiliary task fallback for vision, compression, and web extraction.
 
@@ -91,7 +91,7 @@ Speech-to-text supports six providers: local faster-whisper (free, runs on-devic
 
 Hermes runs as a gateway bot on 27+ messaging platforms, all configured through the same `gateway` subsystem:
 
-- **[Telegram](../user-guide/messaging/telegram.md)**, **[Discord](../user-guide/messaging/discord.md)**, **[Slack](../user-guide/messaging/slack.md)**, **[WhatsApp](../user-guide/messaging/whatsapp.md)**, **[Signal](../user-guide/messaging/signal.md)**, **[Matrix](../user-guide/messaging/matrix.md)**, **[Mattermost](../user-guide/messaging/mattermost.md)**, **[Email](../user-guide/messaging/email.md)**, **[SMS](../user-guide/messaging/sms.md)**, **[DingTalk](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/dingtalk)**, **[Feishu/Lark](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/feishu)**, **[WeCom](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/wecom)**, **[WeCom Callback](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/wecom-callback)**, **[Weixin](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/weixin)**, **[BlueBubbles](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/bluebubbles)**, **[QQ Bot](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/qqbot)**, **[Yuanbao](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/yuanbao)**, **[Home Assistant](../user-guide/messaging/homeassistant.md)**, **[Microsoft Teams](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/teams)**, **[Microsoft Teams Meetings](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/teams-meetings)**, **[Microsoft Graph Webhook](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/msgraph-webhook)**, **[Google Chat](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/google_chat)**, **[LINE](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/line)**, **[ntfy](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/ntfy)**, **[SimpleX](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/simplex)**, **[Open WebUI](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/open-webui)**, **[Webhooks](../user-guide/messaging/webhooks.md)**
+- **[Telegram](../user-guide/messaging/telegram.md)**, **[Discord](../user-guide/messaging/discord.md)**, **[Slack](../user-guide/messaging/slack.md)**, **[WhatsApp](../user-guide/messaging/whatsapp.md)**, **[Signal](../user-guide/messaging/signal.md)**, **[Matrix](../user-guide/messaging/matrix.md)**, **[Mattermost](../user-guide/messaging/mattermost.md)**, **[Email](../user-guide/messaging/email.md)**, **[SMS](../user-guide/messaging/sms.md)**, **[DingTalk](../user-guide/messaging/dingtalk.md)**, **[Feishu/Lark](../user-guide/messaging/feishu.md)**, **[WeCom](../user-guide/messaging/wecom.md)**, **[WeCom Callback](../user-guide/messaging/wecom-callback.md)**, **[Weixin](../user-guide/messaging/weixin.md)**, **[BlueBubbles](../user-guide/messaging/bluebubbles.md)**, **[QQ Bot](../user-guide/messaging/qqbot.md)**, **[Yuanbao](../user-guide/messaging/yuanbao.md)**, **[Home Assistant](../user-guide/messaging/homeassistant.md)**, **[Microsoft Teams](../user-guide/messaging/teams.md)**, **[Microsoft Teams Meetings](../user-guide/messaging/teams-meetings.md)**, **[Microsoft Graph Webhook](../user-guide/messaging/msgraph-webhook.md)**, **[Google Chat](../user-guide/messaging/google_chat.md)**, **[LINE](../user-guide/messaging/line.md)**, **[ntfy](../user-guide/messaging/ntfy.md)**, **[SimpleX](../user-guide/messaging/simplex.md)**, **[Open WebUI](../user-guide/messaging/open-webui.md)**, **[Webhooks](../user-guide/messaging/webhooks.md)**
 
 See the [Messaging Gateway overview](../user-guide/messaging/index.md) for the platform comparison table and setup guide.
 
@@ -102,7 +102,7 @@ See the [Messaging Gateway overview](../user-guide/messaging/index.md) for the p
 ## Plugins
 
 - **[Plugin System](../user-guide/features/plugins.md)** — Extend Hermes with custom tools, lifecycle hooks, and CLI commands without modifying core code. Plugins are discovered from `~/.hermes/plugins/`, project-local `.hermes/plugins/`, and pip-installed entry points.
-- **[Build a Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)** — Step-by-step guide for creating Hermes plugins with tools, hooks, and CLI commands.
+- **[Build a Plugin](../developer-guide/plugins.md)** — Step-by-step guide for creating Hermes plugins with tools, hooks, and CLI commands.
 
 ## Training & Evaluation
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/agent-loop"
 title: "Agent Loop Internals"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Agent Loop Internals
@@ -238,5 +238,5 @@ After each turn:
 - [Provider Runtime Resolution](provider-runtime.md)
 - [Prompt Assembly](prompt-assembly.md)
 - [Context Compression & Prompt Caching](context-compression-and-caching.md)
-- [Tools Runtime](https://hermes-agent.nousresearch.com/docs/developer-guide/tools-runtime)
+- [Tools Runtime](tools-runtime.md)
 - [Architecture Overview](architecture.md)

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/matrix"
 title: "Matrix Setup"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Matrix Setup

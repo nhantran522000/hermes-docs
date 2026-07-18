@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/architecture"
 title: "Architecture"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Architecture
@@ -179,11 +179,11 @@ If you are new to the codebase:
 3.  **[Prompt Assembly](prompt-assembly.md)** — system prompt construction
 4.  **[Provider Runtime Resolution](provider-runtime.md)** — how providers are selected
 5.  **[Adding Providers](adding-providers.md)** — practical guide to adding a new provider
-6.  **[Tools Runtime](https://hermes-agent.nousresearch.com/docs/developer-guide/tools-runtime)** — tool registry, dispatch, environments
+6.  **[Tools Runtime](tools-runtime.md)** — tool registry, dispatch, environments
 7.  **[Session Storage](session-storage.md)** — SQLite schema, FTS5, session lineage
 8.  **[Gateway Internals](gateway-internals.md)** — messaging platform gateway
 9.  **[Context Compression & Prompt Caching](context-compression-and-caching.md)** — compression and caching
-10. **[ACP Internals](https://hermes-agent.nousresearch.com/docs/developer-guide/acp-internals)** — IDE integration
+10. **[ACP Internals](acp-internals.md)** — IDE integration
 
 ## Major Subsystems
 
@@ -213,7 +213,7 @@ A shared runtime resolver used by CLI, gateway, cron, ACP, and auxiliary calls. 
 
 Central tool registry (`tools/registry.py`) with 70+ registered tools across ~28 toolsets. Each tool file self-registers at import time. The registry handles schema collection, dispatch, availability checking, and error wrapping. Terminal tools support 6 backends (local, Docker, SSH, Daytona, Modal, Singularity).
 
-→ [Tools Runtime](https://hermes-agent.nousresearch.com/docs/developer-guide/tools-runtime)
+→ [Tools Runtime](tools-runtime.md)
 
 ### Session Persistence
 
@@ -231,25 +231,25 @@ Long-running process with 20 platform adapters, unified session routing, user au
 
 Three discovery sources: `~/.hermes/plugins/` (user), `.hermes/plugins/` (project), and pip entry points. Plugins register tools, hooks, and CLI commands through a context API. Two specialized plugin types exist: memory providers (`plugins/memory/`) and context engines (`plugins/context_engine/`). Both are single-select — only one of each can be active at a time, configured via `hermes plugins` or `config.yaml`.
 
-→ [Plugin Guide](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins), [Memory Provider Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/memory-provider-plugin)
+→ [Plugin Guide](plugins.md), [Memory Provider Plugin](memory-provider-plugin.md)
 
 ### Cron
 
 First-class agent tasks (not shell tasks). Jobs store in JSON, support multiple schedule formats, can attach skills and scripts, and deliver to any platform.
 
-→ [Cron Internals](https://hermes-agent.nousresearch.com/docs/developer-guide/cron-internals)
+→ [Cron Internals](cron-internals.md)
 
 ### ACP Integration
 
 Exposes Hermes as an editor-native agent over stdio/JSON-RPC for VS Code, Zed, and JetBrains.
 
-→ [ACP Internals](https://hermes-agent.nousresearch.com/docs/developer-guide/acp-internals)
+→ [ACP Internals](acp-internals.md)
 
 ### Trajectories
 
 Generates ShareGPT-format trajectories from agent sessions for training data generation.
 
-→ [Trajectories & Training Format](https://hermes-agent.nousresearch.com/docs/developer-guide/trajectory-format)
+→ [Trajectories & Training Format](trajectory-format.md)
 
 ## Design Principles
 

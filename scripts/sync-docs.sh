@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # One-shot sync used by the weekly schedule:
-#   1. fetch a fresh llms.txt from the live docs site
-#   2. crawl every page it lists into ./docs
-#   3. commit llms.txt + docs changes and push to origin
+#   1. crawl every page listed in the checked-in llms.txt into ./docs
+#   2. commit docs changes and push to origin
+#
+# llms.txt is a hand-maintained page list — it is no longer fetched from the site.
+# Edit it by hand to add/remove pages from the crawl.
 #
 # Safe to run manually too:  scripts/sync-docs.sh
 set -euo pipefail
@@ -14,18 +16,18 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$DIR"
 BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo main)"
 
-# 1 + 2: refresh llms.txt and crawl. Don't abort the whole sync if a few pages
-# fail (their previous versions stay in place); remember the status for the exit.
+# 1: crawl every page in llms.txt. Don't abort the whole sync if a few pages fail
+# (their previous versions stay in place); remember the status for the exit.
 set +e
-"$DIR/scripts/crawl-docs.sh" --refresh-llms "$@"
+"$DIR/scripts/crawl-docs.sh" "$@"
 crawl_status=$?
 set -e
 if [ "$crawl_status" -ne 0 ]; then
   echo "WARNING: crawl exited $crawl_status (some pages may not have updated). Committing what changed."
 fi
 
-# 3: commit + push only the content paths, and only if something changed.
-git add -A -- llms.txt docs
+# 2: commit + push the crawled docs, and only if something changed.
+git add -A -- docs
 if git diff --cached --quiet; then
   echo "No documentation changes to commit."
   exit "$crawl_status"

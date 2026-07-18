@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/team-telegram-assistant"
 title: "Set Up a Team Telegram Assistant"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Set Up a Team Telegram Assistant
@@ -385,7 +385,7 @@ On a shared team bot, use Docker as the terminal backend so agent commands run i
 
 ``` bash
 # In ~/.hermes/.env
-TERMINAL_BACKEND=docker
+TERMINAL_ENV=docker
 TERMINAL_DOCKER_IMAGE=nikolaik/python-nodejs:python3.11-nodejs20
 ```
 

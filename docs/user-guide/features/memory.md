@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/memory"
 title: "Persistent Memory"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Persistent Memory

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/cli"
 title: "CLI Interface"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # CLI Interface
@@ -10,7 +10,7 @@ Hermes Agent's CLI is a full terminal user interface (TUI) — not a web UI. It 
 
 First-time setup
 
-One command — `hermes setup --portal` — and you're ready to `hermes chat`. See [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal).
+One command — `hermes setup --portal` — and you're ready to `hermes chat`. See [Nous Portal](../integrations/nous-portal.md).
 
 tip
 
@@ -90,6 +90,8 @@ The bar adapts to terminal width — full layout at ≥ 76 columns, compact at 5
 | Red    | ≥ 95%     | Near overflow — consider `/compress` |
 
 Use `/usage` for a detailed breakdown including per-category costs (input vs output tokens).
+
+On the `openai-codex` provider, `/usage` also shows any banked usage-limit resets on your ChatGPT account ("You have N resets banked - use /usage reset to activate"). `/usage reset` redeems one banked reset, fully restoring your 5-hour and weekly limits. Hermes refuses to redeem while your limits aren't exhausted (a banked reset restores the full allowance, so spending it early wastes it) — pass `/usage reset --force` to redeem anyway.
 
 ### Session Resume Display
 

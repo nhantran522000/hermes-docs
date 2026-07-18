@@ -1,14 +1,14 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/termux"
 title: "Hermes on Android with Termux"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Hermes on Android with Termux
 
 Tier 2 platform
 
-Termux (Android) is a [Tier 2 platform](https://hermes-agent.nousresearch.com/docs/getting-started/platform-support#tier-2). The installer script and documentation here are maintained on a best-effort basis only. Commits to `main` may break these packages at any point in time.
+Termux (Android) is a [Tier 2 platform](platform-support.md#tier-2). The installer script and documentation here are maintained on a best-effort basis only. Commits to `main` may break these packages at any point in time.
 
 Hermes Agent can run directly on an Android phone through [Termux](https://termux.dev/).
 

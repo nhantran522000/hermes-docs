@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/tools"
 title: "Tools & Toolsets"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Tools & Toolsets
@@ -34,7 +34,7 @@ For the authoritative code-derived registry, see [Built-in Tools Reference](../.
 
 Nous Tool Gateway
 
-Paid [Nous Portal](https://portal.nousresearch.com) subscribers can use web search, image generation, TTS, and browser automation through the **[Tool Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-gateway)** — no separate API keys needed. Run `hermes model` to enable it, or configure individual tools with `hermes tools`.
+Paid [Nous Portal](https://portal.nousresearch.com) subscribers can use web search, image generation, TTS, and browser automation through the **[Tool Gateway](tool-gateway.md)** — no separate API keys needed. Run `hermes model` to enable it, or configure individual tools with `hermes tools`.
 
 ## Using Toolsets
 

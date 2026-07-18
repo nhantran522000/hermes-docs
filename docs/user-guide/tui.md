@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/tui"
 title: "TUI"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # TUI
@@ -57,7 +57,7 @@ The classic CLI remains the shipped default. Anything documented in [CLI Interfa
 - **Alternate-screen rendering** — differential updates mean no flicker when streaming, no scrollback clutter after you quit.
 - **Composer affordances** — inline paste-collapse for long snippets, `Cmd+V` / `Ctrl+V` text paste with clipboard-image fallback, bracketed-paste safety, and image/file-path attachment normalization.
 
-Same [skins](https://hermes-agent.nousresearch.com/docs/user-guide/features/skins) and [personalities](features/personality.md) apply. Switch mid-session with `/skin ares`, `/personality pirate`, and the UI repaints live. See [Skins & Themes](https://hermes-agent.nousresearch.com/docs/user-guide/features/skins) for the full list of customizable keys and which ones apply to classic vs TUI — the TUI honors the banner palette, UI colors, prompt glyph/color, session display, completion menu, selection bg, `tool_prefix`, and `help_header`.
+Same [skins](features/skins.md) and [personalities](features/personality.md) apply. Switch mid-session with `/skin ares`, `/personality pirate`, and the UI repaints live. See [Skins & Themes](features/skins.md) for the full list of customizable keys and which ones apply to classic vs TUI — the TUI honors the banner palette, UI colors, prompt glyph/color, session display, completion menu, selection bg, `tool_prefix`, and `help_header`.
 
 ### Collapsible banner sections
 
@@ -78,6 +78,10 @@ Click anywhere on a section header (or its chevron) to toggle it. The Tools list
 - **TTY** — like the classic CLI, piping stdin or running in non-interactive environments falls back to single-query mode.
 
 On first launch Hermes installs the TUI's Node dependencies into `ui-tui/node_modules` (one-time, a few seconds). Subsequent launches are fast. If you pull a new Hermes version, the TUI bundle is rebuilt automatically when sources are newer than the dist.
+
+Working across git worktrees?
+
+Contributors who run `hermes --tui --dev` from many worktrees can share one `node_modules` instead of installing per checkout — see [TUI & Desktop from Worktrees](../developer-guide/worktree-ui-dev.md).
 
 ### External prebuild
 
@@ -197,7 +201,7 @@ The TUI's status line tracks agent state in real time:
 | `interrupted` | Current turn was cancelled; press Enter to send again. |
 | `forging session…` / `resuming…` | Initial connect or `--resume` handshake. |
 
-The per-skin status-bar colors and thresholds are shared with the classic CLI — see [Skins](https://hermes-agent.nousresearch.com/docs/user-guide/features/skins) for customization.
+The per-skin status-bar colors and thresholds are shared with the classic CLI — see [Skins](features/skins.md) for customization.
 
 The status line also shows:
 
@@ -268,7 +272,7 @@ You may see a `HERMES_TUI_GATEWAY_URL` env var referenced in the codebase or log
 
 There is no general "point any TUI at any standalone gateway port" mode. In particular, the OpenAI-compatible API server (`hermes gateway` / the `api_server` platform) does **not** serve `/api/ws` — it's the model-backend surface (`/v1/chat/completions`, `/v1/models`, …) and deliberately does not expose the TUI's JSON-RPC control channel. Setting `HERMES_TUI_GATEWAY_URL` to that port will 404.
 
-If you want multiple surfaces to share one set of sessions, use the shared `~/.hermes/state.db` (see [Sessions](sessions.md)) or the web dashboard's embedded chat (see [Web Dashboard](https://hermes-agent.nousresearch.com/docs/user-guide/features/web-dashboard#chat)) — not a hand-set gateway URL.
+If you want multiple surfaces to share one set of sessions, use the shared `~/.hermes/state.db` (see [Sessions](sessions.md)) or the web dashboard's embedded chat (see [Web Dashboard](features/web-dashboard.md#chat)) — not a hand-set gateway URL.
 
 ## Reverting to the classic CLI
 
@@ -280,6 +284,6 @@ If the TUI fails to launch (no Node, missing bundle, TTY issue), Hermes prints a
 
 - [CLI Interface](cli.md) — full slash command and keybinding reference (shared)
 - [Sessions](sessions.md) — resume, branch, and history
-- [Skins & Themes](https://hermes-agent.nousresearch.com/docs/user-guide/features/skins) — theme the banner, status bar, and overlays
+- [Skins & Themes](features/skins.md) — theme the banner, status bar, and overlays
 - [Voice Mode](features/voice-mode.md) — works in both interfaces
 - [Configuration](configuration.md) — all config keys

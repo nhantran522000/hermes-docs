@@ -1,8 +1,8 @@
 name: Sync Hermes docs
 
-# Fetches a fresh llms.txt from the live docs site, crawls every page it lists
-# into docs/, and commits + pushes any changes — all on GitHub's runners, so it
-# runs whether or not your own machine is on.
+# Crawls every page listed in the checked-in llms.txt into docs/, and commits +
+# pushes any changes — all on GitHub's runners, so it runs whether or not your own
+# machine is on. llms.txt is a hand-maintained page list; it is no longer fetched.
 
 on:
   schedule:
@@ -48,27 +48,27 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r scripts/requirements.txt
 
-      - name: Fetch llms.txt and crawl docs
+      - name: Crawl docs
         id: crawl
         continue-on-error: true   # a few failed pages shouldn't discard the rest
-        run: python3 scripts/crawl_docs.py --refresh-llms
+        run: python3 scripts/crawl_docs.py
 
       - name: Commit and push changes
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A -- llms.txt docs
+          git add -A -- docs
           if git diff --cached --quiet; then
             echo "No documentation changes to commit."
             exit 0
           fi
           git commit -m "docs: sync Hermes docs $(date -u +'%Y-%m-%d %H:%M UTC')" \
-                     -m "Automated via GitHub Actions: fetched llms.txt and re-crawled all pages."
+                     -m "Automated via GitHub Actions: re-crawled all pages from the checked-in llms.txt."
           git push
           echo "Pushed documentation updates."
 
       - name: Fail the run if the crawl had errors
         if: steps.crawl.outcome == 'failure'
         run: |
-          echo "::error::The crawl step reported failures — see the 'Fetch llms.txt and crawl docs' step log."
+          echo "::error::The crawl step reported failures — see the 'Crawl docs' step log."
           exit 1

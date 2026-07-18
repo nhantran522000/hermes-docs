@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/profiles"
 title: "Profiles: Running Multiple Agents"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Profiles: Running Multiple Agents
@@ -28,7 +28,7 @@ That's it. `coder` is now its own Hermes profile with its own config, memory, an
 
 tip
 
-Quickest setup: run `hermes setup --portal` inside the new profile to wire up models + tools at once. See [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal).
+Quickest setup: run `hermes setup --portal` inside the new profile to wire up models + tools at once. See [Nous Portal](../integrations/nous-portal.md).
 
 ### Blank profile
 
@@ -209,7 +209,7 @@ coder config set terminal.cwd /absolute/path/to/project
 
 ### From the dashboard
 
-The [web dashboard](https://hermes-agent.nousresearch.com/docs/user-guide/features/web-dashboard#managing-multiple-profiles) is a machine-level surface that can manage **any** profile's config, API keys, skills, MCPs, and model via the profile switcher in its sidebar — no per-profile dashboard needed. `coder dashboard` routes to the machine dashboard with the `coder` profile preselected. The dashboard's Chat tab also follows the switcher, spawning a conversation under the selected profile's home.
+The [web dashboard](features/web-dashboard.md#managing-multiple-profiles) is a machine-level surface that can manage **any** profile's config, API keys, skills, MCPs, and model via the profile switcher in its sidebar — no per-profile dashboard needed. `coder dashboard` routes to the machine dashboard with the `coder` profile preselected. The dashboard's Chat tab also follows the switcher, spawning a conversation under the selected profile's home.
 
 Note: "Set as active" on the dashboard's Profiles page is the sticky default for **future CLI/gateway runs** (same as `hermes profile use`) — to edit a profile from the dashboard, use the switcher instead.
 
@@ -292,4 +292,4 @@ hermes profile install github.com/you/research-bot --alias
 hermes profile update research-bot
 ```
 
-See **[Profile Distributions: Share a Whole Agent](https://hermes-agent.nousresearch.com/docs/user-guide/profile-distributions)** for the full guide — authoring, publishing, update semantics, security model, and use cases.
+See **[Profile Distributions: Share a Whole Agent](profile-distributions.md)** for the full guide — authoring, publishing, update semantics, security model, and use cases.

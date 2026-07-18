@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Crawl the Hermes Agent documentation listed in llms.txt into local Markdown.
 
-For every doc URL found in llms.txt this fetches the rendered page, extracts the
-main article content, converts it to GitHub-Flavored Markdown with pandoc, and
+llms.txt is a hand-maintained, checked-in list of pages to crawl (it is NOT fetched
+from the site). For every doc URL it lists, this fetches the rendered page, extracts
+the main article content, converts it to GitHub-Flavored Markdown with pandoc, and
 writes it to docs/<mirrored path>.md. Re-running overwrites existing files, so it
-is safe to schedule weekly.
+is safe to schedule weekly. Edit llms.txt by hand to add or remove pages.
 
 Requires: requests, beautifulsoup4 (see requirements.txt) and the `pandoc` binary.
 """
@@ -31,7 +32,6 @@ DEFAULT_OUT = ROOT / "docs"
 DOMAIN = "hermes-agent.nousresearch.com"
 DOCS_PREFIX = "/docs/"
 SITE = f"https://{DOMAIN}"
-LLMS_URL = f"{SITE}{DOCS_PREFIX}llms.txt"
 
 TIMEOUT = 30
 RETRIES = 4
@@ -69,34 +69,6 @@ def session() -> requests.Session:
         s.headers.update({"User-Agent": USER_AGENT, "Accept-Language": ACCEPT_LANGUAGE})
         _thread_local.session = s
     return s
-
-
-def refresh_llms(url: str, dest: Path) -> bool:
-    """Fetch a fresh llms.txt and write it to `dest` (atomically, after validation).
-
-    Returns True if `dest` holds a usable llms.txt afterwards. A transient fetch
-    failure is non-fatal when a previous llms.txt already exists (we keep it and
-    warn); it is fatal only when there is nothing to fall back to.
-    """
-    try:
-        text = _get(url)
-    except Exception as e:  # noqa: BLE001
-        if dest.exists():
-            print(f"WARNING: could not refresh llms.txt ({e}); using existing {dest}.", file=sys.stderr)
-            return True
-        print(f"ERROR: could not fetch llms.txt from {url}: {e}", file=sys.stderr)
-        return False
-
-    if len(text) < 200 or f"{DOMAIN}{DOCS_PREFIX}" not in text:
-        print(f"ERROR: fetched llms.txt from {url} looks invalid (len={len(text)}); aborting.", file=sys.stderr)
-        return False
-
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    tmp = dest.with_suffix(dest.suffix + ".tmp")
-    tmp.write_text(text, encoding="utf-8")
-    tmp.replace(dest)
-    print(f"Refreshed {dest} from {url} ({len(text)} bytes)")
-    return True
 
 
 def extract_urls(text: str) -> list[str]:
@@ -328,18 +300,11 @@ def main() -> int:
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT, help="Output docs directory")
     ap.add_argument("--workers", type=int, default=6, help="Concurrent fetches")
     ap.add_argument("--only", default=None, help="Only crawl URLs containing this substring (for testing)")
-    ap.add_argument("--refresh-llms", action="store_true",
-                    help="Fetch a fresh llms.txt from --llms-url and save it to --llms before crawling")
-    ap.add_argument("--llms-url", default=LLMS_URL, help="URL to fetch llms.txt from")
     args = ap.parse_args()
 
     if subprocess.run(["pandoc", "--version"], capture_output=True).returncode != 0:
         print("ERROR: pandoc is required but not runnable.", file=sys.stderr)
         return 2
-
-    if args.refresh_llms:
-        if not refresh_llms(args.llms_url, args.llms):
-            return 2
 
     if not args.llms.exists():
         print(f"ERROR: {args.llms} not found.", file=sys.stderr)

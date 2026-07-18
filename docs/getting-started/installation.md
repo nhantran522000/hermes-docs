@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/installation"
 title: "Installation"
-last_crawled: 2026-07-12
+last_crawled: 2026-07-18
 ---
 
 # Installation
@@ -10,7 +10,7 @@ Get Hermes Agent up and running in under two minutes!
 
 Platform Support
 
-For the full platform support matrix (which OSes, distribution methods, and platform-gated features are supported), see **[Platform Support](https://hermes-agent.nousresearch.com/docs/getting-started/platform-support)**.
+For the full platform support matrix (which OSes, distribution methods, and platform-gated features are supported), see **[Platform Support](platform-support.md)**.
 
 ## Quick Install
 
@@ -73,12 +73,13 @@ hermes model          # Choose your LLM provider and model
 hermes tools          # Configure which tools are enabled
 hermes gateway setup  # Set up messaging platforms
 hermes config set     # Set individual config values
+hermes config get     # Inspect individual config values
 hermes setup          # Or run the full setup wizard to configure everything at once
 ```
 
 Fastest path: Nous Portal
 
-One subscription covers 300+ models plus the [Tool Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-gateway) (web search, image generation, TTS, cloud browser). Skip the per-tool key juggling:
+One subscription covers 300+ models plus the [Tool Gateway](../user-guide/features/tool-gateway.md) (web search, image generation, TTS, cloud browser). Skip the per-tool key juggling:
 
 ``` bash
 hermes setup --portal

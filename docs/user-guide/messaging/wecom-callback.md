@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/wecom-callback"
 title: "WeCom Callback (Self-Built App)"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # WeCom Callback (Self-Built App)

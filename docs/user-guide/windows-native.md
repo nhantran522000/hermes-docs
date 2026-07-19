@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/windows-native"
 title: "Windows (Native) Guide"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Windows (Native) Guide

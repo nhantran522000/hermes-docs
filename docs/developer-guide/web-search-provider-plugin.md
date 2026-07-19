@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/web-search-provider-plugin"
 title: "Building a Web Search Provider Plugin"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Building a Web Search Provider Plugin

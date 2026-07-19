@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/programmatic-integration"
 title: "Programmatic Integration"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Programmatic Integration

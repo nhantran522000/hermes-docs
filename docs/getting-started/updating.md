@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/updating"
 title: "Updating & Uninstalling"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Updating & Uninstalling

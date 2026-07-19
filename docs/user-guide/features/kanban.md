@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/kanban"
 title: "Kanban — Multi-Agent Profile Collaboration"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Kanban — Multi-Agent Profile Collaboration

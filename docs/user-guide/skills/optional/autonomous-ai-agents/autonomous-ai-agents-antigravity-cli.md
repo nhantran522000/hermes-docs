@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-antigravity-cli"
 title: "Antigravity Cli"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Antigravity Cli

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/delegation-patterns"
 title: "Delegation & Parallel Work"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Delegation & Parallel Work

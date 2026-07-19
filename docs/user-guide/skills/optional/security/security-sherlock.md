@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/security/security-sherlock"
 title: "Sherlock"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Sherlock

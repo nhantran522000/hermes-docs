@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/docker"
 title: "Hermes Agent — Docker"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Hermes Agent — Docker

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/github-pr-review-agent"
 title: "Tutorial: Build a GitHub PR Review Agent"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Tutorial: Build a GitHub PR Review Agent

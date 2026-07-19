@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/aws-bedrock"
 title: "AWS Bedrock"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # AWS Bedrock

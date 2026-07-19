@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/github/github-github-code-review"
 title: "Github Code Review"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Github Code Review

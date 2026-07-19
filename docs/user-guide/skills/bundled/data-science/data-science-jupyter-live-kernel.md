@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/data-science/data-science-jupyter-live-kernel"
 title: "Jupyter Live Kernel"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Jupyter Live Kernel

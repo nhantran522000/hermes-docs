@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/mlops/mlops-evaluation-lm-evaluation-harness"
 title: "Evaluating Llms Harness"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Evaluating Llms Harness

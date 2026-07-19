@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-stable-diffusion"
 title: "Stable Diffusion Image Generation"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Stable Diffusion Image Generation

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/model-provider-plugin"
 title: "Building a Model Provider Plugin"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Building a Model Provider Plugin

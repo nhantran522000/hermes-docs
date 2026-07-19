@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/git-worktrees"
 title: "Git Worktrees"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Git Worktrees

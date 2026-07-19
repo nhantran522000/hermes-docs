@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/mixture-of-agents"
 title: "Mixture of Agents"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Mixture of Agents

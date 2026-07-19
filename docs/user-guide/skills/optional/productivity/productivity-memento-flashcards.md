@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-memento-flashcards"
 title: "Memento Flashcards"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Memento Flashcards

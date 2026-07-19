@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/acp-internals"
 title: "ACP Internals"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # ACP Internals

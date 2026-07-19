@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-baoyu-comic"
 title: "Baoyu Comic"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Baoyu Comic

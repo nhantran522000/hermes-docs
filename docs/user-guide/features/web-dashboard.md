@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/web-dashboard"
 title: "Web Dashboard"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Web Dashboard

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/extending-the-dashboard"
 title: "Extending the Dashboard"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Extending the Dashboard
@@ -15,6 +15,10 @@ The Hermes web dashboard (`hermes dashboard`) is built to be reskinned and exten
 All three are **drop-in at runtime**: no repo clone, no `npm run build`, no patching the dashboard source. This page is the canonical reference for all three.
 
 If you just want to use the dashboard, see [Web Dashboard](web-dashboard.md). If you want to reskin the terminal CLI (not the web dashboard), see [Skins & Themes](skins.md) — the CLI skin system is unrelated to dashboard themes.
+
+Not the desktop app
+
+This page covers the **web dashboard** (`hermes dashboard`) plugin system — `window.__HERMES_PLUGIN_SDK__`, a `manifest.json`, and a pre-built JS bundle. The **native desktop app** (`hermes desktop`) has its own, unrelated SDK — `@hermes/plugin-sdk`, a single ESM file, no build step — documented at [Desktop Plugin SDK](https://hermes-agent.nousresearch.com/docs/developer-guide/desktop-plugin-sdk). Only the backend `plugin_api.py` namespace (`/api/plugins/<name>`) is shared between them.
 
 How the pieces compose
 

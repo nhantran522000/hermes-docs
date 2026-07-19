@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-simplify-code"
 title: "Simplify Code"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Simplify Code

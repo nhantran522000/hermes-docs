@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/software-development/software-development-code-wiki"
 title: "Code Wiki"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Code Wiki

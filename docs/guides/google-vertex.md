@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/google-vertex"
 title: "Google Vertex AI"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Google Vertex AI

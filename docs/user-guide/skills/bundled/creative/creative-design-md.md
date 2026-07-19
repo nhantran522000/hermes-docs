@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-design-md"
 title: "Design Md"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Design Md

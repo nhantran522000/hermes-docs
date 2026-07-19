@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-here-now"
 title: "Here.Now"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Here.Now

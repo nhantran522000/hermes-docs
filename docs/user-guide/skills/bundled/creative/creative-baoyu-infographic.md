@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-baoyu-infographic"
 title: "Baoyu Infographic"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Baoyu Infographic

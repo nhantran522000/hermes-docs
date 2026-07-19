@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/desktop"
 title: "Desktop App"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Desktop App
@@ -219,6 +219,12 @@ The remote gateway host is configured per [profile](profiles.md), so each profil
 - **Connection refused / times out** — the backend bound to `127.0.0.1` (the default) or a firewall/VPN is blocking the port. Bind to `0.0.0.0` or the tailscale IP and open the port to your trusted network.
 
 For the same setup from the web-dashboard angle, see [Web Dashboard → Connecting Hermes Desktop to a remote backend](features/web-dashboard.md#connecting-hermes-desktop-to-a-remote-backend); the env vars are catalogued under [Environment Variables → Web Dashboard & Hermes Desktop](../reference/environment-variables.md#web-dashboard--hermes-desktop).
+
+## Extending the desktop app
+
+The desktop app is contribution-driven — panes, pages, sidebar nav, status-bar items, palette commands, keybinds, and themes all register through one SDK, and you can add your own. A plugin is a single ESM file dropped in `$HERMES_HOME/desktop-plugins/<id>/plugin.js`; the app loads it within seconds and hot-reloads every save. Manage installed plugins live in **Settings → Plugins**.
+
+See [Desktop Plugin SDK](https://hermes-agent.nousresearch.com/docs/developer-guide/desktop-plugin-sdk) for the full reference. (This is separate from the [web dashboard plugin system](features/extending-the-dashboard.md).)
 
 ## Troubleshooting
 

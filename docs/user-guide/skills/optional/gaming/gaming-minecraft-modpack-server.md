@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/gaming/gaming-minecraft-modpack-server"
 title: "Minecraft Modpack Server"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Minecraft Modpack Server

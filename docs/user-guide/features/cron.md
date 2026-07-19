@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/cron"
 title: "Scheduled Tasks (Cron)"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Scheduled Tasks (Cron)

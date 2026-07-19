@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/image-gen-provider-plugin"
 title: "Building an Image Generation Provider Plugin"
-last_crawled: 2026-07-18
+last_crawled: 2026-07-19
 ---
 
 # Building an Image Generation Provider Plugin

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/research/research-research-paper-writing"
 title: "Research Paper Writing"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Research Paper Writing
@@ -20,7 +20,7 @@ Write ML papers for NeurIPS/ICML/ICLR: design→submit.
 | Dependencies | `semanticscholar`, `arxiv`, `habanero`, `requests`, `scipy`, `numpy`, `matplotlib`, `SciencePlots` |
 | Platforms | linux, macos |
 | Tags | `Research`, `Paper Writing`, `Experiments`, `ML`, `AI`, `NeurIPS`, `ICML`, `ICLR`, `ACL`, `AAAI`, `COLM`, `LaTeX`, `Citations`, `Statistical Analysis` |
-| Related skills | [`arxiv`](research-arxiv.md), `ml-paper-writing`, [`subagent-driven-development`](../../optional/software-development/software-development-subagent-driven-development.md), [`plan`](../software-development/software-development-plan.md) |
+| Related skills | [`arxiv`](research-arxiv.md), [`subagent-driven-development`](../../optional/software-development/software-development-subagent-driven-development.md), [`plan`](../software-development/software-development-plan.md) |
 
 ## Reference: full SKILL.md
 

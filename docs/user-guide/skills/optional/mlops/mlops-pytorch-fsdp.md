@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-pytorch-fsdp"
 title: "Pytorch Fsdp"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Pytorch Fsdp
 
-Expert guidance for Fully Sharded Data Parallel training with PyTorch FSDP - parameter sharding, mixed precision, CPU offloading, FSDP2
+Fully sharded data-parallel training for large models.
 
 ## Skill metadata
 

@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-blackbox"
 title: "Blackbox"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Blackbox
 
-Delegate coding tasks to Blackbox AI CLI agent. Multi-model agent with built-in judge that runs tasks through multiple LLMs and picks the best result. Requires the blackbox CLI and a Blackbox AI API key.
+Delegate coding tasks to the Blackbox AI multi-model CLI.
 
 ## Skill metadata
 
@@ -14,7 +14,7 @@ Delegate coding tasks to Blackbox AI CLI agent. Multi-model agent with built-in 
 |----|----|
 | Source | Optional — install with `hermes skills install official/autonomous-ai-agents/blackbox` |
 | Path | `optional-skills/autonomous-ai-agents/blackbox` |
-| Version | `1.0.0` |
+| Version | `1.0.1` |
 | Author | Hermes Agent (Nous Research) |
 | License | MIT |
 | Platforms | linux, macos, windows |
@@ -31,17 +31,12 @@ The following is the complete skill definition that Hermes loads when this skill
 
 Delegate coding tasks to [Blackbox AI](https://www.blackbox.ai/) via the Hermes terminal. Blackbox is a multi-model coding agent CLI that dispatches tasks to multiple LLMs (Claude, Codex, Gemini, Blackbox Pro) and uses a judge to select the best implementation.
 
-The CLI is [open-source](https://github.com/blackboxaicode/cli) (GPL-3.0, TypeScript, forked from Gemini CLI) and supports interactive sessions, non-interactive one-shots, checkpointing, MCP, and vision model switching.
+The CLI (npm `@blackbox_ai/blackbox-cli`, binary `blackbox`) is a TypeScript coding agent (forked from Gemini CLI) and supports interactive sessions, non-interactive one-shots, checkpointing, MCP, and vision model switching.
 
 ## Prerequisites
 
 - Node.js 20+ installed
-- Blackbox CLI installed: `npm install -g @blackboxai/cli`
-- Or install from source:
-  ``` text
-  git clone https://github.com/blackboxaicode/cli.git
-  cd cli && npm install && npm install -g .
-  ```
+- Blackbox CLI installed: `npm install -g @blackbox_ai/blackbox-cli` (binary: `blackbox`)
 - API key from [app.blackbox.ai/dashboard](https://app.blackbox.ai/dashboard)
 - Configured: run `blackbox configure` and enter your API key
 - Use `pty=true` in terminal calls — Blackbox CLI is an interactive terminal app
@@ -125,14 +120,18 @@ Blackbox's unique feature is running the same task through multiple models and j
 
 ## Key Flags
 
-| Flag                        | Effect                                      |
-|-----------------------------|---------------------------------------------|
-| `--prompt "task"`           | Non-interactive one-shot execution          |
-| `--resume-checkpoint "tag"` | Resume from a saved checkpoint              |
-| `--yolo`                    | Auto-approve all actions and model switches |
-| `blackbox session`          | Start interactive chat session              |
-| `blackbox configure`        | Change settings, providers, models          |
-| `blackbox info`             | Display system information                  |
+| Flag | Effect |
+|----|----|
+| `--prompt "task"` (`-p`) | Non-interactive one-shot execution |
+| `--resume-checkpoint "tag"` | Resume from a saved checkpoint |
+| `--yolo` (`-y`) | Auto-approve all actions and model switches |
+| `--vlm-switch-mode <mode>` | Image-handling: `once`, `session`, or `persist` |
+| `-c, --checkpointing` | Enable checkpointing of file edits |
+| `blackbox configure` | Change settings, providers, models |
+| `blackbox update` | Update the CLI to the latest version |
+| `blackbox mcp` | Manage MCP servers |
+| `blackbox extensions` | Manage CLI extensions |
+| `blackbox voice <action>` / `blackbox shortcut` | Configure voice input / the `b` shortcut |
 
 ## Vision Support
 

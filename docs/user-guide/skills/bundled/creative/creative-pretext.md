@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-pretext"
 title: "Pretext"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Pretext
 
-Use when building creative browser demos with @chenglou/pretext — DOM-free text layout for ASCII art, typographic flow around obstacles, text-as-geometry games, kinetic typography, and text-powered generative art. Produces single-file HTML demos by default.
+Build creative browser demos with DOM-free text layout.
 
 ## Skill metadata
 

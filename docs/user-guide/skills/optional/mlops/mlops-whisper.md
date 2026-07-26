@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-whisper"
 title: "Whisper"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Whisper
 
-OpenAI's general-purpose speech recognition model. Supports 99 languages, transcription, translation to English, and language identification. Six model sizes from tiny (39M params) to large (1550M params). Use for speech-to-text, podcast transcription, or multilingual audio processing. Best for robust, multilingual ASR.
+Transcribe and translate speech in 99 languages.
 
 ## Skill metadata
 

@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-gitnexus-explorer"
 title: "Gitnexus Explorer"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Gitnexus Explorer
 
-Index a codebase with GitNexus and serve an interactive knowledge graph via web UI + Cloudflare tunnel.
+Serve an interactive codebase knowledge graph web UI.
 
 ## Skill metadata
 
@@ -19,7 +19,7 @@ Index a codebase with GitNexus and serve an interactive knowledge graph via web 
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `gitnexus`, `code-intelligence`, `knowledge-graph`, `visualization` |
-| Related skills | `native-mcp`, [`codebase-inspection`](../../bundled/github/github-codebase-inspection.md) |
+| Related skills | [`hermes-agent`](../../bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent.md), [`codebase-inspection`](../../bundled/github/github-codebase-inspection.md) |
 
 ## Reference: full SKILL.md
 

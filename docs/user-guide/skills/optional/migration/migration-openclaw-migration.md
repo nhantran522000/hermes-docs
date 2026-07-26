@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/migration/migration-openclaw-migration"
 title: "Openclaw Migration"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Openclaw Migration
 
-Migrate a user's OpenClaw customization footprint into Hermes Agent. Imports Hermes-compatible memories, SOUL.md, command allowlists, user skills, and selected workspace assets from ~/.openclaw, then reports exactly what could not be migrated and why.
+Import an OpenClaw setup (memories, skills) into Hermes.
 
 ## Skill metadata
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/dingtalk"
 title: "DingTalk Setup"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # DingTalk Setup
@@ -154,7 +154,7 @@ gateway:
 
 - `group_sessions_per_user: true` keeps each participant's context isolated inside shared group chats
 - `require_mention: true` prevents the bot from responding to every group message — it only answers when someone @-mentions it
-- `allowed_users` under `dingtalk.extra` is an alternative to `DINGTALK_ALLOWED_USERS`; if both are set, they're merged
+- `allowed_users` under `dingtalk.extra` is an alternative to `DINGTALK_ALLOWED_USERS`; set one or the other (if both are set, only users present in both lists are authorized)
 
 ### Start the Gateway
 

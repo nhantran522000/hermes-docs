@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-touchdesigner-mcp"
 title: "Touchdesigner Mcp"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Touchdesigner Mcp
 
-Control a running TouchDesigner instance via twozero MCP — create operators, set parameters, wire connections, execute Python, build real-time visuals. 36 native tools.
+Control TouchDesigner via twozero MCP.
 
 ## Skill metadata
 
@@ -19,7 +19,7 @@ Control a running TouchDesigner instance via twozero MCP — create operators, s
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `TouchDesigner`, `MCP`, `twozero`, `creative-coding`, `real-time-visuals`, `generative-art`, `audio-reactive`, `VJ`, `installation`, `GLSL` |
-| Related skills | `native-mcp`, [`ascii-video`](creative-ascii-video.md), [`manim-video`](creative-manim-video.md), `hermes-video` |
+| Related skills | [`ascii-video`](creative-ascii-video.md), [`manim-video`](creative-manim-video.md) |
 
 ## Reference: full SKILL.md
 

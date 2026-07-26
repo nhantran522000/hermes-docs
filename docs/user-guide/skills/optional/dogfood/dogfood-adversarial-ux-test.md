@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/dogfood/dogfood-adversarial-ux-test"
 title: "Adversarial Ux Test"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Adversarial Ux Test
 
-Roleplay the most difficult, tech-resistant user for your product. Browse the app as that persona, find every UX pain point, then filter complaints through a pragmatism layer to separate real problems from noise. Creates actionable tickets from genuine issues only.
+Roleplay a hostile user to find and triage UX pain points.
 
 ## Skill metadata
 
@@ -19,7 +19,7 @@ Roleplay the most difficult, tech-resistant user for your product. Browse the ap
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `qa`, `ux`, `testing`, `adversarial`, `dogfood`, `personas`, `user-testing` |
-| Related skills | [`dogfood`](../../bundled/dogfood/dogfood-dogfood.md) |
+| Related skills | [`dogfood`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-dogfood) |
 
 ## Reference: full SKILL.md
 

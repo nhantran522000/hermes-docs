@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-darwinian-evolver"
 title: "Darwinian Evolver"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Darwinian Evolver
@@ -19,7 +19,7 @@ Evolve prompts/regex/SQL/code with Imbue's evolution loop.
 | License | MIT |
 | Platforms | linux, macos |
 | Tags | `evolution`, `optimization`, `prompt-engineering`, `research` |
-| Related skills | [`arxiv`](../../bundled/research/research-arxiv.md), [`jupyter-live-kernel`](../../bundled/data-science/data-science-jupyter-live-kernel.md) |
+| Related skills | [`arxiv`](../../bundled/research/research-arxiv.md), [`jupyter-notebook`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/data-science/data-science-jupyter-notebook) |
 
 ## Reference: full SKILL.md
 

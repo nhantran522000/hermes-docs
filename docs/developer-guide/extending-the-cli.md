@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/extending-the-cli"
 title: "Extending the CLI"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Extending the CLI

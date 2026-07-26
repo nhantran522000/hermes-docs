@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-plan"
 title: "Plan"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Plan
 
-Plan mode: write an actionable markdown plan to .hermes/plans/, no execution. Bite-sized tasks, exact paths, complete code.
+Write a markdown plan to .hermes/plans/; no execution.
 
 ## Skill metadata
 

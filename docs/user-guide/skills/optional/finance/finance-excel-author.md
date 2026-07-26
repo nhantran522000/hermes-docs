@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/finance/finance-excel-author"
 title: "Excel Author"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Excel Author
 
-Build auditable Excel workbooks headless with openpyxl — blue/black/green cell conventions, formulas over hardcodes, named ranges, balance checks, sensitivity tables. Use for financial models, audit outputs, reconciliations.
+Build auditable financial workbooks headless via openpyxl.
 
 ## Skill metadata
 
@@ -19,7 +19,7 @@ Build auditable Excel workbooks headless with openpyxl — blue/black/green cell
 | License | Apache-2.0 |
 | Platforms | linux, macos, windows |
 | Tags | `excel`, `openpyxl`, `finance`, `spreadsheet`, `modeling` |
-| Related skills | [`pptx-author`](finance-pptx-author.md), [`dcf-model`](finance-dcf-model.md), [`comps-analysis`](finance-comps-analysis.md), [`lbo-model`](finance-lbo-model.md), [`3-statement-model`](finance-3-statement-model.md) |
+| Related skills | [`xlsx`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-xlsx), [`pptx-author`](finance-pptx-author.md), [`dcf-model`](finance-dcf-model.md), [`comps-analysis`](finance-comps-analysis.md), [`lbo-model`](finance-lbo-model.md), [`3-statement-model`](finance-3-statement-model.md) |
 
 ## Reference: full SKILL.md
 

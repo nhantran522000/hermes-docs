@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/optional-skills-catalog"
 title: "Optional Skills Catalog"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Optional Skills Catalog
@@ -32,9 +32,9 @@ hermes skills uninstall <skill-name>
 | Skill | Description |
 |----|----|
 | [**antigravity-cli**](../user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-antigravity-cli.md) | Operate the Antigravity CLI (agy): plugins, auth, sandbox. |
-| [**blackbox**](../user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-blackbox.md) | Delegate coding tasks to Blackbox AI CLI agent. Multi-model agent with built-in judge that runs tasks through multiple LLMs and picks the best result. Requires the blackbox CLI and a Blackbox AI API key. |
+| [**blackbox**](../user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-blackbox.md) | Delegate coding tasks to the Blackbox AI multi-model CLI. |
 | [**grok**](../user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-grok.md) | Delegate coding to xAI Grok Build CLI (features, PRs). |
-| [**honcho**](../user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-honcho.md) | Configure and use Honcho memory with Hermes -- cross-session user modeling, multi-profile peer isolation, observation config, dialectic reasoning, session summaries, and context budget enforcement. Use when setting up Honcho, troubleshoo... |
+| [**honcho**](../user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-honcho.md) | Configure and troubleshoot Honcho memory for Hermes. |
 | [**openhands**](../user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-openhands.md) | Delegate coding to OpenHands CLI (model-agnostic, LiteLLM). |
 
 ## blockchain
@@ -43,7 +43,7 @@ hermes skills uninstall <skill-name>
 |----|----|
 | [**evm**](../user-guide/skills/optional/blockchain/blockchain-evm.md) | Read-only EVM client: wallets, tokens, gas across 8 chains. |
 | [**hyperliquid**](../user-guide/skills/optional/blockchain/blockchain-hyperliquid.md) | Hyperliquid market data, account history, trade review. |
-| [**solana**](../user-guide/skills/optional/blockchain/blockchain-solana.md) | Query Solana blockchain data with USD pricing — wallet balances, token portfolios with values, transaction details, NFTs, whale detection, and live network stats. Uses Solana RPC + CoinGecko. No API key required. |
+| [**solana**](../user-guide/skills/optional/blockchain/blockchain-solana.md) | Query Solana wallets, tokens, txs, and NFTs in USD. |
 
 ## communication
 
@@ -55,24 +55,33 @@ hermes skills uninstall <skill-name>
 
 | Skill | Description |
 |----|----|
+| [**audiocraft-audio-generation**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-audiocraft-audio-generation) | AudioCraft: MusicGen text-to-music, AudioGen text-to-sound. |
 | [**baoyu-article-illustrator**](../user-guide/skills/optional/creative/creative-baoyu-article-illustrator.md) | Article illustrations: type × style × palette consistency. |
 | [**baoyu-comic**](../user-guide/skills/optional/creative/creative-baoyu-comic.md) | Knowledge comics (知识漫画): educational, biography, tutorial. |
 | [**blender-mcp**](../user-guide/skills/optional/creative/creative-blender-mcp.md) | Drive Blender via the catalog blender MCP, with bpy recipes. |
-| [**concept-diagrams**](../user-guide/skills/optional/creative/creative-concept-diagrams.md) | Generate flat, minimal light/dark-aware SVG diagrams as standalone HTML files, using a unified educational visual language with 9 semantic color ramps, sentence-case typography, and automatic dark mode. Best suited for educational and no... |
+| [**concept-diagrams**](../user-guide/skills/optional/creative/creative-concept-diagrams.md) | Generate flat, minimal educational SVG visuals as HTML. |
 | [**creative-ideation**](../user-guide/skills/optional/creative/creative-creative-ideation.md) | Generate ideas via named methods from creative practice. |
-| [**hyperframes**](../user-guide/skills/optional/creative/creative-hyperframes.md) | Create HTML-based video compositions, animated title cards, social overlays, captioned talking-head videos, audio-reactive visuals, and shader transitions using HyperFrames. HTML is the source of truth for video. Use when the user wants... |
-| [**kanban-video-orchestrator**](../user-guide/skills/optional/creative/creative-kanban-video-orchestrator.md) | Plan, set up, and monitor a multi-agent video production pipeline backed by Hermes Kanban. Use when the user wants to make ANY video — narrative film, product/marketing, music video, explainer, ASCII/terminal art, abstract/generative loo... |
-| [**meme-generation**](../user-guide/skills/optional/creative/creative-meme-generation.md) | Generate real meme images by picking a template and overlaying text with Pillow. Produces actual .png meme files. |
+| [**heartmula**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-heartmula) | HeartMuLa: Suno-like song generation from lyrics + tags. |
+| [**hyperframes**](../user-guide/skills/optional/creative/creative-hyperframes.md) | Render MP4/WebM videos from HTML compositions. |
+| [**kanban-video-orchestrator**](../user-guide/skills/optional/creative/creative-kanban-video-orchestrator.md) | Plan and run multi-agent video production pipelines. |
+| [**meme-generation**](../user-guide/skills/optional/creative/creative-meme-generation.md) | Create meme PNGs from templates with Pillow text overlay. |
 | [**pixel-art**](../user-guide/skills/optional/creative/creative-pixel-art.md) | Pixel art w/ era palettes (NES, Game Boy, PICO-8). |
-| [**unreal-mcp**](../user-guide/skills/optional/creative/creative-unreal-mcp.md) | Use when the user wants to do anything in Unreal Engine through Epic's official editor-embedded MCP server (catalog entry: unreal-engine) — build/light/populate scenes, place and transform actors, author Blueprints, animate with Sequence... |
+| [**tldraw-offline**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-tldraw-offline) | Drive and script tldraw offline canvases with an agent. |
+| [**unreal-mcp**](../user-guide/skills/optional/creative/creative-unreal-mcp.md) | Automate Unreal Engine editor scenes, actors, and renders. |
+
+## data-science
+
+| Skill | Description |
+|----|----|
+| [**jupyter-notebook**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/data-science/data-science-jupyter-notebook) | Iterative Python via live Jupyter kernel (hamelnb). |
 
 ## devops
 
 | Skill | Description |
 |----|----|
-| [**inference-sh-cli**](../user-guide/skills/optional/devops/devops-cli.md) | Run 150+ AI apps via inference.sh CLI (infsh) — image generation, video creation, LLMs, search, 3D, social automation. Uses the terminal tool. Triggers: inference.sh, infsh, ai apps, flux, veo, image generation, video generation, seedrea... |
-| [**docker-management**](../user-guide/skills/optional/devops/devops-docker-management.md) | Manage Docker containers, images, volumes, networks, and Compose stacks — lifecycle ops, debugging, cleanup, and Dockerfile optimization. |
-| [**hermes-s6-container-supervision**](../user-guide/skills/optional/devops/devops-hermes-s6-container-supervision.md) | Modify, debug, or extend the s6-overlay supervision tree inside the Hermes Agent Docker image — adding new services, debugging profile gateways, understanding the Architecture B main-program pattern. |
+| [**inference-sh-cli**](../user-guide/skills/optional/devops/devops-cli.md) | Run 150+ AI apps (image, video, LLM) via inference.sh CLI. |
+| [**docker-management**](../user-guide/skills/optional/devops/devops-docker-management.md) | Manage Docker containers, images, volumes, and Compose. |
+| [**hermes-s6-container-supervision**](../user-guide/skills/optional/devops/devops-hermes-s6-container-supervision.md) | Modify or debug s6 services in the Hermes Docker image. |
 | [**pinggy-tunnel**](../user-guide/skills/optional/devops/devops-pinggy-tunnel.md) | Zero-install localhost tunnels over SSH via Pinggy. |
 | [**watchers**](../user-guide/skills/optional/devops/devops-watchers.md) | Poll RSS, JSON APIs, and GitHub with watermark dedup. |
 
@@ -80,25 +89,25 @@ hermes skills uninstall <skill-name>
 
 | Skill | Description |
 |----|----|
-| [**adversarial-ux-test**](../user-guide/skills/optional/dogfood/dogfood-adversarial-ux-test.md) | Roleplay the most difficult, tech-resistant user for your product. Browse the app as that persona, find every UX pain point, then filter complaints through a pragmatism layer to separate real problems from noise. Creates actionable ticke... |
+| [**adversarial-ux-test**](../user-guide/skills/optional/dogfood/dogfood-adversarial-ux-test.md) | Roleplay a hostile user to find and triage UX pain points. |
 
 ## email
 
 | Skill | Description |
 |----|----|
-| [**agentmail**](../user-guide/skills/optional/email/email-agentmail.md) | Give the agent its own dedicated email inbox via AgentMail. Send, receive, and manage email autonomously using agent-owned email addresses (e.g. [hermes-agent@agentmail.to](mailto:hermes-agent@agentmail.to)). |
+| [**agentmail**](../user-guide/skills/optional/email/email-agentmail.md) | Give the agent its own inbox: send and receive email. |
 
 ## finance
 
 | Skill | Description |
 |----|----|
-| [**3-statement-model**](../user-guide/skills/optional/finance/finance-3-statement-model.md) | Build fully-integrated 3-statement models (IS, BS, CF) in Excel with working capital schedules, D&A roll-forwards, debt schedule, and the plugs that make cash and retained earnings tie. Pairs with excel-author. |
-| [**comps-analysis**](../user-guide/skills/optional/finance/finance-comps-analysis.md) | Build comparable company analysis in Excel — operating metrics, valuation multiples, statistical benchmarking vs peer sets. Pairs with excel-author. Use for public-company valuation, IPO pricing, sector benchmarking, or outlier detection. |
-| [**dcf-model**](../user-guide/skills/optional/finance/finance-dcf-model.md) | Build institutional-quality DCF valuation models in Excel — revenue projections, FCF build, WACC, terminal value, Bear/Base/Bull scenarios, 5x5 sensitivity tables. Pairs with excel-author. Use for intrinsic-value equity analysis. |
-| [**excel-author**](../user-guide/skills/optional/finance/finance-excel-author.md) | Build auditable Excel workbooks headless with openpyxl — blue/black/green cell conventions, formulas over hardcodes, named ranges, balance checks, sensitivity tables. Use for financial models, audit outputs, reconciliations. |
-| [**lbo-model**](../user-guide/skills/optional/finance/finance-lbo-model.md) | Build leveraged buyout models in Excel — sources & uses, debt schedule, cash sweep, exit multiple, IRR/MOIC sensitivity. Pairs with excel-author. Use for PE screening, sponsor-case valuation, or illustrative LBO in a pitch. |
-| [**merger-model**](../user-guide/skills/optional/finance/finance-merger-model.md) | Build accretion/dilution (merger) models in Excel — pro-forma P&L, synergies, financing mix, EPS impact. Pairs with excel-author. Use for M&A pitches, board materials, or deal evaluation. |
-| [**pptx-author**](../user-guide/skills/optional/finance/finance-pptx-author.md) | Build PowerPoint decks headless with python-pptx. Pairs with excel-author for model-backed decks where every number traces to a workbook cell. Use for pitch decks, IC memos, earnings notes. |
+| [**3-statement-model**](../user-guide/skills/optional/finance/finance-3-statement-model.md) | Build integrated IS/BS/CF financial workbooks in Excel. |
+| [**comps-analysis**](../user-guide/skills/optional/finance/finance-comps-analysis.md) | Build comparable-company valuation workbooks in Excel. |
+| [**dcf-model**](../user-guide/skills/optional/finance/finance-dcf-model.md) | Build discounted cash flow valuation workbooks in Excel. |
+| [**excel-author**](../user-guide/skills/optional/finance/finance-excel-author.md) | Build auditable financial workbooks headless via openpyxl. |
+| [**lbo-model**](../user-guide/skills/optional/finance/finance-lbo-model.md) | Build leveraged buyout workbooks with IRR/MOIC in Excel. |
+| [**merger-model**](../user-guide/skills/optional/finance/finance-merger-model.md) | Build M&A accretion/dilution workbooks in Excel. |
+| [**pptx-author**](../user-guide/skills/optional/finance/finance-pptx-author.md) | Build PowerPoint decks headless with python-pptx. |
 | [**stocks**](../user-guide/skills/optional/finance/finance-stocks.md) | Stock quotes, history, search, compare, crypto via Yahoo. |
 
 ## gaming
@@ -119,50 +128,51 @@ hermes skills uninstall <skill-name>
 
 | Skill | Description |
 |----|----|
-| [**fastmcp**](../user-guide/skills/optional/mcp/mcp-fastmcp.md) | Build, test, inspect, install, and deploy MCP servers with FastMCP in Python. Use when creating a new MCP server, wrapping an API or database as MCP tools, exposing resources or prompts, or preparing a FastMCP server for Claude Code, Cur... |
+| [**fastmcp**](../user-guide/skills/optional/mcp/mcp-fastmcp.md) | Build, test, and deploy Python MCP servers. |
 | [**mcp-oauth-remote-gateway**](../user-guide/skills/optional/mcp/mcp-mcp-oauth-remote-gateway.md) | Manual OAuth for remote MCP servers on headless gateways. |
-| [**mcporter**](../user-guide/skills/optional/mcp/mcp-mcporter.md) | Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/type generation. |
+| [**mcporter**](../user-guide/skills/optional/mcp/mcp-mcporter.md) | List, auth, and call MCP servers/tools from the terminal. |
 
 ## migration
 
 | Skill | Description |
 |----|----|
-| [**openclaw-migration**](../user-guide/skills/optional/migration/migration-openclaw-migration.md) | Migrate a user's OpenClaw customization footprint into Hermes Agent. Imports Hermes-compatible memories, SOUL.md, command allowlists, user skills, and selected workspace assets from ~/.openclaw, then reports exactly what could not be mig... |
+| [**openclaw-migration**](../user-guide/skills/optional/migration/migration-openclaw-migration.md) | Import an OpenClaw setup (memories, skills) into Hermes. |
 
 ## mlops
 
 | Skill | Description |
 |----|----|
-| [**huggingface-accelerate**](../user-guide/skills/optional/mlops/mlops-accelerate.md) | Simplest distributed training API. 4 lines to add distributed support to any PyTorch script. Unified API for DeepSpeed/FSDP/Megatron/DDP. Automatic device placement, mixed precision (FP16/BF16/FP8). Interactive config, single launch comm... |
+| [**huggingface-accelerate**](../user-guide/skills/optional/mlops/mlops-accelerate.md) | Run PyTorch training across GPUs with minimal changes. |
 | [**axolotl**](../user-guide/skills/optional/mlops/mlops-training-axolotl.md) | Axolotl: YAML LLM fine-tuning (LoRA, DPO, GRPO). |
-| [**chroma**](../user-guide/skills/optional/mlops/mlops-chroma.md) | Open-source embedding database for AI applications. Store embeddings and metadata, perform vector and full-text search, filter by metadata. Simple 4-function API. Scales from notebooks to production clusters. Use for semantic search, RAG... |
-| [**clip**](../user-guide/skills/optional/mlops/mlops-clip.md) | OpenAI's model connecting vision and language. Enables zero-shot image classification, image-text matching, and cross-modal retrieval. Trained on 400M image-text pairs. Use for image search, content moderation, or vision-language tasks w... |
+| [**chroma**](../user-guide/skills/optional/mlops/mlops-chroma.md) | Embedding database for RAG and semantic search. |
+| [**clip**](../user-guide/skills/optional/mlops/mlops-clip.md) | Zero-shot image classification and image-text search. |
 | [**dspy**](../user-guide/skills/optional/mlops/mlops-research-dspy.md) | DSPy: declarative LM programs, auto-optimize prompts, RAG. |
-| [**faiss**](../user-guide/skills/optional/mlops/mlops-faiss.md) | Facebook's library for efficient similarity search and clustering of dense vectors. Supports billions of vectors, GPU acceleration, and various index types (Flat, IVF, HNSW). Use for fast k-NN search, large-scale vector retrieval, or whe... |
-| [**optimizing-attention-flash**](../user-guide/skills/optional/mlops/mlops-flash-attention.md) | Optimizes transformer attention with Flash Attention for 2-4x speedup and 10-20x memory reduction. Use when training/running transformers with long sequences (\>512 tokens), encountering GPU memory issues with attention, or need faster in... |
-| [**guidance**](../user-guide/skills/optional/mlops/mlops-guidance.md) | Control LLM output with regex and grammars, guarantee valid JSON/XML/code generation, enforce structured formats, and build multi-step workflows with Guidance - Microsoft Research's constrained generation framework |
-| [**huggingface-tokenizers**](../user-guide/skills/optional/mlops/mlops-huggingface-tokenizers.md) | Fast tokenizers optimized for research and production. Rust-based implementation tokenizes 1GB in \<20 seconds. Supports BPE, WordPiece, and Unigram algorithms. Train custom vocabularies, track alignments, handle padding/truncation. Integ... |
-| [**instructor**](../user-guide/skills/optional/mlops/mlops-instructor.md) | Extract structured data from LLM responses with Pydantic validation, retry failed extractions automatically, parse complex JSON with type safety, and stream partial results with Instructor - battle-tested structured output library |
-| [**lambda-labs-gpu-cloud**](../user-guide/skills/optional/mlops/mlops-lambda-labs.md) | Reserved and on-demand GPU cloud instances for ML training and inference. Use when you need dedicated GPU instances with simple SSH access, persistent filesystems, or high-performance multi-node clusters for large-scale training. |
-| [**llava**](../user-guide/skills/optional/mlops/mlops-llava.md) | Large Language and Vision Assistant. Enables visual instruction tuning and image-based conversations. Combines CLIP vision encoder with Vicuna/LLaMA language models. Supports multi-turn image chat, visual question answering, and instruct... |
-| [**modal-serverless-gpu**](../user-guide/skills/optional/mlops/mlops-modal.md) | Serverless GPU cloud platform for running ML workloads. Use when you need on-demand GPU access without infrastructure management, deploying ML models as APIs, or running batch jobs with automatic scaling. |
-| [**nemo-curator**](../user-guide/skills/optional/mlops/mlops-nemo-curator.md) | GPU-accelerated data curation for LLM training. Supports text/image/video/audio. Features fuzzy deduplication (16× faster), quality filtering (30+ heuristics), semantic deduplication, PII redaction, NSFW detection. Scales across GPUs wit... |
+| [**faiss**](../user-guide/skills/optional/mlops/mlops-faiss.md) | Fast vector similarity search at billion scale. |
+| [**optimizing-attention-flash**](../user-guide/skills/optional/mlops/mlops-flash-attention.md) | Speed up long-sequence transformer training and inference. |
+| [**guidance**](../user-guide/skills/optional/mlops/mlops-guidance.md) | Constrain LLM output with grammars; guarantee valid JSON. |
+| [**huggingface-tokenizers**](../user-guide/skills/optional/mlops/mlops-huggingface-tokenizers.md) | Fast BPE/WordPiece tokenization and custom vocab training. |
+| [**instructor**](../user-guide/skills/optional/mlops/mlops-instructor.md) | Structured LLM outputs validated with Pydantic. |
+| [**lambda-labs-gpu-cloud**](../user-guide/skills/optional/mlops/mlops-lambda-labs.md) | On-demand GPU cloud instances for ML training. |
+| [**llava**](../user-guide/skills/optional/mlops/mlops-llava.md) | Vision-language chat: VQA, captioning, image dialogue. |
+| [**modal-serverless-gpu**](../user-guide/skills/optional/mlops/mlops-modal.md) | Serverless GPU cloud for ML jobs and model APIs. |
+| [**nemo-curator**](../user-guide/skills/optional/mlops/mlops-nemo-curator.md) | Curate LLM training data: dedupe, filter, PII redaction. |
 | [**obliteratus**](../user-guide/skills/optional/mlops/mlops-obliteratus.md) | OBLITERATUS: abliterate LLM refusals (diff-in-means). |
 | [**outlines**](../user-guide/skills/optional/mlops/mlops-inference-outlines.md) | Outlines: structured JSON/regex/Pydantic LLM generation. |
-| [**peft-fine-tuning**](../user-guide/skills/optional/mlops/mlops-peft.md) | Parameter-efficient fine-tuning for LLMs using LoRA, QLoRA, and 25+ methods. Use when fine-tuning large models (7B-70B) with limited GPU memory, when you need to train \<1% of parameters with minimal accuracy loss, or for multi-adapter se... |
-| [**pinecone**](../user-guide/skills/optional/mlops/mlops-pinecone.md) | Managed vector database for production AI applications. Fully managed, auto-scaling, with hybrid search (dense + sparse), metadata filtering, and namespaces. Low latency (\<100ms p95). Use for production RAG, recommendation systems, or se... |
-| [**pytorch-fsdp**](../user-guide/skills/optional/mlops/mlops-pytorch-fsdp.md) | Expert guidance for Fully Sharded Data Parallel training with PyTorch FSDP - parameter sharding, mixed precision, CPU offloading, FSDP2 |
-| [**pytorch-lightning**](../user-guide/skills/optional/mlops/mlops-pytorch-lightning.md) | High-level PyTorch framework with Trainer class, automatic distributed training (DDP/FSDP/DeepSpeed), callbacks system, and minimal boilerplate. Scales from laptop to supercomputer with same code. Use when you want clean training loops w... |
-| [**qdrant-vector-search**](../user-guide/skills/optional/mlops/mlops-qdrant.md) | High-performance vector similarity search engine for RAG and semantic search. Use when building production RAG systems requiring fast nearest neighbor search, hybrid search with filtering, or scalable vector storage with Rust-powered per... |
-| [**sparse-autoencoder-training**](../user-guide/skills/optional/mlops/mlops-saelens.md) | Provides guidance for training and analyzing Sparse Autoencoders (SAEs) using SAELens to decompose neural network activations into interpretable features. Use when discovering interpretable features, analyzing superposition, or studying... |
-| [**simpo-training**](../user-guide/skills/optional/mlops/mlops-simpo.md) | Simple Preference Optimization for LLM alignment. Reference-free alternative to DPO with better performance (+6.4 points on AlpacaEval 2.0). No reference model needed, more efficient than DPO. Use for preference alignment when want simpl... |
-| [**slime-rl-training**](../user-guide/skills/optional/mlops/mlops-slime.md) | Provides guidance for LLM post-training with RL using slime, a Megatron+SGLang framework. Use when training GLM models, implementing custom data generation workflows, or needing tight Megatron-LM integration for RL scaling. |
-| [**stable-diffusion-image-generation**](../user-guide/skills/optional/mlops/mlops-stable-diffusion.md) | State-of-the-art text-to-image generation with Stable Diffusion models via HuggingFace Diffusers. Use when generating images from text prompts, performing image-to-image translation, inpainting, or building custom diffusion pipelines. |
-| [**tensorrt-llm**](../user-guide/skills/optional/mlops/mlops-tensorrt-llm.md) | Optimizes LLM inference with NVIDIA TensorRT for maximum throughput and lowest latency. Use for production deployment on NVIDIA GPUs (A100/H100), when you need 10-100x faster inference than PyTorch, or for serving models with quantizatio... |
-| [**distributed-llm-pretraining-torchtitan**](../user-guide/skills/optional/mlops/mlops-torchtitan.md) | Provides PyTorch-native distributed LLM pretraining using torchtitan with 4D parallelism (FSDP2, TP, PP, CP). Use when pretraining Llama 3.1, DeepSeek V3, or custom models at scale from 8 to 512+ GPUs with Float8, torch.compile, and dist... |
-| [**fine-tuning-with-trl**](../user-guide/skills/optional/mlops/mlops-training-trl-fine-tuning.md) | TRL: SFT, DPO, PPO, GRPO, reward modeling for LLM RLHF. |
+| [**peft-fine-tuning**](../user-guide/skills/optional/mlops/mlops-peft.md) | Fine-tune large LLMs with LoRA on limited GPU memory. |
+| [**pinecone**](../user-guide/skills/optional/mlops/mlops-pinecone.md) | Managed vector DB for production RAG and search. |
+| [**pytorch-fsdp**](../user-guide/skills/optional/mlops/mlops-pytorch-fsdp.md) | Fully sharded data-parallel training for large models. |
+| [**pytorch-lightning**](../user-guide/skills/optional/mlops/mlops-pytorch-lightning.md) | Clean training loops with built-in distributed support. |
+| [**qdrant-vector-search**](../user-guide/skills/optional/mlops/mlops-qdrant.md) | Vector search engine for production RAG systems. |
+| [**sparse-autoencoder-training**](../user-guide/skills/optional/mlops/mlops-saelens.md) | Train sparse autoencoders to interpret model features. |
+| [**segment-anything-model**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-models-segment-anything-model) | SAM: zero-shot image segmentation via points, boxes, masks. |
+| [**simpo-training**](../user-guide/skills/optional/mlops/mlops-simpo.md) | Reference-free preference alignment, simpler than DPO. |
+| [**slime-rl-training**](../user-guide/skills/optional/mlops/mlops-slime.md) | RL post-training for LLMs with Megatron and SGLang. |
+| [**stable-diffusion-image-generation**](../user-guide/skills/optional/mlops/mlops-stable-diffusion.md) | Text-to-image generation, inpainting, and img2img. |
+| [**tensorrt-llm**](../user-guide/skills/optional/mlops/mlops-tensorrt-llm.md) | High-throughput LLM inference on NVIDIA GPUs. |
+| [**distributed-llm-pretraining-torchtitan**](../user-guide/skills/optional/mlops/mlops-torchtitan.md) | Pretrain LLMs at scale with PyTorch 4D parallelism. |
+| [**fine-tuning-with-trl**](../user-guide/skills/optional/mlops/mlops-training-trl-fine-tuning.md) | TRL: SFT, DPO, GRPO, RLOO reward modeling for LLM RLHF. |
 | [**unsloth**](../user-guide/skills/optional/mlops/mlops-training-unsloth.md) | Unsloth: 2-5x faster LoRA/QLoRA fine-tuning, less VRAM. |
-| [**whisper**](../user-guide/skills/optional/mlops/mlops-whisper.md) | OpenAI's general-purpose speech recognition model. Supports 99 languages, transcription, translation to English, and language identification. Six model sizes from tiny (39M params) to large (1550M params). Use for speech-to-text, podcast... |
+| [**whisper**](../user-guide/skills/optional/mlops/mlops-whisper.md) | Transcribe and translate speech in 99 languages. |
 
 ## payments
 
@@ -176,38 +186,39 @@ hermes skills uninstall <skill-name>
 
 | Skill | Description |
 |----|----|
-| [**canvas**](../user-guide/skills/optional/productivity/productivity-canvas.md) | Canvas LMS integration — fetch enrolled courses and assignments using API token authentication. |
-| [**here.now**](../user-guide/skills/optional/productivity/productivity-here-now.md) | Publish static sites to {slug}.here.now and store private files in cloud Drives for agent-to-agent handoff. |
+| [**canvas**](../user-guide/skills/optional/productivity/productivity-canvas.md) | Fetch Canvas LMS courses and assignments via API token. |
+| [**here.now**](../user-guide/skills/optional/productivity/productivity-here-now.md) | Publish sites to {slug}.here.now and store files in Drives. |
 | [**memento-flashcards**](../user-guide/skills/optional/productivity/productivity-memento-flashcards.md) | Spaced-repetition flashcard system. Create cards from facts or text, chat with flashcards using free-text answers graded by the agent, generate quizzes from YouTube transcripts, review due cards with adaptive scheduling, and export/impor... |
 | [**shop**](../user-guide/skills/optional/productivity/productivity-shop.md) | Shop catalog search, checkout, order tracking, returns. |
-| [**shopify**](../user-guide/skills/optional/productivity/productivity-shopify.md) | Shopify Admin & Storefront GraphQL APIs via curl. Products, orders, customers, inventory, metafields. |
-| [**siyuan**](../user-guide/skills/optional/productivity/productivity-siyuan.md) | SiYuan Note API for searching, reading, creating, and managing blocks and documents in a self-hosted knowledge base via curl. |
-| [**telephony**](../user-guide/skills/optional/productivity/productivity-telephony.md) | Give Hermes phone capabilities without core tool changes. Provision and persist a Twilio number, send and receive SMS/MMS, make direct calls, and place AI-driven outbound calls through Bland.ai or Vapi. |
+| [**shopify**](../user-guide/skills/optional/productivity/productivity-shopify.md) | Query Shopify Admin/Storefront GraphQL APIs via curl. |
+| [**siyuan**](../user-guide/skills/optional/productivity/productivity-siyuan.md) | Query and edit a SiYuan knowledge base via its API. |
+| [**telephony**](../user-guide/skills/optional/productivity/productivity-telephony.md) | Provision Twilio numbers, SMS/MMS, and AI outbound calls. |
 
 ## research
 
 | Skill | Description |
 |----|----|
-| [**bioinformatics**](../user-guide/skills/optional/research/research-bioinformatics.md) | Gateway to 400+ bioinformatics skills from bioSkills and ClawBio. Covers genomics, transcriptomics, single-cell, variant calling, pharmacogenomics, metagenomics, structural biology, and more. Fetches domain-specific reference material on... |
+| [**bioinformatics**](../user-guide/skills/optional/research/research-bioinformatics.md) | Gateway to 400+ genomics and computational biology skills. |
 | [**darwinian-evolver**](../user-guide/skills/optional/research/research-darwinian-evolver.md) | Evolve prompts/regex/SQL/code with Imbue's evolution loop. |
-| [**domain-intel**](../user-guide/skills/optional/research/research-domain-intel.md) | Passive domain reconnaissance using Python stdlib. Subdomain discovery, SSL certificate inspection, WHOIS lookups, DNS records, domain availability checks, and bulk multi-domain analysis. No API keys required. |
+| [**domain-intel**](../user-guide/skills/optional/research/research-domain-intel.md) | Passive recon of subdomains, SSL certs, WHOIS, and DNS. |
 | [**drug-discovery**](../user-guide/skills/optional/research/research-drug-discovery.md) | Pharmaceutical research assistant for drug discovery workflows. Search bioactive compounds on ChEMBL, calculate drug-likeness (Lipinski Ro5, QED, TPSA, synthetic accessibility), look up drug-drug interactions via OpenFDA, interpret ADMET... |
-| [**duckduckgo-search**](../user-guide/skills/optional/research/research-duckduckgo-search.md) | Free web search via DuckDuckGo — text, news, images, videos. No API key needed. Prefer the `ddgs` CLI when installed; use the Python DDGS library only after verifying that `ddgs` is available in the current runtime. |
-| [**gitnexus-explorer**](../user-guide/skills/optional/research/research-gitnexus-explorer.md) | Index a codebase with GitNexus and serve an interactive knowledge graph via web UI + Cloudflare tunnel. |
-| [**osint-investigation**](../user-guide/skills/optional/research/research-osint-investigation.md) | Public-records OSINT investigation framework — SEC EDGAR filings, USAspending contracts, Senate lobbying, OFAC sanctions, ICIJ offshore leaks, NYC property records (ACRIS), OpenCorporates registries, CourtListener court records, Wayback... |
-| [**parallel-cli**](../user-guide/skills/optional/research/research-parallel-cli.md) | Optional vendor skill for Parallel CLI — agent-native web search, extraction, deep research, enrichment, FindAll, and monitoring. Prefer JSON output and non-interactive flows. |
-| [**qmd**](../user-guide/skills/optional/research/research-qmd.md) | Search personal knowledge bases, notes, docs, and meeting transcripts locally using qmd — a hybrid retrieval engine with BM25, vector search, and LLM reranking. Supports CLI and MCP integration. |
-| [**scrapling**](../user-guide/skills/optional/research/research-scrapling.md) | Web scraping with Scrapling - HTTP fetching, stealth browser automation, Cloudflare bypass, and spider crawling via CLI and Python. |
-| [**searxng-search**](../user-guide/skills/optional/research/research-searxng-search.md) | Free meta-search via SearXNG — aggregates results from 70+ search engines. Self-hosted or use a public instance. No API key needed. Falls back automatically when the web search toolset is unavailable. |
+| [**duckduckgo-search**](../user-guide/skills/optional/research/research-duckduckgo-search.md) | Free keyless web, news, and image search via ddgs. |
+| [**gitnexus-explorer**](../user-guide/skills/optional/research/research-gitnexus-explorer.md) | Serve an interactive codebase knowledge graph web UI. |
+| [**osint-investigation**](../user-guide/skills/optional/research/research-osint-investigation.md) | Follow the money via public records and sanctions data. |
+| [**parallel-cli**](../user-guide/skills/optional/research/research-parallel-cli.md) | Agent-native web search, deep research, and enrichment. |
+| [**pinecone-research**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-pinecone-research) | Agent RAG and long-term memory with Pinecone. |
+| [**qmd**](../user-guide/skills/optional/research/research-qmd.md) | Hybrid local search over notes, docs, and transcripts. |
+| [**scrapling**](../user-guide/skills/optional/research/research-scrapling.md) | Scrape sites with stealth browsing and Cloudflare bypass. |
+| [**searxng-search**](../user-guide/skills/optional/research/research-searxng-search.md) | Free keyless meta-search aggregating 70+ engines. |
 
 ## security
 
 | Skill | Description |
 |----|----|
-| [**1password**](../user-guide/skills/optional/security/security-1password.md) | Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in, and reading/injecting secrets for commands. |
+| [**1password**](../user-guide/skills/optional/security/security-1password.md) | Set up op CLI, sign in, and read or inject secrets. |
 | [**godmode**](../user-guide/skills/optional/security/security-godmode.md) | Jailbreak LLMs: Parseltongue, GODMODE, ULTRAPLINIAN. |
 | [**oss-forensics**](../user-guide/skills/optional/security/security-oss-forensics.md) | Supply chain investigation, evidence recovery, and forensic analysis for GitHub repositories. Covers deleted commit recovery, force-push detection, IOC extraction, multi-source evidence collection, hypothesis formation/validation, and st... |
-| [**sherlock**](../user-guide/skills/optional/security/security-sherlock.md) | OSINT username search across 400+ social networks. Hunt down social media accounts by username. |
+| [**sherlock**](../user-guide/skills/optional/security/security-sherlock.md) | Find accounts for a username across 400+ platforms. |
 | [**unbroker**](../user-guide/skills/optional/security/security-unbroker.md) | Autonomously remove your info from data-broker sites. |
 | [**web-pentest**](../user-guide/skills/optional/security/security-web-pentest.md) | Authorized web application penetration testing — reconnaissance, vulnerability analysis, proof-based exploitation, and professional reporting. Adapts Shannon's "No Exploit, No Report" methodology with hard guardrails for scope, authoriza... |
 
@@ -224,7 +235,13 @@ hermes skills uninstall <skill-name>
 | Skill | Description |
 |----|----|
 | [**cloudflare-temporary-deploy**](../user-guide/skills/optional/web-development/web-development-cloudflare-temporary-deploy.md) | Deploy a Worker live, no account, via wrangler --temporary. |
-| [**page-agent**](../user-guide/skills/optional/web-development/web-development-page-agent.md) | Embed alibaba/page-agent into your own web application — a pure-JavaScript in-page GUI agent that ships as a single \<script\> tag or npm package and lets end-users of your site drive the UI with natural language ("click login, fill userna... |
+| [**page-agent**](../user-guide/skills/optional/web-development/web-development-page-agent.md) | Embed an in-page natural-language GUI copilot in web apps. |
+
+## yuanbao
+
+| Skill | Description |
+|----|----|
+| [**yuanbao**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/yuanbao/yuanbao-yuanbao) | Yuanbao (元宝) groups: @mention users, query info/members. |
 
 ------------------------------------------------------------------------
 

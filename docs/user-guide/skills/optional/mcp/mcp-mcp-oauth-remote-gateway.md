@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mcp/mcp-mcp-oauth-remote-gateway"
 title: "Mcp Oauth Remote Gateway"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Mcp Oauth Remote Gateway
@@ -19,7 +19,7 @@ Manual OAuth for remote MCP servers on headless gateways.
 | License | MIT |
 | Platforms | linux, macos |
 | Tags | `MCP`, `OAuth`, `PKCE`, `Remote-Deployment` |
-| Related skills | `native-mcp`, [`mcporter`](mcp-mcporter.md), [`fastmcp`](mcp-fastmcp.md) |
+| Related skills | [`hermes-agent`](../../bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent.md), [`mcporter`](mcp-mcporter.md), [`fastmcp`](mcp-fastmcp.md) |
 
 ## Reference: full SKILL.md
 

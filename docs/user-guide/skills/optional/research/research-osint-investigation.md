@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-osint-investigation"
 title: "Osint Investigation"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Osint Investigation
 
-Public-records OSINT investigation framework — SEC EDGAR filings, USAspending contracts, Senate lobbying, OFAC sanctions, ICIJ offshore leaks, NYC property records (ACRIS), OpenCorporates registries, CourtListener court records, Wayback Machine archives, Wikipedia + Wikidata, GDELT news monitoring. Entity resolution across sources, cross-link analysis, timing correlation, evidence chains. Python stdlib only.
+Follow the money via public records and sanctions data.
 
 ## Skill metadata
 

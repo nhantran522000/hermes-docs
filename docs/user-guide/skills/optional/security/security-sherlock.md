@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/security/security-sherlock"
 title: "Sherlock"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Sherlock
 
-OSINT username search across 400+ social networks. Hunt down social media accounts by username.
+Find accounts for a username across 400+ platforms.
 
 ## Skill metadata
 

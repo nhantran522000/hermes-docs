@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-kanban-video-orchestrator"
 title: "Kanban Video Orchestrator"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Kanban Video Orchestrator
 
-Plan, set up, and monitor a multi-agent video production pipeline backed by Hermes Kanban. Use when the user wants to make ANY video — narrative film, product/marketing, music video, explainer, ASCII/terminal art, abstract/generative loop, comic, 3D, real-time/installation — and the work warrants decomposition into specialized profiles (writer, designer, animator, renderer, voice, editor, etc.) coordinated through a kanban board. Performs adaptive discovery to scope the brief, designs an appropriate team for the requested style, generates the setup script that creates Hermes profiles + initial kanban task, then helps monitor execution and intervene when tasks stall or fail. Routes scenes to whichever Hermes rendering / audio / design skill fits each beat (`ascii-video`, `manim-video`, `p5js`, `comfyui`, `touchdesigner-mcp`, `blender-mcp`, `pixel-art`, `baoyu-comic`, `claude-design`, `excalidraw`, `songsee`, `heartmula`, …) plus external APIs for TTS, image-gen, and image-to-video as needed.
+Plan and run multi-agent video production pipelines.
 
 ## Skill metadata
 
@@ -19,7 +19,7 @@ Plan, set up, and monitor a multi-agent video production pipeline backed by Herm
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `video`, `kanban`, `multi-agent`, `orchestration`, `production-pipeline` |
-| Related skills | [`ascii-video`](../../bundled/creative/creative-ascii-video.md), [`manim-video`](../../bundled/creative/creative-manim-video.md), [`p5js`](../../bundled/creative/creative-p5js.md), [`comfyui`](../../bundled/creative/creative-comfyui.md), [`touchdesigner-mcp`](../../bundled/creative/creative-touchdesigner-mcp.md), [`blender-mcp`](creative-blender-mcp.md), [`pixel-art`](creative-pixel-art.md), [`ascii-art`](../../bundled/creative/creative-ascii-art.md), [`songwriting-and-ai-music`](../../bundled/creative/creative-songwriting-and-ai-music.md), [`heartmula`](../../bundled/media/media-heartmula.md), [`songsee`](../../bundled/media/media-songsee.md), `spotify`, [`youtube-content`](../../bundled/media/media-youtube-content.md), [`claude-design`](../../bundled/creative/creative-claude-design.md), [`excalidraw`](../../bundled/creative/creative-excalidraw.md), [`architecture-diagram`](../../bundled/creative/creative-architecture-diagram.md), [`concept-diagrams`](creative-concept-diagrams.md), [`baoyu-comic`](creative-baoyu-comic.md), [`baoyu-infographic`](../../bundled/creative/creative-baoyu-infographic.md), [`humanizer`](../../bundled/creative/creative-humanizer.md), [`gif-search`](../../bundled/media/media-gif-search.md), [`meme-generation`](creative-meme-generation.md) |
+| Related skills | [`ascii-video`](../../bundled/creative/creative-ascii-video.md), [`manim-video`](../../bundled/creative/creative-manim-video.md), [`p5js`](../../bundled/creative/creative-p5js.md), [`comfyui`](../../bundled/creative/creative-comfyui.md), [`touchdesigner-mcp`](../../bundled/creative/creative-touchdesigner-mcp.md), [`blender-mcp`](creative-blender-mcp.md), [`pixel-art`](creative-pixel-art.md), [`ascii-art`](../../bundled/creative/creative-ascii-art.md), [`songwriting-and-ai-music`](../../bundled/creative/creative-songwriting-and-ai-music.md), [`heartmula`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-heartmula), [`songsee`](../../bundled/media/media-songsee.md), [`youtube-content`](../../bundled/media/media-youtube-content.md), [`claude-design`](../../bundled/creative/creative-claude-design.md), [`excalidraw`](../../bundled/creative/creative-excalidraw.md), [`architecture-diagram`](../../bundled/creative/creative-architecture-diagram.md), [`concept-diagrams`](creative-concept-diagrams.md), [`baoyu-comic`](creative-baoyu-comic.md), [`baoyu-infographic`](../../bundled/creative/creative-baoyu-infographic.md), [`humanizer`](../../bundled/creative/creative-humanizer.md), [`gif-search`](../../bundled/media/media-gif-search.md), [`meme-generation`](creative-meme-generation.md) |
 
 ## Reference: full SKILL.md
 

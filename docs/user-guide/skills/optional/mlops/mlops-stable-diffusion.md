@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-stable-diffusion"
 title: "Stable Diffusion Image Generation"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Stable Diffusion Image Generation
 
-State-of-the-art text-to-image generation with Stable Diffusion models via HuggingFace Diffusers. Use when generating images from text prompts, performing image-to-image translation, inpainting, or building custom diffusion pipelines.
+Text-to-image generation, inpainting, and img2img.
 
 ## Skill metadata
 

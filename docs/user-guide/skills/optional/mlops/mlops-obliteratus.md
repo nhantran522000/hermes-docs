@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-obliteratus"
 title: "Obliteratus"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Obliteratus
@@ -20,7 +20,7 @@ OBLITERATUS: abliterate LLM refusals (diff-in-means).
 | Dependencies | `obliteratus`, `torch`, `transformers`, `bitsandbytes`, `accelerate`, `safetensors` |
 | Platforms | linux, macos |
 | Tags | `Abliteration`, `Uncensoring`, `Refusal-Removal`, `LLM`, `Weight-Projection`, `SVD`, `Mechanistic-Interpretability`, `HuggingFace`, `Model-Surgery` |
-| Related skills | `vllm`, `gguf`, [`huggingface-tokenizers`](mlops-huggingface-tokenizers.md) |
+| Related skills | [`serving-llms-vllm`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/mlops/mlops-inference-serving-llms-vllm), [`llama-cpp`](../../bundled/mlops/mlops-inference-llama-cpp.md), [`huggingface-tokenizers`](mlops-huggingface-tokenizers.md) |
 
 ## Reference: full SKILL.md
 

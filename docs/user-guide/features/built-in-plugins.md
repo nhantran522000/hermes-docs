@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/built-in-plugins"
 title: "Built-in Plugins"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Built-in Plugins

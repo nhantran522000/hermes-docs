@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-p5js"
 title: "P5Js"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # P5Js

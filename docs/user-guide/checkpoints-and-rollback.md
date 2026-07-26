@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/checkpoints-and-rollback"
 title: "Checkpoints and `/rollback`"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Checkpoints and `/rollback`
@@ -77,12 +77,15 @@ checkpoints:
   max_file_size_mb: 10        # skip any single file larger than this
 
   # Auto-maintenance (on by default): sweep ~/.hermes/checkpoints/ at startup
-  # and delete project entries whose working directory no longer exists
-  # (orphans) or whose last_touch is older than retention_days. Runs at most
-  # once per min_interval_hours, tracked via a .last_prune marker.
+  # and delete project entries whose last_touch is older than retention_days.
+  # Runs at most once per min_interval_hours, tracked via a .last_prune
+  # marker. This sweep never deletes "orphan" entries (working directory not
+  # found) — a missing workdir at startup is ambiguous (deleted project vs.
+  # an unmounted external volume / network share / VPN not yet up), so
+  # orphan cleanup is only ever done via the explicit
+  # `hermes checkpoints prune` command below, with a confirmation prompt.
   auto_prune: true
   retention_days: 7
-  delete_orphans: true
   min_interval_hours: 24
 ```
 

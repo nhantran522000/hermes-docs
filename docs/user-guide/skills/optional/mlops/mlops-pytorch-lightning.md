@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-pytorch-lightning"
 title: "Pytorch Lightning"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Pytorch Lightning
 
-High-level PyTorch framework with Trainer class, automatic distributed training (DDP/FSDP/DeepSpeed), callbacks system, and minimal boilerplate. Scales from laptop to supercomputer with same code. Use when you want clean training loops with built-in best practices.
+Clean training loops with built-in distributed support.
 
 ## Skill metadata
 

@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-qmd"
 title: "Qmd"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Qmd
 
-Search personal knowledge bases, notes, docs, and meeting transcripts locally using qmd — a hybrid retrieval engine with BM25, vector search, and LLM reranking. Supports CLI and MCP integration.
+Hybrid local search over notes, docs, and transcripts.
 
 ## Skill metadata
 
@@ -19,7 +19,7 @@ Search personal knowledge bases, notes, docs, and meeting transcripts locally us
 | License | MIT |
 | Platforms | macos, linux |
 | Tags | `Search`, `Knowledge-Base`, `RAG`, `Notes`, `MCP`, `Local-AI` |
-| Related skills | [`obsidian`](../../bundled/note-taking/note-taking-obsidian.md), `native-mcp`, [`arxiv`](../../bundled/research/research-arxiv.md) |
+| Related skills | [`obsidian`](../../bundled/note-taking/note-taking-obsidian.md), [`hermes-agent`](../../bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent.md), [`arxiv`](../../bundled/research/research-arxiv.md) |
 
 ## Reference: full SKILL.md
 

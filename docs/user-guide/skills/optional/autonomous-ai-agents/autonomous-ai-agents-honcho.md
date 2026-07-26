@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-honcho"
 title: "Honcho"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Honcho
 
-Configure and use Honcho memory with Hermes -- cross-session user modeling, multi-profile peer isolation, observation config, dialectic reasoning, session summaries, and context budget enforcement. Use when setting up Honcho, troubleshooting memory, managing profiles with Honcho peers, or tuning observation, recall, and dialectic settings.
+Configure and troubleshoot Honcho memory for Hermes.
 
 ## Skill metadata
 

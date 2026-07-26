@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/finance/finance-3-statement-model"
 title: "3 Statement Model"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # 3 Statement Model
 
-Build fully-integrated 3-statement models (IS, BS, CF) in Excel with working capital schedules, D&A roll-forwards, debt schedule, and the plugs that make cash and retained earnings tie. Pairs with excel-author.
+Build integrated IS/BS/CF financial workbooks in Excel.
 
 ## Skill metadata
 

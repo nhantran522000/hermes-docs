@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/google_chat"
 title: "Google Chat Setup"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Google Chat Setup

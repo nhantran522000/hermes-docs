@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/devops/devops-docker-management"
 title: "Docker Management"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Docker Management
 
-Manage Docker containers, images, volumes, networks, and Compose stacks — lifecycle ops, debugging, cleanup, and Dockerfile optimization.
+Manage Docker containers, images, volumes, and Compose.
 
 ## Skill metadata
 

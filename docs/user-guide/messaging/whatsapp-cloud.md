@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/whatsapp-cloud"
 title: "WhatsApp Business Cloud API Setup"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # WhatsApp Business Cloud API Setup
@@ -117,7 +117,7 @@ Note the printed URL — that's what you'll give Meta.
 
 Quick tunnels rotate
 
-The free quick-tunnel URL changes every time you restart `cloudflared`. For a stable URL, log in with `cloudflared tunnel login` and create a named tunnel. Free Cloudflare accounts get unlimited named tunnels — see [Cloudflare's docs](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) for the named-tunnel workflow.
+The free quick-tunnel URL changes every time you restart `cloudflared`. For a stable URL, log in with `cloudflared tunnel login` and create a named tunnel. Free Cloudflare accounts get unlimited named tunnels — see [Cloudflare's docs](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/) for the named-tunnel workflow.
 
 ### ngrok
 

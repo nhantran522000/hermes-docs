@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-lambda-labs"
 title: "Lambda Labs Gpu Cloud"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Lambda Labs Gpu Cloud
 
-Reserved and on-demand GPU cloud instances for ML training and inference. Use when you need dedicated GPU instances with simple SSH access, persistent filesystems, or high-performance multi-node clusters for large-scale training.
+On-demand GPU cloud instances for ML training.
 
 ## Skill metadata
 

@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-domain-intel"
 title: "Domain Intel"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Domain Intel
 
-Passive domain reconnaissance using Python stdlib. Subdomain discovery, SSL certificate inspection, WHOIS lookups, DNS records, domain availability checks, and bulk multi-domain analysis. No API keys required.
+Passive recon of subdomains, SSL certs, WHOIS, and DNS.
 
 ## Skill metadata
 

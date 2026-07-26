@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/plugins"
 title: "Build a Hermes Plugin"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Build a Hermes Plugin

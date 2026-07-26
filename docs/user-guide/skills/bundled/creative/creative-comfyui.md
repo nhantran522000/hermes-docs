@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-comfyui"
 title: "Comfyui"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Comfyui
 
-Generate images, video, and audio with ComfyUI — install, launch, manage nodes/models, run workflows with parameter injection. Uses the official comfy-cli for lifecycle and direct REST/WebSocket API for execution.
+Generate images, video, and audio via diffusion workflows.
 
 ## Skill metadata
 
@@ -19,7 +19,7 @@ Generate images, video, and audio with ComfyUI — install, launch, manage nodes
 | License | MIT |
 | Platforms | macos, linux, windows |
 | Tags | `comfyui`, `image-generation`, `stable-diffusion`, `flux`, `sd3`, `wan-video`, `hunyuan-video`, `creative`, `generative-ai`, `video-generation` |
-| Related skills | [`stable-diffusion-image-generation`](../../optional/mlops/mlops-stable-diffusion.md), `image_gen` |
+| Related skills | [`stable-diffusion-image-generation`](../../optional/mlops/mlops-stable-diffusion.md) |
 
 ## Reference: full SKILL.md
 

@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/finance/finance-merger-model"
 title: "Merger Model"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Merger Model
 
-Build accretion/dilution (merger) models in Excel — pro-forma P&L, synergies, financing mix, EPS impact. Pairs with excel-author. Use for M&A pitches, board materials, or deal evaluation.
+Build M&A accretion/dilution workbooks in Excel.
 
 ## Skill metadata
 

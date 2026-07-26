@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-parallel-cli"
 title: "Parallel Cli"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Parallel Cli
 
-Optional vendor skill for Parallel CLI — agent-native web search, extraction, deep research, enrichment, FindAll, and monitoring. Prefer JSON output and non-interactive flows.
+Agent-native web search, deep research, and enrichment.
 
 ## Skill metadata
 

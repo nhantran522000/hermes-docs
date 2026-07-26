@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-instructor"
 title: "Instructor"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Instructor
 
-Extract structured data from LLM responses with Pydantic validation, retry failed extractions automatically, parse complex JSON with type safety, and stream partial results with Instructor - battle-tested structured output library
+Structured LLM outputs validated with Pydantic.
 
 ## Skill metadata
 

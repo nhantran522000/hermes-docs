@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-slime"
 title: "Slime Rl Training"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Slime Rl Training
 
-Provides guidance for LLM post-training with RL using slime, a Megatron+SGLang framework. Use when training GLM models, implementing custom data generation workflows, or needing tight Megatron-LM integration for RL scaling.
+RL post-training for LLMs with Megatron and SGLang.
 
 ## Skill metadata
 

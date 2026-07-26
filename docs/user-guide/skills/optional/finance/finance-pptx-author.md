@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/finance/finance-pptx-author"
 title: "Pptx Author"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Pptx Author
 
-Build PowerPoint decks headless with python-pptx. Pairs with excel-author for model-backed decks where every number traces to a workbook cell. Use for pitch decks, IC memos, earnings notes.
+Build PowerPoint decks headless with python-pptx.
 
 ## Skill metadata
 

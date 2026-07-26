@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-faiss"
 title: "Faiss"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Faiss
 
-Facebook's library for efficient similarity search and clustering of dense vectors. Supports billions of vectors, GPU acceleration, and various index types (Flat, IVF, HNSW). Use for fast k-NN search, large-scale vector retrieval, or when you need pure similarity search without metadata. Best for high-performance applications.
+Fast vector similarity search at billion scale.
 
 ## Skill metadata
 

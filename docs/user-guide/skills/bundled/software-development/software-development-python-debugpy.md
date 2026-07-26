@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-python-debugpy"
 title: "Python Debugpy"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Python Debugpy
@@ -19,7 +19,7 @@ Debug Python: pdb REPL + debugpy remote (DAP).
 | License | MIT |
 | Platforms | linux, macos |
 | Tags | `debugging`, `python`, `pdb`, `debugpy`, `breakpoints`, `dap`, `post-mortem` |
-| Related skills | [`systematic-debugging`](software-development-systematic-debugging.md), [`node-inspect-debugger`](software-development-node-inspect-debugger.md), `debugging-hermes-tui-commands` |
+| Related skills | [`systematic-debugging`](software-development-systematic-debugging.md), [`node-inspect-debugger`](software-development-node-inspect-debugger.md) |
 
 ## Reference: full SKILL.md
 

@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-telephony"
 title: "Telephony"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Telephony
 
-Give Hermes phone capabilities without core tool changes. Provision and persist a Twilio number, send and receive SMS/MMS, make direct calls, and place AI-driven outbound calls through Bland.ai or Vapi.
+Provision Twilio numbers, SMS/MMS, and AI outbound calls.
 
 ## Skill metadata
 

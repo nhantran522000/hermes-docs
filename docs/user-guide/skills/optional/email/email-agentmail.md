@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/email/email-agentmail"
 title: "Agentmail"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Agentmail
 
-Give the agent its own dedicated email inbox via AgentMail. Send, receive, and manage email autonomously using agent-owned email addresses (e.g. [hermes-agent@agentmail.to](mailto:hermes-agent@agentmail.to)).
+Give the agent its own inbox: send and receive email.
 
 ## Skill metadata
 

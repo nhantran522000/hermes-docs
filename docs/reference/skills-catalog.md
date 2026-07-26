@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/skills-catalog"
 title: "Bundled Skills Catalog"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Bundled Skills Catalog
@@ -27,14 +27,9 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 |----|----|----|
 | [`claude-code`](../user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-claude-code.md) | Delegate coding to Claude Code CLI (features, PRs). | `autonomous-ai-agents/claude-code` |
 | [`codex`](../user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-codex.md) | Delegate coding to OpenAI Codex CLI (features, PRs). | `autonomous-ai-agents/codex` |
-| [`hermes-agent`](../user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent.md) | Configure, extend, or contribute to Hermes Agent. | `autonomous-ai-agents/hermes-agent` |
+| [`computer-use`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-computer-use) | Drive the user's desktop in the background — clicking, typing, scrolling, dragging — without stealing the cursor, keyboard focus, or switching virtual desktops / Spaces. Cross-platform: macOS, Windows, Linux. Works with any tool-capable... | `autonomous-ai-agents/computer-use` |
+| [`hermes-agent`](../user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent.md) | Use, configure, theme, extend, and orchestrate Hermes Agent. | `autonomous-ai-agents/hermes-agent` |
 | [`opencode`](../user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-opencode.md) | Delegate coding to OpenCode CLI (features, PR review). | `autonomous-ai-agents/opencode` |
-
-## computer-use
-
-| Skill | Description | Path |
-|----|----|----|
-| [`computer-use`](../user-guide/skills/bundled/computer-use/computer-use-computer-use.md) | Drive the user's desktop in the background — clicking, typing, scrolling, dragging — without stealing the cursor, keyboard focus, or switching virtual desktops / Spaces. Cross-platform: macOS, Windows, Linux. Works with any tool-capable... | `computer-use` |
 
 ## creative
 
@@ -45,29 +40,17 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 | [`ascii-video`](../user-guide/skills/bundled/creative/creative-ascii-video.md) | ASCII video: convert video/audio to colored ASCII MP4/GIF. | `creative/ascii-video` |
 | [`baoyu-infographic`](../user-guide/skills/bundled/creative/creative-baoyu-infographic.md) | Infographics: 21 layouts x 21 styles (信息图, 可视化). | `creative/baoyu-infographic` |
 | [`claude-design`](../user-guide/skills/bundled/creative/creative-claude-design.md) | Design one-off HTML artifacts (landing, deck, prototype). | `creative/claude-design` |
-| [`comfyui`](../user-guide/skills/bundled/creative/creative-comfyui.md) | Generate images, video, and audio with ComfyUI — install, launch, manage nodes/models, run workflows with parameter injection. Uses the official comfy-cli for lifecycle and direct REST/WebSocket API for execution. | `creative/comfyui` |
+| [`comfyui`](../user-guide/skills/bundled/creative/creative-comfyui.md) | Generate images, video, and audio via diffusion workflows. | `creative/comfyui` |
 | [`design-md`](../user-guide/skills/bundled/creative/creative-design-md.md) | Author/validate/export Google's DESIGN.md token spec files. | `creative/design-md` |
 | [`excalidraw`](../user-guide/skills/bundled/creative/creative-excalidraw.md) | Hand-drawn Excalidraw JSON diagrams (arch, flow, seq). | `creative/excalidraw` |
 | [`humanizer`](../user-guide/skills/bundled/creative/creative-humanizer.md) | Humanize text: strip AI-isms and add real voice. | `creative/humanizer` |
 | [`manim-video`](../user-guide/skills/bundled/creative/creative-manim-video.md) | Manim CE animations: 3Blue1Brown math/algo videos. | `creative/manim-video` |
 | [`p5js`](../user-guide/skills/bundled/creative/creative-p5js.md) | p5.js sketches: gen art, shaders, interactive, 3D. | `creative/p5js` |
 | [`popular-web-designs`](../user-guide/skills/bundled/creative/creative-popular-web-designs.md) | 54 real design systems (Stripe, Linear, Vercel) as HTML/CSS. | `creative/popular-web-designs` |
-| [`pretext`](../user-guide/skills/bundled/creative/creative-pretext.md) | Use when building creative browser demos with @chenglou/pretext — DOM-free text layout for ASCII art, typographic flow around obstacles, text-as-geometry games, kinetic typography, and text-powered generative art. Produces single-file HT... | `creative/pretext` |
+| [`pretext`](../user-guide/skills/bundled/creative/creative-pretext.md) | Build creative browser demos with DOM-free text layout. | `creative/pretext` |
 | [`sketch`](../user-guide/skills/bundled/creative/creative-sketch.md) | Throwaway HTML mockups: 2-3 design variants to compare. | `creative/sketch` |
 | [`songwriting-and-ai-music`](../user-guide/skills/bundled/creative/creative-songwriting-and-ai-music.md) | Songwriting craft and Suno AI music prompts. | `creative/songwriting-and-ai-music` |
-| [`touchdesigner-mcp`](../user-guide/skills/bundled/creative/creative-touchdesigner-mcp.md) | Control a running TouchDesigner instance via twozero MCP — create operators, set parameters, wire connections, execute Python, build real-time visuals. 36 native tools. | `creative/touchdesigner-mcp` |
-
-## data-science
-
-| Skill | Description | Path |
-|----|----|----|
-| [`jupyter-live-kernel`](../user-guide/skills/bundled/data-science/data-science-jupyter-live-kernel.md) | Iterative Python via live Jupyter kernel (hamelnb). | `data-science/jupyter-live-kernel` |
-
-## dogfood
-
-| Skill | Description | Path |
-|----|----|----|
-| [`dogfood`](../user-guide/skills/bundled/dogfood/dogfood-dogfood.md) | Exploratory QA of web apps: find bugs, evidence, reports. | `dogfood` |
+| [`touchdesigner-mcp`](../user-guide/skills/bundled/creative/creative-touchdesigner-mcp.md) | Control TouchDesigner via twozero MCP. | `creative/touchdesigner-mcp` |
 
 ## email
 
@@ -86,18 +69,11 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 | [`github-pr-workflow`](../user-guide/skills/bundled/github/github-github-pr-workflow.md) | GitHub PR lifecycle: branch, commit, open, CI, merge. | `github/github-pr-workflow` |
 | [`github-repo-management`](../user-guide/skills/bundled/github/github-github-repo-management.md) | Clone/create/fork repos; manage remotes, releases. | `github/github-repo-management` |
 
-## hermes-desktop-plugins
-
-| Skill | Description | Path |
-|----|----|----|
-| [`hermes-desktop-plugins`](../user-guide/skills/bundled/hermes-desktop-plugins/hermes-desktop-plugins-hermes-desktop-plugins.md) | Write desktop app plugins that add UI panes and commands. | `hermes-desktop-plugins` |
-
 ## media
 
 | Skill | Description | Path |
 |----|----|----|
 | [`gif-search`](../user-guide/skills/bundled/media/media-gif-search.md) | Search/download GIFs from Tenor via curl + jq. | `media/gif-search` |
-| [`heartmula`](../user-guide/skills/bundled/media/media-heartmula.md) | HeartMuLa: Suno-like song generation from lyrics + tags. | `media/heartmula` |
 | [`songsee`](../user-guide/skills/bundled/media/media-songsee.md) | Audio spectrograms/features (mel, chroma, MFCC) via CLI. | `media/songsee` |
 | [`youtube-content`](../user-guide/skills/bundled/media/media-youtube-content.md) | YouTube transcripts to summaries, threads, blogs. | `media/youtube-content` |
 
@@ -105,12 +81,10 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 
 | Skill | Description | Path |
 |----|----|----|
-| [`audiocraft-audio-generation`](../user-guide/skills/bundled/mlops/mlops-models-audiocraft.md) | AudioCraft: MusicGen text-to-music, AudioGen text-to-sound. | `mlops/models/audiocraft` |
+| [`evaluating-llms-harness`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/mlops/mlops-evaluation-evaluating-llms-harness) | lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc.). | `mlops/evaluation/evaluating-llms-harness` |
 | [`huggingface-hub`](../user-guide/skills/bundled/mlops/mlops-huggingface-hub.md) | HuggingFace hf CLI: search/download/upload models, datasets. | `mlops/huggingface-hub` |
 | [`llama-cpp`](../user-guide/skills/bundled/mlops/mlops-inference-llama-cpp.md) | llama.cpp local GGUF inference + HF Hub model discovery. | `mlops/inference/llama-cpp` |
-| [`evaluating-llms-harness`](../user-guide/skills/bundled/mlops/mlops-evaluation-lm-evaluation-harness.md) | lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc.). | `mlops/evaluation/lm-evaluation-harness` |
-| [`segment-anything-model`](../user-guide/skills/bundled/mlops/mlops-models-segment-anything.md) | SAM: zero-shot image segmentation via points, boxes, masks. | `mlops/models/segment-anything` |
-| [`serving-llms-vllm`](../user-guide/skills/bundled/mlops/mlops-inference-vllm.md) | vLLM: high-throughput LLM serving, OpenAI API, quantization. | `mlops/inference/vllm` |
+| [`serving-llms-vllm`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/mlops/mlops-inference-serving-llms-vllm) | vLLM: high-throughput LLM serving, OpenAI API, quantization. | `mlops/inference/serving-llms-vllm` |
 | [`weights-and-biases`](../user-guide/skills/bundled/mlops/mlops-evaluation-weights-and-biases.md) | W&B: log ML experiments, sweeps, model registry, dashboards. | `mlops/evaluation/weights-and-biases` |
 
 ## note-taking
@@ -124,14 +98,16 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 | Skill | Description | Path |
 |----|----|----|
 | [`airtable`](../user-guide/skills/bundled/productivity/productivity-airtable.md) | Airtable REST API via curl. Records CRUD, filters, upserts. | `productivity/airtable` |
+| [`docx`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-docx) | Create, read, edit Word .docx documents and templates. | `productivity/docx` |
 | [`google-workspace`](../user-guide/skills/bundled/productivity/productivity-google-workspace.md) | Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python. | `productivity/google-workspace` |
 | [`maps`](../user-guide/skills/bundled/productivity/productivity-maps.md) | Geocode, POIs, routes, timezones via OpenStreetMap/OSRM. | `productivity/maps` |
-| [`nano-pdf`](../user-guide/skills/bundled/productivity/productivity-nano-pdf.md) | Edit PDF text/typos/titles via nano-pdf CLI (NL prompts). | `productivity/nano-pdf` |
+| [`nano-pdf`](../user-guide/skills/bundled/productivity/productivity-nano-pdf.md) | Edit text in existing PDFs via natural-language prompts. | `productivity/nano-pdf` |
 | [`notion`](../user-guide/skills/bundled/productivity/productivity-notion.md) | Notion API + ntn CLI: pages, databases, markdown, Workers. | `productivity/notion` |
 | [`ocr-and-documents`](../user-guide/skills/bundled/productivity/productivity-ocr-and-documents.md) | Extract text from PDFs/scans (pymupdf, marker-pdf). | `productivity/ocr-and-documents` |
-| [`petdex`](../user-guide/skills/bundled/productivity/productivity-petdex.md) | Install and select animated petdex mascots for Hermes. | `productivity/petdex` |
+| [`pdf`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-pdf) | Create, merge, split, fill, and secure PDF files. | `productivity/pdf` |
 | [`powerpoint`](../user-guide/skills/bundled/productivity/productivity-powerpoint.md) | Create, read, edit .pptx decks, slides, notes, templates. | `productivity/powerpoint` |
-| [`teams-meeting-pipeline`](../user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline.md) | Operate the Teams meeting summary pipeline via Hermes CLI — summarize meetings, inspect pipeline status, replay jobs, manage Microsoft Graph subscriptions. | `productivity/teams-meeting-pipeline` |
+| [`teams-meeting-pipeline`](../user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline.md) | Teams meeting summaries, job replay, Graph subscriptions. | `productivity/teams-meeting-pipeline` |
+| [`xlsx`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-xlsx) | Create, read, edit Excel .xlsx spreadsheets and CSVs. | `productivity/xlsx` |
 
 ## research
 
@@ -153,24 +129,19 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 
 | Skill | Description | Path |
 |----|----|----|
-| [`xurl`](../user-guide/skills/bundled/social-media/social-media-xurl.md) | X/Twitter via xurl CLI: post, search, DM, media, v2 API. | `social-media/xurl` |
+| [`xurl`](../user-guide/skills/bundled/social-media/social-media-xurl.md) | X/Twitter via xurl CLI: raw post search, posting, DM, media. | `social-media/xurl` |
 
 ## software-development
 
 | Skill | Description | Path |
 |----|----|----|
-| [`hermes-agent-skill-authoring`](../user-guide/skills/bundled/software-development/software-development-hermes-agent-skill-authoring.md) | Author in-repo SKILL.md: frontmatter, validator, structure, and writing-quality principles. | `software-development/hermes-agent-skill-authoring` |
+| [`dogfood`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-dogfood) | Exploratory QA of web apps: find bugs, evidence, reports. | `software-development/dogfood` |
+| [`hermes-agent-skill-authoring`](../user-guide/skills/bundled/software-development/software-development-hermes-agent-skill-authoring.md) | Author in-repo SKILL.md files: frontmatter and structure. | `software-development/hermes-agent-skill-authoring` |
 | [`node-inspect-debugger`](../user-guide/skills/bundled/software-development/software-development-node-inspect-debugger.md) | Debug Node.js via --inspect + Chrome DevTools Protocol CLI. | `software-development/node-inspect-debugger` |
-| [`plan`](../user-guide/skills/bundled/software-development/software-development-plan.md) | Plan mode: write an actionable markdown plan to .hermes/plans/, no execution. Bite-sized tasks, exact paths, complete code. | `software-development/plan` |
+| [`plan`](../user-guide/skills/bundled/software-development/software-development-plan.md) | Write a markdown plan to .hermes/plans/; no execution. | `software-development/plan` |
 | [`python-debugpy`](../user-guide/skills/bundled/software-development/software-development-python-debugpy.md) | Debug Python: pdb REPL + debugpy remote (DAP). | `software-development/python-debugpy` |
 | [`requesting-code-review`](../user-guide/skills/bundled/software-development/software-development-requesting-code-review.md) | Pre-commit review: security scan, quality gates, auto-fix. | `software-development/requesting-code-review` |
-| [`simplify-code`](../user-guide/skills/bundled/software-development/software-development-simplify-code.md) | Parallel 3-agent cleanup of recent code changes. | `software-development/simplify-code` |
+| [`simplify-code`](../user-guide/skills/bundled/software-development/software-development-simplify-code.md) | Parallel 4-agent cleanup of recent code changes. | `software-development/simplify-code` |
 | [`spike`](../user-guide/skills/bundled/software-development/software-development-spike.md) | Throwaway experiments to validate an idea before build. | `software-development/spike` |
 | [`systematic-debugging`](../user-guide/skills/bundled/software-development/software-development-systematic-debugging.md) | 4-phase root cause debugging: understand bugs before fixing. | `software-development/systematic-debugging` |
 | [`test-driven-development`](../user-guide/skills/bundled/software-development/software-development-test-driven-development.md) | TDD: enforce RED-GREEN-REFACTOR, tests before code. | `software-development/test-driven-development` |
-
-## yuanbao
-
-| Skill | Description | Path |
-|----|----|----|
-| [`yuanbao`](../user-guide/skills/bundled/yuanbao/yuanbao-yuanbao.md) | Yuanbao (元宝) groups: @mention users, query info/members. | `yuanbao` |

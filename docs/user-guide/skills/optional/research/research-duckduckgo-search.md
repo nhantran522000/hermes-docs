@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-duckduckgo-search"
 title: "Duckduckgo Search"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Duckduckgo Search
 
-Free web search via DuckDuckGo — text, news, images, videos. No API key needed. Prefer the `ddgs` CLI when installed; use the Python DDGS library only after verifying that `ddgs` is available in the current runtime.
+Free keyless web, news, and image search via ddgs.
 
 ## Skill metadata
 

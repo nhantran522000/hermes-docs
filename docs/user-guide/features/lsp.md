@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/lsp"
 title: "Language Server Protocol (LSP)"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Language Server Protocol (LSP)
@@ -110,6 +110,12 @@ lsp:
 
   # How long to wait for diagnostics after each write.
   wait_mode: document      # "document" or "full"
+  # Max seconds to wait for the server to re-check the file after an
+  # edit. Only *fresh* diagnostics (produced for the post-edit
+  # content) are ever reported; if the server doesn't finish within
+  # this budget, the edit reports "no LSP data" rather than stale
+  # errors from before the edit. Raise this for slow servers on big
+  # projects (tsserver, rust-analyzer mid-indexing).
   wait_timeout: 5.0
 
   # How to handle missing server binaries.
@@ -149,6 +155,8 @@ Nothing is ever installed to `/usr/local/`, `~/.local/`, or any other shared loc
 LSP servers are **lazy-spawned** on first use. Editing a Python file in a project that's never seen `.py` traffic spawns pyright; the spawn takes 1-3 seconds for most servers (rust-analyzer can take 10+ on a cold project). Subsequent edits in the same workspace re-use the running server.
 
 The LSP layer adds a few milliseconds to clean writes when no diagnostics are emitted. When diagnostics are emitted, the wait budget is `wait_timeout` seconds — typically the server responds in tens of milliseconds for pyright/tsserver and a few seconds for rust-analyzer mid-indexing.
+
+Diagnostics are **freshness-gated**: a result only counts when the server produced it for the content of the current edit (a `publishDiagnostics` push at/after the change, or a pull request answered after it). Slow servers that haven't re-checked yet result in "no data" for that edit — never in yesterday's errors being re-reported as current.
 
 Servers are kept alive for the life of the Hermes process. There's no idle-timeout reaper — the cost of restarting the server's index on every write would be far higher than holding the daemon.
 

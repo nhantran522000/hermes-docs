@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-scrapling"
 title: "Scrapling"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Scrapling
 
-Web scraping with Scrapling - HTTP fetching, stealth browser automation, Cloudflare bypass, and spider crawling via CLI and Python.
+Scrape sites with stealth browsing and Cloudflare bypass.
 
 ## Skill metadata
 

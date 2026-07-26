@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/browser-supervisor"
 title: "Browser CDP Supervisor"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Browser CDP Supervisor

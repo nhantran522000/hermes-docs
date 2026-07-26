@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-meme-generation"
 title: "Meme Generation"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Meme Generation
 
-Generate real meme images by picking a template and overlaying text with Pillow. Produces actual .png meme files.
+Create meme PNGs from templates with Pillow text overlay.
 
 ## Skill metadata
 
@@ -19,7 +19,7 @@ Generate real meme images by picking a template and overlaying text with Pillow.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `creative`, `memes`, `humor`, `images` |
-| Related skills | [`ascii-art`](../../bundled/creative/creative-ascii-art.md), `generative-widgets` |
+| Related skills | [`ascii-art`](../../bundled/creative/creative-ascii-art.md) |
 
 ## Reference: full SKILL.md
 

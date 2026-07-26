@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/x-search"
 title: "X (Twitter) Search"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # X (Twitter) Search
@@ -9,6 +9,17 @@ last_crawled: 2026-07-19
 The `x_search` tool lets the agent search X (Twitter) posts, profiles, and threads directly. It's backed by xAI's built-in `x_search` tool on the Responses API at `https://api.x.ai/v1/responses` — Grok itself runs the search server-side and returns synthesized results with citations to the originating posts.
 
 **Use this instead of `web_search`** when you specifically want current discussion, reactions, or claims **on X**. For general web pages, keep using `web_search` / `web_extract`.
+
+## `x_search` vs `xurl`
+
+Hermes can expose two different X surfaces:
+
+| Surface | Use it for | Do not use it for |
+|----|----|----|
+| `x_search` | Read-only public X discovery: current discussion, reactions, claims, profiles, threads, and synthesized answers with citations. | Posting, replying, liking, DMs, media upload, deleting, or proving that an authenticated X account changed state. |
+| `xurl` skill | Exact or authenticated X API work: `post`, `reply`, `read`, `like`, `dm`, timelines, mentions, media upload, account-specific reads, and raw v2 endpoints. | Broad Grok-synthesized public X research when `x_search` is available and no authenticated account context is needed. |
+
+For mixed workflows, use `x_search` to discover candidate public posts, then switch to `xurl read` or another exact `xurl` command after the target post/user/action is clear. Any state-changing X action must be confirmed by `xurl` output or the X API response; an `x_search` answer is never evidence that a write happened.
 
 tip
 
@@ -49,9 +60,14 @@ Either choice satisfies the gating. You can pick whichever credentials you alrea
 # ~/.hermes/config.yaml
 x_search:
   # xAI model used for the Responses call.
-  # grok-4.20-reasoning is the recommended default; any Grok model
+  # grok-4.5 is the recommended default; any Grok model
   # with x_search tool access works.
-  model: grok-4.20-reasoning
+  model: grok-4.5
+
+  # Optional reasoning effort: low, medium, high, or xhigh. When omitted,
+  # the selected model's default applies. xhigh is supported only by
+  # models that document it, such as grok-4.20-multi-agent.
+  # reasoning_effort: low
 
   # Request timeout in seconds. x_search can take 60–120s for
   # complex queries — the default is generous. Minimum: 30.
@@ -61,6 +77,8 @@ x_search:
   # Each retry backs off (1.5x attempt seconds, capped at 5s).
   retries: 2
 ```
+
+`reasoning_effort` is sent to the xAI Responses API as `reasoning: {effort: ...}`. Leave it unset for models that do not support configurable reasoning. Invalid values fail before an API request is made.
 
 ## Tool parameters
 
@@ -109,6 +127,8 @@ The agent will:
 2.  Get back a synthesized answer plus a list of citations linking to specific posts
 3.  Reply with the answer and references
 
+If the next user request is "reply to the best one" or "like that post", the agent should switch to the `xurl` skill, confirm the exact target post, and use the X API action. `x_search` remains a discovery tool.
+
 ## Troubleshooting
 
 ### "No xAI credentials available"
@@ -117,7 +137,7 @@ The tool surfaces this when both auth paths fail. Either set `XAI_API_KEY` in `~
 
 ### "`x_search` is not enabled for this model"
 
-The configured `x_search.model` doesn't have access to the server-side `x_search` tool. Switch to `grok-4.20-reasoning` (the default) or another Grok model that supports it. Check the [xAI documentation](https://docs.x.ai/) for the current list.
+The configured `x_search.model` doesn't have access to the server-side `x_search` tool. Switch to `grok-4.5` (the default) or another Grok model that supports it. Check the [xAI documentation](https://docs.x.ai/) for the current list.
 
 ### Tool doesn't appear in the schema
 
@@ -139,5 +159,6 @@ Causes worth checking:
 ## See Also
 
 - [xAI Grok OAuth (SuperGrok / Premium+)](../../guides/xai-grok-oauth.md) — the OAuth setup guide
+- [xurl skill](../skills/bundled/social-media/social-media-xurl.md) — official X API CLI for authenticated account actions
 - [Web Search & Extract](web-search.md) — for general (non-X) web search
 - [Tools Reference](../../reference/tools-reference.md) — full tool catalog

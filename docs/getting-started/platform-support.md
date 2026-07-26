@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/platform-support"
 title: "Platform Support"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Platform Support
@@ -40,7 +40,7 @@ These platforms and distribution methods are **not** supported. We suggest that 
 
 - installs via the AUR (we might upstream patches if it helps out \<3)
 - macOS on x86 (Intel) processors
-- installs via `pypi` (e.g. `uv tool install hermes-agent`, `pip install hermse-agent`, etc.)
+- installs via `pypi` (e.g. `uv tool install hermes-agent`, `pip install hermes-agent`, etc.)
 - installs via `brew` (`brew install hermes-agent`)
 
 If you are using an unsupported distribution method, please read the [the installation guide](installation.md) to learn how to switch to a supported one.

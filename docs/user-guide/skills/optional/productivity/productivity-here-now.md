@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-here-now"
 title: "Here.Now"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Here.Now
 
-Publish static sites to {slug}.here.now and store private files in cloud Drives for agent-to-agent handoff.
+Publish sites to {slug}.here.now and store files in Drives.
 
 ## Skill metadata
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/tui"
 title: "TUI"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # TUI
@@ -134,7 +134,7 @@ Open it with any of these:
 - `/sessions new` to create a fresh live session immediately.
 - Click the `N live sessions` count in the status line.
 
-![Hermes TUI Session Orchestrator with one live session and a +new row](/img/docs/tui-session-orchestrator/session-orchestrator.png)
+![Hermes TUI Session Orchestrator with one live session and a +new row](https://hermes-agent.nousresearch.com/docs/img/docs/tui-session-orchestrator/session-orchestrator.png)
 
 Inside the switcher:
 

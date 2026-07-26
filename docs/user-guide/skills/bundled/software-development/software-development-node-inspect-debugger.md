@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-node-inspect-debugger"
 title: "Node Inspect Debugger"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Node Inspect Debugger
@@ -19,7 +19,7 @@ Debug Node.js via --inspect + Chrome DevTools Protocol CLI.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `debugging`, `nodejs`, `node-inspect`, `cdp`, `breakpoints`, `ui-tui` |
-| Related skills | [`systematic-debugging`](software-development-systematic-debugging.md), [`python-debugpy`](software-development-python-debugpy.md), `debugging-hermes-tui-commands` |
+| Related skills | [`systematic-debugging`](software-development-systematic-debugging.md), [`python-debugpy`](software-development-python-debugpy.md) |
 
 ## Reference: full SKILL.md
 

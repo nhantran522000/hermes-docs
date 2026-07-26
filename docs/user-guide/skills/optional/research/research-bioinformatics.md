@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-bioinformatics"
 title: "Bioinformatics"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Bioinformatics
 
-Gateway to 400+ bioinformatics skills from bioSkills and ClawBio. Covers genomics, transcriptomics, single-cell, variant calling, pharmacogenomics, metagenomics, structural biology, and more. Fetches domain-specific reference material on demand.
+Gateway to 400+ genomics and computational biology skills.
 
 ## Skill metadata
 

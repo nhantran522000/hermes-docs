@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/finance/finance-lbo-model"
 title: "Lbo Model"
-last_crawled: 2026-07-19
+last_crawled: 2026-07-26
 ---
 
 # Lbo Model
 
-Build leveraged buyout models in Excel — sources & uses, debt schedule, cash sweep, exit multiple, IRR/MOIC sensitivity. Pairs with excel-author. Use for PE screening, sponsor-case valuation, or illustrative LBO in a pitch.
+Build leveraged buyout workbooks with IRR/MOIC in Excel.
 
 ## Skill metadata
 

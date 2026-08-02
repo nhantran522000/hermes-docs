@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/secret-source-plugin"
 title: "Building a Secret Source Plugin"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Building a Secret Source Plugin
 
-Secret sources resolve provider credentials from an external secret manager (a vault, a password manager, an OS keystore, a custom script) into environment variables at process startup — after `~/.hermes/.env` loads, before Hermes reads credentials. Bitwarden and 1Password ship in-tree; **every other backend is a plugin**. This guide covers building one.
+Secret sources resolve provider credentials from an external secret manager (a vault, a password manager, an OS keystore, a custom script) into environment variables at process startup — after `~/.hermes/.env` loads, before Hermes reads credentials. Bitwarden, 1Password, and a generic command-helper source ship in-tree; **every other backend is a plugin**. This guide covers building one.
 
 tip
 

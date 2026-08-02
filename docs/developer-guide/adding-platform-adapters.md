@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/adding-platform-adapters"
 title: "Adding a Platform Adapter"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Adding a Platform Adapter
@@ -79,7 +79,7 @@ class MyPlatformAdapter(BasePlatformAdapter):
         extra = config.extra or {}
         self.token = os.getenv("MY_PLATFORM_TOKEN") or extra.get("token", "")
 
-    async def connect(self) -> bool:
+    async def connect(self, *, is_reconnect: bool = False) -> bool:
         # Connect to the platform API, start listeners
         self._mark_connected()
         return True
@@ -464,7 +464,7 @@ This checklist is for adding a platform directly to the Hermes core codebase —
 Add your platform to the `Platform` enum in `gateway/config.py`:
 
 ``` python
-class Platform(str, Enum):
+class Platform(Enum):
     # ... existing platforms ...
     NEWPLAT = "newplat"
 ```
@@ -490,7 +490,7 @@ class NewPlatAdapter(BasePlatformAdapter):
         extra = config.extra or {}
         self._api_key = extra.get("api_key") or os.getenv("NEWPLAT_API_KEY", "")
 
-    async def connect(self) -> bool:
+    async def connect(self, *, is_reconnect: bool = False) -> bool:
         # Set up connection, start polling/webhook
         self._mark_connected()
         return True
@@ -536,7 +536,7 @@ Three touchpoints:
 
 ### 4. Gateway Runner (`gateway/run.py`)
 
-Five touchpoints:
+Six touchpoints:
 
 1.  **`_create_adapter()`** — Add an `elif platform == Platform.NEWPLAT:` branch
 2.  **`_is_user_authorized()` allowed_users map** — `Platform.NEWPLAT: "NEWPLAT_ALLOWED_USERS"`
@@ -571,10 +571,10 @@ Five touchpoints:
 
 ### 9. Optional: Platform Hints
 
-**`agent/prompt_builder.py`** — If your platform has specific rendering limitations (no markdown, message length limits, etc.), add an entry to the `_PLATFORM_HINTS` dict. This injects platform-specific guidance into the system prompt:
+**`agent/prompt_builder.py`** — If your platform has specific rendering limitations (no markdown, message length limits, etc.), add an entry to the `PLATFORM_HINTS` dict. This injects platform-specific guidance into the system prompt:
 
 ``` python
-_PLATFORM_HINTS = {
+PLATFORM_HINTS = {
     # ...
     "newplat": (
         "You are chatting via NewPlat. It supports markdown formatting "
@@ -667,8 +667,9 @@ If the adapter holds a persistent connection with a unique credential, add a sco
 ``` python
 from gateway.status import acquire_scoped_lock, release_scoped_lock
 
-async def connect(self):
-    if not acquire_scoped_lock("newplat", self._token):
+async def connect(self, *, is_reconnect: bool = False):
+    acquired, _existing = acquire_scoped_lock("newplat", self._token)
+    if not acquired:
         logger.error("Token already in use by another profile")
         return False
     # ... connect
@@ -683,5 +684,5 @@ async def disconnect(self):
 |----|----|----|----|
 | `bluebubbles.py` | REST + webhook | Medium | Simple REST API integration |
 | `weixin.py` | Long-poll + CDN | High | Media handling, encryption |
-| `wecom_callback.py` | Callback/webhook | Medium | HTTP server, AES crypto, multi-app |
+| `plugins/platforms/wecom/callback_adapter.py` | Callback/webhook | Medium | HTTP server, AES crypto, multi-app |
 | `plugins/platforms/irc/adapter.py` | Long-poll + IRC protocol | High | Full-featured plugin adapter with scoped token lock |

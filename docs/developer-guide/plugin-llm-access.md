@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/plugin-llm-access"
 title: "Plugin LLM Access"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Plugin LLM Access
@@ -242,7 +242,8 @@ class PluginLlmCompleteResult:
     audit: Dict[str, Any]        # plugin_id, purpose, profile
 
 @dataclass
-class PluginLlmStructuredResult(PluginLlmCompleteResult):
+class PluginLlmStructuredResult:
+    # same fields as PluginLlmCompleteResult, plus:
     parsed: Optional[Any]        # JSON object when content_type == "json"
     content_type: str            # "json" or "text"
     # audit also carries schema_name when supplied

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-requesting-code-review"
 title: "Requesting Code Review"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Requesting Code Review

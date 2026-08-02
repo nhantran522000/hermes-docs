@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-notion"
 title: "Notion"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Notion
@@ -439,17 +439,17 @@ Standard CommonMark plus XML-like tags for Notion-specific blocks. Use **tabs** 
 
 ``` text
 <callout icon="🎯" color="blue_bg">
-   Ship the MVP by **Friday**.
+  Ship the MVP by **Friday**.
 </callout>
 
 <details color="gray">
 <summary>Toggle title</summary>
- Children indented one tab
+   Children indented one tab
 </details>
 
 <columns>
    <column>Left side</column>
-  <column>Right side</column>
+    <column>Right side</column>
 </columns>
 
 <table_of_contents color="gray"/>

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/cron-internals"
 title: "Cron Internals"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Cron Internals
@@ -107,7 +107,7 @@ In gateway mode, the cron **trigger** (the part that decides *when* a due job fi
 The active provider is chosen by the `cron.provider` config key:
 
 - **empty (default)** → the built-in `InProcessCronScheduler`, which runs the historical in-process loop calling `scheduler.tick()` every 60 seconds. This is byte-identical to the pre-provider behavior.
-- **a named provider** (e.g. `chronos`, a managed-cron provider for scale-to-zero deployments) → discovered from `plugins/cron/<name>/` or `$HERMES_HOME/plugins/<name>/`.
+- **a named provider** (e.g. `chronos`, a managed-cron provider for scale-to-zero deployments) → discovered from `plugins/cron_providers/<name>/` or `$HERMES_HOME/plugins/<name>/`.
 
 If a named provider is missing, fails to load, or reports `is_available() == False`, the resolver falls back to the built-in with a warning — **cron is never left without a trigger.** The built-in provider lives in core (`cron/scheduler_provider.py`), not in `plugins/`, so the fallback can't be accidentally removed.
 

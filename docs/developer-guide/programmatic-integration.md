@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/programmatic-integration"
 title: "Programmatic Integration"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Programmatic Integration
@@ -28,7 +28,8 @@ Full lifecycle, event bridge, and approval flow: [ACP Internals](acp-internals.m
 
 ``` bash
 hermes acp                  # serve ACP on stdio
-hermes acp --bootstrap      # print install snippet for an ACP-capable IDE
+hermes acp --check          # verify ACP dependencies and adapter imports
+hermes acp --setup          # interactive provider/model setup for ACP terminal auth
 ```
 
 ------------------------------------------------------------------------

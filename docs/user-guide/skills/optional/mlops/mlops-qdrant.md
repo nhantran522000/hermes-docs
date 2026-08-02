@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-qdrant"
 title: "Qdrant Vector Search"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Qdrant Vector Search

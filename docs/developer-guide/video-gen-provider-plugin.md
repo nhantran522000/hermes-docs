@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/video-gen-provider-plugin"
 title: "Building a Video Generation Provider Plugin"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Building a Video Generation Provider Plugin
 
-Video-gen provider plugins register a backend that services every `video_generate` tool call. Built-in providers (xAI, FAL) ship as plugins. Add a new one, or override a bundled one, by dropping a directory into `plugins/video_gen/<name>/`.
+Video-gen provider plugins register a backend that services every `video_generate` tool call. Built-in providers (xAI, FAL, DeepInfra) ship as plugins. Add a new one, or override a bundled one, by dropping a directory into `plugins/video_gen/<name>/`.
 
 tip
 

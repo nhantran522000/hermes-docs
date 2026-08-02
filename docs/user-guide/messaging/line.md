@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/line"
 title: "LINE Setup"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # LINE Setup
@@ -106,7 +106,7 @@ hermes gateway
 The agent log shows:
 
 ``` text
-LINE: webhook listening on 0.0.0.0:8646/line/webhook (public: https://my-tunnel.example.com)
+LINE: webhook listening on * (all interfaces, IPv4+IPv6):8646/line/webhook (public: https://my-tunnel.example.com)
 ```
 
 Add the bot as a friend from the LINE app (scan the QR in the channel's **Messaging API** tab) and send it a message.
@@ -162,7 +162,7 @@ Cron jobs with `deliver: line` route to `LINE_HOME_CHANNEL`. The adapter ships a
 |----|----|----|----|
 | `LINE_CHANNEL_ACCESS_TOKEN` | yes | — | Long-lived channel access token |
 | `LINE_CHANNEL_SECRET` | yes | — | Channel secret (HMAC-SHA256 webhook verification) |
-| `LINE_HOST` | no | `0.0.0.0` | Webhook bind host |
+| `LINE_HOST` | no | unset (dual-stack: all interfaces, IPv4+IPv6) | Webhook bind host |
 | `LINE_PORT` | no | `8646` | Webhook bind port |
 | `LINE_PUBLIC_URL` | for media | — | Public HTTPS base URL; required for image/voice/video sends |
 | `LINE_ALLOWED_USERS` | one of | — | Comma-separated user IDs (U-prefixed) |

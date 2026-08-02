@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/code-execution"
 title: "Code Execution (Programmatic Tool Calling)"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Code Execution (Programmatic Tool Calling)
@@ -274,4 +274,4 @@ Hermes always writes the script and the auto-generated `hermes_tools.py` RPC stu
 
 ## Platform Support
 
-Code execution requires Unix domain sockets and is available on **Linux and macOS only**. It is automatically disabled on Windows — the agent falls back to regular sequential tool calls.
+Code execution is available on **Linux, macOS, and Windows**. On Linux and macOS the RPC channel uses a Unix domain socket; on Windows, where `AF_UNIX` is unreliable, Hermes automatically falls back to a loopback TCP socket for the sandbox RPC transport. Remote terminal backends (Docker/SSH/Modal/etc.) use a file-based RPC transport instead and additionally require Python 3 inside the backend.

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram"
 title: "Telegram Setup"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Telegram Setup

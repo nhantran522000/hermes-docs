@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/microsoft-graph-app-registration"
 title: "Register a Microsoft Graph Application"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Register a Microsoft Graph Application

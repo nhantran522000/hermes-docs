@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/wecom-callback"
 title: "WeCom Callback (Self-Built App)"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # WeCom Callback (Self-Built App)
@@ -59,7 +59,7 @@ WECOM_CALLBACK_TOKEN=your-callback-token
 WECOM_CALLBACK_ENCODING_AES_KEY=your-43-char-aes-key
 
 # Optional
-WECOM_CALLBACK_HOST=0.0.0.0
+# WECOM_CALLBACK_HOST=  # optional pin; unset = dual-stack (all interfaces, IPv4+IPv6)
 WECOM_CALLBACK_PORT=8645
 WECOM_CALLBACK_ALLOWED_USERS=user1,user2
 ```
@@ -85,7 +85,7 @@ Set these in `config.yaml` under `platforms.wecom_callback.extra`, or use enviro
 | `agent_id` | — | Agent ID of the self-built app (required) |
 | `token` | — | Callback verification token (required) |
 | `encoding_aes_key` | — | 43-character AES key for callback encryption (required) |
-| `host` | `0.0.0.0` | Bind address for the HTTP callback server |
+| `host` | unset (dual-stack: all interfaces, IPv4+IPv6) | Bind address for the HTTP callback server |
 | `port` | `8645` | Port for the HTTP callback server |
 | `path` | `/wecom/callback` | URL path for the callback endpoint |
 
@@ -165,4 +165,4 @@ The crypto implementation is compatible with Tencent's official WXBizMsgCrypt SD
 2.  The URL in the admin console is HTTPS (WeCom rejects plain HTTP).
 3.  From outside your network, `curl -i https://<your-domain>/wecom/callback` returns something other than a timeout (a 4xx without query params is fine — it just means the listener is reachable).
 
-**Port not reachable / listener not bound.** Check `hermes gateway run` logs for the bound host/port. If the adapter bound to `127.0.0.1` you must front it with a reverse proxy or tunnel — WeCom's servers can't reach loopback. Set `extra.host: 0.0.0.0` in `config.yaml` (plus `allowed_source_cidrs` if exposing directly) or keep loopback and use a tunnel such as Cloudflare Tunnel / nginx.
+**Port not reachable / listener not bound.** Check `hermes gateway run` logs for the bound host/port. If the adapter bound to `127.0.0.1` you must front it with a reverse proxy or tunnel — WeCom's servers can't reach loopback. Leave `extra.host` unset so the default dual-stack bind (all interfaces, IPv4+IPv6) applies, or pin an interface in `config.yaml` (plus `allowed_source_cidrs` if exposing directly) or keep loopback and use a tunnel such as Cloudflare Tunnel / nginx.

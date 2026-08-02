@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/sessions"
 title: "Sessions"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Sessions
@@ -119,6 +119,25 @@ hermes chat --resume 20250305_091523_a1b2c3d4
 ```
 
 Session IDs are shown when you exit a CLI session, and can be found with `hermes sessions list`.
+
+### Resume Restores the Working Directory
+
+Resuming a CLI session also `cd`s back into the session's recorded working directory (its git repo root or project dir), so the conversation picks up in the workspace it belonged to. If you'd rather stay where you are, pass `--no-restore-cwd`:
+
+``` bash
+hermes --resume 20250305_091523_a1b2c3 --no-restore-cwd
+```
+
+A `↪ restored workspace dir: …` line confirms the switch. Restore failures never break the resume itself.
+
+### Filtering Sessions by Workspace
+
+`hermes sessions list` accepts `--workspace <needle>` to show only sessions whose workspace key (git repo root, else cwd) matches — by path substring or exact directory basename:
+
+``` bash
+hermes sessions list --workspace my-project
+hermes sessions list --workspace ~/code/hermes-agent
+```
 
 ### Conversation Recap on Resume
 
@@ -405,7 +424,7 @@ If the title is already in use by another session, an error is shown.
 ### Prune Old Sessions
 
 ``` bash
-# Delete ended sessions older than 90 days (default)
+# Delete ended sessions inactive for 90 days (default)
 hermes sessions prune
 
 # Custom age threshold — bare numbers are days
@@ -444,7 +463,7 @@ hermes sessions prune --newer-than 5h --dry-run
 hermes sessions prune --older-than 30 --yes
 ```
 
-Time values (`--older-than`, `--newer-than`, `--before`, `--after`) accept a duration (`5h`, `30m`, `2d`, `1w`), a bare number of days, or an ISO timestamp (`2026-07-05`, `2026-07-05 14:30`). `--older-than`/`--before` set the upper bound; `--newer-than`/`--after` set the lower bound. Combine both for a window.
+Time values (`--older-than`, `--newer-than`, `--before`, `--after`) accept a duration (`5h`, `30m`, `2d`, `1w`), a bare number of days, or an ISO timestamp (`2026-07-05`, `2026-07-05 14:30`). `--older-than`/`--before` set the upper bound; `--newer-than`/`--after` set the lower bound. The `--older-than`/`--newer-than` pair uses latest message activity (falling back to session start for empty sessions); `--before`/`--after` explicitly uses session start time. Combine either pair for a window.
 
 Attribute filters: `--source` (platform, exact), `--title` / `--model` / `--branch` (case-insensitive substring), `--provider` (billing provider, exact), `--end-reason`, `--user`, `--chat-id`, `--chat-type` (exact), `--cwd` (path prefix), plus numeric bounds `--min/--max-messages`, `--min/--max-tokens` (input+output), `--min/--max-cost` (USD, actual falling back to estimated), and `--min/--max-tool-calls`. Using any filter disables the implicit 90-day default, so `hermes sessions prune --source cron` or `--model gpt-4o` matches all ages — add a time flag to narrow it. Only a completely bare `hermes sessions prune` keeps the 90-day cutoff. Every non-`--yes` run shows the match count plus the oldest and newest matching session before asking for confirmation.
 
@@ -610,13 +629,14 @@ Sessions with **active background processes** are never auto-reset, regardless o
 |----|----|----|
 | SQLite database | `~/.hermes/state.db` | All session metadata + messages with FTS5 |
 | Gateway messages | `~/.hermes/state.db` | SQLite — canonical store for all session messages |
-| Gateway routing index | `~/.hermes/sessions/sessions.json` | Maps session keys to active session IDs (origin metadata, expiry flags) |
+| Gateway routing index | `gateway_routing` table in `~/.hermes/state.db` | Maps session keys to active session IDs (origin metadata, expiry flags) |
+| Legacy routing mirror | `~/.hermes/sessions/sessions.json` | Backward-compat mirror of the routing index, written when `gateway.write_sessions_json: true` (the default) |
 
 The SQLite database uses WAL mode for concurrent readers and a single writer, which suits the gateway's multi-platform architecture well.
 
 `sessions.json` is not the session list
 
-`~/.hermes/sessions/sessions.json` is the **gateway routing index** — it maps messaging session keys (`agent:main:<platform>:...`) to active session IDs. It only ever contains gateway/messaging entries, so if you run a messaging platform you'll see only those (e.g. `agent:main:whatsapp:dm:...`).
+The gateway routing index lives in the `gateway_routing` table inside `state.db`; `~/.hermes/sessions/sessions.json` is a **legacy mirror** of it, kept for backward compatibility (disable with `gateway.write_sessions_json: false`). It maps messaging session keys (`agent:main:<platform>:...`) to active session IDs. It only ever contains gateway/messaging entries, so if you run a messaging platform you'll see only those (e.g. `agent:main:whatsapp:dm:...`).
 
 This is **expected** and does **not** mean your CLI sessions are missing. `hermes sessions list`, `/sessions`, and the dashboard all read `state.db`, which holds **every** session (CLI, TUI, and gateway). The `/save` snapshots under `~/.hermes/sessions/saved/*.json` are convenience exports, not the index.
 
@@ -640,8 +660,8 @@ Key tables in `state.db`:
 
 - Gateway sessions auto-reset based on the configured reset policy
 - Before reset, the agent saves memories and skills from the expiring session
-- Opt-in auto-pruning: when `sessions.auto_prune` is `true`, ended sessions older than `sessions.retention_days` (default 90) are pruned at CLI/gateway startup
-- After a prune that actually removed rows, `state.db` is `VACUUM`ed to reclaim disk space (SQLite does not shrink the file on plain DELETE)
+- Opt-in auto-pruning: when `sessions.auto_prune` is `true`, ended sessions inactive for `sessions.retention_days` (default 90) are pruned at CLI/gateway startup
+- After a prune that actually removed rows, `state.db` is `VACUUM`ed to reclaim disk space when at least `sessions.min_vacuum_interval_days` (default 30) have elapsed since the last successful `VACUUM` (SQLite does not shrink the file on plain DELETE)
 - Pruning runs at most once per `sessions.min_interval_hours` (default 24); the last-run timestamp is tracked inside `state.db` itself so it's shared across every Hermes process in the same `HERMES_HOME`
 
 Default is **off** — session history is valuable for `session_search` recall, and silently deleting it could surprise users. Enable in `~/.hermes/config.yaml`:
@@ -649,12 +669,13 @@ Default is **off** — session history is valuable for `session_search` recall, 
 ``` yaml
 sessions:
   auto_prune: true          # opt in — default is false
-  retention_days: 90        # keep ended sessions this many days
+  retention_days: 90        # keep ended sessions active within this window
   vacuum_after_prune: true  # reclaim disk space after a pruning sweep
+  min_vacuum_interval_days: 30 # don't rewrite the DB more often than this
   min_interval_hours: 24    # don't re-run the sweep more often than this
 ```
 
-Active sessions are never auto-pruned, regardless of age.
+Active sessions are never auto-pruned, regardless of age. Ended sessions are aged from their latest message, so a long-lived conversation used recently is not deleted merely because it began before the retention window.
 
 ### Manual Cleanup
 

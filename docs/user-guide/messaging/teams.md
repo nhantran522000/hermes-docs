@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/teams"
 title: "Microsoft Teams Setup"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Microsoft Teams Setup
@@ -117,7 +117,7 @@ docker logs -f hermes
 Look for:
 
 ``` text
-[teams] Webhook server listening on 0.0.0.0:3978/api/messages
+[teams] Webhook server listening on * (all interfaces, IPv4+IPv6):3978/api/messages
 ```
 
 ------------------------------------------------------------------------

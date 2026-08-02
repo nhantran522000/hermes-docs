@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/contributing"
 title: "Contributing"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Contributing
@@ -36,7 +36,7 @@ We value contributions in this order:
 | **Git** | With the `git-lfs` extension installed |
 | **Python 3.11–3.13** | uv will install it if missing |
 | **uv** | Fast Python package manager ([install](https://docs.astral.sh/uv/)) |
-| **Node.js 20+** | Optional — needed for browser tools and WhatsApp bridge (matches root `package.json` engines) |
+| **Node.js 26+** | Optional — needed for browser tools and WhatsApp bridge (matches root `package.json` engines) |
 
 ### Install with the standard installer
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/skills-catalog"
 title: "Bundled Skills Catalog"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Bundled Skills Catalog
@@ -137,6 +137,7 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 |----|----|----|
 | [`dogfood`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-dogfood) | Exploratory QA of web apps: find bugs, evidence, reports. | `software-development/dogfood` |
 | [`hermes-agent-skill-authoring`](../user-guide/skills/bundled/software-development/software-development-hermes-agent-skill-authoring.md) | Author in-repo SKILL.md files: frontmatter and structure. | `software-development/hermes-agent-skill-authoring` |
+| [`inspecting-hermes-desktop-dom`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-inspecting-hermes-desktop-dom) | Read the live Hermes desktop DOM/CSS over CDP. | `software-development/inspecting-hermes-desktop-dom` |
 | [`node-inspect-debugger`](../user-guide/skills/bundled/software-development/software-development-node-inspect-debugger.md) | Debug Node.js via --inspect + Chrome DevTools Protocol CLI. | `software-development/node-inspect-debugger` |
 | [`plan`](../user-guide/skills/bundled/software-development/software-development-plan.md) | Write a markdown plan to .hermes/plans/; no execution. | `software-development/plan` |
 | [`python-debugpy`](../user-guide/skills/bundled/software-development/software-development-python-debugpy.md) | Debug Python: pdb REPL + debugpy remote (DAP). | `software-development/python-debugpy` |

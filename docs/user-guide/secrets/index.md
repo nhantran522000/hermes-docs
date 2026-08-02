@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/secrets"
 title: "Secrets"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Secrets
@@ -36,7 +36,7 @@ Every credential injected by a source is labelled with its origin — setup flow
 
 ## Profiles and shared vaults
 
-Two orchestrator-level knobs make one shared vault safe across [profiles](https://hermes-agent.nousresearch.com/docs/user-guide/features/profiles):
+Two orchestrator-level knobs make one shared vault safe across [profiles](../profiles.md):
 
 - **`secrets.preserve_existing`** — a list of env var names whose existing `.env` / shell value always wins, even against a source with `override_existing: true`. Use it for per-profile platform secrets (e.g. `FEISHU_APP_SECRET`) that intentionally differ across profiles while everything else rotates centrally:
 

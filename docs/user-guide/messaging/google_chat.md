@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/google_chat"
 title: "Google Chat Setup"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Google Chat Setup
@@ -140,10 +140,10 @@ GOOGLE_CHAT_MAX_BYTES=16777216                  # 16 MiB — cap on in-flight me
 
 The project ID also falls back to `GOOGLE_CLOUD_PROJECT`, and the SA path falls back to `GOOGLE_APPLICATION_CREDENTIALS` — use whichever convention you prefer.
 
-Install the dependencies the Google Chat adapter needs (no Hermes extra is currently published — install them directly):
+Install the Google Chat adapter dependencies through its maintained installer. It applies the same pinned security floors used by the runtime checks:
 
 ``` bash
-pip install google-cloud-pubsub google-api-python-client google-auth google-auth-oauthlib
+python -m plugins.platforms.google_chat.oauth --install-deps
 ```
 
 Start the gateway:
@@ -191,6 +191,10 @@ The agent's system prompt includes a Google Chat–specific hint so it knows the
 Message size limit: 4000 characters per message. Longer agent responses are automatically split across multiple messages.
 
 Thread support: when a user replies inside a thread, Hermes detects the `thread.name` and posts its reply in the same thread, so each thread gets a separate Hermes session.
+
+### Clarify questions as interactive cards
+
+When the agent asks a multiple-choice clarify question, the adapter renders it as a native **Card v2** with one button per choice plus an **"Other / type answer"** button, instead of a plain numbered text list. Clicking a button answers the question directly (`CARD_CLICKED` events route the choice back into the waiting session). If the card fails to send, or the question has no fixed choices, the adapter falls back to the standard text clarify. No configuration needed.
 
 ------------------------------------------------------------------------
 

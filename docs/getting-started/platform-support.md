@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/platform-support"
 title: "Platform Support"
-last_crawled: 2026-07-26
+last_crawled: 2026-08-02
 ---
 
 # Platform Support

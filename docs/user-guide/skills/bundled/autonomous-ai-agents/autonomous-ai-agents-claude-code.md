@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-claude-code"
 title: "Claude Code"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Claude Code

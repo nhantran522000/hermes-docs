@@ -1,10 +1,10 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-accelerate"
-title: "Huggingface Accelerate"
-last_crawled: 2026-08-02
+title: "Accelerate"
+last_crawled: 2026-08-09
 ---
 
-# Huggingface Accelerate
+# Accelerate
 
 Run PyTorch training across GPUs with minimal changes.
 

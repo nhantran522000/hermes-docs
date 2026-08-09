@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/github/github-github-pr-workflow"
 title: "Github Pr Workflow"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Github Pr Workflow

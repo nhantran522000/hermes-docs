@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-node-inspect-debugger"
 title: "Node Inspect Debugger"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Node Inspect Debugger
@@ -199,7 +199,7 @@ The TUI is built Ink + tsx. Two common scenarios:
 `ui-tui/package.json` has `npm run dev` (tsx --watch). Add `--inspect-brk` by running tsx directly:
 
 ``` bash
-cd /home/bb/hermes-agent/ui-tui
+cd <hermes-agent-repo>/ui-tui
 npm run build    # produce dist/ once so transpile isn't needed on first load
 node --inspect-brk dist/entry.js
 # In another terminal:
@@ -243,7 +243,7 @@ Those are Python, not Node — use the `python-debugpy` skill for them. Only Nod
 ## Running Vitest Tests Under the Debugger
 
 ``` bash
-cd /home/bb/hermes-agent/ui-tui
+cd <hermes-agent-repo>/ui-tui
 # Run a single test file paused on entry
 node --inspect-brk ./node_modules/vitest/vitest.mjs run --no-file-parallelism src/app/foo.test.tsx
 ```

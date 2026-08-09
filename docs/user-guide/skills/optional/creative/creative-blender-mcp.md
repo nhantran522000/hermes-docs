@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-blender-mcp"
 title: "Blender Mcp"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Blender Mcp
@@ -16,6 +16,7 @@ Drive Blender via the catalog blender MCP, with bpy recipes.
 | Path | `optional-skills/creative/blender-mcp` |
 | Version | `2.1.0` |
 | Author | alireza78a + kshitijk4poor + Hermes Agent |
+| License | MIT |
 | Platforms | linux, macos, windows |
 
 ## Reference: full SKILL.md

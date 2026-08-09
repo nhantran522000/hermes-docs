@@ -1,10 +1,10 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-peft"
-title: "Peft Fine Tuning"
-last_crawled: 2026-08-02
+title: "Peft"
+last_crawled: 2026-08-09
 ---
 
-# Peft Fine Tuning
+# Peft
 
 Fine-tune large LLMs with LoRA on limited GPU memory.
 

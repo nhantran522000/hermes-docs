@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/web-dashboard"
 title: "Web Dashboard"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Web Dashboard
@@ -418,7 +418,7 @@ Returns metadata for a single session.
 
 ### GET /api/sessions/{session_id}/messages
 
-Returns the full message history for a session, including tool calls and timestamps.
+Returns a bounded page of message history, including tool calls and timestamps. By default it returns the latest 500 messages in chronological order. Use `limit` (maximum 500), `offset`, and `order=oldest|latest` for explicit pagination.
 
 ### GET /api/sessions/search
 

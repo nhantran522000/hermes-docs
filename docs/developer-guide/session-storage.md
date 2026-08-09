@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/session-storage"
 title: "Session Storage"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Session Storage

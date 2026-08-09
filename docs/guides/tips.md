@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/tips"
 title: "Tips & Best Practices"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Tips & Best Practices
@@ -153,7 +153,7 @@ Use `/model` to switch models mid-session. Use a frontier model (Claude Sonnet/O
 
 tip
 
-Run `/usage` periodically to see your token consumption. Run `/insights` for a broader view of usage patterns over the last 30 days.
+Run `/usage` periodically to see your token consumption. Run `/insights` for a broader view of usage patterns over the last 30 days. To see what your *fixed* per-message cost is before any conversation — system prompt, skills index, memory, tool schemas — run [`hermes prompt-size`](../reference/cli-commands.md#hermes-prompt-size) (works offline).
 
 ## Messaging Tips
 

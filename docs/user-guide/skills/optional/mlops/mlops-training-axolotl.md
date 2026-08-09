@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-training-axolotl"
 title: "Axolotl"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Axolotl
@@ -33,7 +33,7 @@ The following is the complete skill definition that Hermes loads when this skill
 
 Expert guidance for fine-tuning LLMs with Axolotl — YAML configs, 100+ models, LoRA/QLoRA, DPO/KTO/ORPO/GRPO, multimodal support.
 
-Comprehensive assistance with axolotl development, generated from official documentation.
+Assistance with axolotl development, generated from official documentation.
 
 ## When to Use This Skill
 

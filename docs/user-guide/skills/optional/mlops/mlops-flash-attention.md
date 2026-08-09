@@ -1,10 +1,10 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-flash-attention"
-title: "Optimizing Attention Flash"
-last_crawled: 2026-08-02
+title: "Flash Attention"
+last_crawled: 2026-08-09
 ---
 
-# Optimizing Attention Flash
+# Flash Attention
 
 Speed up long-sequence transformer training and inference.
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/gaming/gaming-minecraft-modpack-server"
 title: "Minecraft Modpack Server"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Minecraft Modpack Server
@@ -14,6 +14,9 @@ Host modded Minecraft servers (CurseForge, Modrinth).
 |----|----|
 | Source | Optional — install with `hermes skills install official/gaming/minecraft-modpack-server` |
 | Path | `optional-skills/gaming/minecraft-modpack-server` |
+| Version | `1.0.0` |
+| Author | Teknium (teknium1), Hermes Agent |
+| License | MIT |
 | Platforms | linux, macos |
 
 ## Reference: full SKILL.md

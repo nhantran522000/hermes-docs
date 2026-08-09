@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-osint-investigation"
 title: "Osint Investigation"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Osint Investigation
@@ -16,6 +16,7 @@ Follow the money via public records and sanctions data.
 | Path | `optional-skills/research/osint-investigation` |
 | Version | `0.1.0` |
 | Author | Hermes Agent (adapted from ShinMegamiBoson/OpenPlanter, MIT) |
+| License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `osint`, `investigation`, `public-records`, `sec`, `sanctions`, `corporate-registry`, `property`, `courts`, `due-diligence`, `journalism` |
 | Related skills | [`domain-intel`](research-domain-intel.md), [`arxiv`](../../bundled/research/research-arxiv.md) |

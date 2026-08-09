@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-training-unsloth"
 title: "Unsloth"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Unsloth
@@ -29,7 +29,7 @@ The following is the complete skill definition that Hermes loads when this skill
 
 # Unsloth Skill
 
-Comprehensive assistance with unsloth development, generated from official documentation.
+Assistance with unsloth development, generated from official documentation.
 
 ## When to Use This Skill
 
@@ -49,7 +49,7 @@ This skill should be triggered when:
 
 ## Reference Files
 
-This skill includes comprehensive documentation in `references/`:
+This skill includes full documentation in `references/`:
 
 - **llms-txt.md** - Llms-Txt documentation
 

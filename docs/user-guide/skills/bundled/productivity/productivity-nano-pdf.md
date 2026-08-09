@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-nano-pdf"
 title: "Nano Pdf"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Nano Pdf

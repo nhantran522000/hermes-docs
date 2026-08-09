@@ -1,10 +1,10 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-slime"
-title: "Slime Rl Training"
-last_crawled: 2026-08-02
+title: "Slime"
+last_crawled: 2026-08-09
 ---
 
-# Slime Rl Training
+# Slime
 
 RL post-training for LLMs with Megatron and SGLang.
 

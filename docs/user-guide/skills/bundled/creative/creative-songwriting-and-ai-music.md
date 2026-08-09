@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-songwriting-and-ai-music"
 title: "Songwriting And Ai Music"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Songwriting And Ai Music
@@ -14,6 +14,9 @@ Songwriting craft and Suno AI music prompts.
 |-----------|--------------------------------------------|
 | Source    | Bundled (installed by default)             |
 | Path      | `skills/creative/songwriting-and-ai-music` |
+| Version   | `1.0.0`                                    |
+| Author    | Teknium (teknium1), Hermes Agent           |
+| License   | MIT                                        |
 | Platforms | linux, macos, windows                      |
 
 ## Reference: full SKILL.md

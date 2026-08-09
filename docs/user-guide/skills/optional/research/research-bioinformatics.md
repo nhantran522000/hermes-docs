@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-bioinformatics"
 title: "Bioinformatics"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Bioinformatics
@@ -15,6 +15,8 @@ Gateway to 400+ genomics and computational biology skills.
 | Source | Optional — install with `hermes skills install official/research/bioinformatics` |
 | Path | `optional-skills/research/bioinformatics` |
 | Version | `1.0.0` |
+| Author | Teknium (teknium1), Hermes Agent |
+| License | MIT |
 | Platforms | linux, macos |
 | Tags | `bioinformatics`, `genomics`, `sequencing`, `biology`, `research`, `science` |
 

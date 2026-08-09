@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-systematic-debugging"
 title: "Systematic Debugging"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Systematic Debugging

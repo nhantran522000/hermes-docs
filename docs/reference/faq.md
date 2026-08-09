@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/faq"
 title: "FAQ & Troubleshooting"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # FAQ & Troubleshooting
@@ -218,6 +218,21 @@ curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 ------------------------------------------------------------------------
 
 ### Provider & Model Issues
+
+#### The agent says "Hermes policy" or "Hermes guardrails" refused my request
+
+A model cannot reliably identify why it refused a request. If the refusal appears only in the assistant's prose, its claim that a hidden Hermes runtime policy caused it may be a hallucinated explanation or a restriction applied by the selected model or provider.
+
+Hermes enforcement is explicit: a blocked tool action returns a tool error naming the denied command or path, and an approval-required action shows an approval prompt. Hermes does not silently turn those execution controls into a general content-refusal layer. Provider-level controls can still apply when configured, such as Amazon Bedrock Guardrails.
+
+To isolate the source:
+
+1.  Run `/status` to confirm the active model and provider.
+2.  Check whether the refusal includes an actual Hermes tool error or approval prompt. If it is prose only, do not treat the model's attribution as runtime evidence.
+3.  Retry in a fresh session with another configured model or provider. A refusal that changes with the model is model/provider behavior, not a Hermes execution control.
+4.  If an explicit tool error appears, use its exact text when reporting the problem.
+
+See [Security](../user-guide/security.md) for Hermes' documented execution controls and [Providers](../integrations/providers.md) for provider configuration.
 
 #### `/model` only shows one provider / can't switch providers
 
@@ -522,12 +537,18 @@ You can verify the plist has the correct PATH:
 **Solution:**
 
 ``` bash
+# See exactly what the fixed prompt costs — breakdown by block
+# (system prompt, skills index, memory, tool schemas). Runs offline.
+hermes prompt-size
+
 # Compress the conversation to reduce tokens
 /compress
 
 # Check session token usage
 /usage
 ```
+
+If the baseline looks high before you've typed anything, that's the fixed prompt budget — the system prompt plus tool schemas sent on every call. Run [`hermes prompt-size`](cli-commands.md#hermes-prompt-size) to measure it, then trim: disable toolsets you don't use (`hermes tools`) and uninstall or disable skills you don't need (`hermes skills`).
 
 tip
 
@@ -636,6 +657,8 @@ No. Each messaging platform (Telegram, Discord, etc.) requires exclusive access 
 ### Do profiles share memory or sessions?
 
 No. Each profile has its own memory store, session database, and skills directory. They are completely isolated. If you want to start a new profile with existing memories and sessions, use `hermes profile create newname --clone-all` to copy everything from the current profile, or add `--clone-from <profile>` to copy from a specific source profile.
+
+This isolation is also the reason to never run two agents against the *same* profile or Hermes home: both write memory automatically and each loads the other's writes at session start, so their stored state degrades with every session. One agent per profile; for genuinely shared memory across agents, use an [external memory provider](../user-guide/features/memory-providers.md).
 
 ### What happens when I run `hermes update`?
 

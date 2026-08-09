@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/health/health-fitness-nutrition"
 title: "Fitness Nutrition"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Fitness Nutrition
 
-Gym workout planner and nutrition tracker. Search 690+ exercises by muscle, equipment, or category via wger. Look up macros and calories for 380,000+ foods via USDA FoodData Central. Compute BMI, TDEE, one-rep max, macro splits, and body fat — pure Python, no pip installs. Built for anyone chasing gains, cutting weight, or just trying to eat better.
+Workout planning, macros, and body metrics via wger/USDA.
 
 ## Skill metadata
 
@@ -15,6 +15,7 @@ Gym workout planner and nutrition tracker. Search 690+ exercises by muscle, equi
 | Source | Optional — install with `hermes skills install official/health/fitness-nutrition` |
 | Path | `optional-skills/health/fitness-nutrition` |
 | Version | `1.0.0` |
+| Author | Hailey Marshall (haileymarshall), Hermes Agent |
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `health`, `fitness`, `nutrition`, `gym`, `workout`, `diet`, `exercise` |

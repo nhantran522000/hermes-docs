@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-ocr-and-documents"
 title: "Ocr And Documents"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Ocr And Documents
@@ -30,6 +30,8 @@ The following is the complete skill definition that Hermes loads when this skill
 # PDF & Document Extraction
 
 For DOCX: see the `docx` skill (create/edit) or use `python-docx` for structured reads. For PPTX: see the `powerpoint` skill (full create/read/edit support). For PDF manipulation (merge, split, forms, watermarks, creation): see the `pdf` skill. This skill covers **text extraction from PDFs and scanned documents**.
+
+> **Coming from a `read_file` EXTRACTION COVERAGE WARNING?** `read_file` auto-converts local PDFs but reads the text layer only; the warning footer lists the pages that yielded no text (scanned images). For a handful of pages, render + vision is fastest: `pdftoppm -jpeg -r 150 -f N -l N file.pdf /tmp/page` then `vision_analyze` each image. For bulk OCR of many pages, use marker-pdf below (Step 2).
 
 ## Step 1: Remote URL Available?
 

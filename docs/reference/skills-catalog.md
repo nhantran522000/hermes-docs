@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/skills-catalog"
 title: "Bundled Skills Catalog"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Bundled Skills Catalog
@@ -27,7 +27,7 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 |----|----|----|
 | [`claude-code`](../user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-claude-code.md) | Delegate coding to Claude Code CLI (features, PRs). | `autonomous-ai-agents/claude-code` |
 | [`codex`](../user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-codex.md) | Delegate coding to OpenAI Codex CLI (features, PRs). | `autonomous-ai-agents/codex` |
-| [`computer-use`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-computer-use) | Drive the user's desktop in the background — clicking, typing, scrolling, dragging — without stealing the cursor, keyboard focus, or switching virtual desktops / Spaces. Cross-platform: macOS, Windows, Linux. Works with any tool-capable... | `autonomous-ai-agents/computer-use` |
+| [`computer-use`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-computer-use) | Drive the desktop in the background without stealing focus. | `autonomous-ai-agents/computer-use` |
 | [`hermes-agent`](../user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent.md) | Use, configure, theme, extend, and orchestrate Hermes Agent. | `autonomous-ai-agents/hermes-agent` |
 | [`opencode`](../user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-opencode.md) | Delegate coding to OpenCode CLI (features, PR review). | `autonomous-ai-agents/opencode` |
 
@@ -56,6 +56,7 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 
 | Skill | Description | Path |
 |----|----|----|
+| [`email-inbox-triage`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/email/email-email-inbox-triage) | Triage an inbox: prioritize threads, draft replies safely. | `email/email-inbox-triage` |
 | [`himalaya`](../user-guide/skills/bundled/email/email-himalaya.md) | Himalaya CLI: IMAP/SMTP email from terminal. | `email/himalaya` |
 
 ## github
@@ -65,6 +66,7 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 | [`codebase-inspection`](../user-guide/skills/bundled/github/github-codebase-inspection.md) | Inspect codebases w/ pygount: LOC, languages, ratios. | `github/codebase-inspection` |
 | [`github-auth`](../user-guide/skills/bundled/github/github-github-auth.md) | GitHub auth setup: HTTPS tokens, SSH keys, gh CLI login. | `github/github-auth` |
 | [`github-code-review`](../user-guide/skills/bundled/github/github-github-code-review.md) | Review PRs: diffs, inline comments via gh or REST. | `github/github-code-review` |
+| [`github-issue-to-pr`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/github/github-github-issue-to-pr) | Carry a GitHub issue to a verified PR with honest CI state. | `github/github-issue-to-pr` |
 | [`github-issues`](../user-guide/skills/bundled/github/github-github-issues.md) | Create, triage, label, assign GitHub issues via gh or REST. | `github/github-issues` |
 | [`github-pr-workflow`](../user-guide/skills/bundled/github/github-github-pr-workflow.md) | GitHub PR lifecycle: branch, commit, open, CI, merge. | `github/github-pr-workflow` |
 | [`github-repo-management`](../user-guide/skills/bundled/github/github-github-repo-management.md) | Clone/create/fork repos; manage remotes, releases. | `github/github-repo-management` |
@@ -98,16 +100,20 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 | Skill | Description | Path |
 |----|----|----|
 | [`airtable`](../user-guide/skills/bundled/productivity/productivity-airtable.md) | Airtable REST API via curl. Records CRUD, filters, upserts. | `productivity/airtable` |
-| [`docx`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-docx) | Create, read, edit Word .docx documents and templates. | `productivity/docx` |
+| [`document-to-action-items`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-document-to-action-items) | Extract cited obligations, deadlines, tasks from documents. | `productivity/document-to-action-items` |
+| [`docx`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-docx) | Create, read, edit, template, and review Word .docx files. | `productivity/docx` |
 | [`google-workspace`](../user-guide/skills/bundled/productivity/productivity-google-workspace.md) | Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python. | `productivity/google-workspace` |
 | [`maps`](../user-guide/skills/bundled/productivity/productivity-maps.md) | Geocode, POIs, routes, timezones via OpenStreetMap/OSRM. | `productivity/maps` |
+| [`meeting-action-items`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-meeting-action-items) | Turn meeting notes into cited decisions, owners, tickets. | `productivity/meeting-action-items` |
 | [`nano-pdf`](../user-guide/skills/bundled/productivity/productivity-nano-pdf.md) | Edit text in existing PDFs via natural-language prompts. | `productivity/nano-pdf` |
 | [`notion`](../user-guide/skills/bundled/productivity/productivity-notion.md) | Notion API + ntn CLI: pages, databases, markdown, Workers. | `productivity/notion` |
 | [`ocr-and-documents`](../user-guide/skills/bundled/productivity/productivity-ocr-and-documents.md) | Extract text from PDFs/scans (pymupdf, marker-pdf). | `productivity/ocr-and-documents` |
-| [`pdf`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-pdf) | Create, merge, split, fill, and secure PDF files. | `productivity/pdf` |
-| [`powerpoint`](../user-guide/skills/bundled/productivity/productivity-powerpoint.md) | Create, read, edit .pptx decks, slides, notes, templates. | `productivity/powerpoint` |
+| [`pdf`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-pdf) | Create, read, merge, fill, and secure PDF files. | `productivity/pdf` |
+| [`powerpoint`](../user-guide/skills/bundled/productivity/productivity-powerpoint.md) | Create, read, edit .pptx decks with python-pptx. | `productivity/powerpoint` |
+| [`product-price-monitor`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-product-price-monitor) | Watch product, flight, or listing prices; alert on target. | `productivity/product-price-monitor` |
 | [`teams-meeting-pipeline`](../user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline.md) | Teams meeting summaries, job replay, Graph subscriptions. | `productivity/teams-meeting-pipeline` |
-| [`xlsx`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-xlsx) | Create, read, edit Excel .xlsx spreadsheets and CSVs. | `productivity/xlsx` |
+| [`weekly-review-planning`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-weekly-review-planning) | Weekly reset: commitments, stalled work, next-week plan. | `productivity/weekly-review-planning` |
+| [`xlsx`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-xlsx) | Create, read, edit Excel .xlsx workbooks and CSVs. | `productivity/xlsx` |
 
 ## research
 
@@ -115,8 +121,9 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 |----|----|----|
 | [`arxiv`](../user-guide/skills/bundled/research/research-arxiv.md) | Search arXiv papers by keyword, author, category, or ID. | `research/arxiv` |
 | [`blogwatcher`](../user-guide/skills/bundled/research/research-blogwatcher.md) | Monitor blogs and RSS/Atom feeds via blogwatcher-cli tool. | `research/blogwatcher` |
+| [`competitor-news-monitor`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/research/research-competitor-news-monitor) | Watch named companies for material news; cited digests. | `research/competitor-news-monitor` |
+| [`grounded-citations`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/research/research-grounded-citations) | Ground answers and documents in cited, verifiable sources. | `research/grounded-citations` |
 | [`llm-wiki`](../user-guide/skills/bundled/research/research-llm-wiki.md) | Karpathy's LLM Wiki: build/query interlinked markdown KB. | `research/llm-wiki` |
-| [`polymarket`](../user-guide/skills/bundled/research/research-polymarket.md) | Query Polymarket: markets, prices, orderbooks, history. | `research/polymarket` |
 | [`research-paper-writing`](../user-guide/skills/bundled/research/research-research-paper-writing.md) | Write ML papers for NeurIPS/ICML/ICLR: design→submit. | `research/research-paper-writing` |
 
 ## smart-home

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/sessions"
 title: "Sessions"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Sessions
@@ -42,7 +42,7 @@ The most common cause of context growth is not the media file itself. It is verb
 
 tip
 
-Use `/compress` when a session gets long, `/new` for a fresh thread, and `hermes sessions prune` only when you want to delete old ended sessions from storage. Compression reduces the active context; it is not a privacy delete. Pass a name to `/new` (e.g. `/new payments-refactor`) to set the new session's initial title up front — useful for finding it later with `/resume <name>` or in the `/sessions` picker.
+Use `/compress` when a session gets long, `/new` for a fresh thread, and `hermes sessions prune` only when you want to delete old ended sessions from storage. If `state.db` has simply grown large, start with the non-destructive option first: `hermes sessions optimize` merges FTS5 index segments and VACUUMs the database without touching any session data. Compression reduces the active context; it is not a privacy delete. Pass a name to `/new` (e.g. `/new payments-refactor`) to set the new session's initial title up front — useful for finding it later with `/resume <name>` or in the `/sessions` picker.
 
 ### Session Sources
 
@@ -114,11 +114,32 @@ hermes -r 20250305_091523_a1b2c3d4
 # Resume by title
 hermes --resume "refactoring auth"
 
+# Resume the most recent session — same lookup as -c
+hermes --resume latest
+
 # Or with the chat subcommand
 hermes chat --resume 20250305_091523_a1b2c3d4
 ```
 
 Session IDs are shown when you exit a CLI session, and can be found with `hermes sessions list`.
+
+note
+
+`latest` is a reserved keyword for `--resume`. A session literally titled "latest" is still reachable by its ID or via `-c latest` (title match).
+
+### Resume in a Specific Directory
+
+Pass `--in <dir>` to change into a directory before starting or resuming. Combined with `--resume latest` (or `-c`), the most recent session for that directory's workspace is picked — no need to `cd` first or remember session IDs:
+
+``` bash
+# Resume the latest session that belongs to ./my-project
+hermes --resume latest --in ./my-project
+
+# Works with the TUI too
+hermes --tui --resume latest --in ./my-project
+```
+
+`--in` also pins the session to that directory: the resumed session's recorded working directory is not restored (as if `--no-restore-cwd` were passed).
 
 ### Resume Restores the Working Directory
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/cron-script-only"
 title: "Script-Only Cron Jobs"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Script-Only Cron Jobs

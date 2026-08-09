@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/oauth-over-ssh"
 title: "OAuth over SSH / Remote Hosts"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # OAuth over SSH / Remote Hosts

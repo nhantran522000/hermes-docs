@@ -1,10 +1,10 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-saelens"
-title: "Sparse Autoencoder Training"
-last_crawled: 2026-08-02
+title: "Saelens"
+last_crawled: 2026-08-09
 ---
 
-# Sparse Autoencoder Training
+# Saelens
 
 Train sparse autoencoders to interpret model features.
 

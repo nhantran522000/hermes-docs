@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/software-development/software-development-rest-graphql-debug"
 title: "Rest Graphql Debug"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Rest Graphql Debug
@@ -17,6 +17,7 @@ Debug REST/GraphQL APIs: status codes, auth, schemas, repro.
 | Version | `1.2.0` |
 | Author | eren-karakus0 |
 | License | MIT |
+| Platforms | linux, macos, windows |
 | Tags | `api`, `rest`, `graphql`, `http`, `debugging`, `testing`, `curl`, `integration` |
 | Related skills | [`systematic-debugging`](../../bundled/software-development/software-development-systematic-debugging.md), [`test-driven-development`](../../bundled/software-development/software-development-test-driven-development.md) |
 

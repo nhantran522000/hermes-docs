@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-manim-video"
 title: "Manim Video"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Manim Video
@@ -10,12 +10,15 @@ Manim CE animations: 3Blue1Brown math/algo videos.
 
 ## Skill metadata
 
-|           |                                |
-|-----------|--------------------------------|
-| Source    | Bundled (installed by default) |
-| Path      | `skills/creative/manim-video`  |
-| Version   | `1.0.0`                        |
-| Platforms | linux, macos, windows          |
+|           |                                       |
+|-----------|---------------------------------------|
+| Source    | Bundled (installed by default)        |
+| Path      | `skills/creative/manim-video`         |
+| Version   | `1.0.0`                               |
+| Author    | SHL0MS, Hermes Agent                  |
+| License   | MIT                                   |
+| Platforms | linux, macos, windows                 |
+| Tags      | `Manim`, `Animation`, `Math`, `Video` |
 
 ## Reference: full SKILL.md
 

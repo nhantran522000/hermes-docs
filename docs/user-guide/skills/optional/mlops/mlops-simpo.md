@@ -1,10 +1,10 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-simpo"
-title: "Simpo Training"
-last_crawled: 2026-08-02
+title: "Simpo"
+last_crawled: 2026-08-09
 ---
 
-# Simpo Training
+# Simpo
 
 Reference-free preference alignment, simpler than DPO.
 

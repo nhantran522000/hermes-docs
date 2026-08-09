@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-tensorrt-llm"
 title: "Tensorrt Llm"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Tensorrt Llm
@@ -29,7 +29,7 @@ The following is the complete skill definition that Hermes loads when this skill
 
 # TensorRT-LLM
 
-NVIDIA's open-source library for optimizing LLM inference with state-of-the-art performance on NVIDIA GPUs.
+NVIDIA's open-source library for optimizing LLM inference with high performance on NVIDIA GPUs.
 
 ## When to use TensorRT-LLM
 

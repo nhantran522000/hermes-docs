@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-p5js"
 title: "P5Js"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # P5Js
@@ -15,6 +15,8 @@ p5.js sketches: gen art, shaders, interactive, 3D.
 | Source | Bundled (installed by default) |
 | Path | `skills/creative/p5js` |
 | Version | `1.0.0` |
+| Author | SHL0MS, Hermes Agent |
+| License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `creative-coding`, `generative-art`, `p5js`, `canvas`, `interactive`, `visualization`, `webgl`, `shaders`, `animation` |
 | Related skills | [`ascii-video`](creative-ascii-video.md), [`manim-video`](creative-manim-video.md), [`excalidraw`](creative-excalidraw.md) |

@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-memento-flashcards"
 title: "Memento Flashcards"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Memento Flashcards
 
-Spaced-repetition flashcard system. Create cards from facts or text, chat with flashcards using free-text answers graded by the agent, generate quizzes from YouTube transcripts, review due cards with adaptive scheduling, and export/import decks as CSV.
+Spaced-repetition flashcards: create, review, quiz, export.
 
 ## Skill metadata
 

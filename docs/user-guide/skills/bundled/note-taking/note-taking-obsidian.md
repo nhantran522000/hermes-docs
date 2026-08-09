@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/note-taking/note-taking-obsidian"
 title: "Obsidian"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Obsidian
@@ -10,11 +10,15 @@ Read, search, create, and edit notes in the Obsidian vault.
 
 ## Skill metadata
 
-|           |                                |
-|-----------|--------------------------------|
-| Source    | Bundled (installed by default) |
-| Path      | `skills/note-taking/obsidian`  |
-| Platforms | linux, macos, windows          |
+|           |                                          |
+|-----------|------------------------------------------|
+| Source    | Bundled (installed by default)           |
+| Path      | `skills/note-taking/obsidian`            |
+| Version   | `1.0.0`                                  |
+| Author    | Teknium (teknium1), Hermes Agent         |
+| License   | MIT                                      |
+| Platforms | linux, macos, windows                    |
+| Tags      | `Obsidian`, `Notes`, `Markdown`, `Vault` |
 
 ## Reference: full SKILL.md
 

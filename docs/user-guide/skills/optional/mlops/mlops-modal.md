@@ -1,10 +1,10 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-modal"
-title: "Modal Serverless Gpu"
-last_crawled: 2026-08-02
+title: "Modal"
+last_crawled: 2026-08-09
 ---
 
-# Modal Serverless Gpu
+# Modal
 
 Serverless GPU cloud for ML jobs and model APIs.
 
@@ -29,7 +29,7 @@ The following is the complete skill definition that Hermes loads when this skill
 
 # Modal Serverless GPU
 
-Comprehensive guide to running ML workloads on Modal's serverless GPU cloud platform.
+Guide to running ML workloads on Modal's serverless GPU cloud platform.
 
 ## When to use Modal
 

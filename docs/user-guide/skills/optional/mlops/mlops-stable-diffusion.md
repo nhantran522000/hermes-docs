@@ -1,10 +1,10 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-stable-diffusion"
-title: "Stable Diffusion Image Generation"
-last_crawled: 2026-08-02
+title: "Stable Diffusion"
+last_crawled: 2026-08-09
 ---
 
-# Stable Diffusion Image Generation
+# Stable Diffusion
 
 Text-to-image generation, inpainting, and img2img.
 
@@ -29,7 +29,7 @@ The following is the complete skill definition that Hermes loads when this skill
 
 # Stable Diffusion Image Generation
 
-Comprehensive guide to generating images with Stable Diffusion using the HuggingFace Diffusers library.
+Guide to generating images with Stable Diffusion using the HuggingFace Diffusers library.
 
 ## When to use Stable Diffusion
 

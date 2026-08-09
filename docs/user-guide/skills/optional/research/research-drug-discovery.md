@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-drug-discovery"
 title: "Drug Discovery"
-last_crawled: 2026-08-02
+last_crawled: 2026-08-09
 ---
 
 # Drug Discovery
 
-Pharmaceutical research assistant for drug discovery workflows. Search bioactive compounds on ChEMBL, calculate drug-likeness (Lipinski Ro5, QED, TPSA, synthetic accessibility), look up drug-drug interactions via OpenFDA, interpret ADMET profiles, and assist with lead optimization. Use for medicinal chemistry questions, molecule property analysis, clinical pharmacology, and open-science drug research.
+Drug discovery: ChEMBL search, drug-likeness, interactions.
 
 ## Skill metadata
 

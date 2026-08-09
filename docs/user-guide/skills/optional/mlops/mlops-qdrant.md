@@ -1,10 +1,10 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-qdrant"
-title: "Qdrant Vector Search"
-last_crawled: 2026-08-02
+title: "Qdrant"
+last_crawled: 2026-08-09
 ---
 
-# Qdrant Vector Search
+# Qdrant
 
 Vector search engine for production RAG systems.
 

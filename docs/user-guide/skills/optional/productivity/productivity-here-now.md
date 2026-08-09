@@ -1,10 +1,10 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-here-now"
-title: "Here.Now"
-last_crawled: 2026-08-02
+title: "Here Now"
+last_crawled: 2026-08-09
 ---
 
-# Here.Now
+# Here Now
 
 Publish sites to {slug}.here.now and store files in Drives.
 

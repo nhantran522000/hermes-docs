@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp"
 title: "MCP (Model Context Protocol)"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # MCP (Model Context Protocol)
@@ -131,6 +131,12 @@ Reopens the same checklist with your current selection pre-checked. Use this whe
 MCPs are never auto-updated. Re-run `hermes mcp install <name>` to refresh after a Hermes update if a manifest version changed.
 
 To add an MCP to the catalog, open a PR against [`optional-mcps/`](https://github.com/NousResearch/hermes-agent/tree/main/optional-mcps).
+
+### Suggestion metadata (`suggest:`)
+
+A manifest may declare an optional `suggest:` block with `keywords:` and/or `hosts:` lists. UI surfaces (currently the Desktop app's composer) use it to offer a one-click "Add \<server\>" pill when your draft mentions one of the keywords as a completed word, or contains a pasted link whose hostname ends with one of the host suffixes. It is purely advisory — installs still flow through the same validated catalog/config paths — and most hosted remote entries (Atlassian, Sentry, Notion, Stripe, Vercel, Supabase, and friends) declare it.
+
+GitHub is deliberately **not** in the catalog: its hosted MCP requires each client to bring its own OAuth app (generic dynamic client registration is rejected), and Hermes's bundled `github/*` skills driving the `gh` CLI are a more capable integration. On Desktop, GitHub mentions instead offer the `github-auth` skill when `gh` isn't signed in yet.
 
 ## Two kinds of MCP servers
 

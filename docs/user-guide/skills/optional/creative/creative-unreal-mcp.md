@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-unreal-mcp"
 title: "Unreal Mcp"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Unreal Mcp
@@ -19,7 +19,6 @@ Automate Unreal Engine editor scenes, actors, and renders.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `unreal`, `unreal-engine`, `ue5`, `3d`, `mcp`, `scenes`, `cinematics`, `lighting`, `gamedev` |
-| Related skills | [`blender-mcp`](creative-blender-mcp.md) |
 
 ## Reference: full SKILL.md
 
@@ -35,7 +34,7 @@ Companion skill for the `unreal-engine` entry in the Hermes MCP catalog. The MCP
 
 Use when the user wants anything done in Unreal Engine: build or dress a level, spawn/move/delete actors, set up lighting and atmosphere, create or tune material instances, frame a camera shot, capture screenshots or renders, import assets, inspect the scene or UI, run automation tests, or script the editor. Works for single actions ("make the sun golden hour") and for complete multi-step projects ("build me a moody forest clearing with a campfire and render a shot of it").
 
-Don't use for: DCC-style mesh modeling/sculpting (use `blender-mcp` and import the result), or for editing Unreal C++ project source (that's normal code work — use the terminal; this skill is about the live editor).
+Don't use for: DCC-style mesh modeling/sculpting (model in Blender and import the result), or for editing Unreal C++ project source (that's normal code work — use the terminal; this skill is about the live editor).
 
 ## Prerequisites
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/finance/finance-3-statement-model"
 title: "3 Statement Model"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # 3 Statement Model

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-kanban-video-orchestrator"
 title: "Kanban Video Orchestrator"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Kanban Video Orchestrator
@@ -19,7 +19,7 @@ Plan and run multi-agent video production pipelines.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `video`, `kanban`, `multi-agent`, `orchestration`, `production-pipeline` |
-| Related skills | [`ascii-video`](../../bundled/creative/creative-ascii-video.md), [`manim-video`](../../bundled/creative/creative-manim-video.md), [`p5js`](../../bundled/creative/creative-p5js.md), [`comfyui`](../../bundled/creative/creative-comfyui.md), [`touchdesigner-mcp`](../../bundled/creative/creative-touchdesigner-mcp.md), [`blender-mcp`](creative-blender-mcp.md), [`pixel-art`](creative-pixel-art.md), [`ascii-art`](../../bundled/creative/creative-ascii-art.md), [`songwriting-and-ai-music`](../../bundled/creative/creative-songwriting-and-ai-music.md), [`heartmula`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-heartmula), [`songsee`](../../bundled/media/media-songsee.md), [`youtube-content`](../../bundled/media/media-youtube-content.md), [`claude-design`](../../bundled/creative/creative-claude-design.md), [`excalidraw`](../../bundled/creative/creative-excalidraw.md), [`architecture-diagram`](../../bundled/creative/creative-architecture-diagram.md), [`concept-diagrams`](creative-concept-diagrams.md), [`baoyu-comic`](creative-baoyu-comic.md), [`baoyu-infographic`](../../bundled/creative/creative-baoyu-infographic.md), [`humanizer`](../../bundled/creative/creative-humanizer.md), [`gif-search`](../../bundled/media/media-gif-search.md), [`meme-generation`](creative-meme-generation.md) |
+| Related skills | [`ascii-video`](../../bundled/creative/creative-ascii-video.md), [`manim-video`](../../bundled/creative/creative-manim-video.md), [`p5js`](../../bundled/creative/creative-p5js.md), [`comfyui`](../../bundled/creative/creative-comfyui.md), [`touchdesigner-mcp`](../../bundled/creative/creative-touchdesigner-mcp.md), [`pixel-art`](creative-pixel-art.md), [`ascii-art`](../../bundled/creative/creative-ascii-art.md), [`songwriting-and-ai-music`](../../bundled/creative/creative-songwriting-and-ai-music.md), [`heartmula`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-heartmula), [`songsee`](../../bundled/media/media-songsee.md), [`youtube-content`](../../bundled/media/media-youtube-content.md), [`claude-design`](../../bundled/creative/creative-claude-design.md), [`excalidraw`](../../bundled/creative/creative-excalidraw.md), [`architecture-diagram`](../../bundled/creative/creative-architecture-diagram.md), [`concept-diagrams`](creative-concept-diagrams.md), [`baoyu-comic`](creative-baoyu-comic.md), [`baoyu-infographic`](../../bundled/creative/creative-baoyu-infographic.md), [`humanizer`](../../bundled/creative/creative-humanizer.md), [`gif-search`](../../bundled/media/media-gif-search.md), [`meme-generation`](creative-meme-generation.md) |
 
 ## Reference: full SKILL.md
 
@@ -39,7 +39,7 @@ This skill does **not** render anything itself. It is a meta-pipeline that:
 4.  **Hands off** to the director profile, which decomposes via the kanban
 5.  **Monitors** execution, helps intervene when tasks stall or fail
 
-The actual rendering happens inside the kanban once it's running, via whichever existing skills + tools fit the scenes — `ascii-video`, `manim-video`, `p5js`, `comfyui`, `touchdesigner-mcp`, `blender-mcp`, `songwriting-and-ai-music`, `heartmula`, external APIs, or plain Python with PIL + ffmpeg.
+The actual rendering happens inside the kanban once it's running, via whichever existing skills + tools fit the scenes — `ascii-video`, `manim-video`, `p5js`, `comfyui`, `touchdesigner-mcp`, `songwriting-and-ai-music`, `heartmula`, external APIs, or plain Python with PIL + ffmpeg.
 
 ## When NOT to use this skill
 

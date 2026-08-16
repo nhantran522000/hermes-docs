@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/software-development/software-development-rest-graphql-debug"
 title: "Rest Graphql Debug"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Rest Graphql Debug
@@ -74,7 +74,7 @@ terminal("""curl -X POST https://api.example.com/users \\
 terminal('curl -sI https://api.example.com/health')
 
 # Pretty-print JSON
-terminal('curl -s https://api.example.com/users | python3 -m json.tool')
+terminal('curl -s https://api.example.com/users | python -m json.tool')
 ```
 
 ### GraphQL via terminal

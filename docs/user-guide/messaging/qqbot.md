@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/qqbot"
 title: "QQ Bot"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # QQ Bot

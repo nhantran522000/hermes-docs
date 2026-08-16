@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-powerpoint"
 title: "Powerpoint"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Powerpoint
@@ -43,23 +43,23 @@ Create, inspect, and edit PowerPoint (.pptx) presentations using the python-pptx
 
 - Python 3.10+ with `python-pptx` installed (`pip install python-pptx`).
 - Optional: LibreOffice (`soffice`) plus poppler (`pdftoppm` or `pdftocairo`) for rendering slides to PNGs and for PDF export. `pptx_render.py` detects both with `shutil.which` and degrades gracefully (reports `{"rendered": false, "missing": [...]}`, exit 0) when absent — all create/read/edit operations work without them.
-- Check availability via `terminal`: `python3 -c "import pptx; print(pptx.__version__)"` and `which soffice pdftoppm`.
+- Check availability via `terminal`: `python -c "import pptx; print(pptx.__version__)"` and `which soffice pdftoppm`.
 
 ## How to Run
 
 All scripts live in `scripts/`, take `--help`, print JSON to stdout, and exit non-zero on failure. Run them with `terminal`:
 
 ``` bash
-python3 scripts/pptx_create.py deck.json out.pptx
-python3 scripts/pptx_read.py deck.pptx --outline      # full JSON outline
-python3 scripts/pptx_read.py deck.pptx --notes        # speaker notes
-python3 scripts/pptx_read.py deck.pptx --images ./img # export pictures
-python3 scripts/pptx_edit.py deck.pptx --replace-text "Old Corp" "New Corp"
-python3 scripts/pptx_edit.py deck.pptx --chart-data update.json
-python3 scripts/pptx_edit.py deck.pptx --duplicate-slide 2
-python3 scripts/pptx_edit.py deck.pptx --remove-slide 3 --move-slide 2 0
-python3 scripts/pptx_from_template.py brand.pptx out.pptx --values vals.json
-python3 scripts/pptx_render.py deck.pptx --outdir ./render  # slide PNGs
+python scripts/pptx_create.py deck.json out.pptx
+python scripts/pptx_read.py deck.pptx --outline      # full JSON outline
+python scripts/pptx_read.py deck.pptx --notes        # speaker notes
+python scripts/pptx_read.py deck.pptx --images ./img # export pictures
+python scripts/pptx_edit.py deck.pptx --replace-text "Old Corp" "New Corp"
+python scripts/pptx_edit.py deck.pptx --chart-data update.json
+python scripts/pptx_edit.py deck.pptx --duplicate-slide 2
+python scripts/pptx_edit.py deck.pptx --remove-slide 3 --move-slide 2 0
+python scripts/pptx_from_template.py brand.pptx out.pptx --values vals.json
+python scripts/pptx_render.py deck.pptx --outdir ./render  # slide PNGs
 ```
 
 Author JSON specs with `write_file`; inspect script output and generated JSON with `read_file`.
@@ -141,4 +141,4 @@ The output lands at `./out/deck.pdf`. Fonts not installed on the host are substi
 1.  After any create/edit, run `pptx_read.py OUT.pptx --outline` and check slide count, texts, tables, notes, and chart values match intent.
 2.  `--images DIR` then file-size check confirms pictures embedded.
 3.  Render every slide with `pptx_render.py deck.pptx --outdir ./render` and review each PNG with `vision_analyze` — this catches overlapping shapes, truncated text, and color problems the outline cannot. If the render tools are missing, the script says so; rely on the outline.
-4.  The bundled test suite is the full contract: `python3 -m pytest tests/ -q` (requires python-pptx + pytest).
+4.  The bundled test suite is the full contract: `python -m pytest tests/ -q` (requires python-pptx + pytest).

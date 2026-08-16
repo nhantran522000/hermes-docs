@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline"
 title: "Teams Meeting Pipeline"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Teams Meeting Pipeline

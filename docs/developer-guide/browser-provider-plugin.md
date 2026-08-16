@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/browser-provider-plugin"
 title: "Building a Browser Provider Plugin"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Building a Browser Provider Plugin
@@ -124,7 +124,7 @@ def get_setup_schema(self) -> dict:
              "prompt": "My Backend API key",
              "url": "https://mybackend.example"},
         ],
-        "post_setup": "agent_browser",   # auto-installs the agent-browser npm dep
+        "post_setup": "agent_browser",   # ensures local Chromium is installed (agent-browser itself resolves via npx)
     }
 ```
 

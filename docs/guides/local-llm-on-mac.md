@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/local-llm-on-mac"
 title: "Run Local LLMs on Mac"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Run Local LLMs on Mac

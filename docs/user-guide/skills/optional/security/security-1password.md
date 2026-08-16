@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/security/security-1password"
 title: "1Password"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # 1Password

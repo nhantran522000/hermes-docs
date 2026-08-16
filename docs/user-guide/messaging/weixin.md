@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/weixin"
 title: "Weixin (WeChat)"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Weixin (WeChat)

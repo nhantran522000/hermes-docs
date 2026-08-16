@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/automate-with-cron"
 title: "Automate Anything with Cron"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Automate Anything with Cron

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/integrations/nous-portal"
 title: "Nous Portal"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Nous Portal

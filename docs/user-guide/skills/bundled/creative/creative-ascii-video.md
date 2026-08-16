@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-ascii-video"
 title: "Ascii Video"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Ascii Video

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/deliverable-mode"
 title: "Deliverable Mode"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Deliverable Mode

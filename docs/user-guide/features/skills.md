@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/skills"
 title: "Skills System"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Skills System
@@ -435,10 +435,11 @@ Skills and memory work together in the self-improvement loop: memory stores smal
 
 ### When the Agent Creates Skills
 
-- After completing a complex task (5+ tool calls) successfully
+The system prompt asks the agent to record a non-trivial workflow with `skill_manage` for future reuse. In practice that covers:
+
+- When it worked out a multi-step workflow worth repeating
 - When it hit errors or dead ends and found the working path
 - When the user corrected its approach
-- When it discovered a non-trivial workflow
 
 ### Actions
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/memory"
 title: "Persistent Memory"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Persistent Memory
@@ -289,6 +289,20 @@ auxiliary:
 When you point it at a model **different** from your main one, the review runs there for substantially lower cost (~3–5× in benchmarks). Because a different model can't reuse your main model's prompt cache anyway, the fork automatically replays a compact **digest** of the conversation (recent turns verbatim + a summary of older ones) rather than the full transcript — minimizing what it writes to the new cache. Capture holds: in testing, memory capture was identical and skill capture near-identical to the main-model review.
 
 Leave it at `auto` (or set it to your main model) and nothing changes — the review keeps running on the main model with the full warm-cache replay.
+
+### Disabling automatic reviews (`enabled`)
+
+The review fork can burn a meaningful share of total tokens on busy hosts. Operators can disable it without zeroing nudge intervals:
+
+``` yaml
+auxiliary:
+  background_review:
+    enabled: true              # false = skip automatic post-turn forks
+```
+
+With `enabled: false`, automatic post-turn forks do not spawn; manual `/refine` still works.
+
+Fork usage is persisted in `session_model_usage` with `task='background_review'` and a completion line is written to `agent.log` (`Background review complete: thread=bg-review calls=… in=… out=… result=…`).
 
 ## Controlling skill writes (`skills.write_approval`)
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-concept-diagrams"
 title: "Concept Diagrams"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Concept Diagrams
@@ -325,7 +325,7 @@ mkdir -p .diagrams/sn2-mechanism
 # ...write .diagrams/sn2-mechanism/index.html...
 
 # Serve on loopback only, free port
-cd .diagrams && python3 -c "
+cd .diagrams && python -c "
 import http.server, socketserver
 with socketserver.TCPServer(('127.0.0.1', 0), http.server.SimpleHTTPRequestHandler) as s:
     print(f'Serving at http://127.0.0.1:{s.server_address[1]}/')

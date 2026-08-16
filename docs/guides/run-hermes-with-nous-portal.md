@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/run-hermes-with-nous-portal"
 title: "Run Hermes Agent with Nous Portal"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Run Hermes Agent with Nous Portal

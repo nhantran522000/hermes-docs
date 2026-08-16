@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-ascii-art"
 title: "Ascii Art"
-last_crawled: 2026-08-09
+last_crawled: 2026-08-16
 ---
 
 # Ascii Art
@@ -44,9 +44,9 @@ pip install pyfiglet --break-system-packages -q
 ### Usage
 
 ``` bash
-python3 -m pyfiglet "YOUR TEXT" -f slant
-python3 -m pyfiglet "TEXT" -f doom -w 80    # Set width
-python3 -m pyfiglet --list_fonts             # List all 571 fonts
+python -m pyfiglet "YOUR TEXT" -f slant
+python -m pyfiglet "TEXT" -f doom -w 80    # Set width
+python -m pyfiglet --list_fonts             # List all 571 fonts
 ```
 
 ### Recommended fonts
@@ -165,7 +165,7 @@ boxes -l                                       # List all 70+ designs
 ### Combine with pyfiglet or asciified
 
 ``` bash
-python3 -m pyfiglet "HERMES" -f slant | boxes -d stone
+python -m pyfiglet "HERMES" -f slant | boxes -d stone
 # Or without pyfiglet installed:
 curl -s "https://asciified.thelicato.io/api/v2/ascii?text=HERMES&font=Slant" | boxes -d stone
 ```

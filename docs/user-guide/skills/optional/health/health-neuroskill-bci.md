@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/health/health-neuroskill-bci"
 title: "Neuroskill Bci"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Neuroskill Bci

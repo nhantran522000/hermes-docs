@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/integrations"
 title: "Integrations"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Integrations
@@ -28,16 +28,16 @@ Hermes supports multiple AI inference providers out of the box. Use `hermes mode
 
 The `web_search` and `web_extract` tools support eight backend providers, configured via `config.yaml` or `hermes tools`:
 
-| Backend                 | Env Var                | Search | Extract | Crawl |
-|-------------------------|------------------------|--------|---------|-------|
-| **Firecrawl** (default) | `FIRECRAWL_API_KEY`    | ✔      | ✔       | ✔     |
-| **SearXNG**             | `SEARXNG_URL`          | ✔      | —       | —     |
-| **Brave** (free tier)   | `BRAVE_SEARCH_API_KEY` | ✔      | —       | —     |
-| **DuckDuckGo** (ddgs)   | *(none)*               | ✔      | —       | —     |
-| **Tavily**              | `TAVILY_API_KEY`       | ✔      | ✔       | ✔     |
-| **Exa**                 | `EXA_API_KEY`          | ✔      | ✔       | —     |
-| **Parallel**            | `PARALLEL_API_KEY`     | ✔      | ✔       | —     |
-| **xAI**                 | `XAI_API_KEY`          | ✔      | —       | —     |
+| Backend                 | Env Var                     | Search | Extract | Crawl |
+|-------------------------|-----------------------------|--------|---------|-------|
+| **Firecrawl** (default) | `FIRECRAWL_API_KEY`         | ✔      | ✔       | ✔     |
+| **SearXNG**             | `SEARXNG_URL`               | ✔      | —       | —     |
+| **Brave** (free tier)   | `BRAVE_SEARCH_API_KEY`      | ✔      | —       | —     |
+| **DuckDuckGo** (ddgs)   | *(none)*                    | ✔      | —       | —     |
+| **Tavily**              | `TAVILY_API_KEY` (optional) | ✔      | ✔       | —     |
+| **Exa**                 | `EXA_API_KEY`               | ✔      | ✔       | —     |
+| **Parallel**            | `PARALLEL_API_KEY`          | ✔      | ✔       | —     |
+| **xAI**                 | `XAI_API_KEY`               | ✔      | —       | —     |
 
 Quick setup example:
 
@@ -46,7 +46,7 @@ web:
   backend: firecrawl    # firecrawl | searxng | brave-free | ddgs | tavily | exa | parallel | xai
 ```
 
-If `web.backend` is not set, the backend is auto-detected from whichever API key is available. Self-hosted Firecrawl is also supported via `FIRECRAWL_API_URL`.
+If `web.backend` is not set, the backend is auto-detected from whichever API key is available. Self-hosted Firecrawl is also supported via `FIRECRAWL_API_URL`. Selecting Tavily in `hermes tools` works without a key.
 
 ## Browser Automation
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/programmatic-integration"
 title: "Programmatic Integration"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Programmatic Integration
@@ -112,12 +112,16 @@ POST /v1/runs/{id}/approval      Resolve a pending approval
 POST /v1/runs/{id}/steer         Inject mid-run guidance at the next tool boundary
 POST /v1/runs/{id}/stop          Interrupt the run
 GET  /v1/capabilities            Machine-readable feature flags
+POST /v1/browser-control/register Register a browser controller
+GET  /v1/browser-control/ws       Browser-controller WebSocket
 GET  /v1/models                  Lists hermes-agent
 GET  /api/model/options          Provider-aware picker inventory
 GET  /health, /health/detailed
 ```
 
 Setup, headers (`X-Hermes-Session-Id`, `X-Hermes-Session-Key`), and frontend wiring: [API Server](../user-guide/features/api-server.md).
+
+Browser extensions can opt into the disabled-by-default controller protocol to drive the exact browser session that opened the Hermes conversation. The API and dashboard transports share one principal-bound broker and one explicit capability allowlist; see [Browser-extension control](../user-guide/features/api-server.md#browser-extension-control).
 
 ### Model catalog surfaces
 

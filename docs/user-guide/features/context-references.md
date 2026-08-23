@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/context-references"
 title: "Context References"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Context References

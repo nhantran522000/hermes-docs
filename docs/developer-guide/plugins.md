@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/plugins"
 title: "Build a Hermes Plugin"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Build a Hermes Plugin
@@ -550,6 +550,25 @@ _DATA_FILE = _PLUGIN_DIR / "data" / "languages.yaml"
 with open(_DATA_FILE) as f:
     _DATA = yaml.safe_load(f)
 ```
+
+That's for files you *ship*. State you *write* is different — see the next section.
+
+### Store durable state
+
+Never write runtime state into your plugin directory: that's the install tree, and `hermes plugins update` / `remove` git-pull or delete it — your users' data dies with it. The sanctioned home is the per-plugin data root, which survives both and follows the active profile:
+
+``` python
+from plugins.plugin_storage import plugin_data_dir, plugin_db
+
+# <hermes home>/plugin-data/<name>/ — created on first use
+state_file = plugin_data_dir("my-plugin") / "state.json"
+
+# Or a SQLite database at <data dir>/data.db (WAL mode, thread-friendly)
+conn = plugin_db("my-plugin")
+conn.execute("CREATE TABLE IF NOT EXISTS runs (id TEXT PRIMARY KEY)")
+```
+
+One directory per plugin means every plugin's data is inspectable in one predictable place. Secrets don't belong here — credential reads go through the standard `.env` / secret-scope path like everywhere else.
 
 ### Bundle skills
 

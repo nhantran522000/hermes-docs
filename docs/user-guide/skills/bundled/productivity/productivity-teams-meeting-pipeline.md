@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline"
 title: "Teams Meeting Pipeline"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Teams Meeting Pipeline
@@ -81,6 +81,7 @@ hermes teams-pipeline subscriptions         # current Graph webhook subscription
 hermes teams-pipeline run <job-id>          # replay a stored job (re-summarize, re-deliver)
 hermes teams-pipeline fetch --meeting-id <id>   # dry-run: resolve meeting + transcript without persisting
 hermes teams-pipeline fetch --join-web-url "<url>"   # dry-run by join URL
+hermes teams-pipeline fetch --join-web-url "<url>" --organizer-user-id <id>   # organizer-scoped lookup (required for /meet/ short URLs)
 ```
 
 ### Subscription management

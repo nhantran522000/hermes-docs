@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/smart-home/smart-home-openhue"
 title: "Openhue"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Openhue

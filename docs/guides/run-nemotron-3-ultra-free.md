@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/run-nemotron-3-ultra-free"
 title: "Run Nemotron 3 Ultra free in Hermes Agent"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Run Nemotron 3 Ultra free in Hermes Agent

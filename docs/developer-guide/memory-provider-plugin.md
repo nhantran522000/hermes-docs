@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/memory-provider-plugin"
 title: "Building a Memory Provider Plugin"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Building a Memory Provider Plugin

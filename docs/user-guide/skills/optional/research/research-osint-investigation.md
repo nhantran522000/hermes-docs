@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-osint-investigation"
 title: "Osint Investigation"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Osint Investigation

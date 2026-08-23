@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/github/github-github-auth"
 title: "Github Auth"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Github Auth

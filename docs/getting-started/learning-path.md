@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/learning-path"
 title: "Learning Path"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Learning Path
@@ -81,6 +81,16 @@ tip
 
 Cron jobs let Hermes Agent run tasks on a schedule — daily summaries, periodic checks, automated reports — without you being present.
 
+### "I want a team of specialist Bots"
+
+Create named Bots with their own model, memory, skills, routines, and chats, then bring them together in group chats or through `@mentions`.
+
+1.  [Desktop](../user-guide/desktop.md)
+2.  [Profiles](../user-guide/profiles.md)
+3.  [Bot Mode](https://hermes-agent.nousresearch.com/docs/user-guide/bot-mode)
+4.  [Cron Scheduling](../user-guide/features/cron.md)
+5.  [Multi-connection Desktop](https://hermes-agent.nousresearch.com/docs/user-guide/multi-connection-desktop)
+
 ### "I want to build custom tools/skills"
 
 Extend Hermes Agent with your own tools and reusable skill packages.
@@ -132,6 +142,7 @@ Not sure what's available? Here's a quick directory of major features:
 | **Tools** | Built-in tools the agent can call (file I/O, search, shell, etc.) | [Tools](../user-guide/features/tools.md) |
 | **Skills** | Installable plugin packages that add new capabilities | [Skills](../user-guide/features/skills.md) |
 | **Memory** | Persistent memory across sessions | [Memory](../user-guide/features/memory.md) |
+| **Bot Mode** | Named specialist Bots with persistent chats, routines, group chats, and `@mentions` | [Bot Mode](https://hermes-agent.nousresearch.com/docs/user-guide/bot-mode) |
 | **Context Files** | Feed files and directories into conversations | [Context Files](../user-guide/features/context-files.md) |
 | **MCP** | Connect to external tool servers via Model Context Protocol | [MCP](../user-guide/features/mcp.md) |
 | **Cron** | Schedule recurring agent tasks | [Cron](../user-guide/features/cron.md) |

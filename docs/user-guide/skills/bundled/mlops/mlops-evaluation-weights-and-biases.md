@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/mlops/mlops-evaluation-weights-and-biases"
 title: "Weights And Biases"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Weights And Biases

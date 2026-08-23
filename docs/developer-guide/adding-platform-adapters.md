@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/adding-platform-adapters"
 title: "Adding a Platform Adapter"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Adding a Platform Adapter

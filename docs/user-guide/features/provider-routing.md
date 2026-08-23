@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/provider-routing"
 title: "Provider Routing"
-last_crawled: 2026-08-16
+last_crawled: 2026-08-23
 ---
 
 # Provider Routing

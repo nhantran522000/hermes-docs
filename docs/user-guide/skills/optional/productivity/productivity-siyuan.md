@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-siyuan"
 title: "Siyuan"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Siyuan

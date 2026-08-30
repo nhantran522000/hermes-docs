@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-simplify-code"
 title: "Simplify Code"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Simplify Code
@@ -19,7 +19,7 @@ Parallel 4-agent cleanup of recent code changes.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `code-review`, `cleanup`, `refactor`, `delegation`, `subagent`, `parallel`, `simplify` |
-| Related skills | [`requesting-code-review`](software-development-requesting-code-review.md), [`test-driven-development`](software-development-test-driven-development.md), [`plan`](software-development-plan.md) |
+| Related skills | [`requesting-code-review`](software-development-requesting-code-review.md), [`test-driven-development`](software-development-test-driven-development.md) |
 
 ## Reference: full SKILL.md
 

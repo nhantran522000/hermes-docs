@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/codex-app-server-runtime"
 title: "Codex App-Server Runtime"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Codex App-Server Runtime

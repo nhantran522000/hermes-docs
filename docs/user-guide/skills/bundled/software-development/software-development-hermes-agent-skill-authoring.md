@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-hermes-agent-skill-authoring"
 title: "Hermes Agent Skill Authoring"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Hermes Agent Skill Authoring
@@ -19,7 +19,7 @@ Author in-repo SKILL.md files: frontmatter and structure.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `skills`, `authoring`, `hermes-agent`, `conventions`, `skill-md` |
-| Related skills | [`plan`](software-development-plan.md), [`requesting-code-review`](software-development-requesting-code-review.md) |
+| Related skills | [`requesting-code-review`](software-development-requesting-code-review.md) |
 
 ## Reference: full SKILL.md
 

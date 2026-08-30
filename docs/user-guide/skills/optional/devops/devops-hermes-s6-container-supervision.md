@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/devops/devops-hermes-s6-container-supervision"
 title: "Hermes S6 Container Supervision"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Hermes S6 Container Supervision

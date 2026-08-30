@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/photon"
 title: "Photon iMessage"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Photon iMessage

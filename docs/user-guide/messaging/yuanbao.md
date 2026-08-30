@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/yuanbao"
 title: "Yuanbao"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Yuanbao
@@ -328,7 +328,7 @@ Results are delivered to your home channel.
 Run long operations without blocking the conversation:
 
 ``` text
-/background Analyze all files in the archive
+/bg Analyze all files in the archive
 ```
 
 ### Cross-Platform Messages

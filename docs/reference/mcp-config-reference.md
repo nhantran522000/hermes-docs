@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/mcp-config-reference"
 title: "MCP Config Reference"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # MCP Config Reference

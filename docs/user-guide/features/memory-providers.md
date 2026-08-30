@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers"
 title: "Memory Providers"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Memory Providers
@@ -312,7 +312,7 @@ OpenViking server settings live in `ov.conf` (`--config`, `OPENVIKING_CONFIG_FIL
 - Automatic memory extraction on session commit (profile, preferences, entities, events, cases, patterns)
 - `viking://` URI scheme for hierarchical knowledge browsing
 
-`OPENVIKING_ACCOUNT` and `OPENVIKING_USER` are used for local/trusted mode. `OPENVIKING_AGENT` is Hermes' peer ID in OpenViking for peer-scoped memories.
+`OPENVIKING_ACCOUNT` and `OPENVIKING_USER` are used for local/trusted mode. `OPENVIKING_AGENT` is Hermes' peer ID in OpenViking for peer-scoped memories. Hermes sends `User-Agent: openviking-memory-hermes/<version>` on OpenViking requests. This standard harness identifier contains no per-user identifier and does not add a separate request.
 
 ------------------------------------------------------------------------
 

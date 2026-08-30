@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/tools-runtime"
 title: "Tools Runtime"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Tools Runtime

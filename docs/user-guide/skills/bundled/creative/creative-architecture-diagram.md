@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-architecture-diagram"
 title: "Architecture Diagram"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Architecture Diagram
@@ -19,7 +19,7 @@ Dark-themed SVG architecture/cloud/infra diagrams as HTML.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `architecture`, `diagrams`, `SVG`, `HTML`, `visualization`, `infrastructure`, `cloud` |
-| Related skills | [`concept-diagrams`](../../optional/creative/creative-concept-diagrams.md), [`excalidraw`](creative-excalidraw.md) |
+| Related skills | [`concept-diagrams`](../../optional/creative/creative-concept-diagrams.md), [`excalidraw`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-excalidraw) |
 
 ## Reference: full SKILL.md
 

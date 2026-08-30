@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-ocr-and-documents"
 title: "Ocr And Documents"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Ocr And Documents
@@ -93,7 +93,7 @@ python scripts/extract_pymupdf.py document.pdf --pages 0-4   # Specific pages
 **Inline**:
 
 ``` bash
-python -c "
+python3 -c "
 import pymupdf
 doc = pymupdf.open('document.pdf')
 for page in doc:

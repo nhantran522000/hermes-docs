@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/memory"
 title: "Persistent Memory"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Persistent Memory
@@ -307,6 +307,19 @@ auxiliary:
 With `enabled: false`, automatic post-turn forks do not spawn; manual `/refine` still works.
 
 Fork usage is persisted in `session_model_usage` with `task='background_review'` and a completion line is written to `agent.log` (`Background review complete: thread=bg-review calls=… in=… out=… result=…`).
+
+### Allowing a narrowly scoped extra review tool (`extra_tools`)
+
+Background review can use memory, skill-management, and read-only file tools by default. If a profile provides another tool that is safe for unattended review, opt it in by name:
+
+``` yaml
+auxiliary:
+  background_review:
+    extra_tools:
+      - propose_shared_memory
+```
+
+The tool must already be available to the parent agent; this setting only adds it to the review fork's runtime whitelist. It does not enable arbitrary tools, and tools not listed here remain denied. Keep the list narrow and prefer tools that stage a proposal for human review rather than applying external or destructive changes directly. The default is an empty list.
 
 ## Controlling skill writes (`skills.write_approval`)
 

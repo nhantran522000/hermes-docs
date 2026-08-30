@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-test-driven-development"
 title: "Test Driven Development"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Test Driven Development
@@ -19,7 +19,7 @@ TDD: enforce RED-GREEN-REFACTOR, tests before code.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `testing`, `tdd`, `development`, `quality`, `red-green-refactor` |
-| Related skills | [`systematic-debugging`](software-development-systematic-debugging.md), [`plan`](software-development-plan.md), [`subagent-driven-development`](../../optional/software-development/software-development-subagent-driven-development.md) |
+| Related skills | [`systematic-debugging`](software-development-systematic-debugging.md), [`subagent-driven-development`](../../optional/software-development/software-development-subagent-driven-development.md) |
 
 ## Reference: full SKILL.md
 

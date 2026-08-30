@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/note-taking/note-taking-obsidian"
 title: "Obsidian"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Obsidian

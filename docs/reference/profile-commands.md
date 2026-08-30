@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/profile-commands"
 title: "Profile Commands Reference"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Profile Commands Reference

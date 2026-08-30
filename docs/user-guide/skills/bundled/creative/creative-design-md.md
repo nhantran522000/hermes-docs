@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-design-md"
 title: "Design Md"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Design Md
@@ -19,7 +19,7 @@ Author/validate/export Google's DESIGN.md token spec files.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `design`, `design-system`, `tokens`, `ui`, `accessibility`, `wcag`, `tailwind`, `dtcg`, `google` |
-| Related skills | [`popular-web-designs`](creative-popular-web-designs.md), [`claude-design`](creative-claude-design.md), [`excalidraw`](creative-excalidraw.md), [`architecture-diagram`](creative-architecture-diagram.md) |
+| Related skills | [`popular-web-designs`](creative-popular-web-designs.md), [`claude-design`](creative-claude-design.md), [`excalidraw`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-excalidraw), [`architecture-diagram`](creative-architecture-diagram.md) |
 
 ## Reference: full SKILL.md
 

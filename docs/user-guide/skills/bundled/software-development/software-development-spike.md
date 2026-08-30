@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-spike"
 title: "Spike"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Spike
@@ -19,7 +19,7 @@ Throwaway experiments to validate an idea before build.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `spike`, `prototype`, `experiment`, `feasibility`, `throwaway`, `exploration`, `research`, `planning`, `mvp`, `proof-of-concept` |
-| Related skills | [`sketch`](../creative/creative-sketch.md), [`subagent-driven-development`](../../optional/software-development/software-development-subagent-driven-development.md), [`plan`](software-development-plan.md) |
+| Related skills | [`sketch`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-sketch), [`subagent-driven-development`](../../optional/software-development/software-development-subagent-driven-development.md) |
 
 ## Reference: full SKILL.md
 

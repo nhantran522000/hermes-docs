@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/nix-setup"
 title: "Nix & NixOS Setup"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Nix & NixOS Setup

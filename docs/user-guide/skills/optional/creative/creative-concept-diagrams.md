@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-concept-diagrams"
 title: "Concept Diagrams"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Concept Diagrams
@@ -19,7 +19,7 @@ Generate flat, minimal educational SVG visuals as HTML.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `diagrams`, `svg`, `visualization`, `education`, `physics`, `chemistry`, `engineering` |
-| Related skills | [`architecture-diagram`](../../bundled/creative/creative-architecture-diagram.md), [`excalidraw`](../../bundled/creative/creative-excalidraw.md) |
+| Related skills | [`architecture-diagram`](../../bundled/creative/creative-architecture-diagram.md), [`excalidraw`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-excalidraw) |
 
 ## Reference: full SKILL.md
 

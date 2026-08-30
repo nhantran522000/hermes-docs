@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/open-webui"
 title: "Open WebUI Integration"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Open WebUI Integration

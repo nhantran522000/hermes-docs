@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/profiles"
 title: "Profiles: Running Multiple Agents"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Profiles: Running Multiple Agents

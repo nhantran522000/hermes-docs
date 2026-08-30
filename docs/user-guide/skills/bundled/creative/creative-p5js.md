@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-p5js"
 title: "P5Js"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # P5Js
@@ -19,7 +19,7 @@ p5.js sketches: gen art, shaders, interactive, 3D.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `creative-coding`, `generative-art`, `p5js`, `canvas`, `interactive`, `visualization`, `webgl`, `shaders`, `animation` |
-| Related skills | [`ascii-video`](creative-ascii-video.md), [`manim-video`](creative-manim-video.md), [`excalidraw`](creative-excalidraw.md) |
+| Related skills | [`ascii-video`](creative-ascii-video.md), [`manim-video`](creative-manim-video.md), [`excalidraw`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-excalidraw) |
 
 ## Reference: full SKILL.md
 

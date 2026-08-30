@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/video-gen-provider-plugin"
 title: "Building a Video Generation Provider Plugin"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Building a Video Generation Provider Plugin

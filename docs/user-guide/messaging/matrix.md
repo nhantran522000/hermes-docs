@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/matrix"
 title: "Matrix Setup"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Matrix Setup
@@ -524,7 +524,7 @@ To find a Room ID: in Element, go to the room → **Settings** → **Advanced** 
 
 ## Commands in Matrix
 
-Hermes supports the same gateway commands in Matrix that it supports on other messaging platforms, including `/commands`, `/model`, `/stop`, `/queue`, `/steer`, `/goal`, `/subgoal`, `/background`, `/bg`, `/btw`, `/tasks`, and `/yolo`.
+Hermes supports the same gateway commands in Matrix that it supports on other messaging platforms, including `/commands`, `/model`, `/stop`, `/queue`, `/steer`, `/goal`, `/subgoal`, `/bg`, `/btw`, `/tasks`, and `/yolo`.
 
 Some Matrix clients reserve leading `/` for local client commands and may not send unknown slash commands to the room. In that case, use `!` as a Matrix-safe alias:
 

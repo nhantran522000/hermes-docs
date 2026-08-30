@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/webhooks"
 title: "Webhooks"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Webhooks

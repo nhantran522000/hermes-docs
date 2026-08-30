@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-meme-generation"
 title: "Meme Generation"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Meme Generation
@@ -19,7 +19,7 @@ Create meme PNGs from templates with Pillow text overlay.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `creative`, `memes`, `humor`, `images` |
-| Related skills | [`ascii-art`](../../bundled/creative/creative-ascii-art.md) |
+| Related skills | [`ascii-art`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-ascii-art) |
 
 ## Reference: full SKILL.md
 

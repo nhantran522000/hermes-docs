@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-claude-design"
 title: "Claude Design"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Claude Design
@@ -19,7 +19,7 @@ Design one-off HTML artifacts (landing, deck, prototype).
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `design`, `html`, `prototype`, `ux`, `ui`, `creative`, `artifact`, `deck`, `motion`, `design-system` |
-| Related skills | [`design-md`](creative-design-md.md), [`popular-web-designs`](creative-popular-web-designs.md), [`excalidraw`](creative-excalidraw.md), [`architecture-diagram`](creative-architecture-diagram.md) |
+| Related skills | [`design-md`](creative-design-md.md), [`popular-web-designs`](creative-popular-web-designs.md), [`excalidraw`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-excalidraw), [`architecture-diagram`](creative-architecture-diagram.md) |
 
 ## Reference: full SKILL.md
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/software-development/software-development-code-wiki"
 title: "Code Wiki"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Code Wiki
@@ -19,7 +19,7 @@ Generate wiki docs + Mermaid diagrams for any codebase.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `Documentation`, `Mermaid`, `Architecture`, `Diagrams`, `Wiki`, `Code-Analysis` |
-| Related skills | [`codebase-inspection`](../../bundled/github/github-codebase-inspection.md), [`github-repo-management`](../../bundled/github/github-github-repo-management.md) |
+| Related skills | [`codebase-inspection`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-codebase-inspection), [`github`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-github) |
 
 ## Reference: full SKILL.md
 

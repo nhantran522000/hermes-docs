@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-requesting-code-review"
 title: "Requesting Code Review"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Requesting Code Review
@@ -19,7 +19,7 @@ Pre-commit review: security scan, quality gates, auto-fix.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `code-review`, `security`, `verification`, `quality`, `pre-commit`, `auto-fix` |
-| Related skills | [`subagent-driven-development`](../../optional/software-development/software-development-subagent-driven-development.md), [`plan`](software-development-plan.md), [`test-driven-development`](software-development-test-driven-development.md), [`github-code-review`](../github/github-github-code-review.md) |
+| Related skills | [`subagent-driven-development`](../../optional/software-development/software-development-subagent-driven-development.md), [`test-driven-development`](software-development-test-driven-development.md), [`github`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-github) |
 
 ## Reference: full SKILL.md
 
@@ -42,7 +42,7 @@ Automated verification pipeline before code lands. Static scans, baseline-aware 
 
 **Skip for:** documentation-only changes, pure config tweaks, or when user says "skip verification".
 
-**This skill vs github-code-review:** This skill verifies YOUR changes before committing. `github-code-review` reviews OTHER people's PRs on GitHub with inline comments.
+**This skill vs github:** This skill verifies YOUR changes before committing. `github` reviews OTHER people's PRs on GitHub with inline comments.
 
 ## Step 1 — Get the diff
 

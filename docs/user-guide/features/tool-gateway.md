@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-gateway"
 title: "Nous Tool Gateway"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Nous Tool Gateway

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-baoyu-article-illustrator"
 title: "Baoyu Article Illustrator"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Baoyu Article Illustrator

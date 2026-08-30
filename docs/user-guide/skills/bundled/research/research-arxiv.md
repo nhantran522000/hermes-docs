@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/research/research-arxiv"
 title: "Arxiv"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Arxiv
@@ -19,7 +19,7 @@ Search arXiv papers by keyword, author, category, or ID.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `Research`, `Arxiv`, `Papers`, `Academic`, `Science`, `API` |
-| Related skills | [`ocr-and-documents`](../productivity/productivity-ocr-and-documents.md) |
+| Related skills | [`pdf`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-pdf) |
 
 ## Reference: full SKILL.md
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-systematic-debugging"
 title: "Systematic Debugging"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Systematic Debugging
@@ -19,7 +19,7 @@ last_crawled: 2026-08-23
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `debugging`, `troubleshooting`, `problem-solving`, `root-cause`, `investigation` |
-| Related skills | [`test-driven-development`](software-development-test-driven-development.md), [`plan`](software-development-plan.md), [`subagent-driven-development`](../../optional/software-development/software-development-subagent-driven-development.md) |
+| Related skills | [`test-driven-development`](software-development-test-driven-development.md), [`subagent-driven-development`](../../optional/software-development/software-development-subagent-driven-development.md) |
 
 ## Reference: full SKILL.md
 

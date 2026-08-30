@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/skins"
 title: "Skins & Themes"
-last_crawled: 2026-08-23
+last_crawled: 2026-08-30
 ---
 
 # Skins & Themes

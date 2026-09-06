@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/provider-runtime"
 title: "Provider Runtime Resolution"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Provider Runtime Resolution
@@ -170,7 +170,7 @@ Hermes supports a configured fallback provider chain — a list of `(provider, m
 
 1.  **Storage**: `AIAgent.__init__` stores the `fallback_model` dict and sets `_fallback_activated = False`.
 
-2.  **Trigger points**: `_try_activate_fallback()` is called from three places in the main retry loop in `run_agent.py`:
+2.  **Trigger points**: `_try_activate_fallback()` (forwarded to `try_activate_fallback()` in `agent/chat_completion_helpers.py`) is called from three places in the turn phases (`agent/turn_api_error.py`, `agent/turn_response_check.py`, `agent/turn_recovery.py`):
 
     - After max retries on invalid API responses (None choices, missing content)
     - On non-retryable client errors (HTTP 401, 403, 404)
@@ -190,7 +190,7 @@ Hermes supports a configured fallback provider chain — a list of `(provider, m
 4.  **Config flow**:
 
     - CLI: reads the fallback chain via `hermes_cli/fallback_config.get_fallback_chain()` → passes to `AIAgent(fallback_model=...)`
-    - Gateway: `gateway/run.py._load_fallback_model()` reads `config.yaml` → passes to `AIAgent`
+    - Gateway: `gateway/run_config_loaders.py._load_fallback_model()` reads `config.yaml` → passes to `AIAgent`
     - Validation: both `provider` and `model` keys must be non-empty, or fallback is disabled
 
 ### What does NOT support fallback

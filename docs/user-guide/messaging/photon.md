@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/photon"
 title: "Photon iMessage"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Photon iMessage
@@ -157,6 +157,7 @@ Common issues:
 - **Inbound attachments are metadata-only.** Inbound events carry the filename + MIME type; the agent sees a marker but can't yet read the bytes. The SDK exposes attachment bytes via `content.read()`, so this is a sidecar follow-up.
 - **Outbound attachments are supported.** Hermes sends images, voice notes, video, and documents through spectrum-ts' `attachment()` / `voice()` content builders via the sidecar's `/send-attachment` endpoint. Captions arrive as a separate iMessage bubble after the media.
 - **Native polls are supported.** Hermes sends poll content through spectrum-ts' `poll()` builder via the sidecar's `/send-poll` endpoint.
+- **Read receipts are supported.** The sidecar marks an inbound iMessage read after forwarding it to Hermes, so the sender sees `Read` without waiting for a model/tool turn. Inbound receipts for Hermes-sent messages are consumed as presence telemetry and never create an agent turn. Set `PHOTON_READ_RECEIPTS=false` to keep messages at `Delivered`.
 - **Message effects are supported.** Hermes sends text with native iMessage bubble/screen effects through spectrum-ts' iMessage `effect()` builder via the sidecar's `/send-effect` endpoint.
 - **Photon's free quotas:** 5,000 messages per server per day, 50 new-conversation initiations per shared line per day. Increases available — email `help@photon.codes`.
 - **Cron and standalone sends need the gateway running.** Out-of-process senders (cron jobs, `hermes send`, the dashboard) reuse the sidecar the gateway spawned — they read its port/token from `<hermes-home>/runtime/photon-sidecar.json`, written once the sidecar passes its health check and removed when it stops. If a standalone send reports the gateway appears to be down, start (or restart) the gateway first.

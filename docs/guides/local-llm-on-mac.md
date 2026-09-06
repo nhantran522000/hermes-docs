@@ -1,10 +1,14 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/local-llm-on-mac"
 title: "Run Local LLMs on Mac"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Run Local LLMs on Mac
+
+Desktop users: there's a one-click path
+
+On the Hermes desktop app, **Settings → Providers → Local Models** installs and manages a local llama.cpp server for you — model downloads, memory fitting, and context sizing included. See [Local Models](https://hermes-agent.nousresearch.com/docs/user-guide/local-models). This guide is for manual setup: MLX, custom builds, or servers you want to run yourself.
 
 This guide walks you through running a local LLM server on macOS with an OpenAI-compatible API. You get full privacy, zero API costs, and surprisingly good performance on Apple Silicon.
 

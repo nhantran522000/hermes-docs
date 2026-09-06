@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/automate-with-cron"
 title: "Automate Anything with Cron"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Automate Anything with Cron
@@ -75,6 +75,10 @@ Set up the cron job:
 The \[SILENT\] Trick
 
 For cron monitoring jobs, instruct the agent to respond with only `[SILENT]` when nothing changed. Cron delivery treats `[SILENT]` as the quiet marker, so you only get notified when something actually happens — no spam on quiet hours.
+
+Keeping failure notices out of shared channels
+
+`[SILENT]` only applies to successful runs — when a job hard-fails, the engine posts a `⚠️ Cron 'X' failed…` notice to the job's delivery target. For jobs that deliver into busy shared channels, set `--failure-deliver local` to suppress those notices entirely (run state stays visible in `hermes cron list` and run history), or point failures at an ops channel with `--failure-deliver slack:C_OPS`. Same grammar as `--deliver`; omit it and failures follow `--deliver` as before.
 
 ------------------------------------------------------------------------
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/context-engine-plugin"
 title: "Building a Context Engine Plugin"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Building a Context Engine Plugin

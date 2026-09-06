@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp"
 title: "MCP (Model Context Protocol)"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # MCP (Model Context Protocol)
@@ -571,7 +571,7 @@ If you change MCP config, use:
 /reload-mcp
 ```
 
-This reloads MCP servers from config and refreshes the available tool list. For runtime tool changes pushed by the server itself, see [Dynamic Tool Discovery](#dynamic-tool-discovery) above.
+This reloads MCP servers from config and refreshes the available tool list. It is also the explicit way to re-probe availability-gated tools (Docker, `HASS_TOKEN`, OAuth…): a session's tool set is otherwise frozen, so a credential or daemon that appears mid-session is only picked up on `/reload-mcp`, `/new`, or context compaction. For runtime tool changes pushed by the server itself, see [Dynamic Tool Discovery](#dynamic-tool-discovery) above.
 
 ### Toolsets
 

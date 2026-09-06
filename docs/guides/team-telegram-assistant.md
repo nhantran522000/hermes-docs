@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/team-telegram-assistant"
 title: "Set Up a Team Telegram Assistant"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Set Up a Team Telegram Assistant

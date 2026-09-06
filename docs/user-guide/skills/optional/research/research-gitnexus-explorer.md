@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-gitnexus-explorer"
 title: "Gitnexus Explorer"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Gitnexus Explorer

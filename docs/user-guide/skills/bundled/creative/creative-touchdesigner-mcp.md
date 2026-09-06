@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-touchdesigner-mcp"
 title: "Touchdesigner Mcp"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Touchdesigner Mcp

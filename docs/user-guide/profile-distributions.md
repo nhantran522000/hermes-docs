@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/profile-distributions"
 title: "Profile Distributions: Share a Whole Agent"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Profile Distributions: Share a Whole Agent
@@ -626,10 +626,12 @@ When you don't need versioning, skip the repo. `/export` packs a profile into a 
 In the CLI, TUI, or desktop chat:
 
 ``` text
-/export                          # the active profile → <name>.tar.gz
+/export                          # the active profile → managed profile-exports/<name>-<timestamp>.tar.gz
 /export research-bot             # a named profile
 /export research-bot -o ~/Desktop/research-bot.tar.gz
 ```
+
+Without `-o`, the CLI and TUI place the archive in Hermes's managed `profile-exports/` directory under the default Hermes home, not in the current working directory. This keeps routine exports out of source checkouts and prevents a generated profile snapshot from being mistaken for a repository source file. If the Hermes home itself lives inside a Git checkout (some Docker/custom deployments), the archive goes to `~/.hermes-profile-exports/` or, failing that, a per-user directory under the OS temp dir — never into the checkout. If no safe automatic location exists at all (every candidate is inside a Git checkout), the export refuses with "No safe automatic export destination" and you must pass `-o` with a path outside the checkout. An explicit `-o` path is still honored when you intentionally choose where to save the archive.
 
 Or from a shell, same machinery:
 

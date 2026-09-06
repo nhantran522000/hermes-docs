@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/toolsets-reference"
 title: "Toolsets Reference"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Toolsets Reference
@@ -132,7 +132,7 @@ mcp_servers:
     args: ["-y", "@modelcontextprotocol/server-github"]
 ```
 
-This creates a `mcp-github` toolset you can reference in `--toolsets` or platform configs.
+This creates a `mcp-github` toolset you can reference in `--toolsets` or platform configs. The bare server name (`github`) works as an alias. If a server is named like a built-in toolset (`homeassistant`, `browser`), that name resolves to the built-in tools **plus** the server's `mcp__<server>__*` tools; neither side shadows the other.
 
 ### Plugin toolsets
 

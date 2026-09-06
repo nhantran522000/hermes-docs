@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/secrets/bitwarden"
 title: "Bitwarden Secrets Manager"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Bitwarden Secrets Manager

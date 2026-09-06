@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/memory-provider-plugin"
 title: "Building a Memory Provider Plugin"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Building a Memory Provider Plugin
@@ -131,7 +131,9 @@ class MyArchivingProvider(MemoryProvider):
     # contract: best-effort semantics, raw message list.
     pre_compress_checkpoint_api_version = 2
 
-    def on_pre_compress(self, messages):
+    def on_pre_compress(self, messages, *, require_checkpoint=False):
+        # require_checkpoint mirrors the operator's checkpoint_required
+        # setting: True means a raise here blocks the lossy rewrite.
         ids = self._archive(messages)   # must be durable before returning
         return f"checkpoint: {ids}"     # forwarded into the summary prompt
 ```

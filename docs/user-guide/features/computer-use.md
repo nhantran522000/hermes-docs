@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/computer-use"
 title: "Computer Use"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Computer Use
@@ -247,6 +247,15 @@ computer_use:
   permission_mode: standard        # standard (default) | bounded
   capability_manifest: ""          # capability manifest path, required for bounded
 ```
+
+On Linux, native Wayland support remains an explicit opt-in. Hermes passes the opt-in to every cua-driver process, including gateway sessions, only when that process also has `WAYLAND_DISPLAY`:
+
+``` yaml
+computer_use:
+  native_wayland: true
+```
+
+Restart a running gateway after changing this setting.
 
 Override the driver binary path (tests / CI / local builds):
 

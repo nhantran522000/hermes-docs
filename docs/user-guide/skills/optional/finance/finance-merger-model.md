@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/finance/finance-merger-model"
 title: "Merger Model"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Merger Model

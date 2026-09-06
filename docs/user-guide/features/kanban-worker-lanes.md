@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/kanban-worker-lanes"
 title: "Kanban worker lanes"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Kanban worker lanes

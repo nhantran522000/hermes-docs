@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-creative-ideation"
 title: "Creative Ideation"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Creative Ideation

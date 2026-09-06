@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/lsp"
 title: "Language Server Protocol (LSP)"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Language Server Protocol (LSP)
@@ -166,6 +166,8 @@ The LSP layer adds a few milliseconds to clean writes when no diagnostics are em
 Diagnostics are **freshness-gated**: a result only counts when the server produced it for the content of the current edit (a `publishDiagnostics` push at/after the change, or a pull request answered after it). Slow servers that haven't re-checked yet result in "no data" for that edit — never in yesterday's errors being re-reported as current.
 
 Servers are kept alive while they're being used and shut down after `lsp.idle_timeout` seconds (default 600) with no file activity — a long-running gateway that touches many worktrees no longer accumulates one language-server process per workspace forever. A reaped server is respawned automatically on the next relevant file operation. Set `idle_timeout: 0` to disable reaping and hold every server's index warm for the life of the process.
+
+Servers that support multi-root workspaces (currently pyright) run as a **single process** per Hermes process: the first Python project spawns it, and every further project root — for example sibling git worktrees edited by parallel subagents — is attached to that same server as an additional workspace folder instead of starting another copy.
 
 ## Disabling
 

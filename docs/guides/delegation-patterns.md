@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/delegation-patterns"
 title: "Delegation & Parallel Work"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Delegation & Parallel Work
@@ -236,6 +236,8 @@ delegation:
 **Use delegation for context isolation.** Sometimes you want a fresh perspective. Delegating forces you to articulate the problem clearly, and the subagent approaches it without the assumptions that built up in your conversation.
 
 **Check results.** Subagent summaries are just that — summaries. If a subagent says "fixed the bug and tests pass," verify by running the tests yourself or reading the diff.
+
+**Failures are surfaced.** A subagent that dies (provider error, timeout, crash) is reported with a clean one-line notice — `⚠️ Subagent failed — "your goal": <reason>` — in the CLI delegation tree and as a chat notice on gateway platforms, even when tool progress is turned off. The parent agent also receives the full error in the tool result.
 
 ------------------------------------------------------------------------
 

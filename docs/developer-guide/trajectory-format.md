@@ -1,14 +1,14 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/trajectory-format"
 title: "Trajectory Format"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Trajectory Format
 
 Hermes Agent saves conversation trajectories in ShareGPT-compatible JSONL format for use as training data, debugging artifacts, and reinforcement learning datasets.
 
-Source files: `agent/trajectory.py`, `run_agent.py` (search for `_save_trajectory`), `batch_runner.py`
+Source files: `agent/trajectory.py`, `agent/session_persistence.py` (search for `_save_trajectory`), `batch_runner.py`
 
 ## File Naming Convention
 

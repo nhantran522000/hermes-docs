@@ -1,12 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/extending-the-cli"
 title: "Extending the CLI"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Extending the CLI
 
-Hermes exposes protected extension hooks on `HermesCLI` so wrapper CLIs can add widgets, keybindings, and layout customizations without overriding the 1000+ line `run()` method. This keeps your extension decoupled from internal changes.
+Hermes exposes protected extension hooks on `HermesCLI` so wrapper CLIs can add widgets, keybindings, and layout customizations without overriding the `run()` method or the TUI construction in `hermes_cli/cli_tui_mixin.py` (where these hooks are defined; `HermesCLI` in `cli.py` mixes it in). This keeps your extension decoupled from internal changes.
 
 ## Extension points
 

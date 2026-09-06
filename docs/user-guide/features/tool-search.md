@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-search"
 title: "Tool Search"
-last_crawled: 2026-08-30
+last_crawled: 2026-09-06
 ---
 
 # Tool Search
@@ -105,6 +105,7 @@ These come from the prompt-cache integrity invariant — they are inherent to an
 
 - **One extra round trip on cold tools.** The first time the model needs a deferred tool, it spends one or two extra model calls to find and load the schema. The token savings on the static side are real, but a portion is paid back at runtime.
 - **No cache benefit on deferred schemas.** A loaded `tool_describe` result enters the conversation history (so it does get cached on subsequent turns) but it never benefits from the system-prompt cache prefix.
+- **No provider-native validation for deferred schemas.** `tool_describe` lets the model read a deferred tool's schema, but the provider still sees only the generic `tool_call.arguments` object. Hermes therefore coerces and validates the underlying arguments locally before dispatch; the concrete tool or MCP server remains responsible for schemas Hermes cannot safely validate, such as malformed schemas or external references.
 - **Model-quality dependence.** Tool Search assumes the model can write a reasonable search query for the tool it wants. Smaller models do this less well; the published Anthropic numbers (49% → 74% on Opus 4 with vs. without tool search) show the upside but also that ~26 points of accuracy is still retrieval failure.
 - **Toolset edits invalidate cache.** Adding or removing a tool mid- session changes the bridge tools' descriptions (which include the count of deferred tools) and the catalog, so the prompt cache is invalidated. This is the same trade-off as any toolset edit.
 

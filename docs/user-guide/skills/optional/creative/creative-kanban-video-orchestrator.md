@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-kanban-video-orchestrator"
 title: "Kanban Video Orchestrator"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Kanban Video Orchestrator
@@ -19,7 +19,7 @@ Plan and run multi-agent video production pipelines.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `video`, `kanban`, `multi-agent`, `orchestration`, `production-pipeline` |
-| Related skills | [`ascii-video`](../../bundled/creative/creative-ascii-video.md), [`manim-video`](../../bundled/creative/creative-manim-video.md), [`p5js`](../../bundled/creative/creative-p5js.md), [`comfyui`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-comfyui), [`touchdesigner-mcp`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-touchdesigner-mcp), [`pixel-art`](creative-pixel-art.md), [`ascii-art`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-ascii-art), [`songwriting-and-ai-music`](../../bundled/creative/creative-songwriting-and-ai-music.md), [`heartmula`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-heartmula), [`songsee`](../../bundled/media/media-songsee.md), [`youtube-content`](../../bundled/media/media-youtube-content.md), [`claude-design`](../../bundled/creative/creative-claude-design.md), [`excalidraw`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-excalidraw), [`architecture-diagram`](../../bundled/creative/creative-architecture-diagram.md), [`concept-diagrams`](creative-concept-diagrams.md), [`baoyu-comic`](creative-baoyu-comic.md), [`baoyu-infographic`](../../bundled/creative/creative-baoyu-infographic.md), [`humanizer`](../../bundled/creative/creative-humanizer.md), [`gif-search`](../../bundled/media/media-gif-search.md), [`meme-generation`](creative-meme-generation.md) |
+| Related skills | [`ascii-video`](../../bundled/creative/creative-ascii-video.md), [`manim-video`](../../bundled/creative/creative-manim-video.md), [`p5js`](../../bundled/creative/creative-p5js.md), [`comfyui`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-comfyui), [`pixel-art`](creative-pixel-art.md), [`ascii-art`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-ascii-art), [`songwriting-and-ai-music`](../../bundled/creative/creative-songwriting-and-ai-music.md), [`heartmula`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-heartmula), [`songsee`](../../bundled/media/media-songsee.md), [`youtube-content`](../../bundled/media/media-youtube-content.md), [`claude-design`](../../bundled/creative/creative-claude-design.md), [`excalidraw`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-excalidraw), [`architecture-diagram`](../../bundled/creative/creative-architecture-diagram.md), [`concept-diagrams`](creative-concept-diagrams.md), [`baoyu-comic`](creative-baoyu-comic.md), [`baoyu-infographic`](../../bundled/creative/creative-baoyu-infographic.md), [`humanizer`](../../bundled/creative/creative-humanizer.md), [`gif-search`](../../bundled/media/media-gif-search.md), [`meme-generation`](creative-meme-generation.md) |
 
 ## Reference: full SKILL.md
 

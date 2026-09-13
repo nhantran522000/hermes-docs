@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/sessions"
 title: "Sessions"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Sessions
@@ -581,7 +581,7 @@ Repair is deliberately **not automatic**: if the chat has since built up a secon
 
 ## Importing Sessions from Claude Code and Codex CLI
 
-Started a conversation in another agent CLI? You can pull it into Hermes and continue it here. Hermes reads Claude Code's session logs (`~/.claude/projects/`) and Codex CLI's rollouts (`~/.codex/sessions/`) — the foreign files are only read, never modified.
+Started a conversation in another agent CLI? You can pull it into Hermes and continue it here. Hermes reads Claude Code's session logs (`~/.claude/projects/`, or `$CLAUDE_CONFIG_DIR/projects/` when Claude Code's config dir is relocated) and Codex CLI's rollouts (`~/.codex/sessions/`, or `$CODEX_HOME/sessions/`) — the foreign files are only read, never modified.
 
 ``` bash
 # Interactive picker across both tools, newest first
@@ -598,7 +598,7 @@ hermes --resume @codex
 
 `hermes sessions import` creates a new Hermes session titled `Imported from Claude Code: <first user message>` (or Codex CLI) and prints the id plus a ready-to-paste `hermes --resume <id>` command. `--resume @claude` / `--resume @codex` show the same picker and drop you straight into the imported conversation.
 
-**Hermes Desktop** has the same importer under **Import session** in the sidebar (also in the command palette). It lists the logs on the machine the connected backend runs on — not the computer running the app — shows a read-only preview, and **Continue in Hermes** copies the conversation into the selected profile. Browsing never writes to your session store, importing never touches the source file, and importing the same log twice opens the existing copy instead of making another.
+**Hermes Desktop** has the same importer in the command palette (**Import session**). It lists the logs on the machine the connected backend runs on — not the computer running the app — shows a read-only preview, and **Continue in Hermes** copies the conversation into the selected profile. Browsing never writes to your session store, importing never touches the source file, and importing the same log twice opens the existing copy instead of making another.
 
 What carries over: the ordered user/assistant conversation, with tool activity condensed to short `[ran tool: …]` notes inside assistant turns. System prompts, injected context, reasoning traces, and raw tool output are left behind — the import is a clean transcript, not a byte-for-byte replay.
 
@@ -716,18 +716,20 @@ group_sessions_per_user: false
 
 That reverts groups/channels to a single shared session per room, which preserves shared conversational context but also shares token costs, interrupt state, and context growth.
 
-### Session Reset Policies
+### Session continuity
 
-**By default gateway sessions never auto-reset** (`mode: none`). You can opt in to automatic resets via the `session_reset` section in `config.yaml`:
+Gateway conversations do not reset after inactivity or at a daily boundary. Use `/new` or `/reset` for an explicit new conversation; context compression remains automatic. Legacy `session_reset` settings, reset-policy overrides and reset-timer environment variables are ignored. Cached agents may be released to reclaim resources without replacing the durable conversation. Restart-recovery freshness limits automatic continuation, not the history loaded when you send a message.
 
-- **none** — never auto-reset (default; context managed by `/reset` and compression)
-- **idle** — reset after N minutes of inactivity
-- **daily** — reset at a specific hour each day
-- **both** — reset on whichever comes first (idle or daily)
+### Session hygiene: why you should still run `/new`
 
-Before a session is auto-reset, the agent is given a turn to save any important memories or skills from the conversation.
+Because gateway conversations never expire on their own, it is easy to run one session for weeks. That works, but it quietly defeats the learning loop and inflates costs:
 
-Sessions with **active background processes** are never auto-reset, regardless of policy.
+- **Memory only pays off at boundaries.** `MEMORY.md` / `USER.md` are injected at session start, and `session_search` exists to recall what fell out of context. In a never-ending session everything is still *in* context, so the agent has no reason to consult memory — the "self-learning" machinery barely runs. Memory distillation (the save before reset) also only happens when a session actually ends.
+- **Cost grows with history.** Compression keeps a long session functional, but every turn still carries a large (compacted) prefix. A fresh session with distilled memory is almost always cheaper than a month-old thread.
+
+Practical rule: end a session when you finish a task or topic. Run `/new` (optionally named, e.g. `/new payments-refactor`) at natural stopping points — daily or per-project both work. Before the reset, ask the agent to "remember anything worth keeping" if the work surfaced durable preferences or procedures; it saves memories and skills from the expiring session automatically, but an explicit nudge helps. Restarting the machine or the gateway is **not** a boundary — the same session resumes.
+
+See [Memory](features/memory.md) for what gets carried across boundaries.
 
 ### Continuity After Crashes and Restarts
 
@@ -735,7 +737,7 @@ A gateway chat is designed to be **one continuous session** — compacted repeat
 
 - Session identity (routing key, chat, origin) is written **atomically** when the session row is created, on every creation path (`/new`, first message, `/branch` children). If that write ever fails, the very next turn's routing refresh repairs the row automatically.
 - After a restart, the gateway re-resolves each chat to the session with the most recent **actual activity** — an older, stale row can never win over the conversation you were actually having.
-- Recovery **respects `/new` boundaries**: if the most recent event for a chat is an intentional reset, recovery starts fresh rather than reaching behind the reset to resurrect an older session. Recovered sessions also keep their real idle time, so an opt-in idle/daily reset policy applies correctly to them instead of treating every recovered session as brand new.
+- Recovery **respects `/new` boundaries**: if the most recent event for a chat is an intentional reset, recovery starts fresh rather than reaching behind the reset to resurrect an older session. Elapsed time alone never prevents recovery of a durable conversation.
 
 ## Storage Locations
 
@@ -772,7 +774,7 @@ Key tables in `state.db`:
 
 ### Automatic Cleanup
 
-- Gateway sessions auto-reset based on the configured reset policy
+- Gateway conversations persist across inactivity; use `/new` or `/reset` for an explicit boundary
 - Before reset, the agent saves memories and skills from the expiring session
 - Auto-pruning (**on by default** since \#54189): when `sessions.auto_prune` is `true`, ended sessions inactive for `sessions.retention_days` (default 90) are pruned at CLI/gateway/cron startup
 - After a prune that actually removed rows, `state.db` is `VACUUM`ed to reclaim disk space only when **both** gates pass: at least `sessions.min_vacuum_interval_days` (default 30) have elapsed since the last successful `VACUUM`, **and** more than 25% of the file's pages are reclaimable (`PRAGMA freelist_count / page_count`). A dense database never pays for a full rewrite to reclaim a few MB (SQLite does not shrink the file on plain DELETE)
@@ -828,4 +830,4 @@ hermes sessions prune --older-than 30 --yes
 
 tip
 
-The database grows slowly (typical: 10-15 MB for hundreds of sessions) and session history powers `session_search` recall across past conversations, so auto-prune ships disabled. Enable it if you're running a heavy gateway/cron workload where `state.db` is meaningfully affecting performance (observed failure mode: 384 MB state.db with ~1000 sessions slowing down FTS5 inserts and `/resume` listing). Use `hermes sessions prune` for one-off cleanup without turning on the automatic sweep.
+Auto-prune is **on by default**: ended sessions that have been inactive for `sessions.retention_days` (default 90) are removed at startup, and active sessions are never touched (see [Automatic Cleanup](#automatic-cleanup) above). Session history powers `session_search` recall across past conversations, so if you want to keep every ended session forever, set `sessions.auto_prune: false` in `config.yaml`, or raise `retention_days`. With auto-prune off, `hermes sessions prune` remains available for one-off cleanup (observed failure mode without any pruning: a 384 MB `state.db` with ~1000 sessions slowing down FTS5 inserts and `/resume` listing).

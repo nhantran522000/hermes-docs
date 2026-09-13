@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/adding-providers"
 title: "Adding Providers"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Adding Providers
@@ -327,12 +327,12 @@ At minimum, touch the tests that guard provider wiring.
 Common places:
 
 - `tests/hermes_cli/test_runtime_provider_resolution.py`
-- `tests/cli/test_cli_provider_resolution.py`
+- `tests/hermes_cli/test_cli_provider_resolution.py`
 - `tests/hermes_cli/test_model_switch_custom_providers.py` (and adjacent `tests/hermes_cli/test_model_switch_*.py`)
 - `tests/hermes_cli/test_setup_model_provider.py`
-- `tests/run_agent/test_provider_parity.py`
-- `tests/run_agent/test_run_agent.py`
-- `tests/test_<provider>_adapter.py` for a native provider
+- `tests/agent/test_provider_parity.py`
+- `tests/agent/test_run_agent.py`
+- `tests/agent/test_<provider>_adapter.py` for a native provider
 
 For docs-only examples, the exact file set may differ. The point is to cover:
 
@@ -347,7 +347,7 @@ Run the targeted tests (or use `scripts/run_tests.sh`, which runs each file in i
 
 ``` bash
 source venv/bin/activate
-python -m pytest tests/hermes_cli/test_runtime_provider_resolution.py tests/cli/test_cli_provider_resolution.py tests/hermes_cli/test_setup_model_provider.py tests/run_agent/test_provider_parity.py -q
+python -m pytest tests/hermes_cli/test_runtime_provider_resolution.py tests/hermes_cli/test_cli_provider_resolution.py tests/hermes_cli/test_setup_model_provider.py tests/agent/test_provider_parity.py -q
 ```
 
 For deeper changes, run the full suite before pushing:

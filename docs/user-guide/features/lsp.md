@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/lsp"
 title: "Language Server Protocol (LSP)"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Language Server Protocol (LSP)

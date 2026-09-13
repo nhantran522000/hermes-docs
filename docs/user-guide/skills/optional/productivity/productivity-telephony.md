@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-telephony"
 title: "Telephony"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Telephony

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/acp-internals"
 title: "ACP Internals"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # ACP Internals
@@ -175,7 +175,7 @@ ACP temporarily installs an approval callback on the terminal tool during prompt
 
 ## Related files
 
-- `tests/acp/` — ACP test suite
+- `tests/acp_adapter/` — ACP test suite
 - `toolsets.py` — `hermes-acp` toolset definition
 - `hermes_cli/main.py` — `hermes acp` CLI subcommand
 - `pyproject.toml` — `[acp]` optional dependency + `hermes-acp` script

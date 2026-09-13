@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/github/github-codebase-inspection"
 title: "Codebase Inspection"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Codebase Inspection

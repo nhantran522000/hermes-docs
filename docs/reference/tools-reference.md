@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/tools-reference"
 title: "Built-in Tools Reference"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Built-in Tools Reference
@@ -256,7 +256,7 @@ A tip is a tour step without the production: one bubble, one arrow, no scrim and
 
 The `tip` tool takes the same selectors `tour(action='targets')` reports, so discovery is one call for both, and the durable `data-tour` handles above name targets for either. One tip is on screen at a time; a new one replaces the last.
 
-The app can also show its own, walking a built-in catalog of app features in order, paced like a game's loading-screen tips rather than a notification: a few minutes into a launch at the earliest, then at most one every six hours, and only at a genuinely idle moment. A tip from Hermes shares that cooldown, so it also buys the user six hours of quiet from the rotation. Closing a rotation tip with the ✕ retires that tip for good, and the settings row brings them back.
+The app can also show its own, walking a built-in catalog of app features in order, paced like a game's loading-screen tips rather than a notification: a few minutes into a launch at the earliest, then at most one every six hours, and only at a genuinely idle moment. A tip from Hermes shares that cooldown, so it also buys the user six hours of quiet from the rotation. The rotation is a single lap: each catalog tip shows once, whether it timed out or was closed with the ✕, and once every tip has had its turn the app goes quiet. The settings row starts the lap over.
 
 Both tips and tours are on by default and switched off in Settings → Appearance (`display.in_app_tips`, `display.in_app_tours`). Off covers Hermes as well as the app: the switch reaches the connected gateway's config and the tool leaves the model's schema, so the agent is never told about a surface it isn't allowed to use. Like every schema change, that lands on the next session — a running conversation keeps the toolset it started with, and the app declines the call in the meantime.
 
@@ -288,6 +288,8 @@ Backends ship as plugins under `plugins/video_gen/<name>/`:
 
 - **xAI Grok-Imagine** — text-to-video and image-to-video (SuperGrok OAuth or `XAI_API_KEY`).
 - **FAL.ai** — Veo 3.1, Pixverse v6, Kling O3 (requires `FAL_KEY`).
+- **OpenRouter** — every generative model on OpenRouter's video API (Veo 3.1, Sora 2 Pro, Kling 3, Seedance 2, Wan 3, Hailuo 3, Grok Imagine, FLUX 3 Video, …); text-to-video, image-to-video and reference-to-video; catalog and per-model limits fetched live (requires `OPENROUTER_API_KEY`, billed to your OpenRouter credit).
+- **DeepInfra** — live `video-gen` catalog over the OpenAI-compatible videos endpoint (requires `DEEPINFRA_API_KEY`).
 
 The single `video_generate` tool covers both modalities — pass `image_url` to animate a still, omit it to generate from text alone. The active backend auto-routes to the right endpoint. The tool's description is rebuilt at session start to reflect the active backend's actual capabilities (modalities, aspect ratios, resolutions, duration range, max reference images, audio support). See [Video Generation Provider Plugins](../developer-guide/video-gen-provider-plugin.md) for backend authoring.
 

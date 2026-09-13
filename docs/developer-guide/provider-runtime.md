@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/provider-runtime"
 title: "Provider Runtime Resolution"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Provider Runtime Resolution
@@ -26,6 +26,10 @@ Primary implementation:
 `get_provider_profile()` in `providers/` returns a `ProviderProfile` for a given provider id. `runtime_provider.py` calls this at resolution time to get the canonical `base_url`, `env_vars` priority list, `api_mode`, and `fallback_models` without needing to duplicate that data in multiple files. Adding a new plugin under `plugins/model-providers/<your-provider>/` (or `$HERMES_HOME/plugins/model-providers/<your-provider>/`) that calls `register_provider()` is enough for `runtime_provider.py` to pick it up — no branch needed in the resolver itself.
 
 If you are trying to add a new first-class inference provider, read [Adding Providers](adding-providers.md) and the [Model Provider Plugin guide](model-provider-plugin.md) alongside this page.
+
+## Chat-completions reasoning shapes
+
+OpenAI-compatible relays can return `reasoning` or `reasoning_content` as strings, text-part dictionaries, or lists of text parts and string fragments. Hermes flattens these fields before string operations in the main stream, Relay recording, synchronous and asynchronous auxiliary streams, and completed-response reasoning extraction. Fragments retain their explicit whitespace; normalization adds no intra-field separator. Main-stream and Relay recording retain the existing paragraph breaks between complete bold reasoning headings. Reasoning stays separate from the visible answer.
 
 ## Resolution precedence
 
@@ -204,7 +208,7 @@ Cron jobs **do** support fallback: `run_job()` reads `fallback_providers` (or le
 
 Fallback behavior is exercised across several suites:
 
-- `tests/run_agent/test_fallback_credential_isolation.py` — credential isolation between primary and fallback
+- `tests/agent/test_fallback_credential_isolation.py` — credential isolation between primary and fallback
 - `tests/hermes_cli/test_fallback_cmd.py` — the `/fallback` CLI command
 - `tests/gateway/test_fallback_eviction.py` — gateway eviction of failed providers
 

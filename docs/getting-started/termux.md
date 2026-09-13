@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/termux"
 title: "Hermes on Android with Termux"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Hermes on Android with Termux

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-parallel-cli"
 title: "Parallel Cli"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Parallel Cli

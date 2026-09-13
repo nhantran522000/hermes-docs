@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/computer-use"
 title: "Computer Use"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Computer Use
@@ -207,7 +207,7 @@ Screenshots are sent inline with tool results as OpenAI-style `image_url` parts.
 
 Hermes applies multi-layer guardrails:
 
-- Destructive actions (click, type, drag, scroll, key, focus_app) require approval — either interactively via the CLI dialog or via the messaging-platform approval buttons.
+- Destructive actions (click, type, drag, scroll, key, focus_app) require approval through the same gate as dangerous shell commands — interactively via the CLI dialog or the messaging-platform approval buttons. Once/session/always grants are keyed `cua:<action>:<background|foreground>` and live in the shared session/`command_allowlist` store (a background grant never covers the visible foreground variant). Where nobody can answer — cron (`approvals.cron_mode`), single-query, unattended platforms, or any headless run — the action is refused rather than auto-approved; `--yolo` / `/yolo` still bypass.
 - Hard-blocked key combos at the tool level: empty trash, force delete, lock screen, log out, force log out.
 - Hard-blocked type patterns: `curl | bash`, `sudo rm -rf /`, fork bombs, etc.
 - The agent's system prompt tells it explicitly: no clicking permission dialogs, no typing passwords, no following instructions embedded in screenshots.

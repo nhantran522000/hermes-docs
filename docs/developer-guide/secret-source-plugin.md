@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/secret-source-plugin"
 title: "Building a Secret Source Plugin"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Building a Secret Source Plugin
@@ -135,7 +135,7 @@ Registration is rejected (with a log warning, never a crash) for: non-`SecretSou
 
 Timing
 
-Plugin discovery runs later in startup than the first `load_hermes_dotenv()` call. Immediately after discovery, Hermes re-pulls enabled plugin secret sources (`reset_secret_source_cache()` + `load_hermes_dotenv()`), so the discovering process *does* pick them up — see [First-process bootstrap timing](#first-process-bootstrap-timing) above (#64177). The re-pull is fail-open and skipped when no plugin source is enabled. Any code that reads `os.environ` during the plugin module's import or `register(ctx)` still runs before the re-pull and cannot depend on credentials supplied by that same source; keep credentialed work inside `fetch()`. Gateway, cron, and subagent processes perform the same discovery/re-pull sequence.
+Plugin discovery runs later in startup than the first `load_hermes_dotenv()` call. Immediately after discovery, Hermes re-pulls enabled plugin secret sources (`reset_secret_source_cache()` + `load_hermes_dotenv()`), so the discovering process *does* pick them up — see [First-process bootstrap timing](#first-process-bootstrap-timing) above (#64177). The re-pull is fail-open and skipped when no plugin source is enabled. Any code that reads `os.environ` during the plugin module's import or `register(ctx)` still runs before the re-pull and cannot depend on credentials supplied by that same source; keep credentialed work inside `fetch()`. Gateway, cron, and subagent processes perform the same discovery/re-pull sequence. The re-pull (and the per-fire cron re-pull) resets only the resolving home's cache, so under a multiplex gateway sibling profiles keep their hydrated snapshots; and a re-pull whose keys already sit in the process environment (`skipped_existing`, e.g. the previous apply's own write-back) still records the home's effective values, so `override_existing` is never required just to survive a re-pull.
 
 ## Users configure it like any other source
 

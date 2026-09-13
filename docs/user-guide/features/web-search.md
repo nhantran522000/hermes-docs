@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/web-search"
 title: "Web Search & Extract"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Web Search & Extract
@@ -55,6 +55,8 @@ Backends return raw page markdown, which can be huge (forum threads, docs sites,
 | Over 2 000 000 | Stored text is capped at 2 MB |
 
 The per-page budget is configurable via `web.extract_char_limit` in `config.yaml` (default `15000`, clamped to 2 000–500 000), and the agent can raise it per-call with the tool's `char_limit` argument.
+
+Each provider dispatch is also bounded by a wall-clock timeout (`web.extract_timeout` in `config.yaml`, default `120` seconds; `0` disables it). A backend that keeps the response open without finishing returns per-URL timeout errors instead of stalling the tool call indefinitely.
 
 ### When truncation gets in the way
 

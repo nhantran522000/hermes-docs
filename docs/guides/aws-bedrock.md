@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/aws-bedrock"
 title: "AWS Bedrock"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # AWS Bedrock
@@ -85,6 +85,10 @@ bedrock:
     stream_processing_mode: "async"       # "sync" or "async"
     trace: "disabled"                     # "enabled", "disabled", or "enabled_full"
 ```
+
+The guardrail is attached on the Converse route (`guardrailConfig`) and on the Claude route (InvokeModel headers via the Anthropic Bedrock SDK, so prompt caching and thinking are kept). A blocked request surfaces as a content-filter refusal rather than as model text. `stream_processing_mode` only applies to Converse.
+
+AWS does not apply Guardrails to the Mantle Responses endpoint used by `openai.gpt-5.x` models ([AWS docs](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html)); use a Converse-served model when a guardrail is required.
 
 ### Model Discovery
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/irc"
 title: "IRC"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # IRC
@@ -21,9 +21,9 @@ IRC is plain text: there is no voice, image, file, thread, reaction, typing, or 
 
 ## Configure Hermes
 
-You can configure IRC two ways — environment variables (for a quick env-only setup) or the `gateway` block in `~/.hermes/gateway-config.yaml`.
+You can configure IRC two ways — environment variables (for a quick env-only setup) or the `gateway` block in `~/.hermes/config.yaml`.
 
-### Option A — gateway-config.yaml
+### Option A — config.yaml
 
 ``` yaml
 gateway:

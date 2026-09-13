@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/skills-catalog"
 title: "Bundled Skills Catalog"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Bundled Skills Catalog
@@ -100,13 +100,11 @@ If a skill is missing from this list but present in the repo, the catalog is reg
 | [`competitor-news-monitor`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/research/research-competitor-news-monitor) | Watch named companies for material news; cited digests. | `research/competitor-news-monitor` |
 | [`grounded-citations`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/research/research-grounded-citations) | Ground answers and documents in cited, verifiable sources. | `research/grounded-citations` |
 | [`llm-wiki`](../user-guide/skills/bundled/research/research-llm-wiki.md) | Karpathy's LLM Wiki: build/query interlinked markdown KB. | `research/llm-wiki` |
-| [`rss-feeds`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/research/research-rss-feeds) | Read RSS, Atom, JSON feeds; discover feeds behind a page. | `research/rss-feeds` |
 
 ## social-media
 
 | Skill | Description | Path |
 |----|----|----|
-| [`reddit-reading`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/social-media/social-media-reddit-reading) | Read Reddit: subreddits, search, threads, users. No browser. | `social-media/reddit-reading` |
 | [`xurl`](../user-guide/skills/bundled/social-media/social-media-xurl.md) | X/Twitter via xurl CLI: raw post search, posting, DM, media. | `social-media/xurl` |
 
 ## software-development

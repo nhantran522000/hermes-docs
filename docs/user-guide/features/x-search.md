@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/x-search"
 title: "X (Twitter) Search"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # X (Twitter) Search

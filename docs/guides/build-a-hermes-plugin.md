@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/plugins"
 title: "Build a Hermes Plugin"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Build a Hermes Plugin
@@ -1359,6 +1359,8 @@ def register(ctx):
 ```
 
 Memory providers are single-select — only one is active at a time, chosen via `memory.provider` in `config.yaml`.
+
+If a provider also loads as a general plugin, general discovery owns its lifecycle hooks. The memory loader supplies hooks only as a fallback until that same plugin source loads successfully through general discovery. Repeated provider loads replace the fallback hook group; distinct callbacks within the group are preserved. This does not deduplicate hooks from different plugin sources or change provider activation.
 
 **Full guide:** [Memory Provider Plugins](../developer-guide/memory-provider-plugin.md) — full `MemoryProvider` ABC, threading contract, profile isolation, CLI command registration via `cli.py`.
 

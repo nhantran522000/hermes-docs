@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/webhook-github-pr-review"
 title: "Automated GitHub PR Comments with Webhooks"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Automated GitHub PR Comments with Webhooks

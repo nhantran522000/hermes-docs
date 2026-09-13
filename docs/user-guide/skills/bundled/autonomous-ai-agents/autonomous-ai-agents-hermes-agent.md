@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent"
 title: "Hermes Agent"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Hermes Agent

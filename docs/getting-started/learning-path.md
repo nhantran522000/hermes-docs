@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/learning-path"
 title: "Learning Path"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Learning Path

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-node-inspect-debugger"
 title: "Node Inspect Debugger"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Node Inspect Debugger

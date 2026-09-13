@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/batch-processing"
 title: "Batch Processing"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Batch Processing
@@ -69,7 +69,6 @@ Entries can optionally include:
 | `--resume` | `false` | Resume from checkpoint |
 | `--verbose` | `false` | Enable verbose logging |
 | `--max_samples` | all | Only process first N samples from dataset |
-| `--max_tokens` | model default | Maximum tokens per model response |
 
 ### Provider Routing (OpenRouter)
 

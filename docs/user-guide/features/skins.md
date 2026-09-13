@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/skins"
 title: "Skins & Themes"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Skins & Themes
@@ -94,8 +94,8 @@ Text strings used throughout the CLI interface.
 |----|----|----|
 | `agent_name` | Name shown in banner title and status display | `Hermes Agent` |
 | `welcome` | Welcome message shown at CLI startup | `Welcome to Hermes Agent! Type your message or /help for commands.` |
-| `goodbye` | Message shown on exit | `Goodbye! ⚕` |
-| `response_label` | Label on the response box header | `⚕ Hermes` |
+| `goodbye` | Message shown on exit | `Goodbye! ☤` |
+| `response_label` | Label on the response box header | `☤ Hermes` |
 | `prompt_symbol` | Symbol before the user input prompt (bare token, renderers add a trailing space) | `❯` |
 | `help_header` | Header text for the `/help` command output | `(^_^)? Available Commands` |
 

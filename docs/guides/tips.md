@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/tips"
 title: "Tips & Best Practices"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Tips & Best Practices
@@ -175,7 +175,7 @@ Use `/verbose` to control how much tool activity you see. In messaging platforms
 
 tip
 
-By default, messaging sessions never auto-reset — context lives until you `/reset` or compression kicks in. If you want sessions to reset automatically (after idle time or daily at a fixed hour), opt in via the `session_reset` section in `~/.hermes/config.yaml`.
+Messaging sessions persist until an explicit `/new` or `/reset`. Context compression manages long conversations without an idle or daily reset.
 
 ## Security
 

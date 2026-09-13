@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/media/media-youtube-content"
 title: "Youtube Content"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Youtube Content

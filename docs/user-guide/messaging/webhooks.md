@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/webhooks"
 title: "Webhooks"
-last_crawled: 2026-09-06
+last_crawled: 2026-09-13
 ---
 
 # Webhooks
@@ -60,7 +60,7 @@ Expected response:
 
 ## Configuring Routes
 
-Routes define how different webhook sources are handled. Each route is a named entry under `platforms.webhook.extra.routes` in your `config.yaml`.
+Routes define how different webhook sources are handled. Each route is a named entry under `platforms.webhook.extra.routes` in your `config.yaml`. Adapter settings (`port`, `host`, `secret`, `routes`) may also be written directly under `platforms.webhook:` — both spellings reach the adapter; a value nested under `extra:` wins if the same key appears in both places.
 
 ### Route properties
 

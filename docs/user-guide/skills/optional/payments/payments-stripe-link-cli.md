@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/payments/payments-stripe-link-cli"
 title: "Stripe Link Cli"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Stripe Link Cli
@@ -145,7 +145,7 @@ For MPP merchants add `--credential-type shared_payment_token`.
 ``` text
 link-cli spend-request retrieve <lsrq_id> \
   --include card \
-  --output-file /tmp/link-card.json \
+  --output-file ~/.hermes/cache/scratch/link-card.json \
   --format json
 ```
 
@@ -169,7 +169,7 @@ The file is written with `0600` perms; stdout shows only redacted fields (brand,
 Delete the card file as soon as the purchase is done:
 
 ``` text
-rm -f /tmp/link-card.json
+rm -f ~/.hermes/cache/scratch/link-card.json
 ```
 
 ## Optional: run as an MCP server instead

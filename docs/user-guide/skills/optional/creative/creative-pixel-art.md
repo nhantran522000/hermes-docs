@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-pixel-art"
 title: "Pixel Art"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Pixel Art
@@ -144,12 +144,13 @@ from pixel_art import pixel_art
 from pixel_art_video import pixel_art_video
 
 # 1. Convert to pixel art
-pixel_art("/path/to/photo.jpg", "/tmp/pixel.png", preset="nes")
+out = os.path.expanduser("~/.hermes/cache/scratch")
+pixel_art("/path/to/photo.jpg", f"{out}/pixel.png", preset="nes")
 
 # 2. Animate (optional)
 pixel_art_video(
-    "/tmp/pixel.png",
-    "/tmp/pixel.mp4",
+    f"{out}/pixel.png",
+    f"{out}/pixel.mp4",
     scene="night",
     duration=6,
     fps=15,

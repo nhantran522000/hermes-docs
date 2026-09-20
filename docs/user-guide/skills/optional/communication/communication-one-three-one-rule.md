@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/communication/communication-one-three-one-rule"
 title: "One Three One Rule"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # One Three One Rule

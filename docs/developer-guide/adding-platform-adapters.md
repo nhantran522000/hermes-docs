@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/adding-platform-adapters"
 title: "Adding a Platform Adapter"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Adding a Platform Adapter
@@ -89,7 +89,8 @@ from gateway.config import Platform, PlatformConfig
 class MyPlatformAdapter(BasePlatformAdapter):
     def __init__(self, config: PlatformConfig):
         super().__init__(config, Platform("my_platform"))
-        # config.extra first (the per-profile truth under multiplexing), then the profile-scoped env var.
+        # Explicit env (profile-scoped) → this profile's config.extra (YAML) → default. Under multiplexing a
+        # scoped miss falls to the profile's own YAML, never to another profile's process env.
         self.token = extra_or_secret(config.extra, "token", "MY_PLATFORM_TOKEN")
 
     async def connect(self, *, is_reconnect: bool = False) -> bool:

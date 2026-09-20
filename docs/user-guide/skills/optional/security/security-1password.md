@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/security/security-1password"
 title: "1Password"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # 1Password
@@ -99,7 +99,7 @@ Hermes terminal commands are non-interactive by default and can lose auth contex
 Note: This is NOT needed when using `OP_SERVICE_ACCOUNT_TOKEN` — the token persists across terminal calls automatically.
 
 ``` bash
-SOCKET_DIR="${TMPDIR:-/tmp}/hermes-tmux-sockets"
+SOCKET_DIR="${TMPDIR:-${HERMES_HOME:-$HOME/.hermes}/cache/scratch}/hermes-tmux-sockets"
 mkdir -p "$SOCKET_DIR"
 SOCKET="$SOCKET_DIR/hermes-op.sock"
 SESSION="op-auth-$(date +%Y%m%d-%H%M%S)"

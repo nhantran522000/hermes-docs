@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/wecom"
 title: "WeCom (Enterprise WeChat)"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # WeCom (Enterprise WeChat)

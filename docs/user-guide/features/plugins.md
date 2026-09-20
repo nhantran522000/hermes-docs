@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins"
 title: "Plugins"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Plugins
@@ -183,13 +183,15 @@ The same pin is available in Hermes Desktop: **Skills → Plugins → Install fr
 
 ### Installing from a private repository
 
-`hermes plugins install` clones non-interactively (it never prompts for a username or password), so a private repo needs a credential Hermes can find on its own. For an `https://` source it tries, in order:
+`hermes plugins install` clones non-interactively (it never prompts for a username or password), so a private repo needs a credential Hermes can find on its own. Every clone, pinned `--ref` fetch and `hermes plugins update` pull is attempted anonymously first — public repos never see your credential, so a stale or revoked token cannot break a public install. Only when the remote refuses anonymous access does Hermes look for a credential. For an `https://` source it tries, in order:
 
 1.  `GITHUB_TOKEN` or `GH_TOKEN` from your `.env` (GitHub hosts only).
 2.  The `gh` CLI's login (`gh auth login`), GitHub hosts only.
 3.  Your git credential helper (`git credential fill`) for that host — works for GitLab, Bitbucket and self-hosted servers if a credential is already stored.
 
 The credential is sent as a one-shot HTTP header for that install or update; it is never written into the plugin's `.git/config` or the install metadata. SSH sources (`git@host:owner/repo.git`) authenticate through your ssh-agent as before. The same resolution applies to `hermes plugins update`, catalog MCP installs from git, and profile distributions fetched from a git URL.
+
+`hermes doctor` sends a configured `GITHUB_TOKEN`/`GH_TOKEN` to `api.github.com` (under **API Connectivity**) and, when GitHub rejects it, names the variable and the `.env` file that carries the expired token so you can remove or replace it.
 
 ### What the allow-list does NOT gate
 
@@ -496,7 +498,16 @@ Three verdicts, matching Cowork's pass/warn/fail:
 | **caution** | Findings are shown; you confirm `Install anyway? [y/N]` (or pass `--force`) |
 | **dangerous** | Blocked. `--force` does **not** override |
 
-On `hermes plugins update`, a dangerous verdict on the updated tree disables the plugin until you review the findings and re-enable it.
+On `hermes plugins update`, a dangerous verdict on the updated tree disables the plugin until you review the findings and re-enable it. A dangerous block names the critical findings that caused it (e.g. `1 critical of 42 findings (destructive_root_rm)`), so a single blocking line is not hidden behind the total.
+
+Text that cannot run on the host at install time is scored as **context**, not as the plugin's behaviour, so it can lower a finding but never delete it — every finding stays in the report with file and line:
+
+- **Documentation prose** (`README.md`, `AGENTS.md`, `docs/**/*.md`, `.txt`, `.rst`, `.html`) can never on its own produce **dangerous**: a command or credential path quoted there (an uninstall step, a refusal list naming `~/.ssh`) steps down one severity, and a README removing the plugin's **own** install directory (`rm -rf "$HOME/.hermes/plugins/<name>"`) is a note. Agent-facing shapes keep full severity — prompt injection, Markdown exfil, agent-config edits, `curl … | sh` one-liners, an `authorized_keys` append, a leaked provider key — and so does anything under a bundled `skills/` tree or in `after-install.md`, which the agent reads as instructions.
+- **Test trees and fixtures** (`tests/`, `test/`, `testing/`, `spec/`, `specs/`, `fixtures/` at the plugin root; `__tests__/` and `__fixtures__/` at any depth; `*.test.*`, `*.spec.*`, `test_*.py`, `*_test.*`) are still scanned — a plugin's `__init__.py` can import from them — but a quoted-only hostile string (`verdict_for("rm -rf /")`, a redaction corpus with a fake `sk-…` key) is a note, and test code that would execute on import (`os.system('rm -rf /')`) is capped at **caution**. The same finding in any other file (`setup.sh`, `src/spec/…`) is still **dangerous**.
+- **Whole-line comments and `CHANGELOG.md`** describe a defense; they score as prose does.
+- **Base64 that decodes to a media header** (PNG/JPEG/GIF/WOFF/PDF … in a data URI or JSON scenery) is informational; `base64 -d` piped into a text filter (`grep`, `jq`) is a note, piped into a shell or interpreter it keeps full severity; `sudo` / `env|` as an alternation member of a regex literal (`/approval|sudo|secret/`, a redaction pattern) is a note, in a command string (`subprocess.run("sudo …")`) it is not.
+
+Likewise, a generic sample token (`hardcoded_secret`) inside a runtime `.py` file's `if __name__ == "__main__":` self-test block is capped at **caution** — the loader imports plugins and never runs that block — while every other finding inside it (destructive commands, provider-shaped keys such as `sk-…`) and the same token anywhere above the guard keep full severity.
 
 Scanning is on by default; disable it in `config.yaml`:
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/optional-skills-catalog"
 title: "Optional Skills Catalog"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Optional Skills Catalog
@@ -57,9 +57,11 @@ hermes skills uninstall <skill-name>
 
 | Skill | Description |
 |----|----|
+| [**ai-presenter-video**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-ai-presenter-video) | Make a verified AI presenter video from script + image. |
 | [**archify**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-archify) | Validated interactive HTML diagrams, upstream-maintained. |
 | [**ascii-art**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-ascii-art) | ASCII art: pyfiglet, cowsay, boxes, image-to-ascii. |
 | [**audiocraft-audio-generation**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-audiocraft-audio-generation) | AudioCraft: MusicGen text-to-music, AudioGen text-to-sound. |
+| [**auteur**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-auteur) | Design and build cinematic, award-level web pages. |
 | [**baoyu-article-illustrator**](../user-guide/skills/optional/creative/creative-baoyu-article-illustrator.md) | Article illustrations: type × style × palette consistency. |
 | [**baoyu-comic**](../user-guide/skills/optional/creative/creative-baoyu-comic.md) | Knowledge comics (知识漫画): educational, biography, tutorial. |
 | [**comfyui**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-comfyui) | Generate images, video, and audio via diffusion workflows. |
@@ -71,6 +73,7 @@ hermes skills uninstall <skill-name>
 | [**heartmula**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-heartmula) | HeartMuLa: Suno-like song generation from lyrics + tags. |
 | [**hyperframes**](../user-guide/skills/optional/creative/creative-hyperframes.md) | Render MP4/WebM videos from HTML compositions. |
 | [**impeccable**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-impeccable) | Frontend design guidance, upstream-maintained (impeccable). |
+| [**ip-as-logo**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-ip-as-logo) | Design minimal cute IP mascot marks readable at 32px. |
 | [**kanban-video-orchestrator**](../user-guide/skills/optional/creative/creative-kanban-video-orchestrator.md) | Plan and run multi-agent video production pipelines. |
 | [**meme-generation**](../user-guide/skills/optional/creative/creative-meme-generation.md) | Create meme PNGs from templates with Pillow text overlay. |
 | [**mono-color**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-mono-color) | Generate one- or two-ink editorial print poster images. |
@@ -211,6 +214,7 @@ hermes skills uninstall <skill-name>
 | [**canvas**](../user-guide/skills/optional/productivity/productivity-canvas.md) | Fetch Canvas LMS courses and assignments via API token. |
 | [**decision-questionnaire**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-decision-questionnaire) | Turn an unanswerable decision into a questionnaire doc. |
 | [**here-now**](../user-guide/skills/optional/productivity/productivity-here-now.md) | Publish sites to {slug}.here.now and store files in Drives. |
+| [**live-dashboard**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-live-dashboard) | Build self-updating dashboards from live sources. |
 | [**memento-flashcards**](../user-guide/skills/optional/productivity/productivity-memento-flashcards.md) | Spaced-repetition flashcards: create, review, quiz, export. |
 | [**property-listings**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-property-listings) | Present property and rental listings as desktop cards. |
 | [**shop**](../user-guide/skills/optional/productivity/productivity-shop.md) | Shop catalog search, checkout, order tracking, returns. |
@@ -280,6 +284,7 @@ hermes skills uninstall <skill-name>
 | [**har-derived-api-client**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/web-development/web-development-har-derived-api-client) | Record a site's XHR into a HAR, derive an HTTP client. |
 | [**page-agent**](../user-guide/skills/optional/web-development/web-development-page-agent.md) | Embed an in-page natural-language GUI copilot in web apps. |
 | [**publish-site**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/web-development/web-development-publish-site) | Versioned site deploys to GitHub/Cloudflare/Netlify Pages. |
+| [**scrollcraft**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/web-development/web-development-scrollcraft) | Premium scroll-driven landing pages; scroll = timeline. |
 
 ## yuanbao
 

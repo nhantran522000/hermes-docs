@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/personality"
 title: "Personality & SOUL.md"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Personality & SOUL.md

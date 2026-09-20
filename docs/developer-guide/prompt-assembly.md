@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/prompt-assembly"
 title: "Prompt Assembly"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Prompt Assembly
@@ -144,6 +144,8 @@ platform_hints:
 - `replace` wins over `append` when both are present.
 - A malformed entry is ignored defensively and falls back to the unmodified default, so a bad config value can never break prompt assembly or leak across platforms.
 
+Cron jobs run as platform `cron`, but their final response lands on the job's `deliver` channel, so a cron agent's prompt also carries that channel's hint (built-in text plus its `platform_hints.<channel>` override) under a `Delivery destination (<channel>):` line. A `platform_hints.slack.append` therefore reaches Slack-delivered scheduled jobs as well as live Slack chats; `platform_hints.cron` still governs the cron paragraph itself.
+
 The override is resolved when the system prompt is built (session start, and again on compaction since that rebuilds the prompt). It produces a byte-stable hint for a fixed config, so it lives in the **stable** tier alongside the built-in hint and does not break prompt caching — it is not a live mid-session mutation of a frozen prompt.
 
 ## How SOUL.md appears in the prompt
@@ -157,7 +159,7 @@ def load_soul_md() -> Optional[str]:
     if not soul_path.exists():
         return None
     content = soul_path.read_text(encoding="utf-8").strip()
-    content = _scan_context_content(content, "SOUL.md")  # Security scan
+    content = _scan_context_content(content, "SOUL.md", user_authored=True)  # Security scan: warn + load, never block
     content = _truncate_content(content, "SOUL.md")       # Cap scales with model context window (20k floor); config override wins
     return content
 ```
@@ -228,7 +230,7 @@ def build_context_files_prompt(cwd=None, skip_soul=False):
 
 All context files are:
 
-- **Security scanned** — checked for prompt injection patterns (invisible unicode, "ignore previous instructions", credential exfiltration attempts)
+- **Security scanned** — checked for prompt injection patterns (invisible unicode, "ignore previous instructions", credential exfiltration attempts). A hit replaces a project file with a `[BLOCKED: …]` marker; the user's own `SOUL.md` in `HERMES_HOME` is warned about and loaded anyway (it is human-approved on write, so it is the same trust class as `config.yaml`)
 - **Truncated** — capped at `context_file_max_chars` characters using a 70/20 head/tail split with a truncation marker. The cap scales with the model's context window (20,000-char floor, 500K ceiling); an explicit `context_file_max_chars` in `config.yaml` always wins.
 - **YAML frontmatter stripped** — `.hermes.md` frontmatter is removed (reserved for future config overrides)
 

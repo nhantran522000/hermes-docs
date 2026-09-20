@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/devops/devops-pinggy-tunnel"
 title: "Pinggy Tunnel"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Pinggy Tunnel
@@ -101,7 +101,7 @@ If nothing is listening yet, start it first (e.g. `python -m http.server 8000 --
 Use `terminal(background=True)` and capture output to a logfile (Pinggy prints the URLs on stdout, then keeps the connection open):
 
 ``` bash
-LOG=/tmp/pinggy-8000.log
+LOG=~/.hermes/cache/scratch/pinggy-8000.log
 nohup ssh -p 443 \
     -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
@@ -109,7 +109,7 @@ nohup ssh -p 443 \
     -o ServerAliveCountMax=3 \
     -R0:localhost:8000 free@a.pinggy.io \
     > "$LOG" 2>&1 &
-echo $! > /tmp/pinggy-8000.pid
+echo $! > ~/.hermes/cache/scratch/pinggy-8000.pid
 ```
 
 `StrictHostKeyChecking=no` + `UserKnownHostsFile=/dev/null` skips the first-run host-key prompt. `ServerAliveInterval=30` keeps the SSH session from getting torn down by an idle NAT.
@@ -118,7 +118,7 @@ echo $! > /tmp/pinggy-8000.pid
 
 ``` bash
 sleep 4
-grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' /tmp/pinggy-8000.log | head -1
+grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' ~/.hermes/cache/scratch/pinggy-8000.log | head -1
 ```
 
 Expected output looks like:
@@ -144,7 +144,7 @@ If you get `502 Bad Gateway`, the SSH session is up but the local origin isn't l
 ### 5. Teardown
 
 ``` bash
-kill "$(cat /tmp/pinggy-8000.pid)"
+kill "$(cat ~/.hermes/cache/scratch/pinggy-8000.pid)"
 # or, if the pid file got lost:
 pkill -f 'ssh -p 443 .* free@a\.pinggy\.io'
 ```
@@ -200,10 +200,10 @@ Composite patterns combining a local origin with a Pinggy tunnel. Each recipe is
 Use this when an external service (Stripe, GitHub, Discord, AgentMail, etc.) needs to POST to a publicly reachable URL during a local task.
 
 ``` bash
-# 1. Tiny capturing server: every request gets appended to /tmp/webhook-hits.log
-cat >/tmp/webhook-server.py <<'PY'
+# 1. Tiny capturing server: every request gets appended to ~/.hermes/cache/scratch/webhook-hits.log
+cat >~/.hermes/cache/scratch/webhook-server.py <<'PY'
 import http.server, json, datetime, pathlib
-LOG = pathlib.Path("/tmp/webhook-hits.log")
+LOG = pathlib.Path("~/.hermes/cache/scratch/webhook-hits.log").expanduser()
 class H(http.server.BaseHTTPRequestHandler):
     def _capture(self):
         n = int(self.headers.get("content-length") or 0)
@@ -218,24 +218,24 @@ class H(http.server.BaseHTTPRequestHandler):
     def log_message(self,*a,**k): pass
 http.server.HTTPServer(("127.0.0.1", 18080), H).serve_forever()
 PY
-nohup python /tmp/webhook-server.py >/tmp/webhook-server.log 2>&1 &
-echo $! >/tmp/webhook-server.pid
+nohup python ~/.hermes/cache/scratch/webhook-server.py >~/.hermes/cache/scratch/webhook-server.log 2>&1 &
+echo $! >~/.hermes/cache/scratch/webhook-server.pid
 
 # 2. Tunnel — bearer-token-gate so randos can't pollute the capture log
 nohup ssh -p 443 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
     -o ServerAliveInterval=30 \
     -R0:localhost:18080 "k:$(openssl rand -hex 12)+free@a.pinggy.io" \
-    >/tmp/webhook-pinggy.log 2>&1 &
-echo $! >/tmp/webhook-pinggy.pid
+    >~/.hermes/cache/scratch/webhook-pinggy.log 2>&1 &
+echo $! >~/.hermes/cache/scratch/webhook-pinggy.pid
 sleep 5
-URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' /tmp/webhook-pinggy.log | head -1)
+URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' ~/.hermes/cache/scratch/webhook-pinggy.log | head -1)
 echo "Webhook URL: $URL"
 
 # 3. While the agent works, watch hits land
-tail -f /tmp/webhook-hits.log
+tail -f ~/.hermes/cache/scratch/webhook-hits.log
 ```
 
-Hand `$URL` to the service that needs to call you. Teardown: `kill $(cat /tmp/webhook-server.pid) $(cat /tmp/webhook-pinggy.pid)`.
+Hand `$URL` to the service that needs to call you. Teardown: `kill $(cat ~/.hermes/cache/scratch/webhook-server.pid) $(cat ~/.hermes/cache/scratch/webhook-pinggy.pid)`.
 
 ### Recipe 2 — Expose an MCP server over HTTP/SSE
 
@@ -244,18 +244,18 @@ Use when a remote MCP client (Claude Desktop on another machine, a teammate's ed
 ``` bash
 # 1. Start the MCP server in HTTP mode (example: a FastMCP server on port 8765)
 nohup python my_mcp_server.py --transport http --port 8765 \
-    >/tmp/mcp-server.log 2>&1 &
-echo $! >/tmp/mcp-server.pid
+    >~/.hermes/cache/scratch/mcp-server.log 2>&1 &
+echo $! >~/.hermes/cache/scratch/mcp-server.pid
 
 # 2. Tunnel with a bearer token — MCP traffic should not be open to the internet
 TOKEN=$(openssl rand -hex 16)
 nohup ssh -p 443 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
     -o ServerAliveInterval=30 \
     -R0:localhost:8765 "k:$TOKEN+free@a.pinggy.io" \
-    >/tmp/mcp-pinggy.log 2>&1 &
-echo $! >/tmp/mcp-pinggy.pid
+    >~/.hermes/cache/scratch/mcp-pinggy.log 2>&1 &
+echo $! >~/.hermes/cache/scratch/mcp-pinggy.pid
 sleep 5
-URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' /tmp/mcp-pinggy.log | head -1)
+URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' ~/.hermes/cache/scratch/mcp-pinggy.log | head -1)
 echo "MCP URL: $URL"
 echo "Bearer token: $TOKEN"
 ```
@@ -272,10 +272,10 @@ TOKEN=$(openssl rand -hex 16)
 nohup ssh -p 443 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
     -o ServerAliveInterval=30 \
     -R0:localhost:11434 "k:$TOKEN+co+free@a.pinggy.io" \
-    >/tmp/llm-pinggy.log 2>&1 &
-echo $! >/tmp/llm-pinggy.pid
+    >~/.hermes/cache/scratch/llm-pinggy.log 2>&1 &
+echo $! >~/.hermes/cache/scratch/llm-pinggy.pid
 sleep 5
-URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' /tmp/llm-pinggy.log | head -1)
+URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' ~/.hermes/cache/scratch/llm-pinggy.log | head -1)
 echo "Endpoint: $URL"
 echo "Token:    $TOKEN"
 
@@ -304,17 +304,17 @@ ssh -p 443 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
 
 ``` bash
 # End-to-end: spin up a trivial origin, tunnel it, hit it, tear down
-python -m http.server 18000 --bind 127.0.0.1 >/tmp/origin.log 2>&1 &
+python -m http.server 18000 --bind 127.0.0.1 >~/.hermes/cache/scratch/origin.log 2>&1 &
 ORIGIN_PID=$!
 
 nohup ssh -p 443 \
     -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
-    -R0:localhost:18000 free@a.pinggy.io >/tmp/pinggy-verify.log 2>&1 &
+    -R0:localhost:18000 free@a.pinggy.io >~/.hermes/cache/scratch/pinggy-verify.log 2>&1 &
 SSH_PID=$!
 
 sleep 5
-URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' /tmp/pinggy-verify.log | head -1)
+URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' ~/.hermes/cache/scratch/pinggy-verify.log | head -1)
 echo "URL: $URL"
 curl -sI "$URL/" | head -1
 

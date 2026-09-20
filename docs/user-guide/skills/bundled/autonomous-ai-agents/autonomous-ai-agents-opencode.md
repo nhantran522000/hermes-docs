@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-opencode"
 title: "Opencode"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Opencode
@@ -182,8 +182,8 @@ terminal(command="REVIEW=$(mktemp -d) && git clone https://github.com/user/repo.
 Use separate workdirs/worktrees to avoid collisions:
 
 ``` text
-terminal(command="opencode run 'Fix issue #101 and commit'", workdir="/tmp/issue-101", background=true, pty=true)
-terminal(command="opencode run 'Add parser regression tests and commit'", workdir="/tmp/issue-102", background=true, pty=true)
+terminal(command="opencode run 'Fix issue #101 and commit'", workdir="~/.hermes/cache/scratch/issue-101", background=true, pty=true)
+terminal(command="opencode run 'Add parser regression tests and commit'", workdir="~/.hermes/cache/scratch/issue-102", background=true, pty=true)
 process(action="list")
 ```
 

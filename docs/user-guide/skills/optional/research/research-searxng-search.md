@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-searxng-search"
 title: "Searxng Search"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Searxng Search

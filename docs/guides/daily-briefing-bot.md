@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/daily-briefing-bot"
 title: "Tutorial: Build a Daily Briefing Bot"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Tutorial: Build a Daily Briefing Bot
@@ -106,7 +106,7 @@ and open source LLMs. Summarize the top 3 stories in a concise briefing
 with links. Use a friendly, professional tone. Deliver to telegram.
 ```
 
-Hermes will create the cron job for you using the unified `cronjob` tool.
+Hermes will create the cron job for you using the unified `cronjob_manage` tool.
 
 ### Option B: CLI Slash Command
 

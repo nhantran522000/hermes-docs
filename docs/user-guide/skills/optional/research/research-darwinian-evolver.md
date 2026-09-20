@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-darwinian-evolver"
 title: "Darwinian Evolver"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Darwinian Evolver
@@ -82,13 +82,13 @@ uv run darwinian_evolver parrot \
   --num_iterations 2 \
   --num_parents_per_iteration 2 \
   --mutator_concurrency 2 --evaluator_concurrency 2 \
-  --output_dir /tmp/parrot_demo
+  --output_dir ~/.hermes/cache/scratch/parrot_demo
 ```
 
 Outputs:
 
-- `/tmp/parrot_demo/snapshots/iteration_N.pkl` — pickled population per iteration
-- `/tmp/parrot_demo/<jsonl>` — per-iteration JSON log (path printed at end)
+- `~/.hermes/cache/scratch/parrot_demo/snapshots/iteration_N.pkl` — pickled population per iteration
+- `~/.hermes/cache/scratch/parrot_demo/<jsonl>` — per-iteration JSON log (path printed at end)
 
 Open `~/.hermes/cache/darwinian-evolver/darwinian_evolver/darwinian_evolver/lineage_visualizer.html` in a browser and load the JSON log to see the evolutionary tree.
 
@@ -105,14 +105,14 @@ cd "$DE_DIR" && \
   EVOLVER_MODEL='openai/gpt-4o-mini' \
   uv run --with openai python "$SKILL_DIR/scripts/parrot_openrouter.py" \
     --num_iterations 3 --num_parents_per_iteration 2 \
-    --output_dir /tmp/parrot_or
+    --output_dir ~/.hermes/cache/scratch/parrot_or
 ```
 
 Inspect the result with `scripts/show_snapshot.py`:
 
 ``` bash
 uv run --with openai python "$SKILL_DIR/scripts/show_snapshot.py" \
-  /tmp/parrot_or/snapshots/iteration_3.pkl
+  ~/.hermes/cache/scratch/parrot_or/snapshots/iteration_3.pkl
 ```
 
 Expected output: 7 evolved prompt templates ranked by score, with the best landing around 0.6–0.8 (the seed `Say {{ phrase }}` scored 0.000).

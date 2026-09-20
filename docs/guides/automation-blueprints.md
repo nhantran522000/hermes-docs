@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/automation-blueprints"
 title: "Automation Blueprints"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Automation Blueprints
@@ -16,7 +16,7 @@ Three Trigger Types
 
 | Trigger | How | Tool |
 |----|----|----|
-| **Schedule** | Runs on a cadence (hourly, nightly, weekly) | `cronjob` tool or `/cron` slash command |
+| **Schedule** | Runs on a cadence (hourly, nightly, weekly) | `cronjob_manage` tool or `/cron` slash command |
 | **GitHub Event** | Fires on PR opens, pushes, issues, CI results | Webhook platform (`hermes webhook subscribe`) |
 | **API Call** | External service POSTs JSON to your endpoint | Webhook platform (config.yaml routes or `hermes webhook subscribe`) |
 

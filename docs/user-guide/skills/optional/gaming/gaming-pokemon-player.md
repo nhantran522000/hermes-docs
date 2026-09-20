@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/gaming/gaming-pokemon-player"
 title: "Pokemon Player"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Pokemon Player
@@ -83,7 +83,7 @@ Use --load-state flag when starting the server to auto-load a save. This is fast
 
 ### Step 1: OBSERVE — check state AND take a screenshot
 
-GET /state for position, HP, battle, dialog. GET /screenshot and save to /tmp/pokemon.png, then use vision_analyze. Always do BOTH — RAM state gives numbers, vision gives spatial awareness.
+GET /state for position, HP, battle, dialog. GET /screenshot and save to ~/.hermes/cache/scratch/pokemon.png, then use vision_analyze. Always do BOTH — RAM state gives numbers, vision gives spatial awareness.
 
 ### Step 2: ORIENT
 

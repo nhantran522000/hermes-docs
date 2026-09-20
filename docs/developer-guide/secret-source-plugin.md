@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/secret-source-plugin"
 title: "Building a Secret Source Plugin"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Building a Secret Source Plugin
@@ -17,6 +17,7 @@ The bundled set is deliberately closed, same policy as [memory providers](memory
 `load_hermes_dotenv()` often runs at import time **before** plugins register. Hermes then re-pulls secrets after plugin discovery when any **enabled** plugin secret source is configured. Enablement uses the source's `is_enabled(cfg)` contract; the standard form is `secrets.<name>.enabled: true`, while custom activation remains supported. That closes the "replace Bitwarden with my vault" first-process gap (#64177).
 
 - Re-pull is idempotent and fail-open (never blocks startup).
+- `hermes update` never resolves external sources — not in the updater process and not in the import-health probes it spawns. Nothing in the update path needs credentials, and a slow helper would otherwise be misreported as an import failure (#110823).
 - Sources only supply env vars through the orchestrator; there is **no** plugin API to dump other plugins' or the user's entire secret store beyond what your source's own config allows.
 - Reading `os.environ` after load is possible for any in-process code — the trust boundary remains "enabled plugins run with agent privilege".
 

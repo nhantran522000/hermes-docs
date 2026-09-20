@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/dogfood/dogfood-adversarial-ux-test"
 title: "Adversarial Ux Test"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Adversarial Ux Test

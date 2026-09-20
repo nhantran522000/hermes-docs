@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-qmd"
 title: "Qmd"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Qmd
@@ -293,9 +293,9 @@ cat > ~/Library/LaunchAgents/com.qmd.daemon.plist << 'EOF'
   <key>KeepAlive</key>
   <true/>
   <key>StandardOutPath</key>
-  <string>/tmp/qmd-daemon.log</string>
+  <string>/Users/YOU/.hermes/cache/scratch/qmd-daemon.log</string>
   <key>StandardErrorPath</key>
-  <string>/tmp/qmd-daemon.log</string>
+  <string>/Users/YOU/.hermes/cache/scratch/qmd-daemon.log</string>
 </dict>
 </plist>
 EOF

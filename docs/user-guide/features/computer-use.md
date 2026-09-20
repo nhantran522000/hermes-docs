@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/computer-use"
 title: "Computer Use"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Computer Use
@@ -144,7 +144,7 @@ Hermes keeps its wrapper skill (`skills/autonomous-ai-agents/computer-use/SKILL.
 cua-driver skills install
 ```
 
-The command installs the pack under `~/.cua-driver/skills/cua-driver`. Hermes autodetection is a planned cua-driver follow-up, so currently point Hermes at that directory or symlink it into your skill space. The wrapper remains the workflow layer and points to Cua's installed skill for driver behavior. The pack contains:
+The command links the pack into `~/.hermes/skills/cua-driver` (Hermes is one of the agents `cua-driver skills status` reports). The wrapper remains the workflow layer: the pack documents the driver's own MCP vocabulary (`get_window_state`, `element_token`, `snapshot_id`), which the `computer_use` wrapper translates to for you — keep calling `computer_use(action=...)`. The pack contains:
 
 | File | Topic |
 |----|----|
@@ -218,7 +218,7 @@ Pair with `approvals.mode: manual` in `~/.hermes/config.yaml` if you want every 
 
 Screenshots are expensive. Hermes applies four layers of optimisation:
 
-- **Screenshot eviction** — the Anthropic adapter keeps only the 3 most recent screenshots in context; older ones become `[screenshot removed to save context]` placeholders.
+- **Screenshot eviction** — on every provider, screenshots ride each request until it would cross Anthropic's documented per-request image limit (20 image blocks, or 24 MB of image data); then the oldest batch becomes `[screenshot removed to save context]` placeholders. Below the limit nothing is rewritten, so the prompt-cache prefix survives; at it, one slower turn per batch instead of one per screenshot. Images you attach yourself count against the limit but are never removed.
 - **Client-side compression pruning** — the context compressor detects multimodal tool results and strips image parts from old ones.
 - **Image-aware token estimation** — each image is counted as ~1500 tokens (Anthropic's flat rate) instead of its base64 char length.
 - **Server-side context editing (Anthropic only)** — when active, the adapter enables `clear_tool_uses_20250919` via `context_management` so Anthropic's API clears old tool results server-side.
@@ -231,6 +231,7 @@ A 20-action session on a 1568×900 display typically costs ~30K tokens of screen
 - **No keyboard password entry.** `type` has hard-block patterns on command-shell payloads; for passwords, use the system's autofill (macOS Keychain / Windows Credential Manager / GNOME Keyring / KWallet).
 - **Some apps don't expose an accessibility tree.** Modern UWP apps on Windows, Electron \< 28 on Linux, and a few macOS apps with custom drawing (Logic, Final Cut, some games) have sparse or empty AX trees. Fall back to pixel coordinates if the tree is empty — or skip the task entirely.
 - **Windows: elevated (admin) windows can't be driven from a normal agent.** Windows UIPI (User Interface Privilege Isolation) enforces integrity-level boundaries: a Medium-integrity process (the default Hermes agent) cannot enumerate the UIA tree of, or inject mouse input into, a window owned by a High-integrity (Administrator) process. Symptom: `capture(mode='som')` returns 0 elements and `click(...)` reports success while doing nothing, even though the screenshot renders fine (GDI capture sits below the integrity check). Keyboard events partially bypass UIPI, so Tab / Enter can still navigate an elevated dialog. This is an OS constraint, not a cua-driver bug — it affects every Windows automation stack. To drive elevated windows, run the Hermes agent itself at High integrity (launch from an elevated terminal); otherwise target non-elevated windows.
+- **Windows: `hermes computer-use doctor` fails with "Access is denied" while the tool works.** A cua-driver installed under `C:\Program Files\WindowsApps` cannot be executed by the Hermes venv interpreter (WinError 5 from `CreateProcess`), even though the shell resolves the same binary fine. The doctor now reports this as a diagnosis instead of a traceback. Fix once: reinstall with the upstream installer (lands under your user profile) or set `HERMES_CUA_DRIVER_CMD` to a copy outside `WindowsApps`.
 - **Platform-specific deployment gotchas:**
   - **macOS** uses private SkyLight SPIs. Apple can change them in any OS update. Hermes warns when the installed cua-driver is older than the version it was tested against.
   - **Windows** SSH sessions run in **Session 0**, which has no interactive desktop. Drive Hermes from inside the RDP / console session, or set up cua-driver's autostart Scheduled Task — [windows-ssh](https://cua.ai/docs/how-to-guides/driver/windows-ssh) has the recipe.

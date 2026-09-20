@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-blackbox"
 title: "Blackbox"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Blackbox
@@ -107,8 +107,8 @@ terminal(command="REVIEW=$(mktemp -d) && git clone https://github.com/user/repo.
 Spawn multiple Blackbox instances for independent tasks:
 
 ``` text
-terminal(command="blackbox --prompt 'Fix the login bug'", workdir="/tmp/issue-1", background=true, pty=true)
-terminal(command="blackbox --prompt 'Add unit tests for auth'", workdir="/tmp/issue-2", background=true, pty=true)
+terminal(command="blackbox --prompt 'Fix the login bug'", workdir="~/.hermes/cache/scratch/issue-1", background=true, pty=true)
+terminal(command="blackbox --prompt 'Add unit tests for auth'", workdir="~/.hermes/cache/scratch/issue-2", background=true, pty=true)
 
 # Monitor all
 process(action="list")

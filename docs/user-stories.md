@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-stories"
 title: "User Stories & Use Cases"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # User Stories & Use Cases

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/plugin-llm-access"
 title: "Plugin LLM Access"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Plugin LLM Access

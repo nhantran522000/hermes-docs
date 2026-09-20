@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/apple/apple-findmy"
 title: "Findmy"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Findmy
@@ -56,13 +56,13 @@ osascript -e 'tell application "FindMy" to activate'
 sleep 3
 
 # Take a screenshot of the Find My window
-screencapture -w -o /tmp/findmy.png
+screencapture -w -o ~/.hermes/cache/scratch/findmy.png
 ```
 
 Then use `vision_analyze` to read the screenshot:
 
 ``` text
-vision_analyze(image_url="/tmp/findmy.png", question="What devices/items are shown and what are their locations?")
+vision_analyze(image_url="~/.hermes/cache/scratch/findmy.png", question="What devices/items are shown and what are their locations?")
 ```
 
 ### Switch Between Tabs
@@ -95,19 +95,19 @@ osascript -e 'tell application "FindMy" to activate'
 sleep 3
 
 # Capture and annotate the UI
-peekaboo see --app "FindMy" --annotate --path /tmp/findmy-ui.png
+peekaboo see --app "FindMy" --annotate --path ~/.hermes/cache/scratch/findmy-ui.png
 
 # Click on a specific device/item by element ID
 peekaboo click --on B3 --app "FindMy"
 
 # Capture the detail view
-peekaboo image --app "FindMy" --path /tmp/findmy-detail.png
+peekaboo image --app "FindMy" --path ~/.hermes/cache/scratch/findmy-detail.png
 ```
 
 Then analyze with vision:
 
 ``` text
-vision_analyze(image_url="/tmp/findmy-detail.png", question="What is the location shown for this device/item? Include address and coordinates if visible.")
+vision_analyze(image_url="~/.hermes/cache/scratch/findmy-detail.png", question="What is the location shown for this device/item? Include address and coordinates if visible.")
 ```
 
 ## Workflow: Track AirTag Location Over Time
@@ -123,7 +123,7 @@ sleep 3
 
 # 3. Periodically capture location
 while true; do
-    screencapture -w -o /tmp/findmy-$(date +%H%M%S).png
+    screencapture -w -o ~/.hermes/cache/scratch/findmy-$(date +%H%M%S).png
     sleep 300  # Every 5 minutes
 done
 ```

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/video-gen-provider-plugin"
 title: "Building a Video Generation Provider Plugin"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Building a Video Generation Provider Plugin
@@ -177,7 +177,8 @@ The tool exposes one schema across every backend. Providers ignore parameters th
 | `negative_prompt` | Content to avoid (Pixverse/Kling only) |
 | `audio` | Native audio (Veo3 / Pixverse pricing tier) |
 | `seed` | Reproducibility |
-| `model` | Override the active model/family |
+
+There is deliberately no `model` parameter: the backend and model are user configuration (`video_gen.provider` / `video_gen.model`), never an agent choice. Your `generate()` still receives `model=` — it is the configured model, resolved by the tool layer.
 
 The provider's `capabilities()` advertises which of these are honored. The agent sees the active backend's capabilities in the tool description, dynamically rebuilt when the user changes backend via `hermes tools`.
 
@@ -206,11 +207,12 @@ The user picks `veo3.1` once in `hermes tools`. The agent never thinks about end
 
 For per-instance model knobs (see `plugins/video_gen/fal/__init__.py`):
 
-1.  `model=` keyword from the tool call
-2.  `<PROVIDER>_VIDEO_MODEL` env var
-3.  `video_gen.<provider>.model` in `config.yaml`
-4.  `video_gen.model` in `config.yaml` (when it's one of your IDs)
-5.  Provider's `default_model()`
+1.  `<PROVIDER>_VIDEO_MODEL` env var
+2.  `video_gen.<provider>.model` in `config.yaml`
+3.  `video_gen.model` in `config.yaml` (when it's one of your IDs)
+4.  Provider's `default_model()`
+
+The `model=` keyword your `generate()` receives is the outcome of this resolution — a `model` in the agent's tool call is ignored, so the LLM cannot switch backends or billing tiers on its own.
 
 ## Response shape
 

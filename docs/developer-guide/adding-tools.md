@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/adding-tools"
 title: "Adding Tools"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Adding Tools
@@ -174,7 +174,7 @@ registry.register(
 
 ## Agent-Loop Intercepted Tools
 
-Some tools (`todo`, `memory`, `session_search`, `delegate_task`) need access to per-session agent state. These are intercepted by the agent loop (`agent/tool_executor.py`, called from `agent/conversation_loop.py`) before reaching the registry. The registry still holds their schemas, but `dispatch()` returns a fallback error if the intercept is bypassed.
+Some tools (`todo_list`, `memory`, `session_search`, `delegate_task`) need access to per-session agent state. These are intercepted by the agent loop (`agent/tool_executor.py`, called from `agent/conversation_loop.py`) before reaching the registry. The registry still holds their schemas, but `dispatch()` returns a fallback error if the intercept is bypassed.
 
 ## Optional: Setup Wizard Integration
 

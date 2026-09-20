@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/simplex"
 title: "SimpleX Chat"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # SimpleX Chat

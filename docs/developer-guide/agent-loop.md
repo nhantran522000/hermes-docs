@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/agent-loop"
 title: "Agent Loop Internals"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Agent Loop Internals
@@ -195,6 +195,7 @@ When the primary model fails (429 rate limit, 5xx server error, 401/403 auth err
 2.  Try each fallback in order
 3.  On success, continue the conversation with the new provider
 4.  On 401/403, attempt credential refresh before failing over
+5.  A Codex Responses turn that stalls on reasoning-only output (three consecutive continuations with no visible text or tool call) also fails over to the next fallback with reason `incomplete_response`; if the stall consumed the iteration budget, the fallback gets exactly one bounded grace call
 
 The fallback system also covers auxiliary tasks independently — vision, compression, and web extraction each have their own fallback chain configurable via the `auxiliary.*` config section.
 

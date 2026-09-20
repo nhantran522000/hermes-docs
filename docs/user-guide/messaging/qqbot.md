@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/qqbot"
 title: "QQ Bot"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # QQ Bot
@@ -89,6 +89,7 @@ platforms:
         baseUrl: "https://open.bigmodel.cn/api/coding/paas/v4"
         apiKey: "your-stt-key"
         model: "glm-asr"
+        timeout: 60              # seconds per transcription request (default 60)
 ```
 
 ## Voice Messages (STT)

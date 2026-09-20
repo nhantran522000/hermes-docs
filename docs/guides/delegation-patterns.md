@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/delegation-patterns"
 title: "Delegation & Parallel Work"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Delegation & Parallel Work
@@ -27,7 +27,7 @@ For the full feature reference, see [Subagent Delegation](../user-guide/features
 - Mechanical multi-step work with logic between steps → `execute_code`
 - Tasks needing user interaction → subagents can't use `clarify`
 - Quick file edits → do them directly
-- Durable long-running work that must survive session closure or process restart → `cronjob` or `terminal(background=True, notify_on_complete=True)`. Top-level delegation is asynchronous but still process-local.
+- Durable long-running work that must survive session closure or process restart → `cronjob_manage` or `terminal(background=True, notify_on_complete=True)`. Top-level delegation is asynchronous but still process-local.
 
 ------------------------------------------------------------------------
 
@@ -174,8 +174,8 @@ urls = [r["url"] for r in results[:5]]
 content = web_extract(urls)
 
 # Save for the analysis step
-import json
-with open("/tmp/ai-funding-data.json", "w") as f:
+import json, os
+with open(os.path.expanduser("~/.hermes/cache/scratch/ai-funding-data.json"), "w") as f:
     json.dump({"search_results": results, "extracted": content["results"]}, f)
 print(f"Collected {len(results)} results, extracted {len(content['results'])} pages")
 """)
@@ -183,7 +183,7 @@ print(f"Collected {len(results)} results, extracted {len(content['results'])} pa
 # Step 2: Reasoning-heavy analysis (delegation is better here)
 delegate_task(
     goal="Analyze AI funding data and write a market report",
-    context="""Raw data at /tmp/ai-funding-data.json contains search results and
+    context="""Raw data at ~/.hermes/cache/scratch/ai-funding-data.json contains search results and
     extracted web pages about AI funding, acquisitions, and IPOs in Q1 2026.
     Write a structured market report: key deals, trends, notable players,
     and outlook. Focus on deals over $100M."""
@@ -223,7 +223,7 @@ delegation:
 - **Separate terminals** — each subagent gets its own terminal session with separate working directory and state
 - **No conversation history** — subagents see only the `goal` and `context` the parent agent passes when calling `delegate_task`
 - **Default 250 iterations** — set `delegation.max_iterations` lower in `config.yaml` for fleets of simple tasks to save cost
-- **Not durable** — top-level delegation runs in the background and posts its result back later, but it remains tied to the owning session and Hermes process. Session closure, `/stop`, `/new`, or a process restart can cancel or strand in-progress work. Use `cronjob` or `terminal(background=True, notify_on_complete=True)` for work that must survive those boundaries.
+- **Not durable** — top-level delegation runs in the background and posts its result back later, but it remains tied to the owning session and Hermes process. Session closure, `/stop`, `/new`, or a process restart can cancel or strand in-progress work. Use `cronjob_manage` or `terminal(background=True, notify_on_complete=True)` for work that must survive those boundaries.
 
 ------------------------------------------------------------------------
 

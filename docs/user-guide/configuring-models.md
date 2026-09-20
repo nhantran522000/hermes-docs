@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/configuring-models"
 title: "Configuring Models"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Configuring Models
@@ -56,6 +56,17 @@ When you switch models **inside an active session** (Herm TUI model picker, `her
 Mid-session switches reset the prompt cache
 
 Prompt caches are keyed to the model serving the request, so any mid-conversation model change — an explicit `/model` switch, an [automatic fallback](features/fallback-providers.md), or a [credential-pool](features/credential-pools.md) rotation onto a different account — means the next message re-reads the entire conversation at full input-token price instead of the cached (~75–90% discounted) rate. On a long session this one-time re-read can dwarf the per-token difference between the two models. Switch when you need to, but prefer doing it early in a conversation or right after starting a fresh session.
+
+Because of that one-time re-read cost, Hermes asks for **explicit confirmation** before applying a mid-session switch when the live session already holds a large context (default: **100,000 tokens**, measured from the latest provider-billed prompt size). The confirmation renders through the same selection-guard prompt as the expensive-model and data-training warnings wherever a live session is switching: the CLI and TUI `/model` command and picker, and a typed gateway `/model` in a chat with an active agent. Tune or disable it in `config.yaml`:
+
+``` yaml
+model:
+  # Ask before mid-session switches when the session exceeds this many
+  # context tokens (the next reply re-reads them uncached). 0 disables.
+  switch_context_confirm_tokens: 100000
+```
+
+Re-selecting the model you're already on never prompts (the cache stays warm), and sessions with no measured context (fresh sessions, non-live surfaces) are exempt.
 
 ### Unattended data-training tiers
 
@@ -186,7 +197,17 @@ providers:
       CF-Access-Client-Secret: "yyyy"
 ```
 
-Header values routinely carry credentials — Hermes never logs them. `extra_headers` applies to OpenAI-compatible routes; the `anthropic_messages` and `bedrock_converse` API modes do not use it.
+Header values routinely carry credentials — Hermes never logs them. `extra_headers` applies to OpenAI-compatible routes and to `anthropic_messages` routes (the main client, `/model` switches, rebuilds and auxiliary clients alike); `bedrock_converse` does not use it. A relay behind a WAF that rejects the SDK's default `User-Agent` (403 "Your request was blocked" or a browser-challenge page) is the typical reason to set one — Hermes reports such a 403 as a firewall/CDN block rather than an API-key rejection.
+
+**`session_affinity_header`** — the NAME of a header that carries Hermes' conversation id on every request to that provider (main turn on `chat_completions`, `anthropic_messages` and `codex_responses`, plus auxiliary calls such as compression and titles). Off unless set — Hermes never sends a session identifier to an endpoint that did not ask for one. Session-aware proxies fronting a stateful backend (LiteLLM's `x-litellm-session-id`, self-hosted Claude/OpenAI gateways) otherwise have nothing to correlate an agent loop on and treat nearly every request as a new conversation, re-sending the whole history upstream on each turn. The value is opaque, stable across the turns of one conversation (including compaction), and different for every conversation:
+
+``` yaml
+providers:
+  my-proxy:
+    api: http://127.0.0.1:4000/v1
+    api_key: sk-...
+    session_affinity_header: x-litellm-session-id
+```
 
 **`discover_models`** — set to `false` (default `true`) to skip querying the endpoint's `/models` listing and use only the `models` you configured on the entry. Handy for gateways whose model listing is slow, unreliable, or noisy:
 
@@ -348,7 +369,9 @@ Then `/model fav` or `/model grok` in chat. User aliases shadow built-in short n
 hermes model            # Interactive provider + model picker (the canonical way to switch defaults)
 ```
 
-`hermes model` walks you through picking a provider, authenticating (OAuth flows open a browser; API-key providers prompt for the key), and then choosing a specific model from that provider's curated catalog. The choice is written to `model.provider` and `model.default` in `~/.hermes/config.yaml`.
+`hermes model` walks you through picking a provider, authenticating (OAuth flows open a browser; API-key providers prompt for the key), and then choosing a specific model from that provider's curated catalog. The choice is written to `model.provider` and `model.default` in `~/.hermes/config.yaml`. After a new model is saved, a reasoning-effort step follows (`minimal` … `ultra`, **Disable reasoning**, or **Skip** to keep the current value) and writes `agent.reasoning_effort`; the step is skipped for models the catalog marks as having no reasoning control. The provider list also has a **Reasoning effort for the current model...** row to change only the effort.
+
+**Configure auxiliary models...** opens the per-task side-model picker (vision, compression, approval, delegation, …). Each task's provider → model pick ends with the same effort step, stored as `auxiliary.<task>.reasoning_effort` (or `delegation.reasoning_effort`), with an extra **Provider default** row that leaves the level up to the provider. Tasks whose block has no `reasoning_effort` key by design (MoA slots, memory query rewrite) skip the step.
 
 To list providers/models without launching the picker, use the dashboard or the REST endpoints below. To inspect what the CLI will actually use right now: `hermes config get model --json` and `hermes status`.
 

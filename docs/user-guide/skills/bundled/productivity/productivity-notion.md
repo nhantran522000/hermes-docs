@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-notion"
 title: "Notion"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Notion
@@ -87,7 +87,8 @@ Windows users: skip step 2 entirely until native `ntn` ships — Path B works fi
 
 ``` bash
 ntn api v1/users                                  # GET
-ntn api v1/pages parent[page_id]=abc123 \         # POST with inline body
+# POST with inline body
+ntn api v1/pages parent[page_id]=abc123 \
   properties[title][0][text][content]="Notes"
 ntn api v1/pages/abc123 -X PATCH archived:=true   # PATCH; := is non-string (bool/num/null)
 ```

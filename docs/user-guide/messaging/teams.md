@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/teams"
 title: "Microsoft Teams Setup"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Microsoft Teams Setup
@@ -21,6 +21,8 @@ Need meeting summaries from Microsoft Graph events rather than normal bot conver
 | **Channel**            | Bot only responds when @mentioned.                 |
 
 Teams delivers @mentions as regular messages with `<at>BotName</at>` tags, which Hermes strips automatically before processing.
+
+Without resource-specific consent (RSC) Teams only delivers messages that @mention the bot, so no filtering is needed. Once the app manifest grants `ChannelMessage.Read.Group` or `ChatMessage.Read.Chat`, Teams delivers **every** message in the conversation — set `require_mention: true` (or `TEAMS_REQUIRE_MENTION=true`) so the bot only answers channel/group-chat messages that @mention it or reply to one of its own messages. Personal chats are never gated, and a gated message is dropped before its attachments are downloaded.
 
 ------------------------------------------------------------------------
 
@@ -168,6 +170,7 @@ Open the printed link in your browser — it opens directly in the Teams client.
 | `TEAMS_HOME_CHANNEL` | Conversation ID for cron/proactive message delivery |
 | `TEAMS_HOME_CHANNEL_NAME` | Display name for the home channel |
 | `TEAMS_PORT` | Webhook port (default: `3978`) |
+| `TEAMS_REQUIRE_MENTION` | Set `true` to answer only @mentions / replies to the bot in channels and group chats (default: `false`; for apps with RSC message-read consent) |
 
 ### config.yaml
 
@@ -182,6 +185,7 @@ platforms:
       client_secret: "your-secret"
       tenant_id: "your-tenant-id"
       port: 3978
+    require_mention: false   # true once the app has RSC message-read consent
 ```
 
 ------------------------------------------------------------------------

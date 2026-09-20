@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/use-voice-mode-with-hermes"
 title: "Use Voice Mode with Hermes"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # Use Voice Mode with Hermes

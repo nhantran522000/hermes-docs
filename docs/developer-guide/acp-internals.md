@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/acp-internals"
 title: "ACP Internals"
-last_crawled: 2026-09-13
+last_crawled: 2026-09-20
 ---
 
 # ACP Internals
@@ -79,6 +79,8 @@ Bridged callbacks:
 - `thinking_callback` (currently set to `None` in the ACP bridge — reasoning is forwarded through `step_callback` instead)
 - `step_callback`
 
+Every ACP tool call reaches a terminal status: `tool.completed` closes the call with its own result (`completed` / `failed`), the `step_callback` `prev_tools` pass is only a fallback for runtimes that never project a completion, and anything still open when the turn ends — a denied or blocked call, an interrupted one — is marked `failed` before the response is returned.
+
 Because `AIAgent` runs in a worker thread while ACP I/O lives on the main event loop, the bridge uses:
 
 ``` python
@@ -124,6 +126,8 @@ prompt(..., session_id)
   -> update session history
   -> emit final agent message chunk
 ```
+
+A turn that ends in a terminal failure (provider refusal, non-retryable error, exhausted retries, interrupt before any reply) is closed by the core loop with a Hermes-authored assistant row ("Your request was not processed…" / "This turn did not complete…") so the durable transcript never ends on an open `user` row. Without it the next prompt would be merged into the failed request and replayed. Context-overflow failures are exempt: their repair is session rotation, not another row.
 
 ### Cancelation
 

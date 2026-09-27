@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-torchtitan"
 title: "Torchtitan"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Torchtitan
@@ -175,7 +175,7 @@ context_parallel_degree = 1       # Increase for long sequences
 **Step 2: Set up SLURM script**
 
 ``` bash
-#!/bin/bash
+#!/usr/bin/env bash
 #SBATCH --job-name=llama70b
 #SBATCH --nodes=32
 #SBATCH --ntasks-per-node=8

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/creating-skills"
 title: "Creating Skills"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Creating Skills

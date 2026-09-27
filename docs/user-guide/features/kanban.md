@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/kanban"
 title: "Kanban — Multi-Agent Profile Collaboration"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Kanban — Multi-Agent Profile Collaboration
@@ -153,7 +153,7 @@ All dashboard API endpoints accept `?board=<slug>` for board scoping. The events
 
 ### Switching boards in the Desktop app
 
-In the Desktop app the board switcher sits in the header row at the top of the Kanban page, beside the page title: a **Board** control showing the current board's name and task count, with a chevron — hover it for "Switch board". Click it to pick another board, or to rename, configure, export, import, create, or archive boards. Like the dashboard, the desktop keeps its own selection (persisted locally) and does not move the CLI's `current` pointer.
+In the Desktop app the board switcher sits in the header row at the top of the Kanban page, beside the page title: a **Board** control showing the current board's name and task count, with a chevron — hover it for "Switch board". Click it to pick another board, or to rename, configure, export, import, create, or archive boards. When Kanban is open in a split tile, the same **Board** control sits in the board's own header row, after the task count. Like the dashboard, the desktop keeps its own selection (persisted locally) and does not move the CLI's `current` pointer.
 
 ## File attachments
 
@@ -640,7 +640,7 @@ All routes are mounted under `/api/plugins/kanban/` and protected by the dashboa
 | `DELETE` | `/links?parent_id=…&child_id=…` | Remove a dependency |
 | `POST` | `/dispatch?max=…&dry_run=…` | Nudge the dispatcher — skip the 60 s wait |
 | `GET` | `/config` | Read `dashboard.kanban` preferences from `config.yaml` — `default_tenant`, `lane_by_profile`, `include_archived_by_default`, `render_markdown` |
-| `WS` | `/events?since=<event_id>` | Live stream of `task_events` rows |
+| `WS` | `/events?since=<event_id>` | Live stream of `task_events` rows. Without `since` the stream starts at the board's current tail (the `/board` snapshot already holds the past); pass `since=<latest_event_id>` to catch up from there, or `since=0` to replay history |
 
 Every handler is a thin wrapper — the plugin is ~700 lines of Python (router + WebSocket tail + bulk batcher + config reader) and adds no new business logic. A tiny `_conn()` helper auto-initializes `kanban.db` on every read and write, so a fresh install works whether the user opened the dashboard first, hit the REST API directly, or ran `hermes kanban init`.
 
@@ -748,7 +748,7 @@ hermes kanban context <id>                             # what a worker sees
 hermes kanban specify [<id> | --all] [--tenant T]      # flesh out a triage-column idea
         [--author NAME] [--json]                       #   into a full spec and promote to todo
 hermes kanban gc [--event-retention-days N]            # workspaces + old events + old logs
-        [--log-retention-days N]
+        [--log-retention-days N]                       #   (negative N is rejected; 0 disables that sweep)
 ```
 
 All commands are also available as a slash command in the interactive CLI and in the messaging gateway (see [`/kanban` slash command](#kanban-slash-command) below).
@@ -1010,7 +1010,7 @@ In a one-gateway-per-profile deployment (one dispatcher, separate gateway proces
 
 - **Dispatch stays single-owner.** Exactly one gateway keeps `kanban.dispatch_in_gateway: true` and runs the dispatcher; every other gateway sets it to `false`.
 - **Notification delivery is profile-owned.** Every gateway — including non-dispatch ones — runs the notifier and polls only subscriptions stamped with a profile whose platform adapters it hosts. A task created from the `writer` profile's Telegram gets its `completed`/`blocked` message delivered by the `writer` gateway, even though the `default` gateway did the dispatching.
-- **Route-only multiplex profiles** can use the primary adapter when the subscription's persisted platform, chat, thread, scope and parent-channel anchors resolve to that exact served profile through `gateway.profile_routes`. A connected secondary adapter remains authoritative; a partial secondary adapter registry never falls back to the primary bot. Unmatched, reassigned, disabled or ambiguous routes remain undelivered and retryable. Old rows missing required routing anchors are not guessed into a profile. Wake turns keep the destination profile's runtime scope and the authorized transport.
+- **Multiplex profiles pinned by `gateway.profile_routes`** can use the primary adapter when the subscription's persisted platform, chat, thread, scope and parent-channel anchors resolve to that exact served profile through `gateway.profile_routes` and the profile holds no adapter of its own for the subscription's platform. A connected secondary adapter for that platform remains authoritative; adapters the profile runs on *other* platforms do not block delivery (the shared bot is the only credential serving the pinned chat, for inbound turns and notifications alike). Unmatched, reassigned, disabled or ambiguous routes remain undelivered and retryable. Old rows missing required routing anchors are not guessed into a profile. Wake turns keep the destination profile's runtime scope and the authorized transport.
 - **Stateless (`api_server`) subscriptions** carry a raw session id, which no `profile_routes` entry can anchor (there is no chat/thread/guild discriminator on a session). A served profile is authorized exactly when the subscription's session lives in that profile's own `state.db` — the shared listener mirrors `/p/<profile>/`, so the session store is the ownership proof, never the platform. The wake then runs in that profile's runtime scope and resumes that exact session in-process, so no second listener and no secondary `API_SERVER_KEY` is involved. A session that is unknown, stamped for another profile, or owned by an unserved profile stays undelivered and retryable, and the default profile's own `api_server` subscriptions are unaffected.
 - **Legacy subscriptions** created before profile stamping (no `notifier_profile` on the row) are delivered only by the gateway that holds the actual dispatcher singleton lock, so two gateways never race for them.
 
@@ -1106,6 +1106,7 @@ Every transition appends a row to `task_events`. Each row carries an optional `r
 | Kind | Payload | When |
 |----|----|----|
 | `spawned` | `{pid}` | Dispatcher successfully started a worker process. |
+| `worker_registered` | `{pid, started_at}` | The dispatcher died after starting the worker but before recording its pid, so the worker recorded it itself before its first model call. Liveness checks then see it and an expired claim is extended instead of spawning a second worker. A worker whose run was reclaimed before it got that far exits without working the card. |
 | `heartbeat` | `{note?}` | Worker called `hermes kanban heartbeat $TASK` to signal liveness during long operations. |
 | `reclaimed` | `{stale_lock}` | Claim TTL expired without a completion; task goes back to `ready`. An automatic reclaim counts as one non-successful attempt toward the `gave_up` breaker (a claim that never spawned a worker would otherwise loop claim → reclaim → claim forever); an operator `reclaim` resets the counter instead. |
 | `crashed` | `{pid, claimer, exit_kind?, exit_code?, worker_output?}` | Worker PID no longer alive but TTL hadn't expired yet. `worker_output` is the tail of the worker's own log (its final response or the rendered provider error, chrome stripped, ≤ 400 chars) and is also appended to the task's `last_failure_error`, so the board shows *why* instead of only the exit code. |

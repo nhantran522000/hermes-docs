@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-manim-video"
 title: "Manim Video"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Manim Video

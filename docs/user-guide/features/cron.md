@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/cron"
 title: "Scheduled Tasks (Cron)"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Scheduled Tasks (Cron)
@@ -78,7 +78,7 @@ Hermes will use the unified `cronjob_manage` tool internally.
 
 Before constructing any agent machinery for a scheduled run, the scheduler validates that the job's configuration can actually produce a successful run:
 
-- the provider API key resolves (skipped when a `fallback_providers` chain is configured, since the fallback path may rescue a missing primary key),
+- the provider API key resolves (skipped for an unpinned job when a `fallback_providers` chain is configured, since the fallback path may rescue a missing primary key; a pinned job does not use that chain, so it is always checked),
 - attached skills are ready (no missing required environment variables, commands, or credential files),
 - delivery platform targets are known and have gateway credentials configured (`local`/`origin` targets are never checked),
 - every MCP server the job names in its own `enabled_toolsets` resolved to at least one tool for this profile. A server that connected earlier in this gateway and is only reconnecting after a network blip (router reboot, DNS failure) does **not** block: the job runs with the tools that did resolve and the gateway log notes which servers were skipped (once per outage). A server that never connected for this profile (wrong URL or credentials, or a server another profile owns under a multiplexer), or one parked on a permanent error such as revoked credentials, blocks the run.
@@ -360,7 +360,7 @@ cron:
 
 The mirror case: the provider says exactly how long it will stay closed. When the scheduler resolves a subscription provider (currently the OpenAI Codex usage probe) and the provider reports its usage limit exhausted with a `retry after <N>s` hint (often many hours), and the whole fallback chain is unavailable, re-firing a sub-hourly job into that window is guaranteed to fail identically on every tick — and to alert every time. A 429 the model API returns mid-run is not held this way; it is retried on the normal cadence.
 
-Instead, the scheduler **parks the job**: the one failure alert says the window is closed and that the job is held, `next_run_at` moves to the first scheduled occurrence after the window (`quota_hold_until` on the job record), and nothing fires or alerts until then. Any run that reaches the model clears the hold. One-shot jobs are not held.
+Instead, the scheduler **parks the job**: the one failure alert says the window is closed and that the job is held. If the provider reopens well before a **sparse** cron job's next natural occurrence (at least half a schedule period early), a blocked scheduled occurrence retries once at that recovery boundary; a second quota failure waits for the natural schedule. Dense schedules, manual runs and interval jobs retain their natural next run. Otherwise, missed occurrences are coalesced and `next_run_at` moves to the first scheduled occurrence after the window. The parked instant is stored as `quota_hold_until`; nothing fires or alerts before it. Any run that reaches the model clears the hold. One-shot jobs are not held.
 
 ### Failure incidents: alert once, remind on a cooldown, acknowledge
 
@@ -458,7 +458,7 @@ Execution and delivery are tracked separately. When the agent run succeeds but t
 - `bot-chat:<profile>` targets another profile **on the same machine**. Names are validated against `hermes profile list` when the job is created; profiles on other gateways or machines can never be targeted, so same-named profiles across machines are unambiguous.
 - Each delivery costs the target bot one full agent turn — mind the schedule frequency.
 - Composes with other targets (`bot-chat,telegram`) but is never included in `all`.
-- If the canonical chat is open in a mailbox-capable Desktop/TUI backend, delivery is **durably queued immediately**, whether the bot is idle or busy. Only that live owner runs the incoming turn; cron does not start a competing CLI writer. If a CLI-only or older unsupported owner holds the chat, cron retains the never-started output under the sending profile's `cron/bot_chat_pending/<receipt-id>.json`. Later scheduler ticks deliver after that owner releases the chat, in admission order. Deferred work retains its admitted destination home and receipt ID even if the scheduler's launch root changes; a missing/renamed destination is not recreated or resolved to another profile. A `transferred` pending record points to the live-owner receipt, not a failed turn. Malformed JSON records are retained and logged without blocking other queued outputs. With no owner, the existing `hermes chat -c "Bot Chat" --create-if-missing` lane remains available (normal session ownership checks still apply). That child uses the exact destination home already checked by cron, including custom roots; inherited `HOME` or a changed active profile cannot redirect it. A missing destination directory is refused before launch, not recreated. A deferred request is claimed before launching that lane; interruption or an uncertain subprocess result never causes an automatic resend.
+- If the canonical chat is open in a mailbox-capable Desktop/TUI backend, delivery is **durably queued immediately**, whether the bot is idle or busy. Only that live owner runs the incoming turn; cron does not start a competing CLI writer. If a CLI-only or older unsupported owner holds the chat, cron retains the never-started output under the sending profile's `cron/bot_chat_pending/<receipt-id>.json`. Later scheduler ticks deliver after that owner releases the chat, in admission order. Deferred work retains its admitted destination home and receipt ID even if the scheduler's launch root changes; a missing/renamed destination is not recreated or resolved to another profile. A `transferred` pending record points to the live-owner receipt, not a failed turn. Malformed JSON records are retained and logged without blocking other queued outputs. With no owner, the existing `hermes chat -c "Bot Chat" --create-if-missing` lane remains available (normal session ownership checks still apply). That child uses the exact destination home already checked by cron, including custom roots; inherited `HOME` or a changed active profile cannot redirect it. Its whole environment is the **destination** profile's, as a standalone `hermes -p <profile>` would build it: the sending gateway's `.env` settings, bridged `TERMINAL_*` policy, platform authorization gates and credentials are dropped, and the destination's own secrets are overlaid. A missing destination directory is refused before launch, not recreated. A deferred request is claimed before launching that lane; interruption or an uncertain subprocess result never causes an automatic resend.
 - Never-started outputs have no TTL: if an unsupported owner never releases, they remain queued rather than being silently dropped. Receipts retain their payloads indefinitely. An unexpected delivery exception is logged and retained as `ambiguous`, without stopping sibling deliveries in that drain; claimed/ambiguous attempts are never automatically replayed.
 - **Queued is not completed.** Cron records receipt IDs and `queued`/`claimed` statuses in `last_delivery_queued`, with delivery outcome `queued` (neither delivered nor failed). A successful job shows `delivery_queued`; genuine errors on other targets still take precedence as delivery failures. The bot may complete later. The durable receipt in the target profile's `runtime/bot_live_delivery/<receipt-id>.json` is authoritative; cron's historical status is not automatically refreshed.
 - Rechecking the same execution inspects its existing receipt, even if the owner has disappeared. It never falls back to another writer after acceptance. `failed`, `cancelled`, or `ambiguous` receipts are not automatically replayed; inspect the chat and receipt before intentionally starting new work. Each new cron execution has a distinct delivery ID.
@@ -798,12 +798,16 @@ From the CLI: `hermes cron create "every 6h" "Scan for news" --continuity`, and 
 
 ## Provider recovery
 
-Cron jobs inherit your configured fallback providers and credential pool rotation. If the primary API key is rate-limited or the provider returns an error, the cron agent can:
+If the primary API key is rate-limited or the provider returns an error, the cron agent can:
 
-- **Fall back to an alternate provider** if you have `fallback_providers` (or the legacy `fallback_model`) configured in `config.yaml`
-- **Rotate to the next credential** in your [credential pool](../configuration.md#credential-pool-strategies) for the same provider
+- **Rotate to the next credential** in your [credential pool](../configuration.md#credential-pool-strategies) for the same provider. This applies to every job, pinned or not.
+- **Fall back to an alternate provider** from `fallback_providers` (or the legacy `fallback_model`) in `config.yaml` — **unpinned jobs only**. That covers a failure while resolving credentials before the run starts and a provider error mid-run.
 
-This means cron jobs that run at high frequency or during peak hours are more resilient — a single rate-limited key won't fail the entire run.
+A job with its own `provider`, `model` or `base_url` (set with `--provider` / `--model`, `--pin`, the dashboard, or `jobs.json`) never falls back to the global chain. The pin says which route the job runs on, and a fallback entry is a different provider and usually a different model, so when the pinned route fails the run fails and the failure alert says so. This is the same rule [subagent delegation](delegation.md) applies to a pinned child. To keep fallback for a job, leave it unpinned: it follows `cron.model` / `cron.model_provider` (or the main model) and walks the chain like any other unpinned job.
+
+Before this rule, a pinned job whose provider failed could run on the first working `fallback_providers` entry instead, with a one-line notice in its output. If you relied on that, unpin the job (`hermes cron edit <job_id> --unpin`) and set the model through `cron.model` instead.
+
+A single rate-limited key therefore does not fail a run that has another credential for the same provider, and unpinned jobs still survive a provider outage when a chain is configured.
 
 ## Run failures (`last_error`)
 
@@ -1004,7 +1008,7 @@ The `wakeAgent` gate gives you a \$0 way to decide whether a scheduled job shoul
 **File-change gate** — only run when a watched file has new content since the last successful tick. The scheduler records each job's `last_run_at`; compare it against the file's mtime.
 
 ``` bash
-#!/bin/bash
+#!/usr/bin/env bash
 # ~/.hermes/scripts/feed-changed.sh
 FEED="$HOME/data/feed.json"
 STATE="$HOME/.hermes/scripts/.feed-changed.last"
@@ -1029,7 +1033,7 @@ cronjob(action="create", name="process-feed",
 **External-flag gate** — only run when some other process has signalled readiness (e.g. a deploy hook drops a file, a CI job sets a value in your state store).
 
 ``` bash
-#!/bin/bash
+#!/usr/bin/env bash
 # ~/.hermes/scripts/flag-ready.sh
 if test -f ~/.hermes/cache/scratch/new-data-ready; then
   rm -f ~/.hermes/cache/scratch/new-data-ready
@@ -1099,6 +1103,8 @@ Job definitions are plain JSON on disk: they survive `hermes update`, gateway re
 tip
 
 Ask the agent to manage jobs through the `cronjob_manage` tool, `hermes cron edit`, or `/cron` — not by patching `jobs.json` directly. Direct edits can fail silently when [file write safety](../security.md#file-write-safety) blocks the path (for example when `HERMES_WRITE_SAFE_ROOT` is set), and the [file-mutation verifier](../configuration.md#file-mutation-verifier) footer is the authoritative signal that nothing was saved.
+
+If a hand edit leaves `jobs.json` malformed, the scheduler repairs it on the next load instead of stopping: entries in the `jobs` list that are not JSON objects are dropped, and a `repeat.completed` that is not a non-negative integer is reset to a valid count (0 when it can't be read). Each repair is logged as a warning (value types only, never contents).
 
 Jobs may store `model` and `provider` as `null`. When those fields are omitted, Hermes resolves them at execution time from the global configuration. They only appear in the job record when a per-job override is set.
 

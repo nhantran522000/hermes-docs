@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-architecture-diagram"
 title: "Architecture Diagram"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Architecture Diagram

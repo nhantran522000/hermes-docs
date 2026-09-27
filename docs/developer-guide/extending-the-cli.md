@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/extending-the-cli"
 title: "Extending the CLI"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Extending the CLI
@@ -71,11 +71,10 @@ if __name__ == "__main__":
     cli.run()
 ```
 
-Run it:
+Run it from your source checkout after selecting an isolated development home with the [PM developer workflow](https://hermes-agent.nousresearch.com/docs/reference/package-management#developer-workflow):
 
 ``` bash
-cd ~/.hermes/hermes-agent
-source .venv/bin/activate
+source ./activate
 python my_cli.py
 ```
 

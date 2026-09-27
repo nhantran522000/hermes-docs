@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/google_chat"
 title: "Google Chat Setup"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Google Chat Setup
@@ -148,7 +148,7 @@ Install the Google Chat adapter dependencies through its maintained installer. I
 python -m plugins.platforms.google_chat.oauth --install-deps
 ```
 
-On Docker / hosted images `/opt/hermes/.venv` is read-only. That installer routes through `tools.lazy_deps` into `HERMES_LAZY_INSTALL_TARGET` (`/opt/data/lazy-packages` in the official image) instead of writing site-packages. Restart the gateway after it finishes. The published image also bakes the `[google-chat]` extra so a fresh container does not need a first-boot install.
+`--install-deps` asks PM to add the `google-chat` extra to the managed Python environment (`pm.sync_venv`); restart the gateway after it finishes so the new environment is active. On Docker / hosted images the venv is read-only and on-demand installs are disabled (`HERMES_DISABLE_LAZY_INSTALLS=1`), so this step cannot add anything there. The published image bakes the `[google-chat]` extra instead, so a fresh container does not need a first-boot install.
 
 Start the gateway:
 

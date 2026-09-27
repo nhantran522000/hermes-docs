@@ -1,10 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/azure-foundry"
 title: "Microsoft Foundry"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Microsoft Foundry
+
+Python dependency commands on this page use a [PM-prepared source checkout](https://hermes-agent.nousresearch.com/docs/reference/package-management#developer-workflow). After a dependency change, reactivate the checkout and restart Hermes.
 
 Hermes Agent's `azure-foundry` provider supports Microsoft Foundry (formerly Azure AI Foundry) and Azure OpenAI. A single Foundry resource can host models with two different wire formats:
 
@@ -101,7 +103,7 @@ The wizard runs a bounded preflight probe (10 s timeout). On failure it offers t
 `azure-identity` is installed automatically on first use via Hermes' lazy-install path. To pre-install:
 
 ``` bash
-pip install azure-identity
+python -c "import pm; pm.sync_venv(['azure-identity'], explicit=True)"
 ```
 
 ### Configuration written to `config.yaml`

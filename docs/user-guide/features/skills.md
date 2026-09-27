@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/skills"
 title: "Skills System"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Skills System
@@ -17,15 +17,29 @@ See also:
 - [Bundled Skills Catalog](../../reference/skills-catalog.md)
 - [Official Optional Skills Catalog](../../reference/optional-skills-catalog.md)
 
+## Browse and install in Desktop
+
+Open **Capabilities → Skills** and switch between **Installed** and **Browse**. Search stays at the top; the tab switch and actions share one row. **Installed** reads the selected profile's actual skills and enabled state; it is not inferred from the public catalog. **Browse** is a native catalog UI, not an embedded website or a second, smaller catalog.
+
+Desktop and the public [Skills Hub](https://hermes-agent.nousresearch.com/docs/skills) read the same published CDN snapshot: [`/docs/api/skills.json`](https://hermes-agent.nousresearch.com/docs/api/skills.json). The public docs alias serves the same snapshot as Desktop's fetch URL, `https://nousresearch.github.io/hermes-agent/docs/api/skills.json`. The docs build generates it from bundled `skills/`, `optional-skills/`, and the centralized skills index. Browsing does not crawl GitHub or query upstream marketplaces live; installation still retrieves the selected skill through its source's installer.
+
+### Install from the website
+
+The Skills Hub has an **Install in Hermes** button on each installable card. It opens the installed Hermes Desktop app with a URL-encoded, source-qualified skill target: for example, `official/...` for optional skills or `clawhub/...` for ClawHub. Bundled skills use an explicit repository path rather than an ambiguous bare name. When an older snapshot lacks that explicit bundled target, the website omits its install link and native Browse disables installation rather than resolving an ambiguous name. The next docs publish supplies those targets. The same target is used by native Browse and the card's CLI fallback:
+
+``` text
+hermes://skill/install?identifier=official%2Fsecurity%2F1password
+```
+
+Hermes shows **Install “skill-name”?** with separate **Source** and **Install to** rows. Cancel makes no changes. After confirmation, the same dialog shows **Installing…**, then **Installed** and a completion notification. Errors stay in the dialog so you can read them and retry. Installation uses the existing Skills Hub pipeline, including security scanning, action logs, and installed-list refresh. If you switch profile or connection while the confirmation is open, reopen the link for the new destination. Changes apply to new sessions; a link cannot bypass scanning or select a different profile.
+
+The public links use `hermes://`, not the development-only `hermes-dev://` scheme. The `skill/install` route requires an updated Desktop build. If the app is missing or the link is not recognized, update Desktop or expand the card to copy its CLI install command instead.
+
 ## Starting with a blank slate
 
 By default every profile is seeded with the bundled skill catalog, and each `hermes update` adds any newly bundled skills. If you want a profile with **no bundled skills** — and that stays empty across updates — you have two paths:
 
-**At install time** (applies to the default `~/.hermes` profile):
-
-``` bash
-curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash -s -- --no-skills
-```
+**At install time** (applies to the default `~/.hermes` profile): the installer has no `--no-skills` flag. Its setup stage asks whether to seed the bundled catalog when you pick the Blank Slate setup; answering no writes the opt-out marker described below. Non-interactive installs seed the catalog, so run `hermes skills opt-out` afterwards if you want the profile empty.
 
 **At profile-create time** (named profiles):
 
@@ -41,7 +55,7 @@ hermes skills opt-out --remove   # also delete UNMODIFIED bundled skills (confir
 hermes skills opt-in --sync      # undo: remove the marker and re-seed now
 ```
 
-All three paths write a `.no-bundled-skills` marker into the profile directory. While the marker is present, the installer, `hermes update`, and any skill sync all skip bundled-skill seeding for that profile. Delete the marker (or run `hermes skills opt-in`) to re-enable.
+All of these paths write a `.no-bundled-skills` marker into the profile directory. While the marker is present, the installer, `hermes update`, and any skill sync all skip bundled-skill seeding for that profile. Delete the marker (or run `hermes skills opt-in`) to re-enable.
 
 Safe by default
 
@@ -531,7 +545,7 @@ The system prompt asks the agent to record a non-trivial workflow with `skill_ma
 
 A skill is the instructions for doing a class of task the most efficient and correct way, to your specifications: the procedure in order, the commands and tool calls that work, how you want the result to look, and the pitfalls that cost time. Whether written in a foreground turn, by the background review, or by the curator's consolidation pass, it captures **lessons, not logs**: a pitfall is a generalizable rule plus one clause of *why* (the mechanism), attached to the step it affects, stated once. Incident narration, PR or issue numbers, dates, and quoted chat are not skill content; the rule has to stand without the story behind it. Always-on rules live in `SKILL.md` itself; `references/` holds a small set of files named by topic (a decision table, a recipe, provider quirks), extended in place rather than accumulated one file per session. Skills also do not restate what is already loaded every turn (the repo's `AGENTS.md`, tool schemas).
 
-`skill_manage` runs an advisory linter on `create` and on `references/` writes and returns its findings in the tool result. Two rules exist specifically for this shape: `incident-log-shape` (a body dense in PR/issue numbers) and `references-sprawl` (more than 60 reference files). They warn; they never block a write.
+`skill_manage` runs an advisory linter on `create`, on `SKILL.md` patches, and on `references/` writes and returns its findings in the tool result. Three rules exist specifically for this shape: `incident-log-shape` (a body dense in PR/issue numbers), `references-sprawl` (more than 60 reference files), and `oversized-body` (a `SKILL.md` body past ~24k chars — `skill_view` loads the whole file and it stays in context for the rest of the session). They warn; they never block a write.
 
 ### Actions
 

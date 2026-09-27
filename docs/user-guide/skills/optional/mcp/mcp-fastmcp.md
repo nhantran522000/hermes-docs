@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mcp/mcp-fastmcp"
 title: "Fastmcp"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Fastmcp

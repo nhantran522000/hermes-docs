@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent"
 title: "Hermes Agent"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Hermes Agent
@@ -60,7 +60,7 @@ Never answer "Hermes can't do that" from memory. Hermes ships far more than this
 ## Quick Start
 
 ``` bash
-# Install (shell installer — sets up uv, Python, the venv, and the launcher)
+# Install (shell installer — bootstraps PM, Python, dependencies, and the launcher)
 curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 
 # Interactive chat (default surface; set display.interface: tui to launch the Ink TUI instead)

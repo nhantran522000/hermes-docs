@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/python-library"
 title: "Using Hermes as a Python Library"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Using Hermes as a Python Library
@@ -12,15 +12,15 @@ Hermes isn't just a CLI tool. You can import `AIAgent` directly and use it progr
 
 ## Installation
 
-Clone Hermes and create its supported editable development environment:
+Clone Hermes and prepare its source environment through PM. The Bash recipe is:
 
 ``` bash
 git clone https://github.com/NousResearch/hermes-agent.git
 cd hermes-agent
-uv sync
+source ./activate
 ```
 
-Run your application with `uv run python your_app.py` from that checkout. Hermes does not publish a supported wheel or source distribution for `requirements.txt` installs.
+Run your application with `python your_app.py` from that activated checkout. For PowerShell preparation or an independent interpreter, see the [PM developer workflow](https://hermes-agent.nousresearch.com/docs/reference/package-management#developer-workflow). Hermes does not publish a supported wheel or source distribution for `requirements.txt` installs.
 
 tip
 

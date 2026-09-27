@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/model-catalog"
 title: "Model Catalog"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Model Catalog

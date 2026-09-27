@@ -1,10 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/aws-bedrock"
 title: "AWS Bedrock"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # AWS Bedrock
+
+Python dependency commands on this page use a [PM-prepared source checkout](https://hermes-agent.nousresearch.com/docs/reference/package-management#developer-workflow). After a dependency change, reactivate the checkout and restart Hermes.
 
 Hermes Agent supports Amazon Bedrock as a native provider. This gives you full access to the Bedrock ecosystem: IAM authentication, Guardrails, cross-region inference profiles, and all foundation models.
 
@@ -25,7 +27,7 @@ All three routes share the same AWS credential chain and region resolution — n
   - `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` environment variables
   - `AWS_PROFILE` for SSO or named profiles
   - `aws configure` for local development
-- **boto3** — install with `cd ~/.hermes/hermes-agent && uv pip install -e ".[bedrock]"`
+- **boto3** — install with `cd ~/.hermes/hermes-agent && python -c "import pm; pm.sync_venv(['bedrock'], explicit=True)"`
 - **IAM permissions** — at minimum:
   - `bedrock:InvokeModel` and `bedrock:InvokeModelWithResponseStream` (for inference)
   - `bedrock:ListFoundationModels` and `bedrock:ListInferenceProfiles` (for model discovery)
@@ -39,7 +41,7 @@ On AWS compute, attach an IAM role with `AmazonBedrockFullAccess` and you're don
 
 ``` bash
 # Install with Bedrock support
-cd ~/.hermes/hermes-agent && uv pip install -e ".[bedrock]"
+cd ~/.hermes/hermes-agent && python -c "import pm; pm.sync_venv(['bedrock'], explicit=True)"
 
 # Select Bedrock as your provider
 hermes model

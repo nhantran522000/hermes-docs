@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/gaming/gaming-minecraft-modpack-server"
 title: "Minecraft Modpack Server"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Minecraft Modpack Server
@@ -166,7 +166,7 @@ Check with: `sudo ufw status | grep 25565`
 
 ``` bash
 cat > ~/start-minecraft.sh << 'EOF'
-#!/bin/bash
+#!/usr/bin/env bash
 cd ~/minecraft-server/server
 java @user_jvm_args.txt @libraries/net/neoforged/neoforge/<VERSION>/unix_args.txt nogui
 EOF
@@ -181,7 +181,7 @@ Create backup script:
 
 ``` bash
 cat > ~/minecraft-server/backup.sh << 'SCRIPT'
-#!/bin/bash
+#!/usr/bin/env bash
 SERVER_DIR="$HOME/minecraft-server/server"
 BACKUP_DIR="$HOME/minecraft-server/backups"
 WORLD_DIR="$SERVER_DIR/world"

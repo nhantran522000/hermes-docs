@@ -1,10 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/tools"
 title: "Tools & Toolsets"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Tools & Toolsets
+
+Python dependency commands on this page use a [PM-prepared source checkout](https://hermes-agent.nousresearch.com/docs/reference/package-management#developer-workflow). After a dependency change, reactivate the checkout and restart Hermes.
 
 Tools are functions that extend the agent's capabilities. They're organized into logical **toolsets** that can be enabled or disabled per platform.
 
@@ -152,7 +154,7 @@ hermes config set terminal.singularity_image ~/python.sif
 ### Modal (Serverless Cloud)
 
 ``` bash
-uv pip install modal
+python -c "import pm; pm.sync_venv(['modal'], explicit=True)"
 modal setup
 hermes config set terminal.backend modal
 ```
@@ -160,7 +162,7 @@ hermes config set terminal.backend modal
 ### Vercel Sandbox
 
 ``` bash
-pip install 'hermes-agent[vercel]'
+python -c "import pm; pm.sync_venv(['vercel'], explicit=True)"
 hermes config set terminal.backend vercel_sandbox
 hermes config set terminal.vercel_runtime node24
 ```

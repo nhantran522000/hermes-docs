@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/windows-wsl-quickstart"
 title: "Windows (WSL2) Guide"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Windows (WSL2) Guide
@@ -275,7 +275,7 @@ If you just want a double-click launcher for an interactive Hermes shell, create
 
 3.  Name it something obvious like `Hermes`.
 
-That opens Windows Terminal, starts your WSL distro, drops you in your Linux home directory, and launches Hermes. If `hermes` is not on PATH yet, open WSL once manually and run `source ~/.bashrc`, or replace the command with `uv run hermes` inside your project checkout.
+That opens Windows Terminal, starts your WSL distro, drops you in your Linux home directory, and launches Hermes. If `hermes` is not on PATH yet, open WSL once manually and run `source ~/.bashrc`, or replace the command with `python hermes` inside your PM-activated project checkout.
 
 Optional polish:
 
@@ -339,7 +339,7 @@ Or install `ntpdate` and run it at login.
 
 ## Where to go next
 
-- **[Installation](../getting-started/installation.md)** — actual install steps (Linux/WSL2/Termux all use the same installer).
+- **[Installation](../getting-started/installation.md)** — actual install steps (Linux/WSL2 use the same installer).
 - **[Integrations → Providers → WSL2 Networking](../integrations/providers.md#wsl2-networking-windows-users)** — the canonical networking deep-dive for local model servers.
 - **[MCP guide → WSL → Windows Chrome](../guides/use-mcp-with-hermes.md#wsl2-bridge-hermes-in-wsl-to-windows-chrome)** — controlling your signed-in Windows Chrome from Hermes in WSL.
 - **[Tool Gateway](features/tool-gateway.md)** and **[Web Dashboard](features/web-dashboard.md)** — the long-lived services you'll most often want to expose from WSL to the rest of your network.

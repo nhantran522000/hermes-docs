@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/optional-skills-catalog"
 title: "Optional Skills Catalog"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Optional Skills Catalog
@@ -64,6 +64,8 @@ hermes skills uninstall <skill-name>
 | [**auteur**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-auteur) | Design and build cinematic, award-level web pages. |
 | [**baoyu-article-illustrator**](../user-guide/skills/optional/creative/creative-baoyu-article-illustrator.md) | Article illustrations: type × style × palette consistency. |
 | [**baoyu-comic**](../user-guide/skills/optional/creative/creative-baoyu-comic.md) | Knowledge comics (知识漫画): educational, biography, tutorial. |
+| [**brag**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-brag) | Project launch video via Hyperframes, upstream-maintained. |
+| [**brag-slim**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-brag-slim) | Launch video from a project or URL, upstream-maintained. |
 | [**comfyui**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-comfyui) | Generate images, video, and audio via diffusion workflows. |
 | [**concept-diagrams**](../user-guide/skills/optional/creative/creative-concept-diagrams.md) | Generate flat, minimal educational SVG visuals as HTML. |
 | [**creative-ideation**](../user-guide/skills/optional/creative/creative-creative-ideation.md) | Generate ideas via named methods from creative practice. |

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/migrate-from-openclaw"
 title: "Migrate from OpenClaw"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Migrate from OpenClaw

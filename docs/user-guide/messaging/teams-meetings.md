@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/teams-meetings"
 title: "Microsoft Teams Meetings"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Microsoft Teams Meetings

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/session-storage"
 title: "Session Storage"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Session Storage
@@ -223,6 +223,8 @@ _CHECKPOINT_EVERY_N_WRITES = 50
 ```
 
 When a writer exhausts its budget the turn ends with `session_persistence_failed:locked` and, on Linux, `hermes_state_lockowners` logs a WARNING naming the process that held the lock at that moment (`PID 594094 (hermes --worktree --yolo) holds WAL write lock on state.db-shm`), read from `/proc/locks` — SQLite's byte-range `fcntl` locks encode the lock kind in their offset (`state.db-shm` byte 120 = WAL write, 121 = checkpoint, 123-127 = read slots; the 1 GiB pending-byte page on `state.db` = rollback-journal PENDING/RESERVED/SHARED). The open-descriptor scan cannot make this distinction because every Hermes process has the DB open. Look for that line in `~/.hermes/logs/errors.log` next to the `database is locked` failure.
+
+Lock contention is recognised by SQLite result code (`SQLITE_BUSY` / `SQLITE_LOCKED`, `hermes_state_errors.is_sqlite_lock_error`), not by message text. In rollback-journal (`delete`) mode a lock lost inside FTS5's table constructor arrives as `SQLITE_BUSY` with the text `vtable constructor failed: messages_fts`; it is treated like `database is locked`. Opening a writable `SessionDB` waits up to `_WRITE_PATIENCE_S`; a read-only open waits its `_READ_BUSY_TIMEOUT_S` (5 s) read budget once. If the lock outlasts that, the dashboard answers 503 (busy), not 500.
 
 ## Common Operations
 

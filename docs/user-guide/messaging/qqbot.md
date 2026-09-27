@@ -1,10 +1,12 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/qqbot"
 title: "QQ Bot"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # QQ Bot
+
+Python dependency commands on this page use a [PM-prepared source checkout](https://hermes-agent.nousresearch.com/docs/reference/package-management#developer-workflow). After a dependency change, reactivate the checkout and restart Hermes.
 
 Connect Hermes to QQ via the **Official QQ Bot API (v2)** — supporting private (C2C), group @-mentions, guild, and direct messages with voice transcription.
 
@@ -28,7 +30,7 @@ The QQ Bot adapter uses the [Official QQ Bot API](https://bot.q.qq.com/wiki/deve
 2.  **Dependencies** — The adapter requires `aiohttp` and `httpx`:
 
     ``` bash
-    pip install aiohttp httpx
+    python -c "import pm; pm.sync_venv(['messaging'], explicit=True)"
     ```
 
 ## Configuration
@@ -129,6 +131,6 @@ This usually means:
 
 ### Connection errors
 
-- Ensure `aiohttp` and `httpx` are installed: `pip install aiohttp httpx`
+- Ensure `aiohttp` and `httpx` are installed: `python -c "import pm; pm.sync_venv(['messaging'], explicit=True)"`
 - Check network connectivity to `api.sgroup.qq.com` and the WebSocket gateway
 - Review gateway logs for detailed error messages and reconnect behavior

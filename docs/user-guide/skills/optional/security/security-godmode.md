@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/security/security-godmode"
 title: "Godmode"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Godmode
@@ -76,6 +76,8 @@ Query N models in parallel via OpenRouter, score responses on quality/filteredne
 See `scripts/godmode_race.py` for the implementation.
 
 ## Step 0: Auto-Jailbreak (Recommended)
+
+The helper requires `ruamel.yaml` (included with Hermes). In a standalone Python environment, install `ruamel.yaml==0.18.17` before loading it.
 
 The fastest path — auto-detect the model, test strategies, and lock in the winner:
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/yuanbao"
 title: "Yuanbao"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Yuanbao
@@ -16,13 +16,12 @@ Yuanbao is an enterprise messaging platform primarily used within Tencent and en
 
 - A Yuanbao account with bot creation permissions
 - Yuanbao APP_ID and APP_SECRET (from platform admin)
-- Python packages: `websockets` and `httpx`
-- For media support: `aiofiles`
+- Python packages: `websockets` and `httpx`, both core Hermes dependencies
 
-Install the required dependencies:
+If these core dependencies are damaged, repair the selected environment:
 
 ``` bash
-pip install websockets httpx aiofiles
+hermes pm repair
 ```
 
 ## Setup

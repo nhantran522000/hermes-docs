@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/extending-the-dashboard"
 title: "Extending the Dashboard"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Extending the Dashboard

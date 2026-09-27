@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/devops/devops-docker-management"
 title: "Docker Management"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Docker Management

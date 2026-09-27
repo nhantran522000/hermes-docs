@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/code-execution"
 title: "Code Execution (Programmatic Tool Calling)"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Code Execution (Programmatic Tool Calling)
@@ -154,6 +154,12 @@ Security-critical invariants are identical across both modes:
 - resource limits (timeout, stdout cap, tool-call cap)
 
 Switching mode changes where scripts run and which interpreter runs them, not what credentials they can see or which tools they can call.
+
+## Persistent session kernel
+
+Calls reuse a Python child for the same session, execution mode, interpreter, working directory, and tool set. Imports, variables, and loaded data can persist between cells. The child environment is fixed when the kernel starts.
+
+Pass `reset: true` to discard that kernel state. A timeout or interrupted kernel can also lose it. Do not assume that a later terminal environment change is already visible inside an existing kernel. The old `code_execution.kernel_mode` setting is no longer a separate switch.
 
 ## Resource Limits
 

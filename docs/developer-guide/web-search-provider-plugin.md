@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/web-search-provider-plugin"
 title: "Building a Web Search Provider Plugin"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Building a Web Search Provider Plugin
@@ -231,7 +231,9 @@ Errors surface as the tool result; the LLM decides how to explain them. If no pr
 
 ## Lazy-installing optional dependencies
 
-If your provider wraps a third-party SDK (like DDGS does with the `ddgs` package), don't `import` it at module top level. Use `tools.lazy_deps.ensure(...)` inside `is_available()` or `search()` — Hermes will install the package on first use, gated by `security.allow_lazy_installs`. See [Build a Hermes Plugin → Lazy-install](plugins.md#lazy-install-optional-python-dependencies) for the security model.
+Keep availability checks read-only. For an SDK covered by a Hermes extra, use `pm.available("extra-name")` in `is_available()`. Request `pm.ensure_import("extra-name")` from the operation that needs it. Report `InstallError`, including a required restart, to the caller.
+
+Declare a third-party plugin's own dependencies in its manifest or `pyproject.toml` rather than inventing a Hermes extra. See [Build a Hermes Plugin → Lazy-install](plugins.md#lazy-install-optional-python-dependencies).
 
 ## Reference implementations
 

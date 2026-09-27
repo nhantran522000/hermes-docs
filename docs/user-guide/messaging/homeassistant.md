@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/homeassistant"
 title: "Home Assistant Integration"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Home Assistant Integration

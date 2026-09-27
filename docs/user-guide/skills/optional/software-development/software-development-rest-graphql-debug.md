@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/software-development/software-development-rest-graphql-debug"
 title: "Rest Graphql Debug"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Rest Graphql Debug

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/browser"
 title: "Browser Automation"
-last_crawled: 2026-09-20
+last_crawled: 2026-09-27
 ---
 
 # Browser Automation
@@ -527,11 +527,13 @@ AGENT_BROWSER_ARGS=--no-sandbox
 
 ### Install agent-browser CLI
 
-You don't need to install anything — `agent-browser` resolves automatically via `npx agent-browser` on first browser-tool use. To avoid the one-time npx fetch, you can install it globally ahead of time (optional):
+The installers and `hermes update` install `agent-browser` and its pinned Chromium through Hermes's package manager by default. If you installed with `--skip-browser` / `-SkipBrowser`, or the download failed, install them with:
 
 ``` bash
-npm install -g agent-browser
+hermes pm install agent-browser
 ```
+
+This also undoes an earlier `--skip-browser` choice, so updates keep the browser tools current. An `agent-browser` already on your `PATH` also works. On Linux, Chromium may also need system libraries (`npx playwright install-deps chromium`). On Android/Termux, run `npm install -g agent-browser && agent-browser install` instead.
 
 info
 

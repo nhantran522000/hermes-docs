@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/git-worktrees"
 title: "Git Worktrees"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Git Worktrees
@@ -162,6 +162,8 @@ Hermes will:
 - Create a temporary worktree under `.worktrees/` inside your repo.
 - Check out an isolated branch (e.g. `hermes/hermes-<hash>`).
 - Run the full CLI session inside that worktree.
+
+Hermes checks the worktree out without running the repository's own git configuration: its hooks, `core.fsmonitor` and clean/smudge filters are off for that checkout, as they are for the worktrees Hermes creates for kanban tasks and subagents. A repository that stores files through Git LFS gets pointer files there; run `git lfs pull` inside the worktree if the session needs their contents.
 
 This is the easiest way to get worktree isolation. You can also combine it with a single query:
 

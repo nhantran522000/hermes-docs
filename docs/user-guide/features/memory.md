@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/memory"
 title: "Persistent Memory"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Persistent Memory
@@ -421,7 +421,7 @@ On a messaging platform, approve a skill from its gist + metadata, or open `/ski
 
 ## External Memory Providers
 
-For deeper, persistent memory that goes beyond MEMORY.md and USER.md, Hermes ships with 7 external memory provider plugins — Honcho, OpenViking, Mem0, Holographic, RetainDB, ByteRover, and Supermemory — and more, such as Hindsight, are available from the [plugin catalog](plugins.md) via `hermes plugins install <name>`.
+For deeper, persistent memory that goes beyond MEMORY.md and USER.md, Hermes ships with 5 external memory provider plugins — OpenViking, Mem0, Holographic, RetainDB and ByteRover — and more, such as Honcho, Hindsight and Supermemory, are available from the [plugin catalog](plugins.md) via `hermes plugins install <name>`.
 
 External providers run **alongside** built-in memory (never replacing it) and add capabilities like knowledge graphs, semantic search, automatic fact extraction, and cross-session user modeling.
 

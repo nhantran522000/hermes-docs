@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/work-with-skills"
 title: "Working with Skills"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Working with Skills

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mcp/mcp-mcp-oauth-remote-gateway"
 title: "Mcp Oauth Remote Gateway"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Mcp Oauth Remote Gateway

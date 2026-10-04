@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/python-library"
 title: "Using Hermes as a Python Library"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Using Hermes as a Python Library

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/secret-source-plugin"
 title: "Building a Secret Source Plugin"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Building a Secret Source Plugin

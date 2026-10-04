@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/slash-commands"
 title: "Slash Commands Reference"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Slash Commands Reference

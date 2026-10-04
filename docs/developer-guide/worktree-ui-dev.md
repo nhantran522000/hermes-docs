@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/worktree-ui-dev"
 title: "TUI & Desktop from Worktrees"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # TUI & Desktop from Worktrees

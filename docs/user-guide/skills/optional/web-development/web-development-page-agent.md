@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/web-development/web-development-page-agent"
 title: "Page Agent"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Page Agent

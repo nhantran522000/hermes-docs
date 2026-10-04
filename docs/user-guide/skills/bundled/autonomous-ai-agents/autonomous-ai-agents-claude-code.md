@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-claude-code"
 title: "Claude Code"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Claude Code
@@ -387,7 +387,7 @@ Bash(git commit *)      # Only git commit commands
 Bash(npm run lint:*)    # Pattern matching with wildcards
 WebSearch               # Web search capability
 WebFetch                # Web page fetching
-mcp__<server>__<tool>   # Specific MCP tool
+mcp__<server>__{tool}   # Specific MCP tool
 ```
 
 ## Settings & Configuration

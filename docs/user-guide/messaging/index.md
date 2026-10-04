@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging"
 title: "Messaging Gateway"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Messaging Gateway
@@ -22,36 +22,36 @@ Naming the server's own profile explicitly (for example `profile=default` on a d
 
 ## Platform Comparison
 
-| Platform           | Voice | Images | Files | Threads | Reactions | Typing | Streaming |
-|--------------------|:-----:|:------:|:-----:|:-------:|:---------:|:------:|:---------:|
-| Telegram           |  ✅   |   ✅   |  ✅   |   ✅    |     —     |   ✅   |    ✅     |
-| Discord            |  ✅   |   ✅   |  ✅   |   ✅    |    ✅     |   ✅   |    ✅     |
-| Slack              |  ✅   |   ✅   |  ✅   |   ✅    |    ✅     |   ✅   |    ✅     |
-| Google Chat        |   —   |   ✅   |  ✅   |   ✅    |     —     |   ✅   |     —     |
-| WhatsApp           |   —   |   ✅   |  ✅   |    —    |     —     |   ✅   |    ✅     |
-| WhatsApp Cloud API |  ✅   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
-| Signal             |   —   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
-| SMS                |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
-| Email              |   —   |   ✅   |  ✅   |   ✅    |     —     |   —    |     —     |
-| Home Assistant     |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
-| Mattermost         |  ✅   |   ✅   |  ✅   |   ✅    |     —     |   ✅   |    ✅     |
-| Matrix             |  ✅   |   ✅   |  ✅   |   ✅    |    ✅     |   ✅   |    ✅     |
-| DingTalk           |   —   |   ✅   |  ✅   |    —    |    ✅     |   —    |    ✅     |
-| Feishu/Lark        |  ✅   |   ✅   |  ✅   |   ✅    |    ✅     |   ✅   |    ✅     |
-| WeCom              |  ✅   |   ✅   |  ✅   |    —    |     —     |   —    |     —     |
-| WeCom Callback     |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
-| Weixin             |  ✅   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
-| BlueBubbles        |   —   |   ✅   |  ✅   |    —    |    ✅     |   ✅   |     —     |
-| Photon (iMessage)  |  ✅   |   ✅   |  ✅   |    —    |    ✅     |   ✅   |     —     |
-| QQ                 |  ✅   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
-| Yuanbao            |  ✅   |   ✅   |  ✅   |    —    |     —     |   ✅   |    ✅     |
-| Microsoft Teams    |   —   |   ✅   |   —   |   ✅    |     —     |   ✅   |     —     |
-| LINE               |   —   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
-| ntfy               |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
-| Raft               |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
-| IRC                |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
-| Buzz               |   —   |   ✅   |   —   |   ✅    |     —     |   —    |     —     |
-| SimpleX            |  ✅   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
+| Platform                | Voice | Images | Files | Threads | Reactions | Typing | Streaming |
+|-------------------------|:-----:|:------:|:-----:|:-------:|:---------:|:------:|:---------:|
+| Telegram                |  ✅   |   ✅   |  ✅   |   ✅    |     —     |   ✅   |    ✅     |
+| Discord                 |  ✅   |   ✅   |  ✅   |   ✅    |    ✅     |   ✅   |    ✅     |
+| Slack                   |  ✅   |   ✅   |  ✅   |   ✅    |    ✅     |   ✅   |    ✅     |
+| Google Chat             |   —   |   ✅   |  ✅   |   ✅    |     —     |   ✅   |     —     |
+| WhatsApp                |   —   |   ✅   |  ✅   |    —    |     —     |   ✅   |    ✅     |
+| WhatsApp Cloud API      |  ✅   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
+| Signal                  |   —   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
+| SMS                     |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
+| Email                   |   —   |   ✅   |  ✅   |   ✅    |     —     |   —    |     —     |
+| Home Assistant (plugin) |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
+| Mattermost              |  ✅   |   ✅   |  ✅   |   ✅    |     —     |   ✅   |    ✅     |
+| Matrix                  |  ✅   |   ✅   |  ✅   |   ✅    |    ✅     |   ✅   |    ✅     |
+| DingTalk                |   —   |   ✅   |  ✅   |    —    |    ✅     |   —    |    ✅     |
+| Feishu/Lark             |  ✅   |   ✅   |  ✅   |   ✅    |    ✅     |   ✅   |    ✅     |
+| WeCom                   |  ✅   |   ✅   |  ✅   |    —    |     —     |   —    |     —     |
+| WeCom Callback          |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
+| Weixin                  |  ✅   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
+| BlueBubbles             |   —   |   ✅   |  ✅   |    —    |    ✅     |   ✅   |     —     |
+| Photon (iMessage)       |  ✅   |   ✅   |  ✅   |    —    |    ✅     |   ✅   |     —     |
+| QQ                      |  ✅   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
+| Yuanbao                 |  ✅   |   ✅   |  ✅   |    —    |     —     |   ✅   |    ✅     |
+| Microsoft Teams         |   —   |   ✅   |   —   |   ✅    |     —     |   ✅   |     —     |
+| LINE                    |   —   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
+| ntfy                    |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
+| Raft                    |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
+| IRC                     |   —   |   —    |   —   |    —    |     —     |   —    |     —     |
+| Buzz                    |   —   |   ✅   |   —   |   ✅    |     —     |   —    |     —     |
+| SimpleX                 |  ✅   |   ✅   |  ✅   |    —    |     —     |   ✅   |     —     |
 
 **Voice** = TTS audio replies and/or voice message transcription. **Images** = send/receive images. **Files** = send/receive file attachments. **Threads** = threaded conversations. **Reactions** = emoji reactions on messages. **Typing** = typing indicator while processing. **Streaming** = progressive message updates via editing.
 
@@ -202,7 +202,7 @@ Disable with `gateway.delivery_ledger: false` in `config.yaml` (restores the old
 
 ### Session continuity
 
-Gateway conversations do not reset after inactivity or at a daily boundary. Use `/new` or `/reset` for an explicit new conversation; context compression remains automatic. Legacy `session_reset` settings, reset-policy overrides and reset-timer environment variables are ignored. Cached agents may be released to reclaim resources without replacing the durable conversation. Restart-recovery freshness limits automatic continuation, not the history loaded when you send a message.
+Gateway conversations do not reset after inactivity or at a daily boundary. Use `/new` or `/reset` for an explicit new conversation; context compression remains automatic. Core ignores legacy `session_reset` settings, reset-policy overrides and reset-timer environment variables. If your config still sets `session_reset.mode` to `idle`, `daily` or `both`, gateway startup and `hermes doctor` warn about it. To keep time-based resets, install the catalog plugin that reads the same block unchanged: `hermes plugins install hermes-session-reset-policy`. Cached agents may be released to reclaim resources without replacing the durable conversation. Restart-recovery freshness limits automatic continuation, not the history loaded when you send a message.
 
 ## Per-Channel Model & System Prompt Overrides
 
@@ -608,7 +608,7 @@ Each platform has its own toolset:
 | Signal | `hermes-signal` | Full tools including terminal |
 | SMS | `hermes-sms` | Full tools including terminal |
 | Email | `hermes-email` | Full tools including terminal |
-| Home Assistant | `hermes-homeassistant` | Full tools + HA device control (ha_list_entities, ha_get_state, ha_call_service, ha_list_services) |
+| Home Assistant (plugin) | `hermes-homeassistant` | Full tools + HA device control (ha_list_entities, ha_get_state, ha_call_service, ha_list_services) from the `homeassistant` catalog plugin |
 | Mattermost | `hermes-mattermost` | Full tools including terminal |
 | Matrix | `hermes-matrix` | Full tools including terminal |
 | DingTalk | `hermes-dingtalk` | Full tools including terminal |
@@ -814,7 +814,7 @@ Defaults to `false`. Only platforms whose adapter implements `delete_message` ho
 - [Signal Setup](signal.md)
 - [SMS Setup (Twilio)](sms.md)
 - [Email Setup](email.md)
-- [Home Assistant Integration](homeassistant.md)
+- [Home Assistant Integration](homeassistant.md) (plugin catalog)
 - [Mattermost Setup](mattermost.md)
 - [Matrix Setup](matrix.md)
 - [DingTalk Setup](dingtalk.md)

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-search"
 title: "Tool Search"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Tool Search
@@ -24,7 +24,7 @@ tool_describe(names)           load the full schemas for one or more tools
 tool_call(calls)               invoke deferred tools; `calls` is an array of {name, arguments}
 ```
 
-`calls` takes one entry per invocation; a single local call is an array of one. Only `connectors__` names may be batched together; mixed and multi-local batches are rejected.
+`calls` takes one entry per invocation; a single call is an array of one. Independent calls may be batched (up to 10 entries). The agent splits a batch containing local tools into one tool call per entry, so each entry gets its own scope check, schema validation, hooks, approval and result, and runs under that tool's normal concurrency policy. A batch of only `connectors__` names goes to the hosted connector gateway as one dispatch.
 
 A typical interaction looks like:
 

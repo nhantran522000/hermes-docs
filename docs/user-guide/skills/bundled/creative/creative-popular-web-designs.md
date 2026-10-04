@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-popular-web-designs"
 title: "Popular Web Designs"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Popular Web Designs

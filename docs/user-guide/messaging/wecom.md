@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/wecom"
 title: "WeCom (Enterprise WeChat)"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # WeCom (Enterprise WeChat)
@@ -220,7 +220,7 @@ No configuration is needed — decryption happens transparently when encrypted m
 
 | Method | What it sends | Size limit |
 |----|----|----|
-| `send` | Markdown text messages | 4000 chars |
+| `send` | Markdown text messages | 4000 chars per message; longer text is split across messages |
 | `send_image` / `send_image_file` | Native image messages | 10 MB |
 | `send_document` | File attachments | 20 MB |
 | `send_voice` | Voice messages (AMR format only for native voice) | 2 MB |

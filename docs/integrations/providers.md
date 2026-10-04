@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/integrations/providers"
 title: "LLM and Model Providers"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # LLM and Model Providers
@@ -1281,7 +1281,7 @@ Context windows and output limits are different
 
 **`context_length`** is the **total context window** — the combined budget for input *and* output tokens (e.g. 200,000 for Claude Opus 4.6). Hermes uses this to decide when to compress history and to validate API requests.
 
-Output limits govern a single generated response, not the conversation history. Hermes no longer reads `model.max_tokens`, `HERMES_MAX_TOKENS`, provider output-cap settings, or `model_overrides.*.*.max_output_tokens`. Remove these legacy settings. Custom OpenAI-compatible endpoints receive no automatic catalog-sized output cap. Their server defaults apply; these can be lower than the model maximum.
+Output limits govern a single generated response, not the conversation history. Hermes no longer reads `model.max_tokens`, `HERMES_MAX_TOKENS`, provider output-cap settings, or `model_overrides.*.*.max_output_tokens`. Remove these legacy settings. Custom OpenAI-compatible endpoints receive no automatic catalog-sized output cap. Their server defaults apply; these can be lower than the model maximum. A reply that degenerates into a repetition loop is still stopped: within about 130,000 characters of the loop starting (visible or reasoning text), Hermes closes the stream and ends the turn with a "Repetition Detected" notice, so an uncapped endpoint cannot keep a looping model running.
 
 Native Anthropic Messages (including the native Anthropic Bedrock path) requires `max_tokens`, so Hermes supplies an internal value. Bedrock Converse is a separate protocol: its optional `inferenceConfig.maxTokens` is omitted by default, which [AWS documents as the model maximum](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InferenceConfiguration.html). Internal bounded tasks and provider-specific protocol requirements remain implementation details. Omission does not universally select a model's maximum output.
 

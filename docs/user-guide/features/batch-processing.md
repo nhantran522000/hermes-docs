@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/batch-processing"
 title: "Batch Processing"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Batch Processing

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/signal"
 title: "Signal Setup"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Signal Setup

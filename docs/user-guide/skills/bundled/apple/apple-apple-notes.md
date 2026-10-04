@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/apple/apple-apple-notes"
 title: "Apple Notes"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Apple Notes

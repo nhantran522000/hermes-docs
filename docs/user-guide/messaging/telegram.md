@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram"
 title: "Telegram Setup"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Telegram Setup
@@ -94,6 +94,17 @@ Notes:
 - Watcher reconnects (brief network outages with the process still alive) always preserve the queue regardless of this setting.
 - Conflict recovery still drops pending updates to terminate the competing `getUpdates` session — that path is unrelated to this knob.
 - After a crash, a preserved queue can redeliver an update the crashed instance partially processed. Telegram's offset usually prevents this, but time-sensitive commands sent during a long outage will run on boot.
+
+### Concurrent update handling
+
+Updates from different chats are processed concurrently, so one slow turn (a long provider retry, a large download) no longer stalls every other chat. Updates from the same chat still run one after another, in arrival order. The cross-chat pool defaults to 32; an invalid value logs a warning and uses the default:
+
+``` yaml
+platforms:
+  telegram:
+    extra:
+      max_concurrent_updates: 32   # 1 restores fully sequential processing
+```
 
 ### Repeated inbound updates
 
@@ -1328,7 +1339,7 @@ When the agent calls the `clarify` tool — to ask which approach you prefer, ge
 
 Tap a button to answer, or tap **Other** to type a free-form response (the next message you send becomes the answer). Open-ended `clarify` calls (no preset choices) skip the buttons and just capture your next message.
 
-Configure the response timeout via `agent.clarify_timeout` in `~/.hermes/config.yaml` (default `3600` seconds). If you don't respond within the timeout, the agent unblocks with a sentinel message and adapts rather than hanging.
+Configure the response timeout via `agent.clarify_timeout` in `~/.hermes/config.yaml` (default `3600` seconds). If you don't respond within the timeout, the agent unblocks with `"outcome": "timed_out"` and adapts rather than hanging. Reply `skip` to skip a question.
 
 If Telegram cannot render the button card (the Bot API rejects it, or the send fails after its 15-second acknowledgement window), Hermes re-asks the same question as a plain numbered-list message and your typed reply (a number or the option text) is taken as the answer. When even that cannot be delivered, the agent is released at once with `[clarify prompt could not be delivered]` instead of waiting out the timeout and mistaking the silence for you not answering.
 

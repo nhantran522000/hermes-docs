@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/cron-troubleshooting"
 title: "Cron Troubleshooting"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Cron Troubleshooting
@@ -72,7 +72,7 @@ Delivery targets are case-sensitive and require the correct platform to be confi
 | `local`    | Write access to `~/.hermes/cron/output/`       |
 | `origin`   | Delivers to the chat where the job was created |
 
-Other supported platforms include `mattermost`, `homeassistant`, `dingtalk`, `feishu`, `wecom`, `weixin`, `bluebubbles`, `qqbot`, and `webhook`. You can also target a specific chat with `platform:chat_id` syntax (e.g., `telegram:-1001234567890`).
+Other supported platforms include `mattermost`, `homeassistant` (plugin), `dingtalk`, `feishu`, `wecom`, `weixin`, `bluebubbles`, `qqbot`, and `webhook`. You can also target a specific chat with `platform:chat_id` syntax (e.g., `telegram:-1001234567890`).
 
 If delivery fails, the job still runs — it just won't send anywhere. Check `hermes cron list` for updated `last_error` field (if available).
 

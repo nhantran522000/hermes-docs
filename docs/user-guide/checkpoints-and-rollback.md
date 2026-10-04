@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/checkpoints-and-rollback"
 title: "Checkpoints and `/rollback`"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Checkpoints and `/rollback`
@@ -209,6 +209,12 @@ Restore just one file from a checkpoint without affecting the rest of the direct
 ```
 
 ## Safety and Performance Guards
+
+### Nested Git repositories
+
+A checkpoint of a parent directory can store a nested repository as a Git **gitlink** (a commit reference), not a copy of its files. Recursive capture of nested repositories is not supported: their uncommitted edits and untracked files are not recoverable from that parent checkpoint. Checkpoints taken by this version or later are labelled in `/rollback` listings, for example `before write_file: app.py [nested git repos not captured: tool]`.
+
+If the selected checkpoint contains gitlinks, a full rollback (including `--all`) is refused before changing files or creating a pre-rollback snapshot. Selecting a nested repository, a file below it, or a Git pathspec matching it also refuses the restore rather than reporting success for uncaptured files. You can still restore unrelated captured files, for example `/rollback 1 notes.txt`. Keep separate backups or checkpoints taken directly from the nested repository's own working directory.
 
 ### Container Backends
 

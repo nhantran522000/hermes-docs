@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-unreal-mcp"
 title: "Unreal Mcp"
-last_crawled: 2026-09-27
+last_crawled: 2026-10-04
 ---
 
 # Unreal Mcp
@@ -79,7 +79,7 @@ The discovery walk, always in this order:
 
 Cache what you learn for the session; re-list only after the editor side changes (new plugin enabled, toolset authored, `RefreshTools` run).
 
-The alternative eager mode (`Enable Tool Search` off in Editor Preferences) advertises every tool as its own `mcp_unreal_engine_<tool>` entry. Discovery then happens at `hermes mcp install`/`configure` time instead. Tool-search mode is the default and what this skill assumes; it also keeps schema tokens out of every API call, so prefer it.
+The alternative eager mode (`Enable Tool Search` off in Editor Preferences) advertises every tool as its own `mcp_unreal_engine_{tool}` entry. Discovery then happens at `hermes mcp install`/`configure` time instead. Tool-search mode is the default and what this skill assumes; it also keeps schema tokens out of every API call, so prefer it.
 
 See `references/tool-surface.md` for the shipped toolset catalog, authoring custom toolsets, and the full plugin configuration/console-command reference.
 

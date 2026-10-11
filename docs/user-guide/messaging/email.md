@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/email"
 title: "Email Setup"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Email Setup

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/migration/migration-openclaw-migration"
 title: "Openclaw Migration"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Openclaw Migration

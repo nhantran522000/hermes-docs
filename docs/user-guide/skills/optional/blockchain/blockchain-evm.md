@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/blockchain/blockchain-evm"
 title: "Evm"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Evm

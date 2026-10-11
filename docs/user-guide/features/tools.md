@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/tools"
 title: "Tools & Toolsets"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Tools & Toolsets
@@ -51,7 +51,7 @@ hermes tools
 hermes tools
 ```
 
-Common toolsets include `web`, `search`, `terminal`, `file`, `browser`, `vision`, `image_gen`, `skills`, `tts`, `todo`, `memory`, `session_search`, `cronjob`, `code_execution`, `delegation`, `clarify`, `messaging`, `spotify`, `discord`, `discord_admin`, `debugging`, and `safe`.
+Common toolsets include `web`, `search`, `terminal`, `file`, `browser`, `vision`, `image_gen`, `skills`, `tts`, `todo`, `memory`, `session_search`, `cronjob`, `code_execution`, `delegation`, `clarify`, `messaging`, `discord`, `discord_admin`, `debugging`, and `safe`.
 
 See [Toolsets Reference](../../reference/toolsets-reference.md) for the full set, including platform presets such as `hermes-cli`, `hermes-telegram`, and dynamic MCP toolsets like `mcp-<server>`.
 

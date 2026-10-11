@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/memory-provider-plugin"
 title: "Building a Memory Provider Plugin"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Building a Memory Provider Plugin
@@ -67,6 +67,7 @@ Your plugin implements the `MemoryProvider` abstract base class from `agent/memo
 
 ``` python
 from agent.memory_provider import MemoryProvider
+from agent.secret_scope import get_secret
 
 class MyMemoryProvider(MemoryProvider):
     @property
@@ -75,7 +76,7 @@ class MyMemoryProvider(MemoryProvider):
 
     def is_available(self) -> bool:
         """Check if this provider can activate. NO network calls."""
-        return bool(os.environ.get("MY_API_KEY"))
+        return bool(get_secret("MY_API_KEY"))
 
     def initialize(self, session_id: str, **kwargs) -> None:
         """Called once at agent startup.
@@ -83,7 +84,7 @@ class MyMemoryProvider(MemoryProvider):
         kwargs always includes:
           hermes_home (str): Active HERMES_HOME path. Use for storage.
         """
-        self._api_key = os.environ.get("MY_API_KEY", "")
+        self._api_key = get_secret("MY_API_KEY") or ""
         self._session_id = session_id
 
     # ... implement remaining methods
@@ -145,9 +146,16 @@ For native `replace` and `remove`, `metadata["previous_content"]` contains the f
 
 ### Oversized prefetch results
 
-External `prefetch()` results above the configured spill threshold are written to a private spill file and replaced with the configured head/tail preview. The preview includes the path so the agent can read the full result when it is actually needed. Results at or below the threshold are returned unchanged.
+External `prefetch()` results are returned in full by default, preserving the provider's relevance-ranked recall, up to a safety ceiling of 10× `hooks.output_spill.max_chars` (at least 100,000 characters) above which they still spill. Keep your own recall budget well under that. To opt into spilling oversized results for the active profile, set:
 
-This uses the shared `hooks.output_spill` settings (`10,000` characters by default); see [Plugins — oversized-context spill](plugins.md#oversized-context-spill).
+``` yaml
+memory:
+  prefetch_spill_enabled: true  # default: false
+```
+
+When enabled, results above the shared `hooks.output_spill.max_chars` threshold (default `10,000` characters) are written to a private spill file and replaced with the configured head/tail preview plus its path. The default preview keeps only the first and last `500` characters; the model must read the file to recover the middle. Results at or below the threshold remain unchanged.
+
+The shared `hooks.output_spill` preview lengths and directory still apply, and `hooks.output_spill.enabled: false` disables spilling even with memory opt-in. Both settings are snapshotted when the external provider is registered; restart Hermes to apply changes to existing sessions. Built-in memory and normal plugin-hook spilling are unaffected. See [Plugins — oversized-context spill](plugins.md#oversized-context-spill).
 
 ## Pre-Compress Checkpoints (fail-closed)
 

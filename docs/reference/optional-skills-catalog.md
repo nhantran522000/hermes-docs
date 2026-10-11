@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/optional-skills-catalog"
 title: "Optional Skills Catalog"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Optional Skills Catalog
@@ -58,6 +58,7 @@ hermes skills uninstall <skill-name>
 | Skill | Description |
 |----|----|
 | [**ai-presenter-video**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-ai-presenter-video) | Make a verified AI presenter video from script + image. |
+| [**anatomy**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-anatomy) | Explain an idea as an interactive isometric machine figure. |
 | [**archify**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-archify) | Validated interactive HTML diagrams, upstream-maintained. |
 | [**ascii-art**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-ascii-art) | ASCII art: pyfiglet, cowsay, boxes, image-to-ascii. |
 | [**audiocraft-audio-generation**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-audiocraft-audio-generation) | AudioCraft: MusicGen text-to-music, AudioGen text-to-sound. |
@@ -215,7 +216,9 @@ hermes skills uninstall <skill-name>
 |----|----|
 | [**canvas**](../user-guide/skills/optional/productivity/productivity-canvas.md) | Fetch Canvas LMS courses and assignments via API token. |
 | [**decision-questionnaire**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-decision-questionnaire) | Turn an unanswerable decision into a questionnaire doc. |
+| [**first-task**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-first-task) | Run the first task chat that setup hands off. |
 | [**here-now**](../user-guide/skills/optional/productivity/productivity-here-now.md) | Publish sites to {slug}.here.now and store files in Drives. |
+| [**initiate-setup**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-initiate-setup) | Run the first-run setup chat in the Hermes desktop app. |
 | [**live-dashboard**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-live-dashboard) | Build self-updating dashboards from live sources. |
 | [**memento-flashcards**](../user-guide/skills/optional/productivity/productivity-memento-flashcards.md) | Spaced-repetition flashcards: create, review, quiz, export. |
 | [**property-listings**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-property-listings) | Present property and rental listings as desktop cards. |

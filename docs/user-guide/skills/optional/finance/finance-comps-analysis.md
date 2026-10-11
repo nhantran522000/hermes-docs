@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/finance/finance-comps-analysis"
 title: "Comps Analysis"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Comps Analysis

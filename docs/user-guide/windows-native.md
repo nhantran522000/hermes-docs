@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/windows-native"
 title: "Windows (Native) Guide"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Windows (Native) Guide
@@ -107,7 +107,7 @@ The dashboard uses its `pywinpty`/ConPTY bridge on Windows and `ptyprocess` on P
 ### Optional dependency limits
 
 - Matrix's native encrypted adapter is Linux-only; use a supported proxy route or a Linux backend on Windows.
-- Native Windows ARM64 excludes the `mem0` and `google-chat` SDK extras, and the openWakeWord engine. Sherpa supports native Windows ARM64 and is the automatic wake-word default on that target.
+- Native Windows ARM64 excludes the `google-chat` SDK extra and the openWakeWord engine. Sherpa supports native Windows ARM64 and is the automatic wake-word default on that target.
 - Local Faster-Whisper STT is excluded on native Windows ARM64. Use a cloud or command-based STT provider. Porcupine remains a wake-engine alternative.
 
 The platform markers in `pyproject.toml` define the packaged dependency set. A general gateway or voice feature claim does not override those markers.

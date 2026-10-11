@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/image-gen-provider-plugin"
 title: "Building an Image Generation Provider Plugin"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Building an Image Generation Provider Plugin
@@ -120,7 +120,8 @@ class MyBackendImageGenProvider(ImageGenProvider):
         # Optional keys: "supports_upscale" (bool) adds an `upscale` param, and
         # "creative_controls" lists the controls you honor from `creativity`,
         # `intensity`, `complexity`, `movement`. Only declared controls appear
-        # in the schema and reach generate() as kwargs.
+        # in the schema and reach generate() as kwargs. "source_image_role": "style"
+        # tells the model that image inputs set the look and are not edited.
         return {"modalities": ["text", "image"], "max_reference_images": 4}
 
     def generate(

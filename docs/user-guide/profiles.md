@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/profiles"
 title: "Profiles: Running Multiple Agents"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Profiles: Running Multiple Agents
@@ -93,7 +93,7 @@ Copies **everything** — config, API keys, personality, all memories, skills, p
 
 OAuth logins are shared, not copied
 
-Anthropic (Claude Pro/Max), OpenAI Codex, and xAI OAuth logins use **single-use refresh tokens** — a copy of one is not a second credential, it is the same credential with two owners, and the first profile to refresh it revokes it for every other copy. `--clone-all` (and the dashboard's credential mirroring) therefore drops those OAuth rows from the clone. The new profile keeps reading the login from the root `~/.hermes/auth.json`, and a token refresh performed inside any profile is written back to root, so all profiles stay signed in. Static API keys are copied as usual. To give a profile its own separate OAuth login, run `hermes -p <name> auth add <provider>` inside it.
+Anthropic (Claude Pro/Max), OpenAI Codex, and xAI OAuth logins use **single-use refresh tokens** — a copy of one is not a second credential, it is the same credential with two owners, and the first profile to refresh it revokes it for every other copy. `--clone-all` (and the dashboard's credential mirroring) therefore drops those OAuth rows from the clone. The new profile keeps reading the login from the root `~/.hermes/auth.json`, and a token refresh performed inside any profile is written back to root, so all profiles stay signed in. Static API keys are copied as usual. To give a profile its own separate OAuth login, run `hermes -p <name> auth add <provider>` inside it. That login is saved in the profile's own `auth.json`, also when root has no login for the provider yet, and from then on the profile uses it instead of the root login; root's `auth.json` is not changed. If the login cannot be saved, the command fails with an error instead of printing `Added`.
 
 ### Clone from a specific profile
 

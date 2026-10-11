@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/skills-catalog"
 title: "Bundled Skills Catalog"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Bundled Skills Catalog

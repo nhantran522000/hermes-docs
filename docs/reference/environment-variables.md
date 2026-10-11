@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/environment-variables"
 title: "Environment Variables Reference"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Environment Variables Reference

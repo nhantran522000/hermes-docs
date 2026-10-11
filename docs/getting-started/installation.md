@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/installation"
 title: "Installation"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Installation
@@ -23,7 +23,9 @@ Download the package for your platform from the [Hermes website](https://hermes-
 
 Bundled packages contain the agent, Python, supported dependencies, and prebuilt interfaces. First launch does not build that base runtime. Provider access and optional integrations can still require network access.
 
-A `Hermes-Setup` bootstrap installer is different: it downloads a source installation and builds the desktop app. Light is a remote-only build variant, not a bundled local runtime. See [Hermes Desktop](../user-guide/desktop.md).
+A `Hermes-Setup` bootstrap installer is different: it downloads a source installation and builds the desktop app. See [Hermes Desktop](../user-guide/desktop.md).
+
+There is no separate remote-only Desktop download. To use Desktop with a Hermes backend on another machine, install one of the packages above and connect it from **Settings → Gateways**; see [Connecting to a remote backend](../user-guide/desktop.md#connecting-to-a-remote-backend).
 
 note
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-qmd"
 title: "Qmd"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Qmd

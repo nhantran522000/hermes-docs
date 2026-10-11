@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/context-compression-and-caching"
 title: "Context Compression and Caching"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Context Compression and Caching
@@ -116,6 +116,19 @@ A failed or stalled summary attempt arms a per-session **failure cooldown** (esc
 - **Repeated stall → deterministic fallback.** A first stall keeps the transcript, arms the cooldown and lets the LLM route retry after it lapses. When the route stalls *again* while a stall-class failure is still on the ladder (`_consecutive_timeout_failures >= 1`), the retry ladder ends with a deterministic rung: the worker is re-run with the summary LLM skipped (`DETERMINISTIC_SUMMARY_ROUTE` pin) and commits the static fallback summary through the ordinary lease/fence/watermark pipeline — the same degrade a failed summary call gets — instead of "continuing without compression" and re-entering the same silent stream every turn (#112420). `abort_on_summary_failure: true` still aborts (nothing dropped). A committed compaction rebinds the compressor and resets the ladder count, so each compaction cycle grants the LLM route one stall before escalating; the persisted cooldown row still paces attempts across turns and restarts.
 - **Summary provider overloaded → abort, transcript kept.** When the summary call fails with a provider-overload error (`overloaded`, `at capacity`, HTTP 529) and the one-shot main-model retry also fails, compress() aborts and preserves the transcript unchanged instead of committing the deterministic fallback; the warning names the overload (`failure_class=summary_overload_failure`) and `/compress` retries once capacity recovers. Auth/quota, network and empty-content failures already abort the same way. *Sustained* overload escalates (#123167): after 3 consecutive overload aborts in one session the overload stops counting as terminal and compress() commits the deterministic fallback (`failure_class=summary_overload_degraded`) — a bounded middle-window loss instead of letting the transcript grow into `compression_exhausted` and a gateway auto-reset that discards the whole session. A successful summary resets the budget; `abort_on_summary_failure: true` still hard-aborts every attempt.
 - **Provider-proven overflow** — when the provider itself rejects the request with a context-length error, the recovery pass ignores the cooldown for one bounded attempt (`max_compression_attempts`) without clearing it. Deferring here would wedge the session: every turn would bounce off the provider and the next failure would extend the ladder (#100661). If that attempt fails, the cooldown is recorded normally.
+
+#### Attempt telemetry
+
+Every `compress_context` call that returns logs one content-free INFO line, `context compression attempt telemetry: {...}` (logger `agent.conversation_compression`). It never carries message text, summary text, the focus topic or error messages.
+
+- `trigger_source` names why the attempt ran: `manual`, `idle`, `turn_start_threshold`, `engine_preflight`, `pre_api`, `post_tool`, `gateway_hygiene` or `overflow`. An automatic caller that passes no label reads `auto`; a refusal before any attempt began (pool saturation) reads `unknown`.
+- `route` is `hermes` for the local compressor and `codex_app_server` when the Codex thread owns compaction.
+- `commit_status` is `committed`, `aborted`, `failed`, `skipped` or `blocked`. A `blocked` attempt was refused by an automatic guard; its `failure_class` names the guard (`blocked:cooldown`, `blocked:structural_backoff`, `blocked:ineffective`). Under the session lease, `session_ownership_lost` (`skipped`) means another path already rotated the session, and `session_ownership_unreadable` / `cooldown_state_unreadable` (`aborted`) mean that state could not be read. `empty_transcript` (`aborted`) means the engine returned no messages, so nothing was committed.
+- `attempt_id` names this attempt and `session_id` the session it started in, even when the attempt then adopts a rotated child session or unwinds after a newer attempt (a stall fallback) has begun. An attempt that stops before the compressor runs, or rolls its state back, logs `method: none` and no token counts, never an earlier attempt's numbers.
+- `method` says how the summary was produced: `llm_summary`, `aux_fallback_main` (the summary model failed and the main model wrote it), `deterministic_fallback` (static anchors summary; `items_dropped` counts the replaced messages), `provider` (Codex) or `none`.
+- `messages_before` / `messages_after` and `tokens_before` / `tokens_after` / `tokens_reclaimed` describe the transcript that crossed the commit boundary, including retained `/compress here N` tail rows and boundary anchors. A refused or rolled-back candidate never reached the transcript, so its record has no `messages_after`, `tokens_after`, `tokens_reclaimed` or `items_dropped`. `token_count_method: estimate_rough` marks them as rough message-only estimates (system prompt and tool schemas excluded), so they compare like for like. `tool_results_pruned` and `reasoning_items_pruned` count the deterministic passes that ran before and after the summary.
+
+The opt-in `hermes.compression.count` shared metric keeps coarse triggers (`auto`, `manual`, `overflow`) and counts only attempts the local compressor ran; blocked and Codex-routed attempts appear in the log line only. When the NeMo Relay runtime is live, the same record, plus micro-compaction passes and committed proactive prunes, is also emitted as a `hermes.compaction` mark (see [NeMo Relay Shared Metrics](https://hermes-agent.nousresearch.com/docs/developer-guide/relay-shared-metrics#compaction-marks)).
 
 ## Configuration
 

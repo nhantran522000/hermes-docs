@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/desktop"
 title: "Hermes Desktop"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Hermes Desktop
@@ -257,6 +257,10 @@ Manage providers, models, tools, and credentials from a real UI instead of editi
 
 First-run onboarding has been redesigned on a unified overlay design system, and you can pick **Choose provider later** to skip provider setup and get into the app first.
 
+#### What the setup chat knows about your computer
+
+The setup chat's first message carries a short block of facts, so it can name your computer and offer first tasks that fit it: the OS and its version, CPU, RAM, GPU class, whether it is a Spark, and your language. The block goes to the inference provider that the setup chat uses and stays in that chat's history. The name card offers your full name from the account record, but the name stays on this computer unless you pick it. To choose which plugins and first tasks to offer, setup also checks whether the apps those plugins drive are installed, such as Blender, and NVIDIA App and NVIDIA Broadcast on a Windows computer with an NVIDIA GPU. It looks in the usual install folders, on the `PATH`, and in the Windows list of installed programs, reads the version of each copy it finds, and for some apps reads the app's own runtime file to see whether it is running. Nothing else on the computer is read for setup. Setup keeps a small file in the setup profile's `setup-cards` folder with the machine line and your picks, and copies it into your first task chat. Both chats are saved on this computer like any other chat. With a remote backend, the facts describe the remote machine, not the computer in front of you.
+
 #### Per-profile settings: the "Applies to" scope
 
 When you have two or more [profiles](profiles.md), the config-backed settings pages — **Model, Workspace, Safety, Memory & Context, Voice, Chat, Advanced, and Tools & Keys** — plus **Providers → Custom Endpoints** and the **Messaging** overlay show a shared **Applies to** chip row at the top. It selects which profile your edits target:
@@ -339,7 +343,7 @@ For installations managed by the app, open **Settings → About → Danger zone*
 
 The app closes to finish the job (the cleanup runs after it exits so it can remove the running app bundle and its own venv). The agent-removing options are hidden automatically when no local agent is installed.
 
-These controls are hidden for Nix, bundled/Light packages, and other externally owned installations. Remove those through their package manager or the operating system instead. The app checks its own local package ownership, independently of a remote backend's update status. If ownership cannot be confirmed, no uninstall actions are offered.
+These controls are hidden for Nix, bundled packages, and other externally owned installations. Remove those through their package manager or the operating system instead. The app checks its own local package ownership, independently of a remote backend's update status. If ownership cannot be confirmed, no uninstall actions are offered.
 
 For self-managed installations, you can do the same from the terminal — `hermes uninstall --gui` for the GUI alone, or `hermes uninstall` / `hermes uninstall --full` for the agent too.
 
@@ -348,6 +352,8 @@ Preview GUI cleanup with `hermes uninstall --gui --dry-run`. It lists the remova
 note
 
 Running `hermes uninstall --gui` from a **source checkout** (a `hermes desktop` dev build) removes `apps/desktop/{dist,release,node_modules}` and the desktop build stamp. The workspace-root `node_modules` stays installed because it is shared with the TUI, dashboard and other workspaces. Rebuild the GUI with `hermes desktop` if you need it again.
+
+`hermes update` keeps a desktop app current once it has been built in the checkout, even on a server that never opens it. On a headless Linux host, or when the desktop app's own Node dependencies fail to install (for example a compiler too old for `node-pty`), the update still builds the TUI and web UI, reports the desktop build as owed, and suggests `hermes uninstall --gui`. After that uninstall, later updates skip the desktop app.
 
 ## CLI reference: `hermes desktop`
 
@@ -495,7 +501,7 @@ A desktop plugin is **not sandboxed**: it runs inside the app with the app's own
 - A plugin can extend **this app**, **the agent**, or **both** — the badge on each row says which, inferred from what the package contains (`plugin.yaml` → agent half, `plugin.js` → desktop half). A plugin with both halves is one row, never two.
 - **Desktop column** — the half loaded into this app. It is app-level: the same switch, the same value, whichever profile, gateway, or remote machine the window is looking at. Desktop code loads from exactly one place, `~/.hermes/desktop-plugins/`; the desktop half of a unified agent+desktop package is copied there by the app when the package is installed (and follows its updates and uninstall), so switching profiles never loads, unloads, or re-scopes a pane. Toggles apply live.
 - **Agent column** — the half installed in the selected profile's backend ([agent plugins](features/plugins.md): user, git, project, pip and portable installs), with an **Update** chip when a catalog pin moved. The profile selector lives in this column's header because it governs only this column; with a single profile there is no selector at all. Repo-bundled built-ins (platform adapters, provider plugins) are not listed: they ship enabled and are configured from their own surfaces. The exceptions are the bundled lifecycle plugins with no surface of their own (`disk-cleanup`, `security-guidance`), which appear here so they can be toggled like any other agent plugin.
-- A half the plugin does not ship shows a dash. A desktop half whose agent half is **not** installed in the selected profile shows **Install here**, which pre-fills the install dialog from the package's origin (catalog entry or git remote) for that profile only. Optional extras such as the [Accent Picker](https://github.com/NousResearch/hermes-desktop-accent-picker) install from their own repos via **Install from Git**.
+- A half the plugin does not ship shows a dash. A desktop half whose agent half is **not** installed in the selected profile shows **Install here**, which pre-fills the install dialog from the package's origin (catalog entry or git remote) for that profile only. Optional extras such as the [Accent Picker](https://github.com/NousResearch/hermes-official-plugins/tree/main/accent-picker) install from the plugin catalog.
 - **Uninstall** — every plugin installed under the selected profile's `plugins/` folder (user or git install) has a trash button beside its name. It asks for confirmation, then deletes the plugin's files and install metadata from that profile — the same operation as `hermes plugins remove <name>` — and prunes the app-level copy of a unified package's desktop half. Restart the gateway to unload the plugin's code. Repo-bundled and pip-installed (entrypoint) plugins have no trash button: the first cannot be removed, the second goes with its Python package. A standalone desktop plugin (a folder you dropped into `~/.hermes/desktop-plugins/` with no agent package) gets the same trash button; confirming deletes that folder on this computer and unloads the plugin immediately, no gateway involved.
 
 Discovery sits underneath: the live [Plugin Catalog](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugin-catalog) picker installs reviewed entries at their pinned commit into the selected profile, and **Install from Git** takes any other repository through the same review-then-install dialog; its optional **Pin to commit** field installs one exact 40-character commit SHA (private repos included), and pinned plugins carry a `pinned @ <sha8>` badge in the list. Old `Settings → Plugins` links redirect here.

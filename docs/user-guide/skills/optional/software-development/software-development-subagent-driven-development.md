@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/software-development/software-development-subagent-driven-development"
 title: "Subagent Driven Development"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Subagent Driven Development

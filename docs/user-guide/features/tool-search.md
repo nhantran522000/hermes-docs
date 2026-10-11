@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-search"
 title: "Tool Search"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Tool Search
@@ -79,6 +79,7 @@ tools:
       - todo_list
       - process_manage
       - cronjob_manage
+      - manage_catalog
 ```
 
 The default `defer` list also includes the selected desktop GUI helpers listed in `hermes_cli/config_defaults.py`. It is the single source of truth for the shipped curated set; the runtime fallback uses the same value.
@@ -120,6 +121,8 @@ tools:
 Signed out (or when the gateway does not serve connectors for your account), everything above is invisible: local search behaves exactly as described in the rest of this page, with no errors shown to the model.
 
 A connector call that needs an account you haven't linked returns a `CONNECTION_REQUIRED` error. The `manage_connections` tool lists connectors and their connection state and starts an authorization: in the desktop app the call shows a card, blocks until each app is connected or skipped, and reports the outcomes; elsewhere it returns a connect link per app for the user to open. Disconnecting an account is done by the user in the Portal. The same tool also installs, enables and authorizes local MCP servers from the catalog (targets with `mcp: true`), so it is present whether or not you are signed in; only the managed-connector actions need the sign-in.
+
+You can link more than one account of the same app, each with its own name (see [Multiple connector accounts](tool-gateway.md#multiple-connector-accounts)). Once a connector has two or more active accounts, each of its tools takes a `connector_alias` argument whose allowed values are your account names, and the tool description lists them (`Accounts: home, work.`), so `tool_search` and `tool_describe` show them. A connector result entry carries `account`, the name the call ran under, when that account is named; the field is absent for an unnamed account.
 
 The desktop backend's account-list and disconnect APIs use the Portal's account-management service, including its organization membership checks and disconnect audit. An unavailable Portal does not fall back to direct gateway account management. Tool discovery, execution, and connection-status watching continue through the gateway; the model tool cannot disconnect an account.
 

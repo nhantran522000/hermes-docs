@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-google-workspace"
 title: "Google Workspace"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Google Workspace

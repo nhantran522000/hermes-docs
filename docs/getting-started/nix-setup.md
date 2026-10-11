@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/nix-setup"
 title: "Nix & NixOS Setup"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Nix & NixOS Setup
@@ -805,14 +805,6 @@ For optional extras declared in hermes-agent's `pyproject.toml`, use `extraDepen
 services.hermes-agent.extraDependencyGroups = [ "messaging" ];
 ```
 
-``` nix
-# Enable a memory provider
-services.hermes-agent = {
-  extraDependencyGroups = [ "mem0" ];
-  settings.memory.provider = "mem0";
-};
-```
-
 These groups join the core dependency resolution at build time. Conflicting requirements can still fail that resolution. The table lists common groups; `pyproject.toml` is authoritative for the complete list and platform markers.
 
 | Group            | What it enables                                      |
@@ -827,7 +819,6 @@ These groups join the core dependency resolution at build time. Conflicting requ
 | `anthropic`      | Native Anthropic SDK (not needed via OpenRouter)     |
 | `bedrock`        | AWS Bedrock (boto3)                                  |
 | `azure-identity` | Azure Entra ID auth                                  |
-| `mem0`           | Mem0 memory provider                                 |
 | `modal`          | Modal terminal backend                               |
 | `daytona`        | Daytona terminal backend                             |
 | `exa`            | Exa web search                                       |

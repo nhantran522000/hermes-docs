@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/operate-teams-meeting-pipeline"
 title: "Operate the Teams Meeting Pipeline"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Operate the Teams Meeting Pipeline

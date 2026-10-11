@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/trajectory-format"
 title: "Trajectory Format"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Trajectory Format

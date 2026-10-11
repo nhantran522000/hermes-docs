@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/configuring-models"
 title: "Configuring Models"
-last_crawled: 2026-10-04
+last_crawled: 2026-10-11
 ---
 
 # Configuring Models
@@ -253,6 +253,19 @@ providers:
 ```
 
 Hermes matches this declaration to the exact provider route and runtime model id, without rewriting the alias or inferring support from its provider name, host, or model family. The marker layout follows the configured transport: `openai_chat` uses the OpenAI-compatible envelope layout and `anthropic_messages` uses the native inner-block layout. Set `prompt_caching: false` to explicitly disable cache markers for a model; when omitted, Hermes keeps its normal provider and model capability detection.
+
+Some OpenAI-compatible servers return the whole answer in the `reasoning` field with empty `content`. Hermes does not show reasoning as the reply by default, because most providers put private chain-of-thought there. It retries instead. If your server's parser really does put the final answer in `reasoning`, opt that model in with `answer_in_reasoning`:
+
+``` yaml
+providers:
+  local-vllm:
+    api: http://127.0.0.1:8000/v1
+    models:
+      my-reasoner:
+        answer_in_reasoning: true
+```
+
+To opt in every model on a provider, put the flag in a provider-level `capabilities:` block (`capabilities: {answer_in_reasoning: true}`). Hermes re-reads the opt-in on the active route on every turn, in the CLI, TUI and gateway alike, so it survives a `/model` switch to another model on the same provider. A fallback or any other provider does not inherit it, and OpenRouter routes are never trusted, even with the flag set.
 
 Legacy format
 

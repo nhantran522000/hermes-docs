@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-opencode"
 title: "Opencode"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Opencode

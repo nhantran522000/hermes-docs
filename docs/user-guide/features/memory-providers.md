@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers"
 title: "Memory Providers"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Memory Providers

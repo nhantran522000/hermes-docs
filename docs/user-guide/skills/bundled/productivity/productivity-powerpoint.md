@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-powerpoint"
 title: "Powerpoint"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Powerpoint

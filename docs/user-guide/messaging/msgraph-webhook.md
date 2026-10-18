@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/msgraph-webhook"
 title: "Microsoft Graph Webhook Listener"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Microsoft Graph Webhook Listener

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/contributing"
 title: "Contributing"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Contributing

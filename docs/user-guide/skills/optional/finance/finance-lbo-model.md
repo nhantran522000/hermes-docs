@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/finance/finance-lbo-model"
 title: "Lbo Model"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Lbo Model

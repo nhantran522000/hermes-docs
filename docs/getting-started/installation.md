@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/installation"
 title: "Installation"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Installation
@@ -62,6 +62,8 @@ Use the [Termux APT package](termux.md) on aarch64 Android devices. Configure it
 ### What the source installer does
 
 The scripts clone the source, bootstrap uv, and delegate dependency preparation to PM. PM provides pinned Python, Node.js, npm, ripgrep, and FFmpeg. The source installation selects the `all` Python extra, not every optional extra. PM also installs the browser and computer-use tools by default: `agent-browser` and its pinned Chromium, and `cua-driver` (the computer-use driver, on macOS, Windows and glibc Linux). If a download fails, the install still completes and prints the command to retry. The default browser driver (browser-harness, the engine of the Browser Use CLI) is a regular Python dependency, so every install, the Desktop app included, already has it. Other optional tools use their feature-specific installation paths.
+
+A new install lands on the latest stable release, the channel `hermes update` follows from then on (see [Updating](updating.md)). To install the tip of `main` instead, pass `--channel main` on POSIX or `-Channel main` on Windows (or set `HERMES_INSTALL_CHANNEL=main` first, for the one-liners).
 
 To leave the browser tools out, pass `--skip-browser` on POSIX or `-SkipBrowser` on Windows; for the computer-use driver, `--skip-computer-use` / `-SkipComputerUse`. Hermes remembers these choices: later installs and `hermes update` do not add them back. Run `hermes pm install agent-browser` or `hermes pm install cua-driver` to install them and undo the choice.
 

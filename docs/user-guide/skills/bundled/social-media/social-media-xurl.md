@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/social-media/social-media-xurl"
 title: "Xurl"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Xurl

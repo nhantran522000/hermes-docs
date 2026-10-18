@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-kanban-video-orchestrator"
 title: "Kanban Video Orchestrator"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Kanban Video Orchestrator

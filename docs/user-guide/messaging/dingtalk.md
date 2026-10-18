@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/dingtalk"
 title: "DingTalk Setup"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # DingTalk Setup

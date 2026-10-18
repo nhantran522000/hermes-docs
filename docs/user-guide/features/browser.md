@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/browser"
 title: "Browser Automation"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Browser Automation
@@ -164,19 +164,23 @@ browser:
   real_profile_pin: "Profile 2"   # directory name under the browser's user-data dir
 ```
 
-A pin naming a profile directory that doesn't exist fails closed with a fixable message — it never silently falls back to the last-used profile.
+A pin naming a profile directory that doesn't exist never silently falls back to the last-used profile: the agent gets a fresh browser without your logins and a message naming the bad pin.
 
 When you turn the toggle back off, Hermes deletes the snapshot store (`~/.hermes/browser-profile/`) on the next browser use, so the copied credentials don't linger after you revoke consent.
 
-A running browser can block the login/autofill databases
+When your profile can't be copied, the browser still works
 
-On Windows a running Chrome/Edge/Brave holds its cookie and login databases with an exclusive (deny-all) lock, so Hermes cannot copy them while the browser is open — it fails fast with a "fully quit the browser and retry" message rather than hang or produce a signed-out session. Real-profile browsing on Windows therefore requires the browser **fully quit**, including any background/tray instance (Chrome's "continue running background apps when closed" keeps a `chrome.exe` alive after you close the window).
+Real-profile browsing never takes the browser away. If Hermes can't copy your profile, the agent gets a fresh browser **without your logins** for that session, and its first browser result says why (`real_profile_unavailable`), so it can tell you instead of acting as if it were signed in. That happens when:
 
-On macOS and Linux the profile is not file-locked, but each authentication database is snapshotted through SQLite's online backup with a five-second budget, and a running Chrome typically holds `Login Data`, `Login Data For Account` and `Web Data` with a hot write lock that never yields within that budget (`Cookies` usually snapshots fine). When that happens Hermes stops the launch and names the databases it could not read — for example "chrome is running and holds the profile's Login Data, Login Data For Account, Web Data with a write lock" — so in practice **quit the browser before launching a real-profile session on macOS/Linux too**. You can reopen it once the session is up (the snapshot is a separate directory), but the auth files are re-synced on every fresh session launch, so a browser left running then hits the same lock. Hermes preserves committed WAL data through SQLite rather than falling back to a raw file copy, which could silently lose recent logins. Unreadable or corrupt databases also stop the launch, with the SQLite error named in the message.
+- **Windows:** a running Chrome/Edge/Brave holds its cookie database with an exclusive (deny-all) lock. To browse as you, **fully quit** the browser first, including any background/tray instance (Chrome's "continue running background apps when closed" keeps a `chrome.exe` alive after you close the window).
+- **Your default browser isn't a supported Chromium** (Firefox, a Beta/Dev/Canary channel), or the pinned profile doesn't exist.
+- **The cookie database is unreadable or corrupt**: the message names it and the SQLite error.
 
-Set `browser.real_profile_autoclose: true` to let Hermes **offer to close the browser for you** when it's holding the profile lock (the Windows case). Even with this on, Hermes never closes it automatically — when the profile is locked it always stops and the agent asks you first; only on your approval does it run `hermes browser close-profile` (terminates the browser process tree bound to that profile, losing unsaved tabs), then retries. If the profile is still locked after that (e.g. a background/tray instance relaunched), Hermes stays blocked and tells you to fully quit the browser — it won't loop or kill again on its own.
+On macOS and Linux a running Chrome holds `Login Data`, `Login Data For Account` and `Web Data` (saved passwords and autofill) with a write lock, but `Cookies` still copies, and cookies are what keep you signed in to sites. Hermes copies the cookies and skips the locked password/autofill files, so you can keep your browser open. Each database is copied through SQLite's online backup (never a raw file copy, which could lose recent logins).
 
-- **Supported browsers:** Chrome, Edge, Brave, Brave Origin, Chromium (whichever is your OS default). A non-Chromium default (e.g. Firefox) fails closed with a clear message rather than guessing.
+Set `browser.real_profile_autoclose: true` to let Hermes **offer to close the browser for you** when it's holding the profile lock (the Windows case). Even with this on, Hermes never closes it automatically: the agent asks you first, and only on your approval runs `hermes browser close-profile` (terminates the browser process tree bound to that profile, losing unsaved tabs). A new browser session then picks up your profile.
+
+- **Supported browsers:** Chrome, Edge, Brave, Brave Origin, Chromium (whichever is your OS default). A non-Chromium default (e.g. Firefox) gets a fresh browser and a clear message rather than a guess at which profile to use.
 - **Works on any backend.** On a local backend it's automatic once the toggle is on. Under a **cloud** browser backend, the agent can still open a real-profile local session on demand via the `browser_exec` tool's `local` argument (the tool only exposes that argument when this toggle is on) — the cloud backend keeps serving everything else.
 - **Security framing:** this is a consent-gated convenience, not an isolation boundary. A page the agent visits runs with your real logins, so only enable it when you want the agent acting as you. Off by default.
 - **Desktop:** toggle it in **Capabilities → Tools → Browser → Use My Real Browser Profile** (the switch sits above the backend options), or in Settings → Config under the `browser` section.
@@ -191,7 +195,7 @@ Three things to set up before scheduling one:
 - **Give the job the browser toolset:** `cronjob(action="create", enabled_toolsets=["browser", ...], ...)` — a per-job list wins over the cron-platform config ([details](cron.md#toolsets-available-to-cron-jobs)).
 - **Assume nothing can be prompted for.** A cron, webhook, API or `hermes chat -q` session has nobody to answer a prompt, so a site that is not usable on the synced cookies alone — a login form, a fresh 2FA challenge — needs its credentials saved ahead of time, authenticator key included. That is the [credential vault's](https://hermes-agent.nousresearch.com/docs/user-guide/features/credential-vault#headless-sessions) job, and it is what carries a run after your own session has expired.
 
-**Windows prerequisite:** the browser has to be fully quit before a snapshot can be taken at all, so a scheduled tick needs it closed beforehand — Hermes never closes it without asking you first (see the note above).
+**Windows prerequisite:** the browser has to be fully quit before a snapshot can be taken, so a scheduled tick needs it closed beforehand; otherwise the tick runs on a fresh, signed-out browser. Hermes never closes it without asking you first (see the note above).
 
 The bundled `product-price-monitor` skill is a worked example of the recurring shape — a JSON watch contract written during setup, then one scheduled tick that re-reads it, compares, and alerts on change — though it covers the scheduling half, not logins.
 

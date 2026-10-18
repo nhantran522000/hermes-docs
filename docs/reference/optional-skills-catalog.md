@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/optional-skills-catalog"
 title: "Optional Skills Catalog"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Optional Skills Catalog
@@ -216,9 +216,7 @@ hermes skills uninstall <skill-name>
 |----|----|
 | [**canvas**](../user-guide/skills/optional/productivity/productivity-canvas.md) | Fetch Canvas LMS courses and assignments via API token. |
 | [**decision-questionnaire**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-decision-questionnaire) | Turn an unanswerable decision into a questionnaire doc. |
-| [**first-task**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-first-task) | Run the first task chat that setup hands off. |
 | [**here-now**](../user-guide/skills/optional/productivity/productivity-here-now.md) | Publish sites to {slug}.here.now and store files in Drives. |
-| [**initiate-setup**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-initiate-setup) | Run the first-run setup chat in the Hermes desktop app. |
 | [**live-dashboard**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-live-dashboard) | Build self-updating dashboards from live sources. |
 | [**memento-flashcards**](../user-guide/skills/optional/productivity/productivity-memento-flashcards.md) | Spaced-repetition flashcards: create, review, quiz, export. |
 | [**property-listings**](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-property-listings) | Present property and rental listings as desktop cards. |

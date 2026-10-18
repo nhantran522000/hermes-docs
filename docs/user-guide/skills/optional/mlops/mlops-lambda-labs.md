@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/mlops/mlops-lambda-labs"
 title: "Lambda Labs"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Lambda Labs

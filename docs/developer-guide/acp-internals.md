@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/acp-internals"
 title: "ACP Internals"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # ACP Internals
@@ -31,6 +31,10 @@ hermes acp / hermes-acp / python -m acp_adapter
 ```
 
 Stdout is reserved for ACP JSON-RPC transport. Human-readable logs go to stderr.
+
+### Gateway terminal projection
+
+`acp_adapter/gateway_server.py` waits for the completion of the exact submitted admission. A cancelled admission returns `stopReason: cancelled`; a failed admission raises an ACP request error rather than reporting `end_turn`. Ordinary completion still returns `end_turn`. Cancellation while waiting for the model suppresses the local `Operation interrupted: waiting for model response` status message; actual partial assistant text remains visible. Terminal outcomes come from the gateway's structured execution result, not from assistant prose or a session-wide cancellation flag.
 
 ## Major components
 

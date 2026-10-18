@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/quickstart"
 title: "Hermes Agent Quickstart"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Hermes Agent Quickstart

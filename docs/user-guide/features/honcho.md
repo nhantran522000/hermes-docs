@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/honcho"
 title: "Honcho Memory"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Honcho Memory

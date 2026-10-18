@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/gaming/gaming-pokemon-player"
 title: "Pokemon Player"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Pokemon Player

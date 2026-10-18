@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/multi-profile-gateways"
 title: "Running Many Gateways at Once"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Running Many Gateways at Once
@@ -335,6 +335,8 @@ What is **shared** by design: the process, its PID/lock and `gateway_state.json`
 The served set controls `/p/<profile>/` API and webhook prefixes, runtime status, profile-route eligibility, and which profiles the in-process cron scheduler ticks (the Desktop backend's ticker re-enumerates the same set on every cycle — a profile created or deleted while Desktop runs joins or leaves the ticked set without a restart — and stands down for any profile a running multiplexer or its own gateway already serves). A multiplexer started as `hermes -p <name> gateway run` always ticks its own profile's cron store as well.
 
 The served set is **live**. A profile created while the multiplexer is running (`hermes profile create`, the dashboard, Desktop or the TUI) is served at once: the creator pings the multiplexer over its control socket, and the multiplexer also rescans `profiles/` every 30 seconds as a safety net. The new profile's adapters are built the moment its `config.yaml`/`.env` carries a bot token (creators usually create first, then add the token), `served_profiles` in the default profile's `gateway_state.json` is updated, and `hermes -p <name> gateway status` reports it as served — no restart, and the other profiles' adapters and in-flight turns are untouched. Deleting a profile stops and unroutes its adapters the same way, and `hermes profile rename` unroutes the old name before the directory moves and hot-serves the new one (the old name is not resurrected by the adapters or the cron ticker that were still bound to it). The one-credential-one-poller rule still applies: a hot-added profile that reuses another profile's token is parked with a `duplicate_credential` error, never started as a second poller.
+
+Hot-serving also grows the multiplexer's **profile reservation**: the new profile's `gateway.lock` is taken and its own session authority is built, so `hermes -p <name>` finds the multiplexer as its owner (no stray per-profile daemon) and the next `hermes gateway restart` reserves the whole set cleanly. A profile whose `state.db` cannot be opened is **parked** — logged as `Profile '<name>' not served`, left out of `served_profiles` — and every other profile keeps booting; fix the store and re-run `hermes profile create` or wait for the periodic rescan.
 
 ### Routing shared-bot chats to profiles (`profile_routes`)
 

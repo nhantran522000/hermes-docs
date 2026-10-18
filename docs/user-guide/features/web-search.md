@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/web-search"
 title: "Web Search & Extract"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Web Search & Extract

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/software-development/software-development-hermes-agent-skill-authoring"
 title: "Hermes Agent Skill Authoring"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Hermes Agent Skill Authoring

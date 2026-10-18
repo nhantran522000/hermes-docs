@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/windows-wsl-quickstart"
 title: "Windows (WSL2) Guide"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Windows (WSL2) Guide

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/azure-foundry"
 title: "Microsoft Foundry"
-last_crawled: 2026-10-11
+last_crawled: 2026-10-18
 ---
 
 # Microsoft Foundry

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/vision"
 title: "Vision & Image Paste"
-last_crawled: 2026-10-18
+last_crawled: 2026-10-25
 ---
 
 # Vision & Image Paste

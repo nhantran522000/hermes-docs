@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/skills"
 title: "Skills System"
-last_crawled: 2026-10-18
+last_crawled: 2026-10-25
 ---
 
 # Skills System
@@ -1010,4 +1010,4 @@ All the same commands work with `/skills`:
 /skills list
 ```
 
-Official optional skills still use identifiers like `official/security/1password` and `official/migration/openclaw-migration`.
+Official optional skills still use identifiers like `official/security/1password` and `official/mcp/fastmcp`.

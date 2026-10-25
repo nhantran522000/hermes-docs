@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/batch-processing"
 title: "Batch Processing"
-last_crawled: 2026-10-18
+last_crawled: 2026-10-25
 ---
 
 # Batch Processing
@@ -50,7 +50,7 @@ The input dataset is a JSONL file (one JSON object per line). Each entry must ha
 
 Entries can optionally include:
 
-- `image` or `docker_image`: A container image to use for this prompt's sandbox (works with Docker, Modal, and Singularity backends)
+- `image` or `docker_image`: A container image to use for this prompt's sandbox (works with Docker, Modal, Daytona and plugin backends such as Singularity)
 - `cwd`: Working directory override for the task's terminal session
 
 ## Configuration Options

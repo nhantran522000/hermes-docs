@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/getting-started/quickstart"
 title: "Hermes Agent Quickstart"
-last_crawled: 2026-10-18
+last_crawled: 2026-10-25
 ---
 
 # Hermes Agent Quickstart
@@ -90,6 +90,8 @@ hermes setup --portal
 That logs you in, sets Nous as your provider, and turns on the Tool Gateway in one command.
 
 Setup modes
+
+Coming from OpenClaw, Claude Code, Codex CLI or Cursor? When a fresh `hermes setup` finds one of them on your computer it first offers to import your setup (it installs the `agent-importers` plugin for that; see [Import from Other Agents](https://hermes-agent.nousresearch.com/docs/user-guide/import-from-other-agents)).
 
 On a fresh install, `hermes setup` offers three modes:
 
@@ -375,6 +377,7 @@ That sequence gets you from "broken vibes" back to a known state fast.
 
 ## Next Steps
 
+- **[User Stories](../user-stories.md)**: real setups from the community, a good place to start if you're not sure what to hand Hermes first
 - **[CLI Guide](../user-guide/cli.md)** — Master the terminal interface
 - **[Configuration](../user-guide/configuration.md)** — Customize your setup
 - **[Messaging Gateway](../user-guide/messaging/index.md)** — Connect Telegram, Discord, Slack, WhatsApp, Signal, Email, Home Assistant, Teams, and more

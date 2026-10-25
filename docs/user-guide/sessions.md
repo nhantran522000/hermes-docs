@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/sessions"
 title: "Sessions"
-last_crawled: 2026-10-18
+last_crawled: 2026-10-25
 ---
 
 # Sessions
@@ -642,7 +642,7 @@ Repair is deliberately **not automatic**: if the chat has since built up a secon
 
 Older builds affected by \#122822 could let gateway hygiene or gateway `/compress` persist a detached maintenance agent's reduced-toolset system prompt over the live session. After the root fix in PR \#122825 is installed, use `hermes sessions repair-prompts` to find rows that were already degraded.
 
-The scan is conservative: it only proposes a repair when the stored prompt is missing the `## Skill Safety` guidance **and** the persisted `tools[]` pin contains `skill_manage` (which always emits that guidance). Rows with no readable pin, or with a `memory`-only pin (which is also a legitimate `toolsets: [memory]` setup), are reported as **unverifiable** and are not changed by this scan; clear them explicitly by `SESSION_ID` if needed. A memory-only row also becomes repairable on its own: once the session is resumed, its `tools[]` pin re-pins the full tool surface, after which a scan sees `skill_manage` without the Skill Safety guidance and clears it.
+The scan is conservative: it only proposes a repair when the stored prompt is missing the `skill_manage` guidance line **and** the persisted `tools[]` pin contains `skill_manage` (which always emits that guidance). Rows with no readable pin, or with a `memory`-only pin (which is also a legitimate `toolsets: [memory]` setup), are reported as **unverifiable** and are not changed by this scan; clear them explicitly by `SESSION_ID` if needed. A memory-only row also becomes repairable on its own: once the session is resumed, its `tools[]` pin re-pins the full tool surface, after which a scan sees `skill_manage` without that guidance line and clears it.
 
 ``` bash
 # Report verified candidates and unverifiable rows; writes nothing
@@ -934,6 +934,8 @@ Installs that set any of these keys explicitly keep their values; only unset key
 Only **ended** sessions are ever deleted. Active sessions are never auto-pruned, regardless of age. Ended sessions are aged from their last activity — the freshest of live activity, latest message, or session start — so a long-lived conversation used recently is not deleted merely because it began before the retention window. The same holds for a conversation that compression split into several sessions: its older segments are kept while any later segment is, and are pruned together with it once the whole conversation qualifies.
 
 **Stale open sessions from automation.** Some producers — cron jobs, kanban workers, subagents, one-shot CLI runs — can die without ever marking their session ended, and pruning only deletes *ended* rows. To keep those from accumulating forever, each auto-prune pass also *closes* open sessions from those state-owned sources (`cli`, `cron`, `kanban`, `acp`, `api_server`, `subagent`, `tool`, plus the `recovered` placeholders that `hermes sessions recover` synthesizes for orphaned messages) whose last activity is older than `retention_days` (`end_reason: startup_orphan_reap`). Closing is non-destructive — the session stays resumable — and the row is aged from its close, so it is only deleted by a *later* pass after a further full retention window. Messaging platform sessions (Telegram, Discord, …), TUI/desktop sessions, pinned sessions, and sessions with a live turn or compression in progress are never closed by this sweep.
+
+**Local sessions nobody closed.** A CLI, TUI or Desktop session whose last viewer disappeared without closing it (a killed terminal, a dropped connection, or a gateway stop or restart while it was open) is ended by the gateway `sessions.orphan_end_grace_s` seconds later (default `300`; `0` never ends it), `end_reason: ws_orphan_reap` (or `startup_orphan_reap` after a restart, no sooner than 6 hours after its last activity, since an idle classic CLI only reconnects when you next use it). While `orphan_end_grace_s` is unset, the legacy `dashboard.ws_orphan_reap_grace_s: 0` turns this off, and `dashboard.startup_orphan_sweep: false` turns off the after-restart end. A turn still running keeps running, and the session ends once it settles; one paused on an interrupted turn stays open until you Discard it. A viewer that reconnects within the grace keeps the session open. Ending is non-destructive: the session stays resumable, and its next message reopens it on the same id.
 
 ### Oversized-Transcript Guards
 

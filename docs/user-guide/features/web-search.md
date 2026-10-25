@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/web-search"
 title: "Web Search & Extract"
-last_crawled: 2026-10-18
+last_crawled: 2026-10-25
 ---
 
 # Web Search & Extract
@@ -63,7 +63,7 @@ Each provider dispatch is also bounded by a wall-clock timeout (`web.extract_tim
 
 ### When truncation gets in the way
 
-If you specifically need the live DOM rather than extracted markdown — for example, a JS-heavy page where extraction returns little content — use `browser_navigate` + `browser_snapshot` instead. The browser tool returns the live accessibility tree (subject to its own snapshot cap on huge pages).
+If you specifically need the live DOM rather than extracted markdown — for example, a JS-heavy page where extraction returns little content — use `browser_exec` instead: open the page with `new_tab(url)` + `wait_for_load()`, then read it with `page_info()` or a `js()` DOM extraction. It works on the live, rendered page.
 
 ------------------------------------------------------------------------
 

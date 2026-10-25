@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/memory"
 title: "Persistent Memory"
-last_crawled: 2026-10-18
+last_crawled: 2026-10-25
 ---
 
 # Persistent Memory
@@ -364,7 +364,7 @@ auxiliary:
     enabled: true              # false = skip automatic post-turn forks
 ```
 
-With `enabled: false`, automatic post-turn forks do not spawn; manual `/refine` still works.
+With `enabled: false`, automatic post-turn forks do not spawn; manual `/refine` still works, with or without focus text.
 
 ### Capping review cost (`max_input_tokens`)
 

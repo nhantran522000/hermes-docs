@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/windows-native"
 title: "Windows (Native) Guide"
-last_crawled: 2026-10-18
+last_crawled: 2026-10-25
 ---
 
 # Windows (Native) Guide
@@ -220,9 +220,9 @@ These are default paths. `HERMES_HOME` and installer path arguments can change t
 
 ## Browser tool
 
-Browser setup depends on the selected backend. PM supplies the pinned `agent-browser` and Chromium packages for the built-in backend. Browser Use has its own managed CLI installation through `hermes tools`. A self-contained MSIX includes supported browser tools in its payload.
+The browser tool (`browser_exec`) is part of Hermes's Python environment. For local browsing, Hermes launches the pinned Chromium that PM installs (`hermes pm install chromium` if it is missing); set `browser.executable_path` to use another Chromium-family binary. Cloud browsers are selected in `hermes tools`. A self-contained MSIX includes the browser tools in its payload.
 
-On Windows ARM64, the pinned Chromium and `agent-browser` binaries can use Windows' x64 emulation. This differs from the native ARM64 Python runtime. See [Browser automation](features/browser.md) for backend selection.
+On Windows ARM64, the pinned Chromium is the x64 build and runs under Windows' x64 emulation. This differs from the native ARM64 Python runtime. See [Browser automation](features/browser.md) for browser sources.
 
 ## Running Hermes on Windows — practical notes
 
@@ -295,9 +295,7 @@ Consequence: any codepath that said "check if this PID is alive" via `os.kill(pi
 
 **`/edit` still does nothing after setting `$env:EDITOR`.** You set it in the current process only; close and reopen the shell, or set it at User scope in System Properties → Environment Variables. Verify with `echo $env:EDITOR` in a new PowerShell window.
 
-**Browser tool launches but tools time out.** Run `hermes doctor` and `hermes pm doctor`. Use `hermes tools` to inspect the selected browser backend. Do not install an unrelated Playwright revision into a signed app payload.
-
-**`agent-browser` reports a Node version error.** Run `hermes pm doctor` and inspect which Hermes launcher started the process. PM supplies the managed Node version. Do not delete an unrelated system Node installation to repair Hermes.
+**Browser tool launches but tools time out.** Run `hermes doctor` and `hermes pm doctor`. Use `hermes tools` to inspect the selected browser provider. A slow first Chromium start can be given more time with `browser.command_timeout` (the launch timeout floor, in seconds). Do not install an unrelated Playwright revision into a signed app payload.
 
 **Chinese / Japanese / Arabic characters show as `?` in the CLI.** The UTF-8 stdio shim didn't activate. Check that `HERMES_DISABLE_WINDOWS_UTF8` is NOT set (`Get-ChildItem env:HERMES_DISABLE_WINDOWS_UTF8`). If it's empty and you still see `?`, the console host (very old `cmd.exe`) may not support UTF-8 at all — switch to Windows Terminal.
 

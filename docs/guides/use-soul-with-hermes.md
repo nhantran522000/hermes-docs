@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/use-soul-with-hermes"
 title: "Use SOUL.md with Hermes"
-last_crawled: 2026-10-18
+last_crawled: 2026-10-25
 ---
 
 # Use SOUL.md with Hermes

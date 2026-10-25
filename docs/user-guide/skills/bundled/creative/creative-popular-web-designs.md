@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-popular-web-designs"
 title: "Popular Web Designs"
-last_crawled: 2026-10-18
+last_crawled: 2026-10-25
 ---
 
 # Popular Web Designs
@@ -45,7 +45,7 @@ Each template includes a **Hermes Implementation Notes** block at the top with:
 
 - CDN font substitute and Google Fonts `<link>` tag (ready to paste)
 - CSS font-family stacks for primary and monospace
-- Reminders to use `write_file` for HTML creation and `browser_vision` for verification
+- Reminders to use `write_file` for HTML creation and `browser_exec` (`capture_screenshot()`) for verification
 
 ## HTML Generation Pattern
 
@@ -83,7 +83,7 @@ Each template includes a **Hermes Implementation Notes** block at the top with:
 </html>
 ```
 
-Write the file with `write_file`, serve with the `generative-widgets` workflow (cloudflared tunnel), and verify the result with `browser_vision` to confirm visual accuracy.
+Write the file with `write_file`, serve with the `generative-widgets` workflow (cloudflared tunnel), and verify the result with `browser_exec`: open the page, `capture_screenshot()`, and inspect the image to confirm visual accuracy.
 
 ## Font Substitution Reference
 

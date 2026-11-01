@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/provider-runtime"
 title: "Provider Runtime Resolution"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Provider Runtime Resolution
@@ -52,7 +52,6 @@ Current provider families include (see `plugins/model-providers/` for the comple
 - OpenRouter
 - Nous Portal
 - OpenAI Codex
-- Copilot / Copilot ACP
 - Anthropic (native)
 - Google / Gemini (`gemini`)
 - Alibaba / DashScope (`alibaba`, `alibaba-coding-plan`)

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/cli"
 title: "CLI Interface"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # CLI Interface
@@ -319,7 +319,7 @@ Each entry is a skill name. The list is resolved once when a session's system pr
 Every installed skill in `~/.hermes/skills/` is automatically registered as a slash command. The skill name becomes the command:
 
 ``` text
-/gif-search funny cats
+/excalidraw sketch the request flow for our API
 /axolotl help me fine-tune Llama 3 on my dataset
 /github-pr-workflow create a PR for the auth refactor
 

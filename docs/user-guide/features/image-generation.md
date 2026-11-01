@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/image-generation"
 title: "Image Generation"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Image Generation

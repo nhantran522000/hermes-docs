@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-claude-code"
 title: "Claude Code"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Claude Code
@@ -19,7 +19,7 @@ Delegate coding to Claude Code CLI (features, PRs).
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `Coding-Agent`, `Claude`, `Anthropic`, `Code-Review`, `Refactoring`, `PTY`, `Automation` |
-| Related skills | [`codex`](autonomous-ai-agents-codex.md), [`hermes-agent`](autonomous-ai-agents-hermes-agent.md), [`opencode`](autonomous-ai-agents-opencode.md) |
+| Related skills | [`codex`](autonomous-ai-agents-codex.md), [`hermes-agent`](autonomous-ai-agents-hermes-agent.md), [`opencode`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-opencode) |
 
 ## Reference: full SKILL.md
 

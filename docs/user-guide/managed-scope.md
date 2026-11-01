@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/managed-scope"
 title: "Managed Scope"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Managed Scope
@@ -63,6 +63,8 @@ forces `model.default` for every user while leaving `model.fallback` (and every 
 Precedence note
 
 For the keys it pins, managed scope deliberately wins over the shell environment too — otherwise it would not be "managed." This is the one place that inverts the usual "an environment variable overrides config.yaml" rule, and it applies only to the specific keys the managed layer specifies.
+
+When the managed `config.yaml` pins a non-empty `terminal.backend`, a profile `.env` that exists but cannot be read (a sandbox launcher withholds it and passes the keys as environment) loads as absent with a warning; without that pin the read error still stops Hermes.
 
 ## Seeing what's managed
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/photon"
 title: "Photon iMessage"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Photon iMessage
@@ -160,7 +160,7 @@ Common issues:
 - **Read receipts are supported.** The sidecar marks an inbound iMessage read after forwarding it to Hermes, so the sender sees `Read` without waiting for a model/tool turn. Inbound receipts for Hermes-sent messages are consumed as presence telemetry and never create an agent turn. Set `PHOTON_READ_RECEIPTS=false` to keep messages at `Delivered`.
 - **Message effects are supported.** Hermes sends text with native iMessage bubble/screen effects through spectrum-ts' iMessage `effect()` builder via the sidecar's `/send-effect` endpoint.
 - **Photon's free quotas:** 5,000 messages per server per day, 50 new-conversation initiations per shared line per day. Increases available — email `help@photon.codes`.
-- **Cron and standalone sends need the gateway running.** Out-of-process senders (cron jobs, `hermes send`, the dashboard) reuse the sidecar the gateway spawned — they read its port/token from `<hermes-home>/runtime/photon-sidecar.json`, written once the sidecar passes its health check and removed when it stops. If a standalone send reports the gateway appears to be down, start (or restart) the gateway first.
+- **Cron and standalone sends need the gateway running.** Out-of-process senders (cron jobs, `hermes send`, the dashboard) reuse the sidecar the gateway spawned — they read its port/token from `<hermes-home>/photon-sidecar.json`, written once the sidecar passes its health check and removed when it stops. If a standalone send reports the gateway appears to be down, start (or restart) the gateway first.
 - **Shared/free-tier lines can't initiate conversations with new targets.** Photon-side policy: a shared line can only message a number after that number has texted the line first. A cron/standalone send to a brand-new recipient will be rejected by Photon even when Hermes is set up correctly — either have the recipient message the line once, or move to a dedicated line.
 
 ## Env vars

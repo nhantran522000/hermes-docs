@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/model-catalog"
 title: "Model Catalog"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Model Catalog
@@ -29,7 +29,7 @@ Published on every merge to `main` via the existing `deploy-site.yml` GitHub Pag
     "openrouter": {
       "metadata": {},
       "models": [
-        {"id": "z-ai/glm-5.2",         "description": "default", "default": true},
+        {"id": "z-ai/glm-5.3",         "description": "default", "default": true},
         {"id": "moonshotai/kimi-k3",   "description": "recommended", "metadata": {}},
         {"id": "openai/gpt-5.4",       "description": ""}
       ]
@@ -37,7 +37,7 @@ Published on every merge to `main` via the existing `deploy-site.yml` GitHub Pag
     "nous": {
       "metadata": {},
       "models": [
-        {"id": "z-ai/glm-5.2", "default": true},
+        {"id": "z-ai/glm-5.3", "default": true},
         {"id": "anthropic/claude-opus-4.7"},
         {"id": "moonshotai/kimi-k3"}
       ]

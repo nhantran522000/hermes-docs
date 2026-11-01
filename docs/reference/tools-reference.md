@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/tools-reference"
 title: "Built-in Tools Reference"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Built-in Tools Reference

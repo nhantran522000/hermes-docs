@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/browser"
 title: "Browser Automation"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Browser Automation
@@ -72,6 +72,7 @@ With no cloud provider, `/browser connect` endpoint or real-profile toggle confi
 - **One browser per session**, with a fresh, throwaway profile by default: the agent starts logged into nothing, and nothing persists after the session.
 - **Headless by default.** Set `browser.headed: true` for a visible window (see [below](#headed-mode-visible-browser-window)).
 - **Automatic cleanup.** The browser is closed after `browser.inactivity_timeout` seconds idle (default 120), when Hermes exits, and by an orphan sweep if a process crashed.
+- **Private hosts are reachable.** With a local terminal backend, the local Chromium can open `localhost` and LAN addresses whatever `security.allow_private_urls` says: it reaches nothing the terminal can't. The private-address guard applies when the browser can reach networks the terminal can't (a cloud provider, a `/browser connect` endpoint, or a Docker/SSH/Modal terminal backend). Cloud-metadata URLs the agent writes are always refused.
 
 **Which Chromium.** Hermes picks the first that exists:
 
@@ -195,7 +196,7 @@ When a cloud provider is configured, Hermes auto-spawns a **local Chromium sidec
 
 This solves the common "I'm developing locally but using Browserbase" workflow — the agent can screenshot your dashboard at `http://localhost:3000` AND scrape `https://github.com` without you switching providers or disabling the SSRF guard. The cloud provider never sees the private URL.
 
-The feature is **on by default**. To disable it (all URLs go to the configured cloud provider):
+The feature is **on by default**, and it is not governed by `security.allow_private_urls`: that setting guards the cloud browser and the web tools, but the sidecar runs on the Hermes host and opens private hosts with it off, the same way a `curl http://localhost` from the terminal would. A hosted Hermes (Docker, a VPS) therefore lets the agent browse that host's own loopback services and its LAN through the sidecar. To refuse private URLs instead (all URLs go to the configured cloud provider):
 
 ``` yaml
 # ~/.hermes/config.yaml
@@ -204,9 +205,9 @@ browser:
   auto_local_for_private_urls: false
 ```
 
-With auto-routing disabled, private URLs are rejected with `"Blocked: URL targets a private or internal address"` unless you also set `browser.allow_private_urls: true` (which lets the cloud provider attempt them — usually won't work since Browserbase etc. can't reach your LAN).
+With auto-routing disabled, private URLs are rejected with `"Blocked: URL targets a private or internal address"` unless you also set `security.allow_private_urls: true` (or the legacy `browser.allow_private_urls: true`), which hands them to the cloud provider — usually useless, since Browserbase etc. can't reach your LAN. Cloud-metadata URLs (`169.254.169.254`, `metadata.google.internal`) written in `browser_exec` code or in a URL a raw CDP call fetches are refused on every route, sidecar included; a page that redirects there on its own is not (see [Security](../security.md#what-allow_private_urls-covers-and-what-it-doesnt)).
 
-The sidecar is the same local Chromium described [above](#local-chromium-default), so it needs that Chromium installed. Post-navigation redirects from a public URL onto a private address are still blocked (you can't use a redirect-to-internal trick to reach your LAN through the public path).
+The sidecar is the same local Chromium described [above](#local-chromium-default), so it needs that Chromium installed. Routing is decided from the URLs written in the `browser_exec` code: a public page that later redirects to a private address stays on the cloud browser, which cannot reach your network.
 
 ## Real profile browsing (use your own logins)
 

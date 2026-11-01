@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/feishu"
 title: "Feishu / Lark Setup"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Feishu / Lark Setup

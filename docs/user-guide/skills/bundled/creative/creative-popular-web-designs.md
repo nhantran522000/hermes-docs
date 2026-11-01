@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-popular-web-designs"
 title: "Popular Web Designs"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Popular Web Designs
@@ -32,7 +32,7 @@ The following is the complete skill definition that Hermes loads when this skill
 ## Related design skills
 
 - **`claude-design`** — use for the design *process and taste* (scoping a brief, producing variants, verifying a local HTML artifact, avoiding AI-design slop). Pair it with this skill when the user wants a thoughtfully-designed page styled after a known brand: `claude-design` drives the workflow, this skill supplies the visual vocabulary.
-- **`design-md`** — use when the deliverable is a formal DESIGN.md token spec file, not a rendered artifact.
+- **`design-md`** (optional: `hermes skills install official/creative/design-md`) — use when the deliverable is a formal DESIGN.md token spec file, not a rendered artifact.
 
 ## How to Use
 

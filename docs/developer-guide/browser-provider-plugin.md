@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/browser-provider-plugin"
 title: "Building a Browser Provider Plugin"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Building a Browser Provider Plugin

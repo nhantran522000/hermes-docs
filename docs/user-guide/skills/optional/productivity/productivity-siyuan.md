@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-siyuan"
 title: "Siyuan"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Siyuan
@@ -19,7 +19,7 @@ Query and edit a SiYuan knowledge base via its API.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `SiYuan`, `Notes`, `Knowledge Base`, `PKM`, `API` |
-| Related skills | [`obsidian`](../../bundled/note-taking/note-taking-obsidian.md), [`notion`](../../bundled/productivity/productivity-notion.md) |
+| Related skills | [`obsidian`](../../bundled/note-taking/note-taking-obsidian.md), [`notion`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-notion) |
 
 ## Reference: full SKILL.md
 

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/reference/automation-blueprints-catalog"
 title: "Automation Blueprints"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Automation Blueprints

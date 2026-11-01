@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/guides/xai-grok-oauth"
 title: "xAI Grok OAuth (SuperGrok / X Premium+)"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # xAI Grok OAuth (SuperGrok / X Premium+)

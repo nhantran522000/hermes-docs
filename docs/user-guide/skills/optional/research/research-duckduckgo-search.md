@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-duckduckgo-search"
 title: "Duckduckgo Search"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Duckduckgo Search

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/subscription-proxy"
 title: "Subscription Proxy"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Subscription Proxy
@@ -160,4 +160,4 @@ No transformation. No logging of request bodies. No agent loop. The proxy is a c
 
 ## Future: more OAuth providers
 
-The adapter system is pluggable. Adding a new provider (e.g. HuggingFace, GitHub Copilot's chat endpoint, Anthropic via OAuth) requires implementing `UpstreamAdapter` in `hermes_cli/proxy/adapters/<provider>.py` and registering it in `adapters/__init__.py`. Providers that aren't OpenAI-compatible at the protocol level (Anthropic Messages API, for example) would need a transformation layer, which is out of scope for the current shape.
+The adapter system is pluggable. Adding a new provider (e.g. HuggingFace, Anthropic via OAuth) requires implementing `UpstreamAdapter` in `hermes_cli/proxy/adapters/<provider>.py` and registering it in `adapters/__init__.py`. Providers that aren't OpenAI-compatible at the protocol level (Anthropic Messages API, for example) would need a transformation layer, which is out of scope for the current shape.

@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/developer-guide/gateway-internals"
 title: "Gateway Internals"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Gateway Internals

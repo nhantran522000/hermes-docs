@@ -1,7 +1,7 @@
 ---
 source: "https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-shopify"
 title: "Shopify"
-last_crawled: 2026-10-25
+last_crawled: 2026-11-01
 ---
 
 # Shopify
@@ -19,7 +19,7 @@ Query Shopify Admin/Storefront GraphQL APIs via curl.
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `Shopify`, `E-commerce`, `Commerce`, `API`, `GraphQL` |
-| Related skills | [`airtable`](../../bundled/productivity/productivity-airtable.md), [`xurl`](../../bundled/social-media/social-media-xurl.md) |
+| Related skills | [`airtable`](https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-airtable), [`xurl`](../../bundled/social-media/social-media-xurl.md) |
 
 ## Reference: full SKILL.md
 
